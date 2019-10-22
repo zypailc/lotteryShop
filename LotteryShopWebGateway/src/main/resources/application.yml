@@ -1,0 +1,69 @@
+# 服务配置
+server:
+  port: 8080
+# Sping配置
+spring:
+  application:
+    name: webGateway-service
+  http:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+#  # 模板引擎配置
+#  thymeleaf:
+#    prefix: classpath:/templates/
+#    suffix: .html
+#    cache: false
+
+#微服务注册服务配置
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8081/eureka/
+#beelt模板引擎配置
+beetl:
+  #模板路径
+  templatesPath: templates
+# zuul网关配置
+zuul:
+  routes:
+    #eureka服务配置
+    api-a:
+      path: /eurekaserver/**
+      serviceId:  eureka-service
+    #验证服务配置
+    api-b:
+      path: /authservice/**
+      serviceId: auth-service
+    #api需要授权网关服务配置
+    api-c:
+      path: /api/**
+      serviceId: apiGateway-service
+    #api不需要授权网关服务
+    api-d:
+      path: /apiauthorization/**
+      serviceId: apiGateway-service
+    api-e:
+      path: /base/**
+      serviceId: base-service
+    api-f:
+      path: /ethwallet/**
+      serviceId: wallet-service
+#security&oauth2 配置
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://localhost:8083/auth/api/member # 资源服务认证
+    client:
+      client-id: browser # 认证服务ID
+      client-secret: browser # 认证服务密码
+      access-token-uri: http://localhost:8083/auth/oauth/token # 获取token
+      user-authorization-uri: http://localhost:8083/auth/oauth/authorize # 获取授权码
+
+# 提高延时设置 elevate timeout settings, 避免因为延时造成失败
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+# 负载均衡工具配置
+ribbon:
+  ConnectTimeout: 3000
+  ReadTimeout: 60000

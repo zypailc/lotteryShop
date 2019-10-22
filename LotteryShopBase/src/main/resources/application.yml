@@ -1,0 +1,82 @@
+server:
+  port: 8092
+  #servlet:
+   #context-path: /eurekabase
+spring:
+  application:
+    name: base-service
+  datasource:
+    name: druidDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.50.72:3306/lotteryshop?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false
+      username: root
+      password: 123456
+      filters: stat,wall,4j,config
+      max-active: 100
+      initial-size: 1
+      max-wait: 60000
+      min-idle: 1
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: select 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 50
+      max-pool-prepared-statement-per-connection-size: 20
+#微服务注册服务配置
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8081/eureka/
+#beelt模板引擎配置
+beetl:
+  #模板路径
+  templatesPath: templates
+#mybatispluse
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: com.didu.lotteryshop
+
+#email发送配置
+logging:
+  config:
+    classpath: logback.xml
+
+#security&oauth2 配置
+#security:
+#  oauth2:
+#    resource:
+#      id:  base-service
+#      user-info-uri: http://localhost:8080/authservice/auth/user # 资源服务认证
+#      prefer-token-info: false
+#    client:
+#      client-id: zhuohao # 认证服务ID
+#      client-secret: zhuohao888 # 认证服务密码
+#      access-token-uri: http://localhost:8080/authservice/auth/oauth/token # 获取token
+#      user-authorization-uri: http://localhost:8080/authservice/auth/oauth/authorize # 获取授权码
+
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://localhost:8083/auth/api/member # 资源服务认证
+    client:
+      client-id: zhuohao # 认证服务ID
+      client-secret: zhuohao888 # 认证服务密码
+      access-token-uri: http://localhost:8083/auth/oauth/token # 获取token
+      user-authorization-uri: http://localhost:8083/auth/oauth/authorize # 获取授权码
+
+#security:
+#  oauth2:
+#    resource:
+#      id: eshop-member
+#      user-info-uri: http://localhost:1203/api/member # 资源服务认证
+#      prefer-token-info: false
+#    client:
+#      client-id: android # 认证服务ID
+#      client-secret: android # 认证服务密码
+#      access-token-uri: http://localhost:1203/oauth/token # 获取token
+#      user-authorization-uri: http://localhost:1203/oauth/authorize # 获取授权码

@@ -1,0 +1,47 @@
+# 服务配置
+server:
+  port: 8082
+# Sping配置
+spring:
+  application:
+    name: apiGateway-service
+  http:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+
+#微服务注册服务配置
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8081/eureka/
+
+# zuul网关配置
+zuul:
+  ignored-services: '*'
+  #排除不规则的API
+  ignoredPatterns: /**/api*/**
+  routes:
+    #wallet-service: /ethwallet/**
+    #base-service: /base/**
+    api-a:
+      path: /base/**
+      serviceId:  base-service
+    api-b:
+      path: /ethwallet/**
+      serviceId: allet-service
+
+#security&oauth2 配置
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://localhost:8083/auth/api/member # 资源服务认证
+
+# 提高延时设置 elevate timeout settings, 避免因为延时造成失败
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+# 负载均衡工具配置
+ribbon:
+  ConnectTimeout: 3000
+  ReadTimeout: 60000
+
