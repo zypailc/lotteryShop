@@ -4,9 +4,8 @@ package com.didu.lotteryshop.common.enumeration;
 /**
  * 〈响应状态码〉
  *
- * @author Curise
- * @create 2018/12/13
- * @since 1.0.0
+ * @author CHJ
+ * @date 2019-10-23
  */
 public enum ResultCode {
 

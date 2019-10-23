@@ -1,7 +1,8 @@
 package com.didu.lotteryshop.wallet.advice;
 
+import com.didu.lotteryshop.common.config.Constants;
+import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.wallet.annotation.SecurityParameter;
-import com.didu.lotteryshop.wallet.utils.AesEncryptUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,13 +18,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 
-
 /***
  * 请求数据解密
  * @author CHJ
  * @date 2019-09-27 9:41
  */
-@ControllerAdvice(basePackages = "com.didu.lotteryshop.wallet.contorller")
+@ControllerAdvice(basePackages = "com.didu.lotteryshop.wallet.api")
 public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
 
     private static final Logger logger = LoggerFactory.getLogger(DecodeRequestBodyAdvice.class);
@@ -73,7 +73,7 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
 
         public MyHttpInputMessage(HttpInputMessage inputMessage) throws Exception {
             this.headers = inputMessage.getHeaders();
-            this.body = IOUtils.toInputStream(AesEncryptUtil.decrypt(easpString(IOUtils.toString(inputMessage.getBody(), "UTF-8"))), "UTF-8");
+            this.body = IOUtils.toInputStream(AesEncryptUtil.decrypt(easpString(IOUtils.toString(inputMessage.getBody(), "UTF-8")), Constants.AES_ETHWALLET_KEY), "UTF-8");
         }
 
         @Override

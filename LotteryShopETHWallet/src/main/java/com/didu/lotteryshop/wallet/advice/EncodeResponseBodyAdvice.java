@@ -1,8 +1,9 @@
 package com.didu.lotteryshop.wallet.advice;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.didu.lotteryshop.common.config.Constants;
+import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.wallet.annotation.SecurityParameter;
-import com.didu.lotteryshop.wallet.utils.AesEncryptUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
@@ -17,7 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * @author CHJ
  * @date 2019-09-27 9:41
  */
-@ControllerAdvice(basePackages = "com.didu.lotteryshop.wallet.contorller")
+@ControllerAdvice(basePackages = "com.didu.lotteryshop.wallet.api")
 public class EncodeResponseBodyAdvice implements ResponseBodyAdvice {
 
     private final static Logger logger = LoggerFactory.getLogger(EncodeResponseBodyAdvice.class);
@@ -41,7 +42,7 @@ public class EncodeResponseBodyAdvice implements ResponseBodyAdvice {
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 String result = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(body);
-                return AesEncryptUtil.encrypt(result);
+                return AesEncryptUtil.encrypt(result, Constants.AES_ETHWALLET_KEY);
             } catch (Exception e) {
                 e.printStackTrace();
                 logger.error("对方法method :【" + methodParameter.getMethod().getName() + "】返回数据进行解密出现异常："+e.getMessage());

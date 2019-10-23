@@ -17,7 +17,7 @@
 
 
     <dependencies>
-        <!-- 项目公共工具依赖 -->
+        <!-- 项目公共工具模块依赖 -->
         <dependency>
             <groupId>com.didu</groupId>
             <artifactId>Common</artifactId>

@@ -1,5 +1,6 @@
-package com.didu.lotteryshop.wallet.contorller;
+package com.didu.lotteryshop.wallet.api.v1.contorller;
 
+import com.didu.lotteryshop.common.utils.Result;
 import com.didu.lotteryshop.wallet.annotation.SecurityParameter;
 import com.didu.lotteryshop.wallet.model.Persion;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,7 @@ import javax.websocket.server.PathParam;
  * 测试Controller
  */
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/v1/test")
 public class TestController {
 
     /*
@@ -20,10 +21,10 @@ public class TestController {
     @GetMapping("/get")
     @ResponseBody
     @SecurityParameter
-    private Object get() {
+    private Result get() {
         Persion info = new Persion();
         info.setName("好看");
-        return info;
+        return Result.successJson(info);
     }
     /*
      * 自动解密，并将返回信息加密

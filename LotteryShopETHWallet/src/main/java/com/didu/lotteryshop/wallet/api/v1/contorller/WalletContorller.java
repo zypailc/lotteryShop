@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.wallet.contorller;
+package com.didu.lotteryshop.wallet.api.v1.contorller;
 
 import com.didu.lotteryshop.wallet.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @return
  */
 @Controller
-@RequestMapping("/wallet")
+@RequestMapping("/v1/wallet")
 public class WalletContorller {
     @Autowired
     private WalletService walletService;
