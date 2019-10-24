@@ -44,10 +44,10 @@
         <!-- mybaits 工具 -->
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <artifactId>mybatis-plus</artifactId>
             <version>2.2.0</version>
+            <scope>compile</scope>
         </dependency>
-
     </dependencies>
 
 </project>
