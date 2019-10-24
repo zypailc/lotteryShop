@@ -9,7 +9,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@MapperScan("com.didu.lotteryshop.auth.dao")
+@MapperScan("com.didu.lotteryshop.auth.mapper")
 public class AuthServiceApplication {
 
     public static void main(String[] args) {

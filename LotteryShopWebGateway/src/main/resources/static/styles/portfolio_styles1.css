@@ -67,7 +67,7 @@ ul
 {
 	list-style: none;
 	margin-bottom: 0px;
-	display:inline-block;
+	/*display:inline-block;*/
 	text-align: center;
 }
 p
@@ -652,13 +652,14 @@ section
 }
 .portfolio_category
 {
-	/*margin-right: 38px;*/
+	margin-right: 38px;
 	cursor: pointer;
-	font-size: 15px;
+	font-size: 20px;
 	font-weight: 600;
 	text-transform: uppercase;
 	color: #868e96;
-	border-bottom: dashed 1px #f2f2f2;
+	border-bottom: solid 1px #f2f2f2;
+	display: inline-block;
 }
 .portfolio_category_bottom
 {
@@ -953,10 +954,6 @@ section
 	padding-top: 120px;
 	padding-bottom: 120px;
 }
-.base_head_search{
-	padding-top: 60px;
-	padding-bottom: 120px;
-}
 .phone_button{
 
 }
@@ -982,4 +979,12 @@ section
 .search_condition.active{
 	right: 0;
 	opacity: 1;
+}
+.lottery_item{
+	margin-right: 25%;
+	margin-left: 25%;
+	position: static !important;
+}
+.service_item_title{
+	text-align: center;
 }

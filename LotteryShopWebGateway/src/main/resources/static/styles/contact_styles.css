@@ -329,8 +329,8 @@ section
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 128px;
-	background: rgba(27, 11, 51, 0.52);
+	height: 80px;
+	background: rgba(27, 11, 51, 0.92);
 	z-index: 10;
 }
 .header.scrolled
@@ -933,9 +933,9 @@ section
 
 .footer
 {
-	padding-top: 99px;
+	/*padding-top: 99px;
 	padding-bottom: 82px;
-	border-top: solid 1px #dcdcdc;
+	border-top: solid 1px #dcdcdc;*/
 }
 .footer_logo
 {

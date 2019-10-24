@@ -1,6 +1,6 @@
 package com.didu.lotteryshop.auth.config.security;
 
-import com.didu.lotteryshop.auth.service.MyUserDetailService;
+import com.didu.lotteryshop.auth.service.impl.MemberServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,8 +23,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @Order(2)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
-    private MyUserDetailService userDetailService;
+    private MemberServiceImpl memberService;
+    //private MyUserDetailService userDetailService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -60,12 +62,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());
     }
 
     /**
      * 不定义没有password grant_type,密码模式需要AuthenticationManager支持
-     *
+     *MyUserDetailService
      * @return
      * @throws Exception
      */

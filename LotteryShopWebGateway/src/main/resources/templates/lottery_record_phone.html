@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Lottery - Home</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="RanGO Project">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 公共style -->
+    <%
+    include("common.css.html"){}
+    %>
+    <link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_styles.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_responsive.css">
+</head>
+<!-- 公共js -->
+<%
+include("common.js.html"){}
+%>
+<script src="../js/portfolio_custom.js"></script>
+<script>
+    $(function(){
+        $(".back").click(function(){
+            history.back();
+        });
+        var window_height = document.documentElement.clientHeight;
+        getHeigh();
+        $(".ul_personal_lottery").scroll(function(){
+            var $this =$(this),
+                viewH =$(this).height() - 90,//可见高度
+                contentH =$(this).get(0).scrollHeight,//内容高度
+                scrollTop =$(this).scrollTop();//滚动高度
+            if(scrollTop/(contentH - viewH) >= 0.95){ //当滚动到距离底部5%时
+                var li = '<li>'+
+                    '<div>'+
+                    '<p><span>Lottery type</span><span>#'+contentH+'</span></p>'+
+                    '<p>'+
+                    '<span>2018.01.01 00:00:00</span>'+
+                    '<span>2 4 6 3 2 7</span>'+
+                    '<span>2 5 6 0 2 8</span>'+
+                    '<span>3ETH</span>'+
+                    '</p>'+
+                    '</div>'+
+                    '</li>';
+                $(".ul_personal_lottery").append(li);
+            }
+        });
+        //查询按钮时间初始化
+        $("#search_image").click(function(){
+            console.log("我被点击了！");
+            $(".search_condition").addClass("active");
+        });
+        //查询确认按钮
+        $(".confirm_button").click(function(){
+            console.log("我确认了");
+            $(".search_condition").removeClass("active");
+        });
+        //layui时间控件初始化
+        layui.use('laydate', function(){
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#startDate' //指定元素
+            });
+        });
+        layui.use('laydate', function(){
+            var laydate = layui.laydate;
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#endDate' //指定元素
+            });
+        });
+    })
+    function getHeigh(){
+        var window_height = document.documentElement.clientHeight;
+        console.log(window_height);
+        console.log($(".base_head").clientHeight);
+        $(".ul_personal_lottery").height(window_height-90);
+    }
+
+
+
+</script>
+<style>
+    li{
+        margin: 5px;
+        border-radius: 5px;
+        background: #f8f9fa;
+    }
+    p
+    .base_head{
+        padding-top: 90px;
+        overflow: auto;
+    }
+    .input_class_1{
+        width:90%;
+        margin: 5px;
+    }
+    .ul_personal_lottery{
+        overflow: auto;
+    }
+    .footer_search{
+        bottom: 2px;
+        position: fixed;
+    }
+    .footer_search_button{
+        text-align: center;
+    }
+    .confirm_button{
+        margin: 5px;
+    }
+    .select_search{
+        width: 95%;
+        border-radius: 2px;
+        margin-top: 15px;
+        height: 38px;
+        border: 1px solid #ccc;
+        background-color: white;
+    }
+    .layui-input{
+        width: 95%;
+    }
+    .condition{
+        padding: 20px 10px 5px 35px;
+        margin-bottom: 5px;
+        background-color: #f8f8f8;
+        margin-left: 35px;
+    }
+    .search_p{
+        font-size: 15px;
+        color: #0C0C0C;
+    }
+    .search_title{
+        margin-top: 10px;
+        margin-left: 60px;
+        font-size: 20px;
+        color: #0C0C0C;
+    }
+</style>
+<body class="body_top">
+
+<div class="super_container">
+
+    <!-- 引入头部文件 -->
+    <%
+    include("/top.html"){}
+    %>
+    <!-- Home -->
+
+    <div class="search_condition">
+        <p class="search_title">search<p>
+        <div class="search_lottery_content">
+            <div class="condition search_date">
+                <p class="search_p">date</p>
+                <hr>
+                <input type="text" class="input_class layui-input" placeholder="start：yyyy-MM-dd" id="startDate">
+                <input type="text" class="input_class layui-input" placeholder="end：yyyy-MM-dd" id="endDate">
+            </div>
+            <div class="condition search_type">
+                <p class="search_p">type</p>
+                <hr>
+                <select class="select_search">
+                    <option>全部类型</option>
+                    <option>类型--1</option>
+                    <option>全部--2</option>
+                </select>
+            </div>
+        </div>
+        <div class="footer_search">
+            <div class="footer_search_button">
+                <hr style="width:400px;">
+                <button class="btn confirm_button" type="button">confirm</button>
+                <button class="btn confirm_button" type="button">cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="base_head_search">
+        <div class="search_phone_block">
+            <input class="input_class_1" type="text"/>
+            <img id="search_image" src="../images/ss.png">
+        </div>
+        <div class="lottery_record_block">
+        <ul class="ul_personal_lottery card-1 card-1_scroll">
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span>Lottery type</span><span>#32423</span></p>
+                    <p>
+                        <span>2018.01.01 00:00:00</span>
+                        <span>2 4 6 3 2 7</span>
+                        <span>2 5 6 0 2 8</span>
+                        <span>3ETH</span>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+    </div>
+    <!-- 引入底部文件 -->
+    <%
+    include("bottom.html"){}
+    %>
+
+</div>
+</body>
+
+</html>

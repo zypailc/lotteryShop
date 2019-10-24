@@ -302,7 +302,7 @@ section
 .home
 {
 	width: 100%;
-	height: 55vh;
+	/*height: 55vh;*/
 }
 .home_background_container
 {
@@ -331,7 +331,8 @@ section
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 128px;
+	/*height: 128px;*/
+	height: 80px;
 	background: rgba(27, 11, 51, 0.92);
 	z-index: 10;
 }
@@ -472,7 +473,14 @@ section
 	flex-basis: 40px;
 	text-align: right;
 }
-
+.hamburger_container_language
+{
+	display: none;
+	cursor: pointer;
+	/*margin-right: 40px;*/
+	flex-basis: 40px;
+	text-align: right;
+}
 .hamburger_container i
 {
 	font-size: 24px;
@@ -1094,7 +1102,7 @@ section
 	display: -webkit-flex;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	/*justify-content: center;*/
 	align-items: center;
 	height: 475px;
 	max-width: 100%;
@@ -1106,11 +1114,27 @@ section
 	-ms-transition: all 600ms ease;
 	-o-transition: all 600ms ease;
 	transition: all 600ms ease;
+	overflow: hidden;
 }
 .services_slider .owl-item.active.center .services_item_inner
 {
 	height: 663px;
 	width: 98%;
+	overflow: auto;
+}
+.services_item_inner-1::-webkit-scrollbar {/*滚动条整体样式*/
+	width: 5px;     /*高宽分别对应横竖滚动条的尺寸*/
+	height: 1px;
+}
+.services_item_inner-1::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+	background: #dddddd;
+}
+.services_item_inner-1::-webkit-scrollbar-track {/*滚动条里面轨道*/
+	-webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+	border-radius: 5px;
+	background: #EDEDED;
 }
 .service_item_content
 {
@@ -1474,6 +1498,7 @@ section
 /*********************************
 12. Footer
 *********************************/
+
 
 .footer_logo
 {

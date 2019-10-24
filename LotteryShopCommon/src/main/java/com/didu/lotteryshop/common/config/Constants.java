@@ -1,5 +1,7 @@
 package com.didu.lotteryshop.common.config;
 
+import com.didu.lotteryshop.common.entity.Member;
+
 import java.util.Random;
 
 /**

@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.auth.dao;
+package com.didu.lotteryshop.auth.mapper;
 
 import com.didu.lotteryshop.common.entity.Permission;
 
@@ -11,7 +11,7 @@ import java.util.List;
  * @create 2018/12/13
  * @since 1.0.0
  */
-public interface PermissionDao {
+public interface PermissionMapper {
 
     /**
      * 根据角色id查找权限列表

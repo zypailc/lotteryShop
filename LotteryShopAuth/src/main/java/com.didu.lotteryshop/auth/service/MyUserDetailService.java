@@ -1,20 +1,9 @@
 package com.didu.lotteryshop.auth.service;
 
-import com.didu.lotteryshop.auth.dao.MemberDao;
-import com.didu.lotteryshop.common.entity.Member;
-import com.didu.lotteryshop.common.entity.Permission;
-import com.didu.lotteryshop.common.entity.Role;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import com.didu.lotteryshop.auth.mapper.MemberMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * 〈自定义UserDetailService〉
@@ -23,15 +12,15 @@ import java.util.Set;
  * @create 2018/12/13
  * @since 1.0.0
  */
-@Service("userDetailService")
+//@Service("userDetailService")
 public class MyUserDetailService implements UserDetailsService {
 
-    @Autowired
-    private MemberDao memberDao;
+    //@Autowired
+    //private MemberMapper memberDao;
 
-    @Override
+    //@Override
     public UserDetails loadUserByUsername(String memberName) throws UsernameNotFoundException {
-        Member member = memberDao.findByMemberName(memberName);
+       /* Member member = memberDao.findByMemberName(memberName);
         if (member == null) {
             throw new UsernameNotFoundException(memberName);
         }
@@ -56,7 +45,8 @@ public class MyUserDetailService implements UserDetailsService {
         }
         User user = new User(member.getMemberName(), member.getPassword(),
                 enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, grantedAuthorities);
-        return user;
+        return user;*/
+       return null;
     }
 
 }

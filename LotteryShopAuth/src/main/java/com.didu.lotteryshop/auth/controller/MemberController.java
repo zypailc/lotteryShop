@@ -1,6 +1,6 @@
 package com.didu.lotteryshop.auth.controller;
 
-import com.didu.lotteryshop.auth.service.MyUserDetailService;
+import com.didu.lotteryshop.auth.service.impl.MemberServiceImpl;
 import com.didu.lotteryshop.common.entity.Result;
 import com.didu.lotteryshop.common.enumeration.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import java.security.Principal;
 public class MemberController {
 
     @Autowired
-    private MyUserDetailService userDetailService;
+    private MemberServiceImpl memberService;
 
     @Autowired
     private ConsumerTokenServices consumerTokenServices;

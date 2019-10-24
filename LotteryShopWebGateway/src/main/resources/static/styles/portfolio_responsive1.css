@@ -162,17 +162,11 @@
 		bottom: 10%;
 		display: none;
 	}
-	.portfolio_category{
-		display: none;
-	}
 	.portfolio_items{
 		border: 0;
-		height: 165px !important;
-		padding-left: 12%;
 	}
 	.portfolio{
 		padding-left: 0px;
-		overflow: auto;
 	}
 	.container_left{
 		width: 100%;
@@ -184,6 +178,14 @@
 	.container_phone{
 		display: block;
 		float: left;
+	}
+	.portfolio_category{
+		margin-right: 20px;
+		font-size: 16px;
+	}
+	.lottery_item{
+		margin-right: 5px;
+		margin-left: 5px;
 	}
 }
 

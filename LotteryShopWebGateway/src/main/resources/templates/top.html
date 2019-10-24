@@ -4,22 +4,22 @@
 
     <!-- Logo -->
     <div class="logo mr-auto">
-        <a href="#">Ran<span>Lottery</span></a>
+        <a class="back" href="#"><span>&lt; Back</span></a>
     </div>
 
     <!-- Navigation -->
     <nav class="main_nav justify-self-end text-right">
-        <div class="top_div">
+       <!-- <div class="top_div">
             <div class="search_content d-flex flex-column align-items-center justify-content-center">
-                <% if(top_login_1){ %>
+                <% if(top_login){ %>
                 <div class="top_center_span">
                     <span>2019-09-26 00:00:00</span><br/>
-                    <span>Welcome，sanZ</span>
+                    <span>Welcome，<a href="./personalCenter">sanZ</a></span>
                 </div>
                 <% }else{ %>
                 <div class="top_login_span">
 							<span>
-								<a href="./login">Login<!--{zh-TW}登录--></a><span> / </span><a href="./register">Register</a>
+								<a href="./login">Login&lt;!&ndash;{zh-TW}登录&ndash;&gt;</a><span> / </span><a href="./register">Register</a>
 							</span>
                 </div>
                 <% } %>
@@ -32,31 +32,42 @@
                     <option class="select_option" value="da">Danish</option>
                 </select>
             </div>
-        </div>
-        <div class="top_div">
-            <ul>
-                <li><a href="#">Play the lottery</a></li>
-            </ul>
-        </div>
+        </div>-->
     </nav>
 
-    <div class="hamburger_container_language">
+   <!-- <div class="hamburger_container_language">
         <select class="language_select_onchange">
             <option class="select_option" value="zh-TW">Chinese (Traditional)</option>
             <option class="select_option" value="en" selected="selected">English</option>
             <option class="select_option" value="jp">Japanese</option>
             <option class="select_option" value="da">Danish</option>
         </select>
-    </div>
+    </div>-->
     <!-- Hamburger -->
-    <div class="hamburger_container">
+   <!-- <div class="hamburger_container">
         <i class="fas fa-bars trans_200"></i>
-    </div>
+    </div>-->
     <div id="google_translate_element" style="display: none;"></div>
     <!--<div id="google_translate_element"></div>-->
 </header>
+<!--<div class="menu_container">
+    <div class="menu menu_mm text-right">
+        <div class="menu_close"><i class="far fa-times-circle trans_200"></i></div>
+        <ul class="menu_mm">
+            <li><a href="./index">Home</a></li>
+            <li><a href="./playTheLottery">Play The Lottery</a></li>
+            <% if(top_login){ %>
+            <li><a href="./personalCenter"><span>sanZ ,个人中心</span></a></li>
+            <% } else { %>
+            <li class="menu_mm"><a href="./login">Login</a></li>
+            <li class="menu_mm"><a href="./register">Register</a></li>
+            <% } %>
+        </ul>
+    </div>
+</div>-->
 <!--<script src="../js/language_select.js"></script>-->
 <script src="https://translate.google.cn/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script src="../js/language_cookie.js"></script>
 <script>
     function googleTranslateElementInit() {
 
@@ -78,7 +89,6 @@
     }
     $(function(){
         $(".language_select_onchange").change(function (){
-            console.log("我被改变了！");
             var language_select = $(this).val() || "";
             //获取浏览器的语言
             var browserLanguage = navigator.language.toLowerCase();
@@ -86,8 +96,17 @@
             console.log(browserLanguage);
             var language_ja = {ja:"日本語",da:"デンマーク語"};//日本
             var language_da = {ja:"Japansk",da:"Dansk"};//丹麦
+            var name = "somoveLanguage";
             if(browserLanguage){
                 switch (browserLanguage) {
+                    case zh:
+                        SetCookie(name, browserLanguage);
+                        location.reload();
+                        break;
+                    case en:
+                        SetCookie(name, browserLanguage);
+                        location.reload();
+                        break;
                     case ja:
                         browserLanguage_array = language_ja;
                         language_select = language_ja["language_select"];
@@ -109,7 +128,6 @@
                     //$(this).parents("a").find("div").click();
                     $(this).click();
                     //$(this).parents("a").find("span.indicator").click();
-
                 }
             })
         });

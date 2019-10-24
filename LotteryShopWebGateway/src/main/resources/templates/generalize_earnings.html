@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Lottery - Home</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="RanGO Project">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 公共style -->
+    <%
+    include("common.css.html"){}
+    %>
+    <link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_styles.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_responsive.css">
+</head>
+<!-- 公共js -->
+<%
+include("common.js.html"){}
+%>
+<script src="../js/portfolio_custom.js"></script>
+<script>
+    $(function(){
+        $(".back").click(function(){
+            history.back();
+        });
+        var window_height = document.documentElement.clientHeight;
+        getHeigh();
+        $(".card-1_scroll").scroll(function(){
+            var $this =$(this),
+                viewH =$(this).height() - 90,//可见高度
+                contentH =$(this).get(0).scrollHeight,//内容高度
+                scrollTop =$(this).scrollTop();//滚动高度
+            console.log("viewH:"+viewH);
+            console.log("contentH:"+contentH);
+            console.log("scrollTop:"+scrollTop);
+            console.log("xxxxxxxx:"+scrollTop/(contentH -viewH));
+            if(scrollTop/(contentH - viewH) >= 0.95){ //当滚动到距离底部5%时
+                var li = '<li>'+
+                    '<div>'+
+                    '<p><span>Lottery type</span><span>#'+contentH+'</span></p>'+
+                    '<p>'+
+                    '<span>2018.01.01 00:00:00</span>'+
+                    '<span>2 4 6 3 2 7</span>'+
+                    '<span>2 5 6 0 2 8</span>'+
+                    '<span>3ETH</span>'+
+                    '</p>'+
+                    '</div>'+
+                    '</li>';
+                $(".ul_personal_lottery").append(li);
+            }
+        });
+    })
+    function getHeigh(){
+        var window_height = document.documentElement.clientHeight;
+        console.log(window_height);
+        console.log($(".base_head").clientHeight);
+        $(".base_head").height(window_height-90);
+    }
+
+
+
+</script>
+<style>
+    li{
+        margin: 5px;
+        border-radius: 5px;
+        background: #f8f9fa;
+    }
+    .base_head{
+        padding-top: 90px;
+        overflow: auto;
+    }
+    .span_title{
+        font-size: 15px;
+    }
+    .span_left{
+        margin-right: 30px;
+    }
+</style>
+<body class="body_top">
+
+<div class="super_container">
+
+    <!-- 引入头部文件 -->
+    <%
+    include("/top.html"){}
+    %>
+    <!-- Home -->
+
+
+    <div class="base_head card-1 card-1_scroll">
+        <ul class="ul_personal_lottery">
+            <li>
+                <div>
+                    <p><span class="span_title span_left">2018.01.01 00:00:00</span> <span>earnings:100 </span></p>
+                    <p><span class="span_left">lottery type:type1</span> <span>lottery number：2 4 8 6 7</span></p>
+                    <p><span class="span_left">winners:张三</span> <span>winning numbers: 2 4 5 6 7</span></p>
+                    <p><span class="span_left">Pond：15ETH</span> <span>winning amount：5ETH</span></p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span class="span_title span_left">2018.01.01 00:00:00</span> <span>earnings:100 </span></p>
+                    <p><span class="span_left">lottery type:type1</span> <span>lottery number：2 4 8 6 7</span></p>
+                    <p><span class="span_left">winners:张三</span> <span>winning numbers: 2 4 5 6 7</span></p>
+                    <p><span class="span_left">Pond：15ETH</span> <span>winning amount：5ETH</span></p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span class="span_title span_left">2018.01.01 00:00:00</span> <span>earnings:100 </span></p>
+                    <p><span class="span_left">lottery type:type1</span> <span>lottery number：2 4 8 6 7</span></p>
+                    <p><span class="span_left">winners:张三</span> <span>winning numbers: 2 4 5 6 7</span></p>
+                    <p><span class="span_left">Pond：15ETH</span> <span>winning amount：5ETH</span></p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span class="span_title span_left">2018.01.01 00:00:00</span> <span>earnings:100 </span></p>
+                    <p><span class="span_left">lottery type:type1</span> <span>lottery number：2 4 8 6 7</span></p>
+                    <p><span class="span_left">winners:张三</span> <span>winning numbers: 2 4 5 6 7</span></p>
+                    <p><span class="span_left">Pond：15ETH</span> <span>winning amount：5ETH</span></p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span class="span_title span_left">2018.01.01 00:00:00</span> <span>earnings:100 </span></p>
+                    <p><span class="span_left">lottery type:type1</span> <span>lottery number：2 4 8 6 7</span></p>
+                    <p><span class="span_left">winners:张三</span> <span>winning numbers: 2 4 5 6 7</span></p>
+                    <p><span class="span_left">Pond：15ETH</span> <span>winning amount：5ETH</span></p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span class="span_title span_left">2018.01.01 00:00:00</span> <span>earnings:100 </span></p>
+                    <p><span class="span_left">lottery type:type1</span> <span>lottery number：2 4 8 6 7</span></p>
+                    <p><span class="span_left">winners:张三</span> <span>winning numbers: 2 4 5 6 7</span></p>
+                    <p><span class="span_left">Pond：15ETH</span> <span>winning amount：5ETH</span></p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span class="span_title span_left">2018.01.01 00:00:00</span> <span>earnings:100 </span></p>
+                    <p><span class="span_left">lottery type:type1</span> <span>lottery number：2 4 8 6 7</span></p>
+                    <p><span class="span_left">winners:张三</span> <span>winning numbers: 2 4 5 6 7</span></p>
+                    <p><span class="span_left">Pond：15ETH</span> <span>winning amount：5ETH</span></p>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <p><span class="span_title span_left">2018.01.01 00:00:00</span> <span>earnings:100 </span></p>
+                    <p><span class="span_left">lottery type:type1</span> <span>lottery number：2 4 8 6 7</span></p>
+                    <p><span class="span_left">winners:张三</span> <span>winning numbers: 2 4 5 6 7</span></p>
+                    <p><span class="span_left">Pond：15ETH</span> <span>winning amount：5ETH</span></p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 引入底部文件 -->
+    <%
+    include("bottom.html"){}
+    %>
+
+</div>
+</body>
+
+</html>

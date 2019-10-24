@@ -15,14 +15,14 @@ import java.util.Set;
 @Data
 public class Member{
 
-    private int id;
-    private String memberName;
-    private String password;
-    private String mobile;
-    private String email;
-    private short sex;
-    private Date birthday;
-    private Date createTime;
-    private Set<Role> roles;
+    private String id;
+    private String memberName;//昵称
+    private String secretKey;//秘钥
+    private String password;//密码
+    private String email;//电子邮箱
+    private String generalizeMemberId;//推广人员Id
+    private String headPortaitUrl;//头像Url
+    private Date createTime;//创建时间
+    private Set<Role> roles;//角色
 
 }

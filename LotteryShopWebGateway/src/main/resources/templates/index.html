@@ -23,7 +23,7 @@
 
 </script>
 <style>
-	.top_div{float: right;}
+	/*.top_div{float: right;}
 	.top_login_span{font-size: 18px;color: #ffffff;margin-right: 10px;}
 	.top_login_span a {color: #ffffff;}
 	.top_center_span{font-size: 20px;}
@@ -44,8 +44,7 @@
 	}
 	#goog-gt-tt{
 		display: none;
-	}
-
+	}*/
 </style>
 <body class="body_top">
 
@@ -53,23 +52,8 @@
 
 	<!-- 引入头部文件 -->
 	<%
-		include("/top.html"){}
+		include("index_top.html"){}
 	%>
-	<!-- Menu -->
-	<div class="menu_container">
-		<div class="menu menu_mm text-right">
-			<div class="menu_close"><i class="far fa-times-circle trans_200"></i></div>
-			<ul class="menu_mm">
-				<li><a href="#">Play the lottery</a></li>
-				<% if(top_login_1){ %>
-					<li><span>sanZ ,个人中心</span></li>
-				<% } else { %>
-					<li class="menu_mm"><a href="./login">Login</a></li>
-					<li class="menu_mm"><a href="./register">Register</a></li>
-				<% } %>
-			</ul>
-		</div>
-	</div>
 	<!-- Home -->
 
 	<div class="home">
@@ -157,7 +141,98 @@
 		</div>
 	</div>
 
+	<!-- 项目特点 -->
+	<div class="features">
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
 
+					<div class="section_title">
+						<h1>Modern features</h1>
+					</div>
+
+				</div>
+			</div>
+			<div class="row features_row">
+				<div class="col-lg-4 text-lg-right features_col order-lg-1 order-2">
+					<!-- Features Item-->
+					<div class="features_item">
+						<h2>Responsive</h2>
+						<p>Etiam nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus.</p>
+					</div>
+					<!-- Features Item-->
+					<div class="features_item">
+						<h2>Clean code</h2>
+						<p>Nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus bla ndit.</p>
+					</div>
+
+				</div>
+				<div class="col-lg-4 d-flex flex-column align-items-center order-lg-2 order-1">
+					<div class="features_image">
+						<img src="../images/js.jpg" alt="">
+					</div>
+				</div>
+				<div class="col-lg-4 features_col order-lg-3 order-3">
+					<!-- Features Item-->
+					<div class="features_item">
+						<h2>Retina ready</h2>
+						<p>Nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus bla ndit.</p>
+					</div>
+					<!-- Features Item-->
+					<div class="features_item">
+						<h2>Great team</h2>
+						<p>Etiam nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 资金分配 -->
+	<div class="features">
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
+
+					<div class="section_title">
+						<h1>Modern features</h1>
+					</div>
+
+				</div>
+			</div>
+			<div class="row features_row">
+				<div class="col-lg-4 d-flex flex-column align-items-center order-lg-2 order-1">
+					<div class="features_image">
+						<img src="../images/fp.jpg" alt="">
+					</div>
+				</div>
+				<div class="col-lg-4 features_col order-lg-3 order-3">
+					<!-- Features Item-->
+					<div class="features_item">
+						<h2>Retina ready</h2>
+						<p>Nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus bla ndit.</p>
+					</div>
+					<!-- Features Item-->
+					<div class="features_item">
+						<h2>Great team</h2>
+						<p>Etiam nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus.</p>
+					</div>
+				</div>
+				<div class="col-lg-4 features_col order-lg-3 order-3">
+					<!-- Features Item-->
+					<div class="features_item">
+						<h2>Retina ready</h2>
+						<p>Nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus bla ndit.</p>
+					</div>
+					<!-- Features Item-->
+					<div class="features_item">
+						<h2>Great team</h2>
+						<p>Etiam nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<!-- 玩法列表 -->
 
@@ -177,18 +252,21 @@
 			<div class="service_slider_outer">
 				<!-- Services Slider -->
 				<div class="owl-carousel owl-theme services_slider">
-					
 					<!-- Services Slider Item-->
 					<div class="owl-item services_item">
 						<div class="services_item_inner">
 							<div class="service_item_content">
-								<div class="service_item_title">
-									<div class="service_item_icon">
-										<div data-icon="&#xe083;" class="icon"></div>
-									</div>
-									<h2>Amazing service</h2>
+								<div class="button service_item_button trans_200">
+									<a href="./lotteryServices" class="trans_200">discover more</a>
 								</div>
-								<p>Etiam nec odio vestibulum est mattis effic iturut magna. Pellentesque sit am et tellus blandit. Etiam nec odio vesti bul mattis effic iturut magna.</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Services Slider Item-->
+					<div class="owl-item services_item">
+						<div class="services_item_inner">
+							<div class="service_item_content">
 								<div class="button service_item_button trans_200">
 									<a href="#" class="trans_200">discover more</a>
 								</div>
@@ -200,13 +278,6 @@
 					<div class="owl-item services_item">
 						<div class="services_item_inner">
 							<div class="service_item_content">
-								<div class="service_item_title">
-									<div class="service_item_icon">
-										<div data-icon="&#xe059;" class="icon"></div>
-									</div>
-									<h2>Management</h2>
-								</div>
-								<p>Odio vestibulum est mattis effic iturut magna. Pellente sque sit am et tellus blandit. Etiam nec odio vesti bul.</p>
 								<div class="button service_item_button trans_200">
 									<a href="#" class="trans_200">discover more</a>
 								</div>
@@ -218,13 +289,6 @@
 					<div class="owl-item services_item">
 						<div class="services_item_inner">
 							<div class="service_item_content">
-								<div class="service_item_title">
-									<div class="service_item_icon">
-										<div data-icon="&#xe024;" class="icon"></div>
-									</div>
-									<h2>Risk Evaluation</h2>
-								</div>
-								<p>Odio vestibulum est mattis effic iturut magna. Pellente sque sit am et tellus blandit. Etiam nec odio vesti bul.</p>
 								<div class="button service_item_button trans_200">
 									<a href="#" class="trans_200">discover more</a>
 								</div>
@@ -236,13 +300,6 @@
 					<div class="owl-item services_item">
 						<div class="services_item_inner">
 							<div class="service_item_content">
-								<div class="service_item_title">
-									<div class="service_item_icon">
-										<div data-icon="&#xe05e;" class="icon"></div>
-									</div>
-									<h2>Assesment</h2>
-								</div>
-								<p>Etiam nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus bla ndit. Etiam nec odio vestibul.</p>
 								<div class="button service_item_button trans_200">
 									<a href="#" class="trans_200">discover more</a>
 								</div>
@@ -254,13 +311,6 @@
 					<div class="owl-item services_item">
 						<div class="services_item_inner">
 							<div class="service_item_content">
-								<div class="service_item_title">
-									<div class="service_item_icon">
-										<div data-icon="&#xe059;" class="icon"></div>
-									</div>
-									<h2>Great team</h2>
-								</div>
-								<p>Etiam nec odio vestibulum est mattis effic iturut magna. Pel lentesque sit am et tellus bla ndit. Etiam nec odio vestibul.</p>
 								<div class="button service_item_button trans_200">
 									<a href="#" class="trans_200">discover more</a>
 								</div>
@@ -272,31 +322,6 @@
 					<div class="owl-item services_item">
 						<div class="services_item_inner">
 							<div class="service_item_content">
-								<div class="service_item_title">
-									<div class="service_item_icon">
-										<div data-icon="&#xe040;" class="icon"></div>
-									</div>
-									<h2>Amazing service</h2>
-								</div>
-								<p>Etiam nec odio vestibulum est mattis effic iturut magna. Pellentesque sit am et tellus blandit. Etiam nec odio vesti bul mattis effic iturut magna.</p>
-								<div class="button service_item_button trans_200">
-									<a href="#" class="trans_200">discover more</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<!-- Services Slider Item-->
-					<div class="owl-item services_item">
-						<div class="services_item_inner">
-							<div class="service_item_content">
-								<div class="service_item_title">
-									<div class="service_item_icon">
-										<div data-icon="&#xe020;" class="icon"></div>
-									</div>
-									<h2>Amazing service</h2>
-								</div>
-								<p>Etiam nec odio vestibulum est mattis effic iturut magna. Pellentesque sit am et tellus blandit. Etiam nec odio vesti bul mattis effic iturut magna.</p>
 								<div class="button service_item_button trans_200">
 									<a href="#" class="trans_200">discover more</a>
 								</div>
@@ -305,37 +330,57 @@
 					</div>
 
 				</div>
-			
 				<div class="services_slider_nav services_slider_nav_left"><i class="fas fa-chevron-left trans_200"></i></div>
 				<div class="services_slider_nav services_slider_nav_right"><i class="fas fa-chevron-right trans_200"></i></div>
-
 			</div>
 		</div>
 	</div>
 
-	<!-- Call to action -->
-
-	<div class="cta">
-		<div class="cta_background" style="background-image:url(../images/cta_background.jpg)"></div>
-		
+	<!-- 充值途径 -->
+	<div class="features">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-5 order-lg-1 order-2">
-					<div class="cta_content">
-						<h1>We love our customers</h1>
-						<p>Cursus, enim a ultrices venenatis, ante magna varius felis, ac sodales turpis lectus a odio. Quisque facilisis lacus vitae leo tincidunt, id cursus dui blandit.</p>
+				<div class="col text-center">
+					<div class="section_title">
+						<h1>PARTNERS AND AFFILIATES</h1>
 					</div>
 				</div>
-
-				<div class="col-lg-6 offset-lg-1 order-lg-2 order-1">
-					<div class="cta_image d-flex flex-column justify-content-end">
-						<img src="../images/cta.png" alt="image by https://unsplash.com/@heysupersimi">
+			</div>
+			<div class="row features_row">
+				<div class="col-lg-12 d-flex flex-column align-items-center order-lg-2 order-1">
+					<div class="features_image">
+						<img src="../images/db.jpg" alt="">
+						<img src="../images/db.jpg" alt="">
+						<img src="../images/db.jpg" alt="">
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
+	<!-- 合作伙伴 外部链接 -->
+	<div class="features">
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
+					<div class="section_title">
+						<h1>EXTERNAL LINKS</h1>
+					</div>
+				</div>
+			</div>
+			<div class="row features_row">
+				<div class="col-lg-12 d-flex flex-column align-items-center order-lg-2 order-1">
+					<div class="features_image">
+						<img src="../images/wblj.jpg" alt="">
+						<img src="../images/wblj.jpg" alt="">
+						<img src="../images/wblj.jpg" alt="">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 分隔线 -->
+	<hr>
 	<!-- 引入底部文件 -->
 	<%
 		include("bottom.html"){}

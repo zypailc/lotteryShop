@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.didu.lotteryshop.auth.dao.MemberDao">
+<mapper namespace="com.didu.lotteryshop.auth.mapper.MemberMapper">
 
-    <resultMap id="baseResultMap" type="Member">
-        <id property="id" column="id" jdbcType="INTEGER" />
-        <result property="memberName" column="member_name" jdbcType="VARCHAR" />
-        <result property="password" column="password" jdbcType="VARCHAR" />
-        <result property="mobile" column="mobile" jdbcType="VARCHAR" />
-        <result property="email" column="email" jdbcType="VARCHAR" />
-        <result property="sex" column="sex" jdbcType="TINYINT" />
-        <result property="birthday" column="birthday" jdbcType="TIMESTAMP" />
-        <result property="createTime" column="createTime" jdbcType="TIMESTAMP" />
-        <collection property="roles" fetchType="eager" column="id" select="com.didu.lotteryshop.auth.dao.RoleDao.findByMemberId"></collection>
+    <resultMap id="BaseResultMap" type="com.didu.lotteryshop.auth.entity.Member">
+        <id column="id" property="id" />
+        <result column="member_name" property="memberName" />
+        <result column="secret_key" property="secretKey" />
+        <result column="password" property="password" />
+        <result column="email" property="email" />
+        <result column="generalize_member_id" property="generalizeMemberId" />
+        <result column="head_portrait_url" property="headPortraitUrl" />
+        <result column="create_time" property="createTime" />
+        <collection property="roles" fetchType="eager" column="id" select="com.didu.lotteryshop.auth.mapper.RoleMapper.findByMemberId"></collection>
     </resultMap>
 
     <sql id="normalItems">
-        id,member_name,email,mobile,sex
+        id,member_name,email
     </sql>
 
     <select id="findByMemberName" parameterType="java.lang.String" resultMap="baseResultMap">

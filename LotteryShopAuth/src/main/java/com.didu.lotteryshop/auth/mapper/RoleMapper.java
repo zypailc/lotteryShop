@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.auth.dao;
+package com.didu.lotteryshop.auth.mapper;
 
 
 import com.didu.lotteryshop.common.entity.Role;
@@ -12,7 +12,7 @@ import java.util.List;
  * @create 2018/12/13
  * @since 1.0.0
  */
-public interface RoleDao {
+public interface RoleMapper {
 
     /**
      * 根据用户id查找角色列表

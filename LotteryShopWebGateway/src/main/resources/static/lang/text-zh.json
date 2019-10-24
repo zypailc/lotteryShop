@@ -1,0 +1,9 @@
+﻿{
+  "base": {
+    "PersonalCenter": "个人中心",
+    "Home": "主页",
+    "PlayTheLottery": "竞彩",
+    "Login": "登录",
+    "Register": "注册"
+  }
+}

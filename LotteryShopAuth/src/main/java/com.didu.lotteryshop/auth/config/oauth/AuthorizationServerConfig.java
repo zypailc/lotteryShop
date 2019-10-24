@@ -1,7 +1,7 @@
 package com.didu.lotteryshop.auth.config.oauth;
 
 import com.didu.lotteryshop.auth.config.error.MssWebResponseExceptionTranslator;
-import com.didu.lotteryshop.auth.service.MyUserDetailService;
+import com.didu.lotteryshop.auth.service.impl.MemberServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +43,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private RedisConnectionFactory redisConnectionFactory;
 
     @Autowired
-    private MyUserDetailService userDetailService;
+    private MemberServiceImpl memberService;
 
     @Bean
     public TokenStore tokenStore() {
@@ -96,7 +96,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.tokenStore(jdbcTokenStore())
-                .userDetailsService(userDetailService)
+                .userDetailsService(memberService)
                 .authenticationManager(authenticationManager);
         endpoints.tokenServices(defaultTokenServices());
         //认证异常翻译

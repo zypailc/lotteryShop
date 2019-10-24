@@ -1,0 +1,9 @@
+﻿{
+  "base": {
+    "PersonalCenter": "Personal Center",
+    "Home": "Home",
+    "PlayTheLottery": "Play The Lottery",
+    "Login": "Login",
+    "Register": "Register"
+  }
+}

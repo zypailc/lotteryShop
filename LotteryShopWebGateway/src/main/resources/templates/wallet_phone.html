@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Lottery - Home</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="RanGO Project">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 公共style -->
+    <%
+    include("common.css.html"){}
+    %>
+    <link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_styles.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_responsive.css">
+</head>
+<!-- 公共js -->
+<%
+include("common.js.html"){}
+%>
+<script src="../js/portfolio_custom.js"></script>
+<script>
+    $(function(){
+        $(".back").click(function(){
+            history.back();
+        });
+    })
+</script>
+<style>
+
+</style>
+<body class="body_top">
+
+<div class="super_container">
+
+    <!-- 引入头部文件 -->
+    <%
+    include("/top.html"){}
+    %>
+    <!-- Home -->
+
+
+    <div class="base_head">
+        <div class="wallet_phone">
+            <div class="wallet_extract">
+                <p>Binding the purse：</p>
+                <div class="wallet_binding">
+                    <p>wallet address :
+                        http://xxxxxxxxxxxxxxxxxxxxxxxxxxx <a class="wallet_button update_wallet_button" href="#">update</a>
+                    </p>
+                    <div class="binding_purse">
+                        <input class="input_class_2" type="text">
+                        <a class="wallet_button" href="#">Binding the purse</a>
+                    </div>
+                </div>
+            </div>
+            <div class="wallet_extract">
+                <p>到账钱包地址：fjkaldjfkajdskfsdfnasjdflkajdsfjad</p>
+                <div>
+                    <input class="input_class_2" type="number" placeholder="amount">
+                    <a class="wallet_button" href="#">extract</a>
+                </div>
+            </div>
+            <div class="wallet_right wallet_extract">
+                <p>提币规则：</p>
+                <p>到币时间为1~2个工作日,实际到币时间请以具体到币时间为准</p>
+                <p>10000个金币可兑换一个1/ETH</p>
+                <p>操作时请核对好钱包地址</p>
+            </div>
+            <div class="wallet_extract">
+                <img src="../images/wallet_record.jpg">
+                    <a href="./walletRecordPhone">wallet management</a>
+                <span class="span_entrance"> > </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入底部文件 -->
+    <%
+    include("bottom.html"){}
+    %>
+
+</div>
+</body>
+
+</html>
