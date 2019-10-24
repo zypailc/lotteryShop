@@ -1,5 +1,6 @@
 package com.didu.lotteryshop.auth.service;
 
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.didu.lotteryshop.auth.mapper.MemberMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

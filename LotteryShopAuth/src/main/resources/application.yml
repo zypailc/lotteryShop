@@ -23,7 +23,7 @@ spring:
         min-idle: 0
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.50.72:3306/eshop_member?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+    url: jdbc:mysql://192.168.50.72:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
     username: root
     password: 123456
   druid:
@@ -56,14 +56,14 @@ eureka:
     service-url:
       defaultZone: http://localhost:8090/eureka/
 #mybatis 配置
-mybatis:
+mybatis-plus:
+  mapper-locations: classpath*:mapping/*.xml
   type-aliases-package: com.didu.lotteryshop.common.entity
-  configuration:
-    map-underscore-to-camel-case: true  #开启驼峰命名,l_name -> lName
-    jdbc-type-for-null: NULL
-    lazy-loading-enabled: true
-    aggressive-lazy-loading: true
-    cache-enabled: true #开启二级缓存
-    call-setters-on-nulls: true #map空列不显示问题
-  mapper-locations:
-    - classpath:mybatis/*.xml
+  #configuration:
+    #map-underscore-to-camel-case: true  #开启驼峰命名,l_name -> lName
+    #jdbc-type-for-null: NULL
+    #lazy-loading-enabled: true
+    #aggressive-lazy-loading: true
+    #cache-enabled: true #开启二级缓存
+    #call-setters-on-nulls: true #map空列不显示问题
+

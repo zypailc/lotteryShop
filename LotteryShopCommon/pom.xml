@@ -41,6 +41,13 @@
             <version>3.9</version>
         </dependency>
 
+        <!-- mybaits 工具 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

@@ -33,7 +33,9 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
 
     @Override
     public UserDetails loadUserByUsername(String memberName) throws UsernameNotFoundException {
+
         Member member = memberMapper.findByMemberName(memberName);
+
         if (member == null) {
             throw new UsernameNotFoundException(memberName);
         }

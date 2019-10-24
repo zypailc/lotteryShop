@@ -2,6 +2,7 @@ package com.didu.lotteryshop.auth.mapper;
 
 
 import com.didu.lotteryshop.common.entity.Role;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @create 2018/12/13
  * @since 1.0.0
  */
+@Mapper
 public interface RoleMapper {
 
     /**
