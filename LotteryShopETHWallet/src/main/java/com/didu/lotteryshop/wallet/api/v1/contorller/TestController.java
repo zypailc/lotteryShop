@@ -2,7 +2,6 @@ package com.didu.lotteryshop.wallet.api.v1.contorller;
 
 import com.didu.lotteryshop.common.utils.Result;
 import com.didu.lotteryshop.wallet.annotation.SecurityParameter;
-import com.didu.lotteryshop.wallet.model.Persion;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -34,15 +33,44 @@ public class TestController {
     @PostMapping(value = "/save",consumes = "application/json")
     @ResponseBody
     @SecurityParameter
-    public Object save(@RequestBody Persion info) {
+    public Result save(@RequestBody Persion info) {
         System.out.println(info.getName());
-        return info;
+        return Result.successJson(info);
     }
 
     @ResponseBody
     @RequestMapping("/test")
-    public String test(@PathParam(value = "name") String name){
-        return name;
+    public Result test(@PathParam(value = "name") String name){
+        return  Result.successJson(name);
     }
 
+    class Persion {
+        private String name;
+        private String sex;
+        private String age;
+         public String getName() {
+             return name;
+         }
+
+         public void setName(String name) {
+             this.name = name;
+         }
+
+         public String getSex() {
+             return sex;
+         }
+
+         public void setSex(String sex) {
+             this.sex = sex;
+         }
+
+         public String getAge() {
+             return age;
+         }
+
+         public void setAge(String age) {
+             this.age = age;
+         }
+
+    }
 }

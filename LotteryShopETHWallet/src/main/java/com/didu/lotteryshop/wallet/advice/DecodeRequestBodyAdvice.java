@@ -49,14 +49,16 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
                 encode = serializedField.inDecode();
             }
             if (encode) {
-                logger.info("对方法method :【" + methodParameter.getMethod().getName() + "】返回数据进行解密");
+                //logger.info("对方法method :【" + methodParameter.getMethod().getName() + "】返回数据进行解密");
+                logger.info("The method :【" + methodParameter.getMethod().getName() + "】Returns data for decryption");
                 return new MyHttpInputMessage(inputMessage);
             } else {
                 return inputMessage;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("对方法method :【" + methodParameter.getMethod().getName() + "】返回数据进行解密出现异常：" + e.getMessage());
+            //logger.error("对方法method :【" + methodParameter.getMethod().getName() + "】返回数据进行解密出现异常：" + e.getMessage());
+            logger.error("The method :【" + methodParameter.getMethod().getName() + "】An exception occurred when the data was returned for decryption：" + e.getMessage());
             return inputMessage;
         }
     }
@@ -94,7 +96,8 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
             if (requestData != null && !requestData.equals("")) {
                 String s = "{\"requestData\":";
                 if (!requestData.startsWith(s)) {
-                    throw new RuntimeException("参数【requestData】缺失异常！");
+                    //throw new RuntimeException("参数【requestData】缺失异常！");
+                    throw new RuntimeException("Parameter [requestData] missing exception！");
                 } else {
                     int closeLen = requestData.length() - 1;
                     int openLen = "{\"requestData\":".length();

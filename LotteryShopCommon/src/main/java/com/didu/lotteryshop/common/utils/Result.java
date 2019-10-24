@@ -72,6 +72,22 @@ public class Result {
         results.setMsg(msg);
         return results;
     }
+    public static Result errorJson(String msg,Object value){
+        Result results = new Result();
+        results.setCode(ResultCode.FAILED.getCode());
+        results.setSuccess(false);
+        results.setMsg(msg);
+        results.getExtend().put("data",value);
+        return results;
+    }
+    public static Result errorJson(Object value){
+        Result results = new Result();
+        results.setCode(ResultCode.FAILED.getCode());
+        results.setSuccess(false);
+        results.setMsg(ResultCode.FAILED.getMessage());
+        results.getExtend().put("data",value);
+        return results;
+    }
 
     /**
      * 失败返回的json封装体

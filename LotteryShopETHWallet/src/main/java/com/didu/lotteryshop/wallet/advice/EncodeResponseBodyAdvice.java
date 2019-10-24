@@ -38,14 +38,16 @@ public class EncodeResponseBodyAdvice implements ResponseBodyAdvice {
             encode = serializedField.outEncode();
         }
         if (encode) {
-            logger.info("对方法method :【" + methodParameter.getMethod().getName() + "】返回数据进行加密");
+            //logger.info("对方法method :【" + methodParameter.getMethod().getName() + "】返回数据进行加密");
+            logger.info("The method  :【" + methodParameter.getMethod().getName() + "】Return data for encryption");
             ObjectMapper objectMapper = new ObjectMapper();
             try {
                 String result = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(body);
                 return AesEncryptUtil.encrypt(result, Constants.AES_ETHWALLET_KEY);
             } catch (Exception e) {
                 e.printStackTrace();
-                logger.error("对方法method :【" + methodParameter.getMethod().getName() + "】返回数据进行解密出现异常："+e.getMessage());
+                //logger.error("对方法method :【" + methodParameter.getMethod().getName() + "】返回数据进行解密出现异常："+e.getMessage());
+                logger.error("The method  :【" + methodParameter.getMethod().getName() + "】There is an exception in decryption of returned data:"+e.getMessage());
             }
         }
         return body;
