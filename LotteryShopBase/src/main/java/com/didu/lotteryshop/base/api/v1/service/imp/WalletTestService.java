@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.base.api.v1.service;
+package com.didu.lotteryshop.base.api.v1.service.imp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;

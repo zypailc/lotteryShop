@@ -82,10 +82,10 @@ public class MysqlGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setModuleName("test");
+        //pc.setModuleName("test");
         pc.setParent(rb.getString("parent"));// 自定义包路径
-        pc.setController("controller");// 这里是控制器包名，默认 web
-        pc.setEntity("model");
+        //pc.setController("controller");// 这里是控制器包名，默认 web
+        //pc.setEntity("model");
         pc.setMapper("mapper");
         //pc.setXml("mapping");
         pc.setService("service");
@@ -113,7 +113,7 @@ public class MysqlGenerator {
                     // 自定义输出文件目录
                     @Override
                     public String outputFile(TableInfo tableInfo) {
-                        return path+"/test-boot-client/src/main/resources/mapping/" + tableInfo.getEntityName() + "Mapper.xml";
+                        return path+"/LotteryShopAuth/src/main/resources/mapping/" + tableInfo.getEntityName() + "xMapper.xml";
                     }
                 }))
         ).setTemplate(

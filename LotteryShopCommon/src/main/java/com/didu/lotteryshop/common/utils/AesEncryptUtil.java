@@ -1,6 +1,7 @@
 package com.didu.lotteryshop.common.utils;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.lang.UUID;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 //import org.apache.tomcat.util.codec.binary.Base64;
 
@@ -68,11 +69,11 @@ public class AesEncryptUtil {
         return decrypt(encryptStr, KEY);
     }
 
-
     public static void main(String[] args) throws Exception {
         Map map=new HashMap<String,String>();
         map.put("key","value");
         map.put("中文","汉字");
+        System.out.println("六位数字："+(int)((Math.random()*9+1)*1000000000));
         String content = Convert.toStr(map);
         System.out.println("加密前：" + content);
 

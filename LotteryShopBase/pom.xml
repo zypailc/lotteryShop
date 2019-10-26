@@ -11,6 +11,12 @@
 
     <artifactId>LotteryShopBase</artifactId>
     <dependencies>
+        <!-- 项目公共工具模块依赖 -->
+        <dependency>
+            <groupId>com.didu</groupId>
+            <artifactId>Common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!-- security安全框架依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -100,7 +106,11 @@
             <artifactId>beetl-framework-starter</artifactId>
             <version>1.2.14.RELEASE</version>
         </dependency>
-
+        <!-- 发送邮件的架包 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

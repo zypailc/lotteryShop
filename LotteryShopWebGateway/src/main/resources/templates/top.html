@@ -1,5 +1,4 @@
 <!-- Header -->
-
 <header id="header_load" class="header d-flex flex-row justify-content-end align-items-center trans_200">
 
     <!-- Logo -->
@@ -7,70 +6,19 @@
         <a class="back" href="#"><span>&lt; Back</span></a>
     </div>
 
-    <!-- Navigation -->
     <nav class="main_nav justify-self-end text-right">
-       <!-- <div class="top_div">
-            <div class="search_content d-flex flex-column align-items-center justify-content-center">
-                <% if(top_login){ %>
-                <div class="top_center_span">
-                    <span>2019-09-26 00:00:00</span><br/>
-                    <span>Welcome，<a href="./personalCenter">sanZ</a></span>
-                </div>
-                <% }else{ %>
-                <div class="top_login_span">
-							<span>
-								<a href="./login">Login&lt;!&ndash;{zh-TW}登录&ndash;&gt;</a><span> / </span><a href="./register">Register</a>
-							</span>
-                </div>
-                <% } %>
-            </div>
-            <div>
-                <select class="language_select_onchange">
-                    <option class="select_option" value="zh-TW">Chinese (Traditional)</option>
-                    <option class="select_option" value="en" selected="selected">English</option>
-                    <option class="select_option" value="jp">Japanese</option>
-                    <option class="select_option" value="da">Danish</option>
-                </select>
-            </div>
-        </div>-->
+
     </nav>
 
-   <!-- <div class="hamburger_container_language">
-        <select class="language_select_onchange">
-            <option class="select_option" value="zh-TW">Chinese (Traditional)</option>
-            <option class="select_option" value="en" selected="selected">English</option>
-            <option class="select_option" value="jp">Japanese</option>
-            <option class="select_option" value="da">Danish</option>
-        </select>
-    </div>-->
-    <!-- Hamburger -->
-   <!-- <div class="hamburger_container">
-        <i class="fas fa-bars trans_200"></i>
-    </div>-->
+
     <div id="google_translate_element" style="display: none;"></div>
-    <!--<div id="google_translate_element"></div>-->
 </header>
-<!--<div class="menu_container">
-    <div class="menu menu_mm text-right">
-        <div class="menu_close"><i class="far fa-times-circle trans_200"></i></div>
-        <ul class="menu_mm">
-            <li><a href="./index">Home</a></li>
-            <li><a href="./playTheLottery">Play The Lottery</a></li>
-            <% if(top_login){ %>
-            <li><a href="./personalCenter"><span>sanZ ,个人中心</span></a></li>
-            <% } else { %>
-            <li class="menu_mm"><a href="./login">Login</a></li>
-            <li class="menu_mm"><a href="./register">Register</a></li>
-            <% } %>
-        </ul>
-    </div>
-</div>-->
+
 <!--<script src="../js/language_select.js"></script>-->
 <script src="https://translate.google.cn/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script src="../js/language_cookie.js"></script>
 <script>
     function googleTranslateElementInit() {
-
         new google.translate.TranslateElement(
             {
                 //这个是当前页面的原语言，便于插件精确翻译
@@ -88,48 +36,52 @@
         );
     }
     $(function(){
+        //初始化语言选择
+        var language_cookie = getCookie("somoveLanguage");
+        $(".language_select_onchange").prop('value',language_cookie);
         $(".language_select_onchange").change(function (){
             var language_select = $(this).val() || "";
+            var language_select_1 = $(this).val() || "";
             //获取浏览器的语言
             var browserLanguage = navigator.language.toLowerCase();
             var browserLanguage_array;
-            console.log(browserLanguage);
+            var langeage_zh = {ja:"日语",da:"丹麦语"};//中文繁体
+            var langeage_en = {ja:"Japanese",da:"Danish"};//英文
             var language_ja = {ja:"日本語",da:"デンマーク語"};//日本
             var language_da = {ja:"Japansk",da:"Dansk"};//丹麦
             var name = "somoveLanguage";
+            var flag = true;
             if(browserLanguage){
                 switch (browserLanguage) {
-                    case zh:
-                        SetCookie(name, browserLanguage);
-                        location.reload();
-                        break;
-                    case en:
-                        SetCookie(name, browserLanguage);
-                        location.reload();
-                        break;
-                    case ja:
+                    case 'zh-cn':
                         browserLanguage_array = language_ja;
-                        language_select = language_ja["language_select"];
+                        language_select = langeage_zh[language_select];
                         break;
-                    case da:
+                    case 'en':
+                        browserLanguage_array = language_ja;
+                        language_select = langeage_en[language_select];
+                        break;
+                    case 'ja':
+                        browserLanguage_array = language_ja;
+                        language_select = language_ja[language_select];
+                        break;
+                    case 'da':
                         browserLanguage_array = language_da;
-                        language_select = language_ja["language_select"];
+                        language_select = language_da[language_select];
                         break;
                     default:
                 }
             }
-            console.log(language_select);
-            $("iframe.goog-te-menu-frame").contents().find("table").find("span.text").each(function(i,data){
-                console.log($(this));
-                console.log($(this).html())
-                console.log($(this).parents("a").html());
-                if($(this).html() == language_select){
-                    //$(this).parents("a").click();
-                    //$(this).parents("a").find("div").click();
-                    $(this).click();
-                    //$(this).parents("a").find("span.indicator").click();
-                }
-            })
+            if((language_select_1 != 'zh' && language_select_1 != 'en')) {
+                $("iframe.goog-te-menu-frame").contents().find("table").find("span.text").each(function (i, data) {
+                    if ($(this).html() == language_select) {
+                        $(this).click();
+                    }
+                })
+            }else {
+                SetCookie(name, language_select_1);
+                location.reload();
+            }
         });
     })
 </script>
