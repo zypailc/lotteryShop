@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 
 @SpringBootApplication
 @EnableEurekaClient
-@MapperScan("com.didu.lotteryshop.base.mapper*")
+@MapperScan("com.didu.lotteryshop.base.api.v1.mapper*")
 @EnableFeignClients
 @EnableOAuth2Client
 @EnableResourceServer
