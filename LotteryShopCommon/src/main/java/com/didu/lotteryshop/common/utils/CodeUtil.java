@@ -15,7 +15,7 @@ public class CodeUtil {
      * @return
      */
     public static String getUuid(){
-        return UUID.randomUUID().toString().replaceAll("_","");
+        return UUID.randomUUID().toString().replaceAll("-","");
     }
 
     /**

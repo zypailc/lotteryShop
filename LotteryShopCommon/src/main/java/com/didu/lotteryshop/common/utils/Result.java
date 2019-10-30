@@ -16,6 +16,17 @@ public class Result {
     private static final long serialVersionUID = 1348172152215944560L;
 
     /**
+     * 请求成功返回码
+     */
+    public static final int SUCCESS_CODE = 200;
+
+    /**
+     * 请求失败返回码
+     */
+    public static final int ERROR_CODE = 500;
+
+
+    /**
      * 返回状态码，200为正确，500为失败
      */
     private int code;
@@ -99,6 +110,13 @@ public class Result {
         results.setSuccess(false);
         results.setMsg(msg);
         return results;
+    }
+
+    public static Result jsonObject(String msg,Integer code){
+        Result result = new Result();
+        result.setCode(code);
+        result.setMsg(msg);
+        return result;
     }
 
     public int getCode() {

@@ -18,6 +18,16 @@ import java.util.Set;
 @TableName("es_member")
 public class Member{
 
+    /**
+     * 推广类型: 1 初始用户
+     */
+    public static final String generalizeMemberType_1 = "1";
+
+    /**
+     * 推广类型: 2 推广用户
+     */
+    public static final  String generalizeMemberType_2 = "2";
+
     private String id;
     @TableField("member_name")
     private String memberName;//昵称
@@ -30,7 +40,7 @@ public class Member{
     @TableField("generalize_member_id")
     private String generalizeMemberId;//推广人员Id
     @TableField("generalize_member_type")
-    private String generalizeMemberType;//推广类型 1 三层推广 2 七层推广
+    private String generalizeMemberType;//推广类型: 1 初始用户 2 推广用户
     @TableField("head_portrait_url")
     private String headPortraitUrl;//头像Url
     @TableField("create_time")
