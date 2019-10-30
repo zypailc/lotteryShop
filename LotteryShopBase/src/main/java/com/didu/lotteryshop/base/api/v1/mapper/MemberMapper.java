@@ -16,4 +16,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface MemberMapper extends BaseMapper<Member> {
 
     Member findByMemberName(String memberName);
+
 }

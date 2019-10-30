@@ -87,7 +87,8 @@ public class MailServiceImp implements MailService {
             //注意这个空行是必须的，设置好了类型，需要空一行再起一行输入正文内容
             printWriter.println();
 
-            printWriter.println("您注册的账号密码为：123456");
+            printWriter.println("您注册的账号为：" + member.getEmail() + "<br/>");
+            printWriter.println("您注册的账号密码为："+ text);
 
             printWriter.println();
             //结束邮件发送"."命令
