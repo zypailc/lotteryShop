@@ -36,6 +36,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new NoEncryptPasswordEncoder();
     }
 
+   /* @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+        //return new NoEncryptPasswordEncoder();
+    }*/
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //自定义登录押验证请求地址
@@ -46,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/oauth/**",loginPage,loginProcessUrl)
                 .and().authorizeRequests()
                 //密码模式需要允许“/auth/oauth/**”请求通过
-                // .antMatchers("/auth/oauth/**",loginPage,loginProcessUrl)
+               // .antMatchers("/auth/oauth/**",loginPage,loginProcessUrl)
                  .antMatchers(loginPage,loginProcessUrl)
                 .permitAll()
                 .anyRequest()

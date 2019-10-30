@@ -21,7 +21,7 @@
     </sql>
 
     <select id="findByMemberName" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select * from es_member where member_name = #{memberName,jdbcType=VARCHAR}
+        select * from es_member where email = #{email,jdbcType=VARCHAR}
     </select>
 
 

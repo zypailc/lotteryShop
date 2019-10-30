@@ -20,8 +20,10 @@ public class NoEncryptPasswordEncoder implements PasswordEncoder {
 
     @Override
     public boolean matches(CharSequence charSequence, String s) {
-
-        return s.equals(AesEncryptUtil.encrypt_code((String)charSequence,AesEncryptUtil.KEY_TOW));
+        if(!(s.equals("browser") && charSequence.equals("browser"))){//这个是其他验证，文字不需要加密，只有密码需要加密
+            return s.equals(AesEncryptUtil.encrypt_code((String)charSequence,AesEncryptUtil.KEY_TOW));
+        }
+        return s.equals(charSequence);
     }
 
 }

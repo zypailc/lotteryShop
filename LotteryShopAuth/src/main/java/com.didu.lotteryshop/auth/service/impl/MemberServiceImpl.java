@@ -58,7 +58,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
                 grantedAuthorities.add(authority);
             }
         }
-        User user = new User(member.getEmail(), member.getPassword(),
+        User user = new User(member.getMemberName(), member.getPassword(),
                 enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, grantedAuthorities);
         return user;
     }
