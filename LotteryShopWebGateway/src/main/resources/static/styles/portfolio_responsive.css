@@ -168,7 +168,7 @@
 	.portfolio_items{
 		border: 0;
 		height: 165px !important;
-		padding-left: 12%;
+		/*padding-left: 12%;*/
 	}
 	.portfolio{
 		padding-left: 0px;
@@ -184,6 +184,15 @@
 	.container_phone{
 		display: block;
 		float: left;
+	}
+	.person_center_module{
+		background: #f8f9fa;
+	}
+	.p_wallet_module{
+		display: none;
+	}
+	.ul_wallet_module{
+		display: block;
 	}
 }
 

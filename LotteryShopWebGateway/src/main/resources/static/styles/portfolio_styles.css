@@ -264,7 +264,7 @@ section
 }
 .container_left{
 	float: left;
-	width: 20%;
+	width: 15%;
 	border-right: dotted 1px  #ddd;
 }
 .container_right{
@@ -982,4 +982,13 @@ section
 .search_condition.active{
 	right: 0;
 	opacity: 1;
+}
+.person_center_module{
+	background: none;
+}
+.p_wallet_module{
+	display: block;
+}
+.ul_wallet_module{
+	display: none;
 }

@@ -20,68 +20,7 @@
 include("common.js.html"){}
 %>
 <script src="../js/portfolio_custom.js"></script>
-<script>
-	$(function (){
-		//初始化方法
-		var li = $(".wallet_li");
-		li.click();
-		$(".card-1_scroll").scroll(function(){
-			var $this =$(this),
-					viewH =$(this).height(),//可见高度
-					contentH =$(this).get(0).scrollHeight,//内容高度
-					scrollTop =$(this).scrollTop();//滚动高度
-			if(scrollTop/(contentH -viewH) >= 0.95){ //当滚动到距离底部5%时
-				var li = '<hr style="height: 1px; border: none; border-top: 1px dashed #ddd;" />'+
-						'<li>'+
-						'<div>'+
-						'<p><span>Lottery type</span><span>#'+contentH+'</span></p>'+
-						'<p>'+
-						'<span>2018.01.01 00:00:00</span>'+
-						'<span>2 4 6 3 2 7</span>'+
-						'<span>2 5 6 0 2 8</span>'+
-						'<span>3ETH</span>'+
-						'</p>'+
-						'</div>'+
-						'</li>';
-				$(".ul_personal_lottery").append(li);
-			}
-		});
 
-		//昵称标签超出长度显示省略号
-		var span_title = $(".span_title").html();
-		if (span_title.length > 15) {
-			//截取固定长度
-			var span_title = span_title.substring(0, 15);
-			//为非隐藏<span>标签赋值--截取固定长度
-			$(".span_title").text(span_title+"...");
-		} else {
-			$(".span_title").text(span_title);
-		}
-		//屏幕分辨率小于991的初始化方法
-		$(".personal_phone").click(function(){
-			var type = $(this).attr("data-file") || "";
-			if(type){
-				$(location).prop('href','./phoneType?'+"type="+type);
-			}
-		});
-		//layui时间控件初始化
-		layui.use('laydate', function(){
-			var laydate = layui.laydate;
-			//执行一个laydate实例
-			laydate.render({
-				elem: '#startDate' //指定元素
-			});
-		});
-		layui.use('laydate', function(){
-			var laydate = layui.laydate;
-			//执行一个laydate实例
-			laydate.render({
-				elem: '#endDate' //指定元素
-			});
-		});
-	})
-
-</script>
 <style>
 
 	.draw_personal_lottery{cursor: pointer;}
@@ -117,10 +56,168 @@ include("common.js.html"){}
 		display: inline;
 		width: 20%;
 	}
-	.update_wallet_button{
-		/*display: none;*/
+	.ul_wallet_module{
+        border-radius: 5px;
+        /*background: #ddd;*/
+        width: 100%;
+        height: 50px;
+    }
+    .li_wallet_module{
+        float: left;
+        width: 33%;
+        height: 100%;
+        line-height: 50px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 500;
+        letter-spacing: 3px;
+    }
+    .li_wallet_module_right{
+        border: none;
+    }
+	.head_img{
+		margin-left: 2%;
+		margin-bottom: 15px;
+		display: inline-block;
+	}
+	.layui_head{
+		display: inline-block;
+		/*text-align: center;*/
+	}
+	.head_img_width{
+		width: 30%;
+	}
+	.btn_head_button{
+		width: 100%;
+	}
+	.layui_title{
+		text-align: left;
+		padding-left: 10px;
+		background: #dddddd;
+		margin-bottom: 15px;
+	}
+	.img_change_border{
+		border: solid;
 	}
 </style>
+<script>
+	$(function (){
+		//初始化方法
+		var li = $(".wallet_li");
+		li.click();
+		$(".card-1_scroll").scroll(function(){
+			var $this =$(this),
+					viewH =$(this).height(),//可见高度
+					contentH =$(this).get(0).scrollHeight,//内容高度
+					scrollTop =$(this).scrollTop();//滚动高度
+			if(scrollTop/(contentH -viewH) >= 0.95){ //当滚动到距离底部5%时
+				var li = '<hr style="height: 1px; border: none; border-top: 1px dashed #ddd;" />'+
+						'<li>'+
+						'<div>'+
+						'<p><span>Lottery type</span><span>#'+contentH+'</span></p>'+
+						'<p>'+
+						'<span>2018.01.01 00:00:00</span>'+
+						'<span>2 4 6 3 2 7</span>'+
+						'<span>2 5 6 0 2 8</span>'+
+						'<span>3ETH</span>'+
+						'</p>'+
+						'</div>'+
+						'</li>';
+				$(".ul_personal_lottery").append(li);
+			}
+		});
+
+
+
+
+		//昵称标签超出长度显示省略号
+		var span_title = $(".span_title").html();
+		if (span_title.length > 15) {
+			//截取固定长度
+			var span_title = span_title.substring(0, 15);
+			//为非隐藏<span>标签赋值--截取固定长度
+			$(".span_title").text(span_title+"...");
+		} else {
+			$(".span_title").text(span_title);
+		}
+		//屏幕分辨率小于991的初始化方法
+		$(".personal_phone").click(function(){
+			var type = $(this).attr("data-file") || "";
+			if(type){
+				$(location).prop('href','./phoneType?'+"type="+type);
+			}
+		});
+		layui.use('laydate', function(){
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: '#startDate'
+			});
+		});
+		layui.use('laydate', function(){
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: '#endDate'
+			});
+		});
+	})
+
+	function changePicture(){
+		layer.open({
+			type: 1,
+			title: false,
+			closeBtn: 0,
+			shadeClose: true,
+			content: $(".layui_head")
+		});
+	}
+
+	function img_change(e){
+		$(".img_change").removeClass("img_change_border");
+		$(e).addClass("img_change_border");
+	}
+
+	function img_change_button(){
+		var src = $(".img_change_border").attr("src");
+		$.ajax({
+			type: "get",
+			url: "/apiauthorization/base/v1/authorization/member/headPortrait",
+			data:data_array,
+			dataType: "json",
+			success:function (data){
+				if(data.code == '200'){//注册成功
+
+				}
+				if(data.code == '500'){//注册失败
+
+				}
+				layer.msg(data.msg);
+			}
+		})
+	}
+
+	//获取头像列表
+	function div_head_images(){
+		var divImages = $(".div_head_images");
+		$.ajax({
+			type: "post",
+			url: "/api/base/v1/authorization/member/headPortrait",
+			dataType: "json",
+			success:function (result){
+				console.log(data)
+				if(data.code == '200'){//注册成功
+					$.each(result,function(index,data){
+						var div_image = '<div  class="head_img head_img_width">' +
+								'<img class="img_change" onclick="img_change(this)" src="'+data.url+'">' +
+								'</div>';
+						divImages.append(div_image);
+					})
+				}
+			}
+		})
+	}
+
+
+</script>
 <body class="body_top">
 
 <div class="super_container">
@@ -137,16 +234,20 @@ include("common.js.html"){}
 				<div class="col">
 					<div class="portfolio_items">
 						<div class="person_center card">
-							<div>
+							<div class="person_center_module">
 								<div class="card-title">
-									<img src="../images/tx.jpg">
+									<img onclick="changePicture()" src="../images/head/tx.jpg">
 									<span class="span_title" title="The luckiest man">The luckiest man</span>
 								</div>
 								<div class="card-text">
-									<p><span>Grade:100</span><span>Gold Club</span></p>
-									<p><span>ETH:10ETH</span><span>gold:1000DB</span></p>
+									<p class="p_wallet_module" ><span>Grade:100</span><span>Gold Club</span></p>
+									<p class="p_wallet_module"><span>ETH:10ETH</span><span>gold:1000DB</span></p>
+									<ul class="ul_wallet_module">
+										<li class="li_wallet_module">ETH <span>&nbsp;&nbsp;> </span></li>
+										<li class="li_wallet_module">FLAT<span>&nbsp;&nbsp;> </span></li>
+										<li class="li_wallet_module li_wallet_module_right">wallet<span>&nbsp;&nbsp;></span></li>
+									</ul>
 								</div>
-								<!--<div><a href="#">wallet address</a></div>-->
 							</div>
 						</div>
 					</div>
@@ -662,8 +763,6 @@ include("common.js.html"){}
 				</div>
 			</div>
 		</div>
-
-
 		<!-- 手机列表 -->
 		<div class="container container_phone">
 			<div class="phone_piece">
@@ -687,6 +786,27 @@ include("common.js.html"){}
 				</div>
 			</div>
 		</div>
+	</div>
+	<!-- 头像弹框 -->
+	<div class="layui_head" style="display: none">
+		<div class="layui_title">
+			<span>头像</span>
+		</div>
+		<div class="div_head_images">
+			<!--<div class="head_img head_img_width">
+				<img class="img_change" onclick="img_change(this)" src="../images/tx.jpg">
+			</div>
+			<div  class="head_img head_img_width">
+				<img class="img_change" onclick="img_change(this)" src="../images/tx.jpg">
+			</div>
+			<div class="head_img head_img_width">
+				<img class="img_change" onclick="img_change(this)" src="../images/tx.jpg">
+			</div>
+			<div class="head_img head_img_width">
+				<img class="img_change" onclick="img_change(this)" src="../images/tx.jpg">
+			</div>-->
+		</div>
+		<button class="btn btn_head_button" onclick="img_change_button()" >确认</button>
 	</div>
 	<!-- 引入底部文件 -->
 	<%
