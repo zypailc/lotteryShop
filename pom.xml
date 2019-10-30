@@ -9,10 +9,10 @@
         <module>LotteryShopWebGateway</module>
         <module>LotteryShopAPIGateway</module>
         <module>LotteryShopAuth</module>
-        <module>LotteryShopAuth_22</module>
         <module>LotteryShopETHWallet</module>
         <module>LotteryShopBase</module>
         <module>LotteryShopManage</module>
+        <module>LotteryShopLSBWallet</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
