@@ -1,5 +1,6 @@
 package com.didu.lotteryshop.auth.config.security;
 
+import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
@@ -13,11 +14,14 @@ public class NoEncryptPasswordEncoder implements PasswordEncoder {
 
     @Override
     public String encode(CharSequence charSequence) {
-        return (String) charSequence;
+        //return AesEncryptUtil.encrypt_code((String)charSequence,AesEncryptUtil.KEY_TOW);
+        return (String)charSequence;
     }
 
     @Override
     public boolean matches(CharSequence charSequence, String s) {
-        return s.equals((String) charSequence);
+
+        return s.equals(AesEncryptUtil.encrypt_code((String)charSequence,AesEncryptUtil.KEY_TOW));
     }
+
 }
