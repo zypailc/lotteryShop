@@ -100,6 +100,12 @@
             <artifactId>beetl-framework-starter</artifactId>
             <version>1.2.14.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>4.6.7</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 

@@ -6,12 +6,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class WalletTestService {
-
+    //auth2.0授权码模式
     @Autowired
     private OAuth2RestTemplate oAuth2RestTemplate;
 
@@ -19,7 +18,8 @@ public class WalletTestService {
         String str = "{\"requestData\":\"i7xBt1//dZKU1loTAZQnLFthL2EqyAtCXSgLCdsKUg6+wLbn7uByyF0PgBa99Hi9ybGWxLgscF8M/cxsMop1Jw==\"}";
         System.out.println("调用到了"+oAuth2RestTemplate.getAccessToken());
         //User user = oAuth2RestTemplate.getForObject("http://user-service/auth/v1/me", User.class);
-        String reStr =   oAuth2RestTemplate.getForObject("http://wallet-service/test/get",String.class);
+        String reStr =   oAuth2RestTemplate.getForObject("http://wallet-service/v1/test/get",String.class);
+        // String  reStr =  restTemplate.getForObject("http://wallet-service/v1/test/get?access_token="+oAuth2RestTemplate.getAccessToken(), String.class);
         return reStr;
     }
 

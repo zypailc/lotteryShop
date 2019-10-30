@@ -2,6 +2,9 @@ server:
   port: 8092
   #servlet:
    #context-path: /eurekabase
+#  session:
+#    cookie:
+#      name: SESSIONID
 spring:
   application:
     name: base-service
@@ -62,10 +65,13 @@ logging:
 security:
   oauth2:
     resource:
+      id: base-service
       user-info-uri: http://localhost:8083/auth/api/member # 资源服务认证
+      prefer-token-info: false
     client:
-      client-id: zhuohao # 认证服务ID
-      client-secret: zhuohao888 # 认证服务密码
+      client-id: browser # 认证服务ID
+      client-secret: browser # 认证服务密码
+      grantType: password
       access-token-uri: http://localhost:8083/auth/oauth/token # 获取token
       user-authorization-uri: http://localhost:8083/auth/oauth/authorize # 获取授权码
 
