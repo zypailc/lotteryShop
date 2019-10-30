@@ -30,11 +30,24 @@ spring:
       pool-prepared-statements: true
       max-open-prepared-statements: 50
       max-pool-prepared-statement-per-connection-size: 20
+  #email发送配置
+  mail:
+    #SMTP服务器
+    username: zm18180545306@163.com
+    password: z18180545306
+    host: smtp.163.com
+    port: 25
+    default-encoding: UTF-8
+    properties:
+      mail:
+        debug: true
+        smtp:
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
 #微服务注册服务配置
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8081/eureka/
+      defaultZone: http://localhost:8090/eureka/
 #beelt模板引擎配置
 beetl:
   #模板路径

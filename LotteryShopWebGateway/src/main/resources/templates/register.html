@@ -6,6 +6,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="RanGO Project">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 引用meta -->
+	<%
+		include("common.meta.html"){}
+	%>
 	<!-- 公共style -->
 <%
 	include("common.css.html"){}
@@ -46,13 +50,15 @@
 					<div class="reply">
 						<div class="reply_form_container">
 							<!-- Reply Form -->
-							<form id="reply_form" action="/" method="post">
+							<form id="reply_form" action="/apiauthorization/base/v1/authorization/member/register" method="get">
 								<div>
-									<input id="reply_form_petname" class="input_field reply_form_email" type="text" placeholder="pet name">
-									<input id="reply_form_email" class="input_field reply_form_email" type="email" placeholder="E-mail" required="required" data-error="Valid email is required.">
+									<input id="reply_form_petname" name="memberName" class="input_field reply_form_email" type="text" placeholder="pet name">
+									<input id="reply_form_email" name="email" class="input_field reply_form_email" type="email" placeholder="E-mail" required="required" data-error="Valid email is required.">
+									<!--<input type="hidden" name="_csrf" value="${_csrf.token}"  />
+									<input type="hidden" name="_csrf_header" value="${_csrf.headerName}"  />-->
 								</div>
 								<div>
-									<button id="reply_form_submit" type="button" class="button_margin reply_submit_btn trans_300">
+									<button id="reply_form_submit" type="submit" class="button_margin reply_submit_btn trans_300">
 										Register
 									</button>
 								</div>
@@ -72,17 +78,21 @@
 
 
 	<script>
-		function layer_test(){
+		$(function(){
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			$(document).ajaxSend(function(e, xhr, options) {
+				xhr.setRequestHeader(header, token);
+			});
+		})
+		/*function layer_test(){
 			layer.alert("我在测试！");
 			layer.open({
 				skin:"my-layui-layer-btn0",//设置自定义样式
 				title:"弹框",
 				content:"你在测试！",
 			});
-		}
-		function trans(){
-			translate();
-		}
+		}*/
 	</script>
 </div>
 </body>

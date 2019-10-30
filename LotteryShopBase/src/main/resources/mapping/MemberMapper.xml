@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.didu.lotteryshop.auth.mapper.MemberMapper">
+
+    <resultMap id="BaseResultMap" type="Member">
+        <id column="id" property="id" />
+        <result column="member_name" property="memberName" />
+        <result column="secret_key" property="secretKey" />
+        <result column="payment_code" property="paymentCode" />
+        <result column="password" property="password" />
+        <result column="email" property="email" />
+        <result column="generalize_member_id" property="generalizeMemberId" />
+        <result column="generalize_member_type" property="generalizeMemberType" />
+        <result column="head_portrait_url" property="headPortraitUrl" />
+        <result column="create_time" property="createTime" />
+        <collection property="roles" fetchType="eager" column="id" select="com.didu.lotteryshop.auth.mapper.RoleMapper.findByMemberId"></collection>
+    </resultMap>
+
+    <sql id="normalItems">
+        id,member_name,email
+    </sql>
+
+    <select id="findByMemberName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from es_member where member_name = #{memberName,jdbcType=VARCHAR}
+    </select>
+
+
+</mapper>

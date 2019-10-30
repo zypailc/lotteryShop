@@ -40,15 +40,23 @@
 				<div class="col-lg-8">
 					<!-- Reply -->
 					<div class="reply">
+                        <input type="hidden" id="rdirect_url" value="${rdirect_url}"/>
 						<div class="reply_form_container">
 							<!-- Reply Form -->
-							<form id="reply_form" action="post">
+							<!--<form id="reply_form" action="http://localhost:8083/auth/login" method="post">-->
+							<!--<form id="reply_form" action="/authservice/auth/oauth/token" method="post">-->
+							<form id="reply_form" action="/authservice/auth/oauth/token" method="post">
+							<!--<form id="reply_form" action="/authservice/auth/login" method="post">-->
+							<!--<form id="reply_form" action="/authservice/auth/custom/authorize" method="post">-->
+								<input type="hidden" name="grant_type" value ="password"/>
+								<input type="hidden" name="client_id" value ="${client_id}"/>
+								<input type="hidden" name="client_secret" value ="${client_secret}"/>
 								<div>
-									<input id="reply_form_email" class="input_field reply_form_email" type="email" placeholder="E-mail" required="required" data-error="Wrong username and password.">
-									<input id="reply_form_password" class="input_field reply_form_password" type="password" placeholder="password" required="required" data-error="Wrong username and password.">
+									<input  name="username" id="reply_form_email" class="input_field reply_form_email" type="text" placeholder="E-mail" required="required" data-error="Wrong username and password.">
+									<input  name="password" id="reply_form_password" class="input_field reply_form_password" type="password" placeholder="password" required="required" data-error="Wrong username and password.">
 								</div>
 								<div class="button_parent_div">
-									<button type="button" class="button_margin reply_submit_btn trans_300">
+									<button type="button" onclick="login()" class="button_margin reply_submit_btn trans_300">
 										Login
 									</button>
 									<button type="button" class="button_margin reply_submit_btn trans_300">
@@ -61,7 +69,18 @@
 							</form>
 						</div>
 					</div>
-
+                    <form id="testPost" action="/web2/testPost" method="post">
+						<!---->
+						<input type="text" name="access_token" value="bae582fc-f5b5-4cad-83d4-2c821a4a6848"/>
+                        <input type="text" name="name"/>
+                        <input type="text" name="sex"/>
+                        <button type="submit" class="button_margin reply_submit_btn trans_300">
+                            submit测试post请求是否验证通过，需删除
+                        </button>
+						<button type="button" onclick="testPost()" class="button_margin reply_submit_btn trans_300">
+							ajax测试post请求是否验证通过，需删除
+						</button>
+                    </form>
 				</div>
 		</div>
 	</div>
@@ -73,6 +92,51 @@
 	%>
 
 </div>
+
+	<script type="text/javascript">
+		$(function () {
+			$(document).ajaxSend(function(e, xhr, options) {
+				//options.data.put({"access_token":"bae582fc-f5b5-4cad-83d4-2c821a4a6848"});
+				var dataStr = options.data;
+				if(dataStr){
+					dataStr = dataStr+"&access_token="+"bae582fc-f5b5-4cad-83d4-2c821a4a6848";
+				}else{
+					dataStr = "access_token="+"bae582fc-f5b5-4cad-83d4-2c821a4a6848";
+				}
+				options.data = dataStr;
+				xhr.setRequestHeader("access_token", "bae582fc-f5b5-4cad-83d4-2c821a4a6848");
+			});
+		});
+
+		function testPost(){
+			$.ajax({
+				url:"/web2/testPost",
+				data:{'name':'CHJ李艳龙','sex':1},
+				type:"post",
+				dataType:"text",
+				success:function(data){
+					console.log(data);
+				},
+				error:function(){
+					alert("User or password error!")
+				}
+			});
+		}
+		function login(){
+			$.ajax({
+				url:"/authservice/auth/oauth/token",
+				data:$('#reply_form').serializeArray(),
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					window.location.href = "/loginSession?access_token="+data.access_token+"&accessToken="+data.access_token+"&rdirectUrl="+$('#rdirect_url').val();
+				},
+				error:function(){
+					alert("User or password error!")
+				}
+			});
+		}
+	</script>
 <script src="../js/contact_custom.js"></script>
 </div>
 </body>

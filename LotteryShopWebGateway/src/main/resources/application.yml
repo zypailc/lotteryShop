@@ -1,6 +1,8 @@
 # 服务配置
 server:
   port: 8080
+#  servlet:
+#    context-path: /CHJ
 # Sping配置
 spring:
   application:
@@ -20,7 +22,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8090/eureka/
+      defaultZone: http://localhost:8081/eureka/
 #beelt模板引擎配置
 beetl:
   #模板路径
@@ -60,6 +62,15 @@ security:
       client-secret: browser # 认证服务密码
       access-token-uri: http://localhost:8083/auth/oauth/token # 获取token
       user-authorization-uri: http://localhost:8083/auth/oauth/authorize # 获取授权码
+#security:
+#  oauth2:
+#    resource:
+#      user-info-uri: http://localhost:${server.port}/authservice/auth/api/member # 资源服务认证
+#    client:
+#      client-id: browser # 认证服务ID
+#      client-secret: browser # 认证服务密码
+#      access-token-uri: http://localhost:${server.port}/authservice/auth/oauth/token # 获取token
+#      user-authorization-uri: http://localhost:${server.port}/authservice/auth/oauth/authorize # 获取授权码
 
 # 提高延时设置 elevate timeout settings, 避免因为延时造成失败
 hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
