@@ -49,12 +49,12 @@ spring:
 
 #eureka服务注册中心配置
 eureka:
-  instance:
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+#  instance:
+#    prefer-ip-address: true
+#    instance-id: ${spring.cloud.client.ip-address}:${server.port}
   client:
     service-url:
-      defaultZone: http://localhost:8090/eureka/
+      defaultZone: http://localhost:8081/eureka/
 #mybatis 配置
 mybatis-plus:
   mapper-locations: classpath*:mapping/*.xml

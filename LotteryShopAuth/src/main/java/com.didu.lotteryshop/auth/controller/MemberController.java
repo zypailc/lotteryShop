@@ -39,10 +39,12 @@ public class MemberController {
         Result result = new Result();
         if (consumerTokenServices.revokeToken(access_token)) {
             result.setCode(ResultCode.SUCCESS.getCode());
-            result.setMessage("注销成功");
+            //result.setMessage("注销成功");
+            result.setMessage("Logout success!");
         } else {
             result.setCode(ResultCode.FAILED.getCode());
-            result.setMessage("注销失败");
+            //result.setMessage("注销失败");
+            result.setMessage("Logout failed!");
         }
         return result;
     }

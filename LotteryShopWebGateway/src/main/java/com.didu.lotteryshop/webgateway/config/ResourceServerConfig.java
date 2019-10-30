@@ -37,8 +37,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 //.and().formLogin().loginPage("/login").permitAll()
                 // .and().logout().permitAll()
                 // .and().logout().logoutSuccessUrl("/").permitAll()
-               // .and().csrf().disable();
-                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+                .and().csrf().disable();
+               // .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
     }
 

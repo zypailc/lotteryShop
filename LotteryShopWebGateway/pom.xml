@@ -12,6 +12,12 @@
     <artifactId>WebGateway</artifactId>
 
     <dependencies>
+        <!-- 项目公共工具模块依赖 -->
+        <dependency>
+            <groupId>com.didu</groupId>
+            <artifactId>Common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!-- security安全框架依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -56,6 +62,12 @@
             <groupId>com.ibeetl</groupId>
             <artifactId>beetl-framework-starter</artifactId>
             <version>1.2.14.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
