@@ -1,6 +1,6 @@
 package com.didu.lotteryshop.wallet.api.v1.contorller;
 
-import com.didu.lotteryshop.common.utils.Result;
+import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.wallet.api.v1.service.WalletService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +30,14 @@ public class WalletContorller {
      */
     @RequestMapping(value = "/generate")
     @ResponseBody
-    public Result generateWallet(String userId,String payPassword){
+    public ResultUtil generateWallet(String userId, String payPassword){
         if(StringUtils.isBlank(userId)){
             //用户ID不能为空！
-            return Result.errorJson("The userId cannot be empty!");
+            return ResultUtil.errorJson("The userId cannot be empty!");
         }
         if(StringUtils.isBlank(payPassword)){
             //支付密码不能为空！
-           return Result.errorJson("The payPassword cannot be empty!");
+           return ResultUtil.errorJson("The payPassword cannot be empty!");
         }
         return walletService.generateWallet(userId,payPassword);
     }
@@ -49,10 +49,10 @@ public class WalletContorller {
      */
     @RequestMapping(value = "/findBalance")
     @ResponseBody
-    public Result findBalance(String address){
+    public ResultUtil findBalance(String address){
         if(StringUtils.isBlank(address)){
             //支付密码不能为空！
-            return Result.errorJson("The address cannot be empty!");
+            return ResultUtil.errorJson("The address cannot be empty!");
         }
         //TODO 需要判断钱包地址规则
         return walletService.findBalance(address);
@@ -70,11 +70,11 @@ public class WalletContorller {
      */
     @RequestMapping(value = "/transfer")
     @ResponseBody
-    public  Result transfer(String walletFileName,String payPassword,String formAddress,String toAddress,String ether){
+    public ResultUtil transfer(String walletFileName, String payPassword, String formAddress, String toAddress, String ether){
         if(StringUtils.isBlank(walletFileName) || StringUtils.isBlank(payPassword) || StringUtils.isBlank(formAddress)
                 || StringUtils.isBlank(toAddress) || StringUtils.isBlank(ether)){
             //参数错误！
-            return Result.errorJson("Invalid parameter!");
+            return ResultUtil.errorJson("Invalid parameter!");
         }
         //TODO 需要判断钱包地址规则
         return walletService.transfer(walletFileName,payPassword,formAddress,toAddress,ether);
@@ -87,10 +87,10 @@ public class WalletContorller {
      */
     @RequestMapping(value = "/findTransactionStatus")
     @ResponseBody
-    public  Result findTransactionStatus(String transactionHashValue){
+    public ResultUtil findTransactionStatus(String transactionHashValue){
         if(StringUtils.isBlank(transactionHashValue)){
             //transactionHashValue 参数不能为空
-            return Result.errorJson("The transactionHashValue cannot be empty!");
+            return ResultUtil.errorJson("The transactionHashValue cannot be empty!");
         }
         return walletService.findTransactionStatus(transactionHashValue);
     }

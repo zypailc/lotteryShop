@@ -1,6 +1,6 @@
 package com.didu.lotteryshop.wallet.api.v1.contorller;
 
-import com.didu.lotteryshop.common.utils.Result;
+import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.wallet.annotation.SecurityParameter;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +20,10 @@ public class TestController {
     @GetMapping("/get")
     @ResponseBody
     @SecurityParameter
-    private Result get() {
+    private ResultUtil get() {
         Persion info = new Persion();
         info.setName("好看");
-        return Result.successJson(info);
+        return ResultUtil.successJson(info);
     }
     /*
      * 自动解密，并将返回信息加密
@@ -33,15 +33,15 @@ public class TestController {
     @PostMapping(value = "/save",consumes = "application/json")
     @ResponseBody
     @SecurityParameter
-    public Result save(@RequestBody Persion info) {
+    public ResultUtil save(@RequestBody Persion info) {
         System.out.println(info.getName());
-        return Result.successJson(info);
+        return ResultUtil.successJson(info);
     }
 
     @ResponseBody
     @RequestMapping("/test")
-    public Result test(@PathParam(value = "name") String name){
-        return  Result.successJson(name);
+    public ResultUtil test(@PathParam(value = "name") String name){
+        return  ResultUtil.successJson(name);
     }
 
     class Persion {

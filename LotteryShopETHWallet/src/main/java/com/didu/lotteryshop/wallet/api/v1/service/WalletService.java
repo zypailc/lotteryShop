@@ -1,6 +1,6 @@
 package com.didu.lotteryshop.wallet.api.v1.service;
 
-import com.didu.lotteryshop.common.utils.Result;
+import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.wallet.service.GasProviderService;
 import com.didu.lotteryshop.wallet.service.Web3jService;
 import org.apache.commons.lang3.StringUtils;
@@ -42,10 +42,10 @@ public class WalletService {
      * @param payPassword 口令
      * @return
      */
-    public Result generateWallet(String userId,String payPassword){
+    public ResultUtil generateWallet(String userId, String payPassword){
         if(StringUtils.isBlank(walletFilePath)){
             //钱包文件地址没有配置，请先配置。
-            return Result.errorJson("WalletFilePath not configured!");
+            return ResultUtil.errorJson("WalletFilePath not configured!");
         }
         try {
             String fileName = WalletUtils.generateNewWalletFile(payPassword, new File(walletFilePath), false);
@@ -58,7 +58,7 @@ public class WalletService {
             reMap.put("address",ALICE.getAddress());
             reMap.put("fileName",fileName);
             reMap.put("userId",userId);
-            return Result.successJson(reMap);
+            return ResultUtil.successJson(reMap);
         } catch (CipherException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -71,7 +71,7 @@ public class WalletService {
             e.printStackTrace();
         }
         //生成eth钱包错误！
-        return Result.errorJson("Error generating  eth wallet!");
+        return ResultUtil.errorJson("Error generating  eth wallet!");
     }
 
     /**
@@ -79,7 +79,7 @@ public class WalletService {
      * @param address
      * @return
      */
-    public Result findBalance(String address){
+    public ResultUtil findBalance(String address){
         Map<String,Object>  reMap = new HashMap<>();
         //钱包地址
         reMap.put("address",address);
@@ -87,13 +87,13 @@ public class WalletService {
             BigDecimal  ether = web3jService.getBalanceByEther(address);
             //钱包余额
             reMap.put("ether",ether.toBigInteger());
-            return Result.successJson(reMap);
+            return ResultUtil.successJson(reMap);
         } catch (IOException e) {
             e.printStackTrace();
             //错误信息
             reMap.put("errorMsg",e.getMessage());
         }
-        return Result.errorJson(reMap);
+        return ResultUtil.errorJson(reMap);
     }
 
     /**
@@ -105,7 +105,7 @@ public class WalletService {
      * @param ether ether
      * @return
      */
-    public  Result transfer(String walletFileName,String payPassword,String formAddress,String toAddress,String ether){
+    public ResultUtil transfer(String walletFileName, String payPassword, String formAddress, String toAddress, String ether){
         Map<String,Object>  reMap = new HashMap<>();
         //交易地址
         reMap.put("formAddress",formAddress);
@@ -127,7 +127,7 @@ public class WalletService {
                         reMap.put("transactionCasUsed",sMap.get(Web3jService.TRANSACTION_CASUSED));
                     }
                 }
-                return Result.successJson(reMap);
+                return ResultUtil.successJson(reMap);
             }else{
                 //错误信息
                 reMap.put("errorMsg","Insufficient Balance!("+allEther.toPlainString()+")");
@@ -137,7 +137,7 @@ public class WalletService {
             //错误信息
             reMap.put("errorMsg",e.getMessage());
         }
-        return Result.errorJson(reMap);
+        return ResultUtil.errorJson(reMap);
     }
 
     /**
@@ -145,7 +145,7 @@ public class WalletService {
      * @param transactionHashValue 转账事务哈希码
      * @return
      */
-    public Result findTransactionStatus(String transactionHashValue){
+    public ResultUtil findTransactionStatus(String transactionHashValue){
         Map<String,Object>  reMap = new HashMap<>();
         //转账事务哈希码
         reMap.put("transactionHashValue",transactionHashValue);
@@ -160,12 +160,12 @@ public class WalletService {
                     reMap.put("transactionCasUsed",sMap.get(Web3jService.TRANSACTION_CASUSED));
                 }
             }
-            return Result.successJson(reMap);
+            return ResultUtil.successJson(reMap);
         } catch (IOException e) {
             e.printStackTrace();
             //错误信息
             reMap.put("errorMsg",e.getMessage());
         }
-        return Result.errorJson(reMap);
+        return ResultUtil.errorJson(reMap);
     }
 }

@@ -11,7 +11,7 @@ import java.util.Map;
  * @date 2019-10-23
  *
  */
-public class Result {
+public class ResultUtil {
 
     private static final long serialVersionUID = 1348172152215944560L;
 
@@ -51,8 +51,8 @@ public class Result {
      * @param value 原始数据
      * @return json格式
      */
-    public static Result successJson(Object value){
-        Result results = new Result();
+    public static ResultUtil successJson(Object value){
+        ResultUtil results = new ResultUtil();
         results.setCode(ResultCode.SUCCESS.getCode());
         results.setMsg(ResultCode.SUCCESS.getMessage());
         results.setSuccess(true);
@@ -64,8 +64,8 @@ public class Result {
      * 失败返回的json封装体
      * @return json格式
      */
-    public static Result errorJson(){
-        Result results = new Result();
+    public static ResultUtil errorJson(){
+        ResultUtil results = new ResultUtil();
         results.setCode(ResultCode.FAILED.getCode());
         results.setSuccess(false);
         results.setMsg(ResultCode.FAILED.getMessage());
@@ -76,23 +76,23 @@ public class Result {
      * 失败返回的json封装体
      * @return json格式
      */
-    public static Result errorJson(String msg){
-        Result results = new Result();
+    public static ResultUtil errorJson(String msg){
+        ResultUtil results = new ResultUtil();
         results.setCode(ResultCode.FAILED.getCode());
         results.setSuccess(false);
         results.setMsg(msg);
         return results;
     }
-    public static Result errorJson(String msg,Object value){
-        Result results = new Result();
+    public static ResultUtil errorJson(String msg, Object value){
+        ResultUtil results = new ResultUtil();
         results.setCode(ResultCode.FAILED.getCode());
         results.setSuccess(false);
         results.setMsg(msg);
         results.getExtend().put("data",value);
         return results;
     }
-    public static Result errorJson(Object value){
-        Result results = new Result();
+    public static ResultUtil errorJson(Object value){
+        ResultUtil results = new ResultUtil();
         results.setCode(ResultCode.FAILED.getCode());
         results.setSuccess(false);
         results.setMsg(ResultCode.FAILED.getMessage());
@@ -104,16 +104,16 @@ public class Result {
      * 失败返回的json封装体
      * @return json格式
      */
-    public static Result errorJson(String msg,Integer code){
-        Result results = new Result();
+    public static ResultUtil errorJson(String msg, Integer code){
+        ResultUtil results = new ResultUtil();
         results.setCode(code);
         results.setSuccess(false);
         results.setMsg(msg);
         return results;
     }
 
-    public static Result jsonObject(String msg,Integer code){
-        Result result = new Result();
+    public static ResultUtil jsonObject(String msg, Integer code){
+        ResultUtil result = new ResultUtil();
         result.setCode(code);
         result.setMsg(msg);
         return result;

@@ -1,8 +1,8 @@
 package com.didu.lotteryshop.auth.controller;
 
 import com.didu.lotteryshop.auth.service.impl.MemberServiceImpl;
-import com.didu.lotteryshop.common.entity.Result;
 import com.didu.lotteryshop.common.enumeration.ResultCode;
+import com.didu.lotteryshop.common.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,17 +35,15 @@ public class MemberController {
     }
 
     @DeleteMapping(value = "/exit")
-    public Result revokeToken(String access_token) {
-        Result result = new Result();
+    public ResultUtil revokeToken(String access_token) {
+        ResultUtil result = new ResultUtil();
         if (consumerTokenServices.revokeToken(access_token)) {
-            result.setCode(ResultCode.SUCCESS.getCode());
             //result.setMessage("注销成功");
-            result.setMessage("Logout success!");
+            return ResultUtil.errorJson("Logout success!");
         } else {
             result.setCode(ResultCode.FAILED.getCode());
             //result.setMessage("注销失败");
-            result.setMessage("Logout failed!");
+            return ResultUtil.errorJson("Logout failed!");
         }
-        return result;
     }
 }

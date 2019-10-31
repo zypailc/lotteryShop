@@ -3,7 +3,7 @@ package com.didu.lotteryshop.base.api.v1.controller;
 import com.didu.lotteryshop.base.api.v1.service.imp.MemberServiceImp;
 import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.utils.EmailUtil;
-import com.didu.lotteryshop.common.utils.Result;
+import com.didu.lotteryshop.common.utils.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +27,13 @@ public class MemberContorller {
      */
     @ResponseBody
     @RequestMapping("/register")
-    public Result register(Member member){
+    public ResultUtil register(Member member){
         //验证邮箱格式
         if(!EmailUtil.verificationEmail(member.getEmail())){
-            return Result.jsonObject("Please enter the correct email address !",Result.ERROR_CODE);
+            return ResultUtil.jsonObject("Please enter the correct email address !", ResultUtil.ERROR_CODE);
         }
         //return memberService.register(member);
-        return Result.jsonObject("success",Result.SUCCESS_CODE);
+        return ResultUtil.jsonObject("success", ResultUtil.SUCCESS_CODE);
     }
 
     /**
@@ -43,7 +43,7 @@ public class MemberContorller {
      */
     @ResponseBody
     @RequestMapping("/headPortrait")
-    public Result headPortrait(Member member){
+    public ResultUtil headPortrait(Member member){
         return memberService.headPortrait(member);
     }
 
