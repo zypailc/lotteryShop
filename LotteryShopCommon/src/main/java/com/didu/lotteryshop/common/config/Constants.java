@@ -14,7 +14,9 @@ public class Constants {
      *  ethwallt 钱包服务api数据传输加密Key，16位
      */
     public static final String AES_ETHWALLET_KEY = "vvuvj8vyl6obu64w";
-    
+    /** 登录用户session_key*/
+    public static final String LOGIN_SESSION_KEY = "Login_session_key";
+
     public static void main(String[] args) {
         System.out.println(getRandomString(16));
     }

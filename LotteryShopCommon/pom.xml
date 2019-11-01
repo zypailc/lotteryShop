@@ -48,6 +48,18 @@
             <version>2.2.0</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- 引入web依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- security安全框架依赖 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-security</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
