@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.wallet.api.v1.contorller;
+package com.didu.lotteryshop.wallet.api.v1.controller;
 
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.wallet.api.v1.service.WalletService;

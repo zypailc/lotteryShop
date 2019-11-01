@@ -39,7 +39,7 @@ public class Web3jService {
     public static final String TRANSACTION_CASUSED = "transaction_casUsed";
     @PostConstruct
     public void init() {
-        web3j = Web3j.build(new HttpService()); //RPC方式
+        web3j = Web3j.build(new HttpService(ethwalletWeb3jUrl)); //RPC方式
        // web3j = Web3j.build(new UnixIpcService(ipcSocketPath)); //IPC方式
     }
 
@@ -69,7 +69,6 @@ public class Web3jService {
             // create our transaction
             // DefaultGasProvider defaultGasProvider = new DefaultGasProvider();
             // StaticGasProvider defaultGasProvider = new StaticGasProvider(BigInteger.valueOf(22000000000L),BigInteger.valueOf(4300000L));
-           //TODO
             RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(
                     nonce, gasProviderService.getGasPrice(),
                     gasProviderService.getGasLimit(),
