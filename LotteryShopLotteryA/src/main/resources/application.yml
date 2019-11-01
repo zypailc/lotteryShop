@@ -1,0 +1,29 @@
+server:
+  port: 8096
+
+#启动服务名称
+spring:
+      application:
+        name: lotterya-service
+
+#微服务注册服务配置
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8081/eureka/
+
+security:
+  oauth2:
+    resource:
+      id: lotterya-service
+      #user-info-uri: http://localhost:8080/authservice/auth/user # 资源服务认证
+      user-info-uri: http://localhost:8083/auth/api/member # 资源服务认证
+      prefer-token-info: false
+#    client:
+#      client-id: zhuohao # 认证服务ID
+#      client-secret: zhuohao888 # 认证服务密码
+#      access-token-uri: http://localhost:8181/auth/oauth/token # 获取token
+#      user-authorization-uri: http://localhost:8181/auth/oauth/authorize # 获取授权码
+
+
+

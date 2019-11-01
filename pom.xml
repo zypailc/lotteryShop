@@ -12,6 +12,7 @@
         <module>LotteryShopETHWallet</module>
         <module>LotteryShopBase</module>
         <module>LotteryShopManage</module>
+        <module>LotteryShopLotteryA</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
