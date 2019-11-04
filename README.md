@@ -1,7 +1,7 @@
-# 彩票店项目描述
+# 菠菜项目描述
 
 ## LotteryShopCommon 项目公共模块
-## LotteryShopEurekaServer 注册服务；端口：8081
+## LotteryShopEurekaServer 注册服务；端口：8090
 ## LotteryShopAuth 安全验证服务；端口：8083
 ## LotteryShopBase 基础功能服务；端口：8092
 ## LotteryShopETHWallet eth钱包服务；端口：8095
