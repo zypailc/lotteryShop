@@ -22,7 +22,7 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8081/eureka/
+      defaultZone: http://localhost:8090/eureka/
 #beelt模板引擎配置
 beetl:
   #模板路径
