@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/LotteryShop3.iml" filepath="$PROJECT_DIR$/.idea/LotteryShop3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LotteryShopAPIGateway/LotteryShopAPIGateway.iml" filepath="$PROJECT_DIR$/LotteryShopAPIGateway/LotteryShopAPIGateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LotteryShopAuth/LotteryShopAuth.iml" filepath="$PROJECT_DIR$/LotteryShopAuth/LotteryShopAuth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LotteryShopBase/LotteryShopBase.iml" filepath="$PROJECT_DIR$/LotteryShopBase/LotteryShopBase.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LotteryShopCommon/LotteryShopCommon.iml" filepath="$PROJECT_DIR$/LotteryShopCommon/LotteryShopCommon.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LotteryShopETHWallet/LotteryShopETHWallet.iml" filepath="$PROJECT_DIR$/LotteryShopETHWallet/LotteryShopETHWallet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LotteryShopEurekaServer/LotteryShopEurekaServer.iml" filepath="$PROJECT_DIR$/LotteryShopEurekaServer/LotteryShopEurekaServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LotteryShopLotteryA/LotteryShopLotteryA.iml" filepath="$PROJECT_DIR$/LotteryShopLotteryA/LotteryShopLotteryA.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LotteryShopManage/LotteryShopManage.iml" filepath="$PROJECT_DIR$/LotteryShopManage/LotteryShopManage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LotteryShopWebGateway/LotteryShopWebGateway.iml" filepath="$PROJECT_DIR$/LotteryShopWebGateway/LotteryShopWebGateway.iml" />
+    </modules>
+  </component>
+</project>

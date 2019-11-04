@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" addBOMForNewFiles="with NO BOM">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/LotteryShopAPIGateway" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/LotteryShopAuth" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/LotteryShopBase" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/LotteryShopCommon" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/LotteryShopETHWallet" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/LotteryShopEurekaServer" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/LotteryShopLotteryA" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/LotteryShopManage" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/LotteryShopWebGateway" charset="UTF-8" />
+  </component>
+</project>

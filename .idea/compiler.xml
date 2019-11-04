@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="LotteryShopAPIGateway" />
+        <module name="LotteryShopAuth" />
+        <module name="LotteryShopBase" />
+        <module name="LotteryShopCommon" />
+        <module name="LotteryShopETHWallet" />
+        <module name="LotteryShopEurekaServer" />
+        <module name="LotteryShopLotteryA" />
+        <module name="LotteryShopManage" />
+        <module name="LotteryShopWebGateway" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="LotteryShop3" target="1.8" />
+      <module name="LotteryShopAPIGateway" target="1.8" />
+      <module name="LotteryShopAuth" target="1.8" />
+      <module name="LotteryShopBase" target="1.8" />
+      <module name="LotteryShopCommon" target="1.8" />
+      <module name="LotteryShopETHWallet" target="1.8" />
+      <module name="LotteryShopEurekaServer" target="1.8" />
+      <module name="LotteryShopLotteryA" target="1.8" />
+      <module name="LotteryShopManage" target="1.8" />
+      <module name="LotteryShopWebGateway" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="LotteryShopAPIGateway" options="-parameters" />
+      <module name="LotteryShopAuth" options="-parameters" />
+      <module name="LotteryShopBase" options="-parameters" />
+      <module name="LotteryShopCommon" options="-parameters" />
+      <module name="LotteryShopETHWallet" options="-parameters" />
+      <module name="LotteryShopEurekaServer" options="-parameters" />
+      <module name="LotteryShopLotteryA" options="-parameters" />
+      <module name="LotteryShopManage" options="-parameters" />
+      <module name="LotteryShopWebGateway" options="-parameters" />
+    </option>
+  </component>
+</project>
