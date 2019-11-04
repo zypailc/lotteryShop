@@ -10,12 +10,12 @@ import java.util.Random;
  * @date 2019-10-23
  */
 public class Constants {
-    /**
-     *  ethwallt 钱包服务api数据传输加密Key，16位
-     */
+    /** ethwallt 钱包服务api数据传输加密Key，16位 */
     public static final String AES_ETHWALLET_KEY = "vvuvj8vyl6obu64w";
-    /** 登录用户session_key*/
+    /** 登录用户session_key */
     public static final String LOGIN_SESSION_KEY = "Login_session_key";
+    /** eth钱包管理员私钥加密key，16位 */
+    public static final String AES_ETHMANAGER_PRIVATEKEY = "t89k66blfwlrnlhc";
 
     public static void main(String[] args) {
         System.out.println(getRandomString(16));
