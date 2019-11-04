@@ -11,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.Principal;
+
 @Controller
-@RequestMapping("/v1/authorization/member")
+@RequestMapping("/authorization/v1/member")
 public class MemberContorller {
 
     Logger log = LoggerFactory.getLogger(getClass());
@@ -26,14 +28,13 @@ public class MemberContorller {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/register")
+    @RequestMapping("/register")//可不过验证访问
     public ResultUtil register(Member member){
         //验证邮箱格式
         if(!EmailUtil.verificationEmail(member.getEmail())){
             return ResultUtil.jsonObject("Please enter the correct email address !", ResultUtil.ERROR_CODE);
         }
-        //return memberService.register(member);
-        return ResultUtil.jsonObject("success", ResultUtil.SUCCESS_CODE);
+        return memberService.register(member);
     }
 
     /**
@@ -43,7 +44,8 @@ public class MemberContorller {
      */
     @ResponseBody
     @RequestMapping("/headPortrait")
-    public ResultUtil headPortrait(Member member){
+    public ResultUtil headPortrait(Member member,Principal user){
+
         return memberService.headPortrait(member);
     }
 

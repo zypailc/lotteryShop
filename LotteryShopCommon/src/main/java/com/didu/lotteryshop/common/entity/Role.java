@@ -15,7 +15,7 @@ import java.util.Set;
 @Data
 public class Role {
 
-    private int id;
+    private String id;
     private String roleName;
     private short valid;
     private Date createTime;

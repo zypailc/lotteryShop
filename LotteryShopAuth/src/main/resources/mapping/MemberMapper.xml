@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.didu.lotteryshop.auth.mapper.MemberMapper">
 
-    <resultMap id="BaseResultMap" type="Member">
-        <id column="id" property="id" />
+    <resultMap id="BaseResultMap" type="com.didu.lotteryshop.common.entity.Member">
+        <id column="id" property="id"/>
         <result column="member_name" property="memberName" />
         <result column="secret_key" property="secretKey" />
         <result column="payment_code" property="paymentCode" />
@@ -21,7 +21,7 @@
     </sql>
 
     <select id="findByMemberName" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select * from es_member where email = #{email,jdbcType=VARCHAR}
+        select * from es_member where email = #{email}
     </select>
 
 

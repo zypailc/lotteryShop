@@ -38,7 +38,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 // 开始认证
                 .antMatcher("/**").authorizeRequests()
                 // 对静态文件和登陆页面放行
-                .antMatchers("/v1/authorization/**").permitAll()
+                .antMatchers("/authorization/**").permitAll()
                 // 其他请求需要认证登陆
                 .anyRequest().authenticated()
                 .and().csrf();

@@ -132,6 +132,10 @@ public class AesEncryptUtil {
         String decrypt = decrypt(encrypt, KEY);
         System.out.println("解密后：" + decrypt);
 
+        //0E14309A5592C544A683E5C623295027
+        //0E14309A5592C544A683E5C623295027
+        System.out.println("mima:"+AesEncryptUtil.encrypt_code("1","b13828b542d244bf9b08e5c2caf95df8"));
+        System.out.println("mima1:"+AesEncryptUtil.encrypt_code("972661448111982254","b13828b542d244bf9b08e5c2caf95df8"));
         //生成4个uuid
         System.out.println("1:"+CodeUtil.getUuid());
         System.out.println("2:"+CodeUtil.getUuid());

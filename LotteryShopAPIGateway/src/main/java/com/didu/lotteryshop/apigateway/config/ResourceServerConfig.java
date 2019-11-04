@@ -29,7 +29,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .requestMatchers().antMatchers("/**")
                 .and()
                 .authorizeRequests()
-                .antMatchers("**/apiauthorization/**").authenticated()
+                .antMatchers("**/apiauthorization/**").authenticated()//请求带有apiauthorization不需要验证
                 .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
     }

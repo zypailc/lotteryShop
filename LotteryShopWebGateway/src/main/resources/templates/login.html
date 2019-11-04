@@ -69,8 +69,8 @@
 							</form>
 						</div>
 					</div>
-                    <form id="testPost" action="/web2/testPost" method="post">
-						<!---->
+                    <!--<form id="testPost" action="/web2/testPost" method="post">
+						&lt;!&ndash;&ndash;&gt;
 						<input type="text" name="access_token" value="bae582fc-f5b5-4cad-83d4-2c821a4a6848"/>
                         <input type="text" name="name"/>
                         <input type="text" name="sex"/>
@@ -80,7 +80,7 @@
 						<button type="button" onclick="testPost()" class="button_margin reply_submit_btn trans_300">
 							ajax测试post请求是否验证通过，需删除
 						</button>
-                    </form>
+                    </form>-->
 				</div>
 		</div>
 	</div>
@@ -94,7 +94,7 @@
 </div>
 
 	<script type="text/javascript">
-		$(function () {
+		/*$(function () {
 			$(document).ajaxSend(function(e, xhr, options) {
 				////options.data.put({"access_token":"bae582fc-f5b5-4cad-83d4-2c821a4a6848"});
 				// var dataStr = options.data;
@@ -106,9 +106,9 @@
 				// options.data = dataStr;
 				// xhr.setRequestHeader("access_token", "bae582fc-f5b5-4cad-83d4-2c821a4a6848");
 			});
-		});
+		});*/
 
-		function testPost(){
+		/*function testPost(){
 			$.ajax({
 				url:"/web2/testPost",
 				data:{'name':'CHJ李艳龙','sex':1},
@@ -121,7 +121,7 @@
 					alert("User or password error!")
 				}
 			});
-		}
+		}*/
 		function login(){
 			$.ajax({
 				url:"/authservice/auth/oauth/token",

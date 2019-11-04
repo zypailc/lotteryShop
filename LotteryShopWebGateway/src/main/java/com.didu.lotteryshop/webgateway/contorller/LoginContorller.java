@@ -36,9 +36,6 @@ public class LoginContorller {
         try {
             request.getSession().setAttribute(Constants.SESSION_LOGIN_TOKEN,accessToken);
             response.sendRedirect(rdirectUrl);
-            System.out.println("loginUserName:"+ user.getName());
-            //TODO 查询用户
-            //TODO 存入session
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -14,7 +14,7 @@ import java.util.List;
  * 图片操作Contorller
  */
 @Controller
-@RequestMapping("/v1/authorization/lsimage")
+@RequestMapping("/v1/lsimage")
 public class LsImageContorller {
 
     @Autowired

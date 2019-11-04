@@ -112,6 +112,19 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
+        <!-- Mybatis通用Mapper -->
+        <!--<dependency>
+            <groupId>com.github.abel533</groupId>
+            <artifactId>mapper</artifactId>
+            <version>3.0.0</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>com.github.abel533</groupId>
+            <artifactId>entitymapper</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

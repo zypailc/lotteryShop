@@ -97,7 +97,7 @@ include("common.js.html"){}
 		margin-bottom: 15px;
 	}
 	.img_change_border{
-		border: solid;
+		box-shadow: 0 0 15px;
 	}
 </style>
 <script>
@@ -127,6 +127,8 @@ include("common.js.html"){}
 			}
 		});
 
+		//初始化头像列表
+		div_head_images();
 
 
 
@@ -177,11 +179,11 @@ include("common.js.html"){}
 	}
 
 	function img_change_button(){
-		var src = $(".img_change_border").attr("src");
+		var src = $("img .img_change_border").attr("src");
 		$.ajax({
-			type: "get",
-			url: "/apiauthorization/base/v1/authorization/member/headPortrait",
-			data:data_array,
+			type: "post",
+			url: "/api/base/v1/member/headPortrait",
+			data:{"url":src},
 			dataType: "json",
 			success:function (data){
 				if(data.code == '200'){//注册成功
@@ -200,18 +202,16 @@ include("common.js.html"){}
 		var divImages = $(".div_head_images");
 		$.ajax({
 			type: "post",
-			url: "/api/base/v1/authorization/member/headPortrait",
+			url: "/api/base/v1/lsimage/imageType",
 			dataType: "json",
 			success:function (result){
-				console.log(data)
-				if(data.code == '200'){//注册成功
-					$.each(result,function(index,data){
-						var div_image = '<div  class="head_img head_img_width">' +
-								'<img class="img_change" onclick="img_change(this)" src="'+data.url+'">' +
-								'</div>';
-						divImages.append(div_image);
-					})
-				}
+				console.log(result)
+				$.each(result,function(index,data){
+					var div_image = '<div  class="head_img head_img_width">' +
+							'<img class="img_change" onclick="img_change(this)" src="'+data.url+'">' +
+							'</div>';
+					divImages.append(div_image);
+				})
 			}
 		})
 	}
@@ -236,7 +236,7 @@ include("common.js.html"){}
 						<div class="person_center card">
 							<div class="person_center_module">
 								<div class="card-title">
-									<img onclick="changePicture()" src="../images/head/tx.jpg">
+									<img onclick="changePicture()" src="../images/head/tx_01.jpg">
 									<span class="span_title" title="The luckiest man">The luckiest man</span>
 								</div>
 								<div class="card-text">
@@ -793,20 +793,9 @@ include("common.js.html"){}
 			<span>头像</span>
 		</div>
 		<div class="div_head_images">
-			<!--<div class="head_img head_img_width">
-				<img class="img_change" onclick="img_change(this)" src="../images/tx.jpg">
-			</div>
-			<div  class="head_img head_img_width">
-				<img class="img_change" onclick="img_change(this)" src="../images/tx.jpg">
-			</div>
-			<div class="head_img head_img_width">
-				<img class="img_change" onclick="img_change(this)" src="../images/tx.jpg">
-			</div>
-			<div class="head_img head_img_width">
-				<img class="img_change" onclick="img_change(this)" src="../images/tx.jpg">
-			</div>-->
+			<!-- 头像列表 -->
 		</div>
-		<button class="btn btn_head_button" onclick="img_change_button()" >确认</button>
+		<button class="btn btn_head_button" onclick="img_change_button()" >更改</button>
 	</div>
 	<!-- 引入底部文件 -->
 	<%

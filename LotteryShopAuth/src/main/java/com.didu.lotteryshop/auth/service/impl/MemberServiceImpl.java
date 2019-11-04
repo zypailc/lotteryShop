@@ -48,7 +48,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
         boolean credentialsNonExpired = true;
         // 锁定性 :true:未锁定 false:已锁定
         boolean accountNonLocked = true;
-        for (Role role : member.getRoles()) {
+       /* for (Role role : member.getRoles()) {
             //角色必须是ROLE_开头，可以在数据库中设置
             GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.getRoleName());
             grantedAuthorities.add(grantedAuthority);
@@ -57,8 +57,8 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
                 GrantedAuthority authority = new SimpleGrantedAuthority(permission.getUri());
                 grantedAuthorities.add(authority);
             }
-        }
-        User user = new User(member.getMemberName(), member.getPassword(),
+        }*/
+        User user = new User(member.getEmail(), member.getPassword(),
                 enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, grantedAuthorities);
         return user;
     }

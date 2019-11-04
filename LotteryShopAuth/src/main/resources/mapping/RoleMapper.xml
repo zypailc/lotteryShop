@@ -3,7 +3,7 @@
 <mapper namespace="com.didu.lotteryshop.auth.mapper.RoleMapper">
 
     <resultMap id="baseResultMap" type="Role">
-        <id property="id" column="id" jdbcType="INTEGER" />
+        <id property="id" column="id" jdbcType="VARCHAR" />
         <result property="roleName" column="role_name" jdbcType="VARCHAR" />
         <result property="valid" column="valid" jdbcType="TINYINT" />
         <result property="createTime" column="createTime" jdbcType="TIMESTAMP" />
@@ -11,7 +11,7 @@
         <collection property="permissions" fetchType="eager" column="id" select="com.didu.lotteryshop.auth.mapper.PermissionMapper.findByRoleId"></collection>
     </resultMap>
 
-    <select id="findByMemberId" resultMap="baseResultMap" parameterType="Integer">
+    <select id="findByMemberId" resultMap="baseResultMap" parameterType="String">
       select r.* from es_member_role mr,es_role r where mr.role_id = r.id and mr.member_id = #{memberId,jdbcType=INTEGER}
     </select>
 

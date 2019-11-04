@@ -6,10 +6,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="RanGO Project">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- 引用meta -->
-	<%
-		include("common.meta.html"){}
-	%>
 	<!-- 公共style -->
 <%
 	include("common.css.html"){}
@@ -54,8 +50,6 @@
 								<div>
 									<input id="reply_form_petname" name="memberName" class="input_field reply_form_email" type="text" placeholder="pet name">
 									<input id="reply_form_email" name="email" class="input_field reply_form_email" type="email" placeholder="E-mail" required="required" data-error="Valid email is required.">
-									<!--<input type="hidden" name="_csrf" value="${_csrf.token}"  />
-									<input type="hidden" name="_csrf_header" value="${_csrf.headerName}"  />-->
 								</div>
 								<div>
 									<button id="reply_form_submit" type="button" onclick="register()" class="button_margin reply_submit_btn trans_300">
@@ -78,13 +72,13 @@
 
 
 	<script>
-		$(function(){
+		/*$(function(){
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 			$(document).ajaxSend(function(e, xhr, options) {
 				xhr.setRequestHeader(header, token);
 			});
-		})
+		})*/
 
 		function register(){
 			var  data_array = $("#reply_form").serializeArray();
@@ -93,13 +87,13 @@
             console.log(data_array);
             console.log(data_array['email']);
             var email = $("#reply_form_email").val() || "";
-            if(mail_reg.test(email)){
+            if(!mail_reg.test(email)){
                 layer.msg("Please enter the correct email address !");
                 return;
             }
 			$.ajax({
 					type: "get",
-					url: "/apiauthorization/base/v1/authorization/member/register",
+					url: "/apiauthorization/base/authorization/v1/member/register",
 					data:data_array,
 					dataType: "json",
 					success:function (data){
