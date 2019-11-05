@@ -50,7 +50,6 @@ public class IndexController extends BaseContorller {
     @RequestMapping("/index")
     public String index(Model model, HttpServletRequest request){
         model = getModel(model);
-        model.addAttribute("whetherLogin",true);
         return "index";
     }
 
