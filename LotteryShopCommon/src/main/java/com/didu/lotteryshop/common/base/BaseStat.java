@@ -34,7 +34,7 @@ public class BaseStat {
         return  sqlMapper;
     }
     public  UserDetil getLoginUser(){
-        return  (UserDetil)request.getSession().getAttribute(Constants.LOGIN_SESSION_KEY);
+        return  (UserDetil)request.getSession().getAttribute(Constants.LOGIN_USER);
     }
     public HttpSession  getSession(){
         return request.getSession();

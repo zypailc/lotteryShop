@@ -1,8 +1,6 @@
 package com.didu.lotteryshop.webgateway.controller;
 
 import com.didu.lotteryshop.common.base.contorller.BaseContorller;
-import com.didu.lotteryshop.common.config.Constants;
-import com.didu.lotteryshop.common.entity.UserDetil;
 import org.apache.commons.lang.StringUtils;
 import org.beetl.sql.core.annotatoin.Param;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,7 +50,7 @@ public class IndexController extends BaseContorller {
     @RequestMapping("/index")
     public String index(Model model, HttpServletRequest request){
         model = getModel(model);
-        UserDetil userDetil = (UserDetil) request.getSession().getAttribute(Constants.LOGIN_USER);
+        model.addAttribute("whetherLogin",true);
         return "index";
     }
 
