@@ -1,5 +1,8 @@
 package com.didu.lotteryshop.webgateway.controller;
 
+import com.didu.lotteryshop.common.base.contorller.BaseContorller;
+import com.didu.lotteryshop.common.config.Constants;
+import com.didu.lotteryshop.common.entity.UserDetil;
 import org.apache.commons.lang.StringUtils;
 import org.beetl.sql.core.annotatoin.Param;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping("/web")
-public class IndexController {
+public class IndexController extends BaseContorller {
     @Value("${security.oauth2.client.client-id}")
     private String securityClientId;
     @Value("${security.oauth2.client.client-secret}")
@@ -48,8 +51,8 @@ public class IndexController {
      */
     @RequestMapping("/index")
     public String index(Model model, HttpServletRequest request){
-        model.addAttribute("top_login",true);
-        model.addAttribute("top_login_1",false);
+        model = getModel(model);
+        UserDetil userDetil = (UserDetil) request.getSession().getAttribute(Constants.LOGIN_USER);
         return "index";
     }
 

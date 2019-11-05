@@ -16,6 +16,8 @@ public class Constants {
     public static final String LOGIN_SESSION_KEY = "Login_session_key";
     /** eth钱包管理员私钥加密key，16位 */
     public static final String AES_ETHMANAGER_PRIVATEKEY = "t89k66blfwlrnlhc";
+    /** 登陆用户的信息key **/
+    public static final  String LOGIN_USER = "login_user";
 
     public static void main(String[] args) {
         System.out.println(getRandomString(16));

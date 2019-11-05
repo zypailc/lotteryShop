@@ -1,9 +1,9 @@
-package com.didu.lotteryshop.base.config.datasource.druid;
+package com.didu.lotteryshop.common.config.datasource.druid;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
-import com.didu.lotteryshop.base.config.datasource.model.DruidDataSourceProperties;
+import com.didu.lotteryshop.common.config.datasource.model.DruidDataSourceProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

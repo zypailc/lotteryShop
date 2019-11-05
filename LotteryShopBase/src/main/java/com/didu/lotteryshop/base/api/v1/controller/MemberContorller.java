@@ -1,9 +1,11 @@
 package com.didu.lotteryshop.base.api.v1.controller;
 
 import com.didu.lotteryshop.base.api.v1.service.imp.MemberServiceImp;
+import com.didu.lotteryshop.common.base.contorller.BaseContorller;
 import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.utils.EmailUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +17,14 @@ import java.security.Principal;
 
 @Controller
 @RequestMapping("/authorization/v1/member")
-public class MemberContorller {
+public class MemberContorller extends BaseContorller {
 
     Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private MemberServiceImp memberService;
+    @Autowired
+    private SqlSession sqlSession;
 
     /**
      * 注册账号
@@ -45,7 +49,6 @@ public class MemberContorller {
     @ResponseBody
     @RequestMapping("/headPortrait")
     public ResultUtil headPortrait(Member member,Principal user){
-
         return memberService.headPortrait(member);
     }
 

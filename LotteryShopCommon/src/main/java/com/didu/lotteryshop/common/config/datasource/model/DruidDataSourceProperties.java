@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.base.config.datasource.model;
+package com.didu.lotteryshop.common.config.datasource.model;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
