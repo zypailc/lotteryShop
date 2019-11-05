@@ -4,11 +4,15 @@ import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.UserDetil;
 import com.github.abel533.sql.SqlMapper;
 import net.sf.jsqlparser.expression.operators.arithmetic.Concat;
+import netscape.security.Principal;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.WebApplicationContext;
@@ -22,13 +26,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Component
 public class LoginSessionFilter extends OncePerRequestFilter {
+
+    Logger log = LoggerFactory.getLogger(getClass());
 
     /*@Autowired
     private SqlSession sqlSession;*/
@@ -37,10 +42,17 @@ public class LoginSessionFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-
+        System.out.println("path:"+httpServletRequest.getContextPath());
         Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
         //最新登陆的用户名
-        String memberName = authentication.getPrincipal().toString();
+        String memberName = null;
+        try{
+            UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+            memberName = userDetails.getUsername();
+        }catch (Exception e){
+            log.info("User Strong go error！");
+            memberName = authentication.getPrincipal().toString();
+        }
         //如果 memberName == ‘anonymousUser’ 没有登陆用户
         //登陆后记录的用户名
         String user_name =  (String)httpServletRequest.getSession().getAttribute(Constants.LOGIN_SESSION_KEY);
@@ -65,9 +77,6 @@ public class LoginSessionFilter extends OncePerRequestFilter {
         if(userDetil != null) {
             httpServletRequest.getSession().setAttribute(Constants.LOGIN_USER, userDetil);
         }
-        // Principal principal = (Principal)authentication.getPrincipal();
-        //System.out.println(principal.getName());
-        //System.out.println(authentication.getPrincipal());
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }

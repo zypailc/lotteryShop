@@ -34,26 +34,4 @@ public class BaseContorller extends BaseStat{
         }
         return model;
     }
-
-
-    //获取用户信息
-//    public UserDetil getUserMedol(){
-//        //取用户邮箱
-//        String email = (String) request.getSession().getAttribute(Constants.LOGIN_SESSION_KEY);
-//
-//        if(userDetil == null  || !userDetil.getClass().equals(email)){
-//            UserDetil userDetil = null;
-//            if(email != null && "".equals(email)){
-//                //sqlMapper = new SqlMapper(@Autowired SqlSession sql);
-//                List<Map<String,Object>> list =  sqlMapper.selectList("select * from es_member");
-//                userDetil = new UserDetil();
-//            }
-//            //查询的详细信息
-//        }
-//        return userDetil;
- //   }
-
-
-
-
 }
