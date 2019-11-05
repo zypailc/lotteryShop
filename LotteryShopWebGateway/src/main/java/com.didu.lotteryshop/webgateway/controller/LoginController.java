@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.webgateway.contorller;
+package com.didu.lotteryshop.webgateway.controller;
 
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.webgateway.config.Constants;
@@ -21,7 +21,7 @@ import java.security.Principal;
  *
  */
 @Controller
-public class LoginContorller {
+public class LoginController {
     @Autowired
     private RestTemplate restTemplate;
     /**

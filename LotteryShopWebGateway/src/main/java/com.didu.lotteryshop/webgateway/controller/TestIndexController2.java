@@ -1,6 +1,5 @@
-package com.didu.lotteryshop.webgateway.contorller;
+package com.didu.lotteryshop.webgateway.controller;
 
-import org.beetl.sql.core.annotatoin.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/web2")
-public class TestIndexContorller2 {
+public class TestIndexController2 {
 
     /**
      * 主页

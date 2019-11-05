@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.webgateway.contorller;
+package com.didu.lotteryshop.webgateway.controller;
 
 import org.apache.commons.lang.StringUtils;
 import org.beetl.sql.core.annotatoin.Param;
@@ -8,8 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * Web页面Contorller
@@ -19,7 +17,7 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping("/web")
-public class IndexContorller {
+public class IndexController {
     @Value("${security.oauth2.client.client-id}")
     private String securityClientId;
     @Value("${security.oauth2.client.client-secret}")
