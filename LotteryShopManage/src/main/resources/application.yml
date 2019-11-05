@@ -1,0 +1,32 @@
+# 服务配置
+server:
+  port: 8070
+# Sping配置
+spring:
+  application:
+    name: manage-service
+  http:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+#security 配置
+  security:
+    user:
+      name: admin
+      password: 123456
+
+#微服务注册服务配置
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8090/eureka/
+#beelt模板引擎配置
+beetl:
+  #模板路径
+  templatesPath: templates
+
+

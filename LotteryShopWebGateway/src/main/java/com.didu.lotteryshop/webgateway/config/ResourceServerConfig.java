@@ -33,6 +33,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/eureka/**").permitAll()
                 .antMatchers("/authservice/**").permitAll()
                 .antMatchers("/apiauthorization/**").permitAll()
+                .antMatchers("/manage/**").permitAll()
                 .anyRequest().authenticated()
                 //.and().formLogin().loginPage("/login").permitAll()
                 // .and().logout().permitAll()

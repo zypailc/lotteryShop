@@ -47,11 +47,9 @@ zuul:
       path: /apiauthorization/**
       serviceId: apiGateway-service
     api-e:
-      path: /base/**
-      serviceId: base-service
-    api-f:
-      path: /ethwallet/**
-      serviceId: wallet-service
+      path: /manage/**
+      serviceId: manage-service
+
 #security&oauth2 配置
 security:
   oauth2:
