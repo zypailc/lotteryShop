@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 /**
- * 彩票类型A定时任务
+ * A彩票开奖定时任务
  * @author CHJ
  * @date 2019-11-01
  */

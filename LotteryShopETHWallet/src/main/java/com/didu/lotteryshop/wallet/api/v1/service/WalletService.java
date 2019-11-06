@@ -102,19 +102,19 @@ public class WalletService {
      * @param payPassword 支付密码
      * @param formAddress 出账地址
      * @param toAddress  入账地址
-     * @param ether ether
+     * @param etherValue etherValue
      * @return
      */
-    public ResultUtil transfer(String walletFileName, String payPassword, String formAddress, String toAddress, String ether){
+    public ResultUtil transfer(String walletFileName, String payPassword, String formAddress, String toAddress, String etherValue){
         Map<String,Object>  reMap = new HashMap<>();
         //交易地址
         reMap.put("formAddress",formAddress);
         try {
             Credentials credentials = WalletUtils.loadCredentials(payPassword, walletFilePath+walletFileName);
             BigDecimal  etherBalance =  web3jService.getBalanceByEther(formAddress);
-            BigDecimal allEther = gasProviderService.getAllEther(new BigDecimal(ether));
+            BigDecimal allEther = gasProviderService.getAllEther(new BigDecimal(etherValue));
             if(etherBalance.compareTo(allEther) >= 0){
-                String transactionHashValue = web3jService.transfer(credentials,toAddress,ether);
+                String transactionHashValue = web3jService.transfer(credentials,toAddress,etherValue);
                 //转账事务hash值，可用来查看交易是否被确认
                 reMap.put("transactionHashValue",transactionHashValue);
                 //交易确认状态，0-未确认；1-已确认

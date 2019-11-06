@@ -1,6 +1,7 @@
 package com.didu.lotteryshop.wallet.api.v1.controller;
 
 import com.didu.lotteryshop.common.utils.ResultUtil;
+import com.didu.lotteryshop.wallet.annotation.SecurityParameter;
 import com.didu.lotteryshop.wallet.api.v1.service.WalletService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class WalletContorller {
      */
     @RequestMapping(value = "/generate")
     @ResponseBody
+    @SecurityParameter
     public ResultUtil generateWallet(String userId, String payPassword){
         if(StringUtils.isBlank(userId)){
             //用户ID不能为空！
@@ -49,6 +51,7 @@ public class WalletContorller {
      */
     @RequestMapping(value = "/findBalance")
     @ResponseBody
+    @SecurityParameter
     public ResultUtil findBalance(String address){
         if(StringUtils.isBlank(address)){
             //支付密码不能为空！
@@ -65,19 +68,20 @@ public class WalletContorller {
      * @param payPassword 支付密码
      * @param formAddress 出账地址
      * @param toAddress  入账地址
-     * @param ether ether
+     * @param etherValue etherValue
      * @return
      */
     @RequestMapping(value = "/transfer")
     @ResponseBody
-    public ResultUtil transfer(String walletFileName, String payPassword, String formAddress, String toAddress, String ether){
+    @SecurityParameter
+    public ResultUtil transfer(String walletFileName, String payPassword, String formAddress, String toAddress, String etherValue){
         if(StringUtils.isBlank(walletFileName) || StringUtils.isBlank(payPassword) || StringUtils.isBlank(formAddress)
-                || StringUtils.isBlank(toAddress) || StringUtils.isBlank(ether)){
+                || StringUtils.isBlank(toAddress) || StringUtils.isBlank(etherValue)){
             //参数错误！
             return ResultUtil.errorJson("Invalid parameter!");
         }
         //TODO 需要判断钱包地址规则
-        return walletService.transfer(walletFileName,payPassword,formAddress,toAddress,ether);
+        return walletService.transfer(walletFileName,payPassword,formAddress,toAddress,etherValue);
     }
 
     /**
@@ -87,6 +91,7 @@ public class WalletContorller {
      */
     @RequestMapping(value = "/findTransactionStatus")
     @ResponseBody
+    @SecurityParameter
     public ResultUtil findTransactionStatus(String transactionHashValue){
         if(StringUtils.isBlank(transactionHashValue)){
             //transactionHashValue 参数不能为空

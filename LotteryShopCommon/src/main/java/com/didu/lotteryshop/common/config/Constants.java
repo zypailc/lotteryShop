@@ -28,7 +28,7 @@ public class Constants {
      * @param length 表示生成字符串的长度
      * @return
      */
-    public static String getRandomString(int length) {
+    private static String getRandomString(int length) {
         String base = "abcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
         StringBuffer sb = new StringBuffer();
