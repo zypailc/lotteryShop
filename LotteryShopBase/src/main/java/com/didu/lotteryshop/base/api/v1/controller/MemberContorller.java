@@ -3,6 +3,7 @@ package com.didu.lotteryshop.base.api.v1.controller;
 import com.didu.lotteryshop.base.api.v1.service.imp.MemberServiceImp;
 import com.didu.lotteryshop.common.base.contorller.BaseContorller;
 import com.didu.lotteryshop.common.entity.Member;
+import com.didu.lotteryshop.common.enumeration.ResultCode;
 import com.didu.lotteryshop.common.utils.EmailUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import org.apache.ibatis.session.SqlSession;
@@ -36,7 +37,7 @@ public class MemberContorller extends BaseContorller {
     public ResultUtil register(Member member){
         //验证邮箱格式
         if(!EmailUtil.verificationEmail(member.getEmail())){
-            return ResultUtil.jsonObject("Please enter the correct email address !", ResultUtil.ERROR_CODE);
+            return ResultUtil.jsonObject("Please enter the correct email address !", ResultCode.FAILED.getCode());
         }
         return memberService.register(member);
     }

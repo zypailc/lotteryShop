@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.Collections;
@@ -21,6 +23,7 @@ import java.util.ResourceBundle;
  *
  */
 public class MysqlGenerator {
+    private static String mappingPath;
 
     private static String packageName="";    //文件路径
     private static File file = new File(packageName);
@@ -46,7 +49,7 @@ public class MysqlGenerator {
         GlobalConfig gc = new GlobalConfig();
 
         gc.setOutputDir(rb.getString("OutputDir"));
-
+        mappingPath =  rb.getString("xxx.mapping.path");
         gc.setFileOverride(true);
         gc.setActiveRecord(true);// 开启 activeRecord 模式
         gc.setEnableCache(false);// XML 二级缓存
@@ -88,8 +91,8 @@ public class MysqlGenerator {
         //pc.setEntity("model");
         pc.setMapper("mapper");
         //pc.setXml("mapping");
-        pc.setService("service");
-        pc.setServiceImpl("service.impl");
+        pc.setService("service.form");
+        pc.setServiceImpl("service.form.impl");
 		/*pc.setModuleName("test");
 		pc.setParent(rb.getString("parent"));// 自定义包路径
 		pc.setController("controller." + rb.getString("className"));// 这里是控制器包名，默认 web
@@ -113,7 +116,8 @@ public class MysqlGenerator {
                     // 自定义输出文件目录
                     @Override
                     public String outputFile(TableInfo tableInfo) {
-                        return path+"/LotteryShopAuth/src/main/resources/mapping/" + tableInfo.getEntityName() + "xMapper.xml";
+                       // return path+"/LotteryShopLotteryA/src/main/resources/mapping/" + tableInfo.getEntityName() + "Mapper.xml";
+                        return path+mappingPath + tableInfo.getEntityName() + "Mapper.xml";
                     }
                 }))
         ).setTemplate(

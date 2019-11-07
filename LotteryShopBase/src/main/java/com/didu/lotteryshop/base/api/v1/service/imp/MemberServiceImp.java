@@ -27,7 +27,7 @@ public class MemberServiceImp extends ServiceImpl<MemberMapper, Member> {
         member_verification.setEmail(member.getEmail());
         Member m = baseMapper.selectOne(member_verification);
         if(m != null && m.getEmail() != null){
-            return ResultUtil.jsonObject("The email address has been registered !", ResultUtil.ERROR_CODE);
+            return ResultUtil.errorJson("The email address has been registered !");
         }
         //随机生成一个秘钥jsonObjectjsonObject
         String secretKey = AesEncryptUtil.KEY_TOW;
@@ -50,7 +50,7 @@ public class MemberServiceImp extends ServiceImpl<MemberMapper, Member> {
         mailServiceImp.sendSimpleMail(member,"密码",password);
         //保存用户信息
         insert(member);
-        return ResultUtil.jsonObject("registered successfully , please log in !", ResultUtil.SUCCESS_CODE);
+        return ResultUtil.errorJson("registered successfully , please log in !");
     }
 
     public ResultUtil headPortrait(Member member){

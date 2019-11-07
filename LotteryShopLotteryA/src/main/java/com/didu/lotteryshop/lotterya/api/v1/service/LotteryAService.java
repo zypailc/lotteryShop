@@ -40,6 +40,7 @@ public class LotteryAService extends BaseService {
         //当前状态
         //彩票名称
         //开奖时间
+        //开奖间隔时间
         return ResultUtil.successJson(rMap);
     }
 
