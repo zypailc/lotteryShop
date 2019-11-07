@@ -1,5 +1,6 @@
 package com.didu.lotteryshop;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -19,6 +20,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @ComponentScan("com")
 @EnableOAuth2Client
 @EnableResourceServer
+@MapperScan("com.didu.lotteryshop.lotterya.mapper*")
 public class LotteryApplication extends SpringBootServletInitializer {
 
     @Override

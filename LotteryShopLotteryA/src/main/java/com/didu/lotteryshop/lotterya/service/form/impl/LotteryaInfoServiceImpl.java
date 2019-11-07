@@ -4,6 +4,7 @@ import com.didu.lotteryshop.lotterya.entity.LotteryaInfo;
 import com.didu.lotteryshop.lotterya.mapper.LotteryaInfoMapper;
 import com.didu.lotteryshop.lotterya.service.form.ILotteryaInfoService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,5 +17,15 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LotteryaInfoServiceImpl extends ServiceImpl<LotteryaInfoMapper, LotteryaInfo> implements ILotteryaInfoService {
+    @Autowired
+    private LotteryaInfoMapper lotteryaInfoMapper;
+
+    /**
+     * 查询A彩票基本信息
+     * @return
+     */
+    public LotteryaInfo findLotteryaInfo(){
+        return lotteryaInfoMapper.selectById(1);
+    }
 	
 }

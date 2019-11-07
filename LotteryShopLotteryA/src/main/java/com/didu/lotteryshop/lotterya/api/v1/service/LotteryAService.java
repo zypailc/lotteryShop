@@ -4,7 +4,11 @@ import cn.hutool.core.convert.Convert;
 import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.enumeration.ResultCode;
 import com.didu.lotteryshop.common.utils.ResultUtil;
+import com.didu.lotteryshop.lotterya.entity.LotteryaInfo;
+import com.didu.lotteryshop.lotterya.entity.LotteryaIssue;
 import com.didu.lotteryshop.lotterya.service.Web3jService;
+import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaInfoServiceImpl;
+import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaIssueServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -27,19 +31,29 @@ public class LotteryAService extends BaseService {
     private OAuth2RestTemplate oAuth2RestTemplate;
     @Autowired
     private Web3jService web3jService;
+    @Autowired
+    private LotteryaInfoServiceImpl lotteryaInfoService;
+    @Autowired
+    private LotteryaIssueServiceImpl lotteryaIssueService;
 
     /**
      * 获取彩票信息
      * @return
      */
     public ResultUtil getLotteryInfo(){
-        Map<String,String> rMap = new HashMap<>();
-        //彩票单价
-        rMap.put("price",web3jService.getLotterAPrice());
-        //当前期数
-        //当前状态
+        Map<String,Object> rMap = new HashMap<>();
+        LotteryaInfo lotteryaInfo = lotteryaInfoService.findLotteryaInfo();
+        LotteryaIssue lotteryaIssue = lotteryaIssueService.findCurrentPeriodLotteryaIssue();
         //彩票名称
+        rMap.put("title",lotteryaInfo.getTitle());
+        //彩票单价
+        rMap.put("price",lotteryaInfo.getPrice().toPlainString());
+        //当前期数
+        rMap.put("issueNum",lotteryaIssue.getIssueNum());
+        //当前状态
+        rMap.put("buyStatus",lotteryaIssue.getBuyStatus());
         //开奖时间
+        rMap.put("endTime",lotteryaIssue.getEndTime());
         //开奖间隔时间
         return ResultUtil.successJson(rMap);
     }

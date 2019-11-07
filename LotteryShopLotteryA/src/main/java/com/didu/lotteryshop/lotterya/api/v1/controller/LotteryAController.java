@@ -26,6 +26,7 @@ public class LotteryAController extends BaseContorller {
      * @return
      */
     @RequestMapping("/getLotteryInfo")
+    @ResponseBody
     public ResultUtil getLotteryInfo(){
         return lotteryAService.getLotteryInfo();
     }

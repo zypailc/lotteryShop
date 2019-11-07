@@ -5,6 +5,9 @@ server:
 spring:
   application:
     name: lotterya-service
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
   datasource:
     name: druidDataSource
     type: com.alibaba.druid.pool.DruidDataSource
