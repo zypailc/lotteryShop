@@ -98,7 +98,8 @@ public class EsEthwalletServiceImpl extends ServiceImpl<EsEthwalletMapper, EsEth
             esEthwallet.setBalance(esEthwallet.getBalance().add(balance));
         }else{
             //账户余额，要大于出账金额
-            if(esEthwallet.getBalance().compareTo(balance) != -1){
+            // if(esEthwallet.getBalance().compareTo(freeze) != -1) {
+            if(this.judgeBalance(memberId,balance)){
                 esEthwallet.setBalance(esEthwallet.getBalance().subtract(balance));
                 esEthwallet.setTotal(esEthwallet.getTotal().subtract(balance));
             }else{
@@ -142,14 +143,16 @@ public class EsEthwalletServiceImpl extends ServiceImpl<EsEthwalletMapper, EsEth
         EsEthwallet esEthwallet = this.findByMemberId(memberId);
         if(isAdd){
             //账户余额，要大于出账金额
-            if(esEthwallet.getBalance().compareTo(freeze) != -1) {
+           // if(esEthwallet.getBalance().compareTo(freeze) != -1) {
+            if(this.judgeBalance(memberId,freeze)){
                 esEthwallet.setBalance(esEthwallet.getBalance().subtract(freeze));
                 esEthwallet.setFreeze(esEthwallet.getFreeze().add(freeze));
             }else{
                 return null;
             }
         }else {
-            if (esEthwallet.getFreeze().compareTo(freeze) != -1) {
+          //  if (esEthwallet.getFreeze().compareTo(freeze) != -1) {
+            if (this.judgeFreeze(memberId,freeze)) {
                 //成功出账
                 if (isSuc) {
                     esEthwallet.setTotal(esEthwallet.getTotal().subtract(freeze));
