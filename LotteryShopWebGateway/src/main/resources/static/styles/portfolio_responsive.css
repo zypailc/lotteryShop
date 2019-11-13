@@ -186,13 +186,25 @@
 		float: left;
 	}
 	.person_center_module{
-		background: #f8f9fa;
+		background: #322444;
+	}
+	.span_title{
+		color: aliceblue;
+	}
+	.container{
+		padding-right: 0px;
+		padding-left: 0px;
 	}
 	.p_wallet_module{
 		display: none;
 	}
 	.ul_wallet_module{
 		display: block;
+	}
+	.img_head{
+		border-radius: 50%;
+		padding-top: 3px;
+		padding-left: 3px;
 	}
 }
 

@@ -31,6 +31,7 @@ public class CodeUtil {
     }
 
     public static void main(String [] args){
+        System.out.println(getUuid());
         System.out.println(getCode(10));
     }
 

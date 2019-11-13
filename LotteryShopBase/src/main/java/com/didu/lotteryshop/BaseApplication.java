@@ -28,7 +28,7 @@ import java.util.Arrays;
 
 @SpringBootApplication
 @EnableEurekaClient
-@MapperScan("com.didu.lotteryshop.base.api.v1.mapper*")
+@MapperScan("com.didu.lotteryshop.**.mapper*")
 @EnableFeignClients
 @EnableOAuth2Client
 @EnableResourceServer

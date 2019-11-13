@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@MapperScan("com.didu.lotteryshop.auth.mapper*")
+@MapperScan("com.didu.lotteryshop.**.mapper*")
 public class AuthServiceApplication {
 
     public static void main(String[] args) {

@@ -1,7 +1,7 @@
 package com.didu.lotteryshop.common.base;
 
 import com.didu.lotteryshop.common.config.Constants;
-import com.didu.lotteryshop.common.entity.UserDetil;
+import com.didu.lotteryshop.common.entity.LoginUser;
 import com.github.abel533.sql.SqlMapper;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class BaseStat {
     @Autowired
     private WebApplicationContext wac;
     private SqlMapper sqlMapper;
-    private UserDetil loginUser;
+    private LoginUser loginUser;
 
     public HttpServletResponse getResponse(){
         return response;
@@ -33,8 +33,8 @@ public class BaseStat {
         }
         return  sqlMapper;
     }
-    public  UserDetil getLoginUser(){
-        return  (UserDetil)request.getSession().getAttribute(Constants.LOGIN_USER);
+    public LoginUser getLoginUser(){
+        return  (LoginUser)request.getSession().getAttribute(Constants.LOGIN_USER);
     }
     public HttpSession  getSession(){
         return request.getSession();

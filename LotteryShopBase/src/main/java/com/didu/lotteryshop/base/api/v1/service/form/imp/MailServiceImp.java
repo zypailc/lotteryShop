@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.base.api.v1.service.imp;
+package com.didu.lotteryshop.base.api.v1.service.form.imp;
 
 import com.didu.lotteryshop.base.api.v1.service.MailService;
 import com.didu.lotteryshop.common.entity.Member;

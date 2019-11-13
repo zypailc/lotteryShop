@@ -13,19 +13,19 @@
                 <% if(has(whetherLogin) && whetherLogin){ %>
                 <div class="top_center_span">
                     <span>2019-09-26 00:00:00</span><br/>
-                    <span><a href="./personalCenter">sanZ ，<span data-localize="base.PersonalCenter"> Personal Center</span></a> </span>
+                    <span><a href="../person/personalCenter">${loginUser.memberName!"without"} ，<span data-localize="base.PersonalCenter"> Personal Center</span></a> </span>
                 </div>
                 <% }else{ %>
                 <div class="top_login_span">
 							<span>
                                 <% if(has(type) && type == 'register'){ %>
-                                    <a class="a_border" href="./login" data-localize="base.Login">Login</a>
+                                    <a class="a_border" href="../web/login" data-localize="base.Login">Login</a>
                                 <% }else if(has(type) && type == 'login'){ %>
-                                    <a class="a_border" href="./register" data-localize="base.Register">Register</a>
+                                    <a class="a_border" href="../web/register" data-localize="base.Register">Register</a>
                                 <% }else{ %>
-                                    <a class="a_border" href="./login" data-localize="base.Login">Login</a>
+                                    <a class="a_border" href="../web/login" data-localize="base.Login">Login</a>
                                     <span> | </span>
-                                    <a class="a_border" href="./register" data-localize="base.Register">Register</a>
+                                    <a class="a_border" href="../web/register" data-localize="base.Register">Register</a>
                                 <% } %>
 							</span>
                 </div>
@@ -42,8 +42,8 @@
         </div>
         <div class="top_div">
             <ul>
-                <li><a href="./index" data-localize="base.Home">Home</a></li>
-                <li><a href="./playTheLottery" data-localize="base.PlayTheLottery">Play The Lottery</a></li>
+                <li><a href="../web/index" data-localize="base.Home">Home</a></li>
+                <li><a href="../web/playTheLottery" data-localize="base.PlayTheLottery">Play The Lottery</a></li>
             </ul>
         </div>
     </nav>
@@ -70,15 +70,15 @@
             <li><a href="./index" data-localize="base.Home">Home</a></li>
             <li><a href="./playTheLottery" data-localize="base.PlayTheLottery">Play The Lottery</a></li>
             <% if(has(whetherLogin) && whetherLogin){ %>
-            <li><a href="./personalCenter">sanZ , <span data-localize="base.PersonalCenter"> Personal Center</span></a></li>
+            <li><a href="../person/personalCenter">${loginUser.memberName!"without"} , <span data-localize="base.PersonalCenter"> Personal Center</span></a></li>
             <% } else { %>
                 <% if(has(type) && type == 'register'){ %>
-                    <li class="menu_mm"><a class="a_border" href="./login" data-localize="base.Login">Login</a></li>
+                    <li class="menu_mm"><a class="a_border" href="../web/login" data-localize="base.Login">Login</a></li>
                 <% } else if(has(type) && type == 'login') { %>
-                    <li class="menu_mm"><a class="a_border" href="./register" data-localize="base.Register">Register</a></li>
+                    <li class="menu_mm"><a class="a_border" href="../web/register" data-localize="base.Register">Register</a></li>
                 <% } else { %>
-                    <li class="menu_mm"><a class="a_border" href="./login" data-localize="base.Login">Login</a></li>
-                    <li class="menu_mm"><a class="a_border" href="./register" data-localize="base.Register">Register</a></li>
+                    <li class="menu_mm"><a class="a_border" href="../web/login" data-localize="base.Login">Login</a></li>
+                    <li class="menu_mm"><a class="a_border" href="../web/register" data-localize="base.Register">Register</a></li>
                 <% } %>
             <%  } %>
         </ul>
@@ -154,6 +154,5 @@
            }
         });
         //初始化参数绑定
-
     })
 </script>

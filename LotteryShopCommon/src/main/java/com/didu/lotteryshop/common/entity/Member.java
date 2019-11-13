@@ -45,6 +45,13 @@ public class Member{
     private String headPortraitUrl;//头像Url
     @TableField("create_time")
     private Date createTime;//创建时间
+    @TableField("p_address")
+    private String pAddress;//平台钱包地址
+    @TableField("b_address")
+    private String bAddress;//绑定钱包地址
+    @TableField("wallet_name")
+    private String walletName;//钱包名称
+
     @TableField(exist = false)
     private Set<Role> roles;//角色
 

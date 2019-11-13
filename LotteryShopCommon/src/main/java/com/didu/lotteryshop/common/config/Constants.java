@@ -14,10 +14,14 @@ public class Constants {
     public static final String AES_ETHWALLET_KEY = "vvuvj8vyl6obu64w";
     /** 登录用户session_key */
     public static final String LOGIN_SESSION_KEY = "Login_session_key";
+    /** 用户最后修改时间session_key */
+    public static final String LOGIN_SESSION_UPDATE_KEY = "Login_session_update_key";
     /** eth钱包管理员私钥加密key，16位 */
     public static final String AES_ETHMANAGER_PRIVATEKEY = "t89k66blfwlrnlhc";
     /** 登陆用户的信息key **/
     public static final  String LOGIN_USER = "login_user";
+    /** 全局头像地址配置**/
+    public static final  String HEAD_PORTRAIT_URL = "../images/head/tx_01.jpg";
 
     public static void main(String[] args) {
         System.out.println(getRandomString(16));

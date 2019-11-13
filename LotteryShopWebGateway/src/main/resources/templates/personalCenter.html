@@ -68,9 +68,9 @@ include("common.js.html"){}
         height: 100%;
         line-height: 50px;
         text-align: center;
-        font-size: 18px;
-        font-weight: 500;
-        letter-spacing: 3px;
+		font-size: 15px;
+		font-weight: 300;
+		letter-spacing: 2px;
     }
     .li_wallet_module_right{
         border: none;
@@ -130,7 +130,14 @@ include("common.js.html"){}
 		//初始化头像列表
 		div_head_images();
 
-
+		$(".li_wallet_module").click(function(){
+			var type = $(this).attr("data-class") || "";
+			if(type == 'wallet_bind'){
+				$(location).prop('href','./walletBind?'+"type="+type);
+			}else{
+				$(location).prop('href','./walletBase?'+"type="+type);
+			}
+		});
 
 		//昵称标签超出长度显示省略号
 		var span_title = $(".span_title").html();
@@ -162,9 +169,9 @@ include("common.js.html"){}
 			});
 		});
 	})
-
+	var img_head_layer;
 	function changePicture(){
-		layer.open({
+		img_head_layer = layer.open({
 			type: 1,
 			title: false,
 			closeBtn: 0,
@@ -179,20 +186,25 @@ include("common.js.html"){}
 	}
 
 	function img_change_button(){
-		var src = $("img .img_change_border").attr("src");
+		var src = $(".img_change_border").attr("src") || "";
+		if(!src){
+			layer.msg("Please select the avatar first !");
+			return;
+		}
 		$.ajax({
-			type: "post",
-			url: "/api/base/v1/member/headPortrait",
-			data:{"url":src},
+			type: "get",
+			url: "/api/base/v1/lsimage/headPortrait",
+			data:{"headPortraitUrl":src},
 			dataType: "json",
 			success:function (data){
-				if(data.code == '200'){//注册成功
+				if(data.code == '200'){//register success
+					$(".img_head").attr("src",src);
+					layer.close(img_head_layer);
+				}
+				if(data.code == '500'){//register error
 
 				}
-				if(data.code == '500'){//注册失败
-
-				}
-				layer.msg(data.msg);
+				layer.msg(data.extend.data);
 			}
 		})
 	}
@@ -205,7 +217,6 @@ include("common.js.html"){}
 			url: "/api/base/v1/lsimage/imageType",
 			dataType: "json",
 			success:function (result){
-				console.log(result)
 				$.each(result,function(index,data){
 					var div_image = '<div  class="head_img head_img_width">' +
 							'<img class="img_change" onclick="img_change(this)" src="'+data.url+'">' +
@@ -236,23 +247,22 @@ include("common.js.html"){}
 						<div class="person_center card">
 							<div class="person_center_module">
 								<div class="card-title">
-									<img onclick="changePicture()" src="../images/head/tx_01.jpg">
+									<img onclick="changePicture()" class="img_head" src="${loginUser.headPortraitUrl!defaultHeadImg}">
 									<span class="span_title" title="The luckiest man">The luckiest man</span>
 								</div>
 								<div class="card-text">
 									<p class="p_wallet_module" ><span>Grade:100</span><span>Gold Club</span></p>
 									<p class="p_wallet_module"><span>ETH:10ETH</span><span>gold:1000DB</span></p>
 									<ul class="ul_wallet_module">
-										<li class="li_wallet_module">ETH <span>&nbsp;&nbsp;> </span></li>
-										<li class="li_wallet_module">FLAT<span>&nbsp;&nbsp;> </span></li>
-										<li class="li_wallet_module li_wallet_module_right">wallet<span>&nbsp;&nbsp;></span></li>
+										<li class="li_wallet_module" data-class="wallet_eth">ETH <span>&nbsp;&nbsp;> </span></li>
+										<li class="li_wallet_module" data-class="wallet_flat">FLAT<span>&nbsp;&nbsp;> </span></li>
+										<li class="li_wallet_module li_wallet_module_right" data-class="wallet_bind">wallet<span>&nbsp;&nbsp;></span></li>
 									</ul>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="portfolio_categories button-group filters-button-group">
-						<hr>
 						<ul class="personal_li">
 							<li class="portfolio_category draw_personal_lottery personal_center" data-filter=".none">personal center</li>
 							<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".wallet">wallet</li>
@@ -766,12 +776,12 @@ include("common.js.html"){}
 		<!-- 手机列表 -->
 		<div class="container container_phone">
 			<div class="phone_piece">
-				<div class="personal_phone" data-file="wallet">
+				<!--<div class="personal_phone" data-file="wallet">
 					<img src="../images/phone_js.png">
 					<div>
 						<span>wallet</span>
 					</div>
-				</div>
+				</div>-->
 				<div class="personal_phone" data-file="lottery_record">
 					<img src="../images/phone_js.png">
 					<div>

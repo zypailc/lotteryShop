@@ -2,6 +2,7 @@ package com.didu.lotteryshop.common.utils;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.UUID;
+import com.didu.lotteryshop.common.config.Constants;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 //import org.apache.tomcat.util.codec.binary.Base64;
 
@@ -20,14 +21,12 @@ import java.util.Map;
  * @date 2019-09-27 9:42
  */
 public class AesEncryptUtil {
-    //可配置到Constant中，并读取配置文件注入,16位,自己定义
-    private static final String KEY = "xxxxxxxxxxxxxxxx";
 
     //参数分别代表 算法名称/加密模式/数据填充方式
     private static final String ALGORITHMSTR = "AES/ECB/PKCS5Padding";
 
-    //秘钥
-    public static final  String KEY_TOW = "b13828b542d244bf9b08e5c2caf95df8";
+    //可配置到Constant中，并读取配置文件注入,16位,自己定义
+    private static final String KEY = "xxxxxxxxxxxxxxxx";
 
     /**
      * 加密
@@ -141,6 +140,24 @@ public class AesEncryptUtil {
         System.out.println("2:"+CodeUtil.getUuid());
         System.out.println("3:"+CodeUtil.getUuid());
         System.out.println("4:"+CodeUtil.getUuid());
+
+        String str = "\"Gt6LgNNQOJrd2AmmeUdpi9GZ7ec3c1Wvlze93Z+QYwCurzlITbiWuZioa0tmGsMjvh52AALCCPEjiyfUXjd1/lyFmDmonkqBamL7WKJWXlTm8iajz5HVryZ/1YhkHqG9EU7z9576QUuse3LkL+Lnpg==\"";
+        System.out.println("indexof:"+str.replaceAll("\"",""));
+        System.out.println("indexof_str:"+str);
+        str = str.replaceAll("\"","");
+        String ss = AesEncryptUtil.decrypt(str, Constants.AES_ETHWALLET_KEY);
+        System.out.println("indexof1:"+ss);
+
+        String wallet = "net.sf.ezmorph.bean.MorphDynaBean@4e30280b["+
+                "{fileName=UTC--2019-11-12T06-17-58.702000000Z--327f742b07dc456f54b2f2815bd964bc17328ae0.json, address=0x327f742b07dc456f54b2f2815bd964bc17328ae0, userId=2}"+
+                //         UTC--2019-11-12T06-17-58.702000000Z--327f742b07dc456f54b2f2815bd964bc17328ae0.json
+                "]";
+        System.out.println(AesEncryptUtil.encrypt("UTC--2019-11-12T06-17-5fadsfasdfadsfadsfdsf8.702000000Z--327f742b07dc456f54b2f2815bd964bc17328ae0.json",ConfigurationUtil.KEY_THREE));
+        //SLeGFAaTwsTnsqLCNQvXzBY0EcQ65uV1v1jIbQdUFh5Q9fx4XEKPpYYUvWiuUtla5XZPy6cQyvFliLJuNI3/rr/AdtecYaCZIFj0kD8GyOK2Q5B4QUfJrw4IeQBRJ9Ii
+        System.out.println("SLeGFAaTwsTnsqLCNQvXzBY0EcQ65uV1v1jIbQdUFh5Q9fx4XEKPpYYUvWiuUtla5XZPy6cQyvFliLJuNI3/rr/AdtecYaCZIFj0kD8GyOK2Q5B4QUfJrw4IeQBRJ9Ii".length());
+        //SLeGFAaTwsTnsqLCNQvXzGr6fC5d+KYQJZJZhWhkr9NFtq3t0ykqAzR1r70FtaT6ev2nV4jHPNW3J+7gQElTcu5jvh+6s8M9yYFbXnwXIGuC8VDASazbqYEPKv87d42FsokVJjojUxNRB6k4Of46oQ==
+        System.out.println(AesEncryptUtil.decrypt("SLeGFAaTwsTnsqLCNQvXzBY0EcQ65uV1v1jIbQdUFh5Q9fx4XEKPpYYUvWiuUtla5XZPy6cQyvFliLJuNI3/rr/AdtecYaCZIFj0kD8GyOK2Q5B4QUfJrw4IeQBRJ9Ii",ConfigurationUtil.KEY_THREE));
+        System.out.println("mima:"+AesEncryptUtil.encrypt_code("1",ConfigurationUtil.KEY_TOW));
     }
 
 }

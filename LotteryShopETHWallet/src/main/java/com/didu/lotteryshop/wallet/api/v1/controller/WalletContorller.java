@@ -6,8 +6,11 @@ import com.didu.lotteryshop.wallet.api.v1.service.WalletService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.websocket.server.PathParam;
 
 /**
  * 钱包Contorller
@@ -26,22 +29,23 @@ public class WalletContorller {
     /**
      * 创建钱包
      * @param userId 用户ID
-     * @param payPassword 口令
+     * @param paymentCode 口令
      * @return
      */
-    @RequestMapping(value = "/generate")
+    @PostMapping(value = "/generate")
+    //@RequestMapping(value = "/generate")
     @ResponseBody
     @SecurityParameter
-    public ResultUtil generateWallet(String userId, String payPassword){
+    public ResultUtil generateWallet(String userId,String paymentCode){
         if(StringUtils.isBlank(userId)){
             //用户ID不能为空！
             return ResultUtil.errorJson("The userId cannot be empty!");
         }
-        if(StringUtils.isBlank(payPassword)){
+        if(StringUtils.isBlank(paymentCode)){
             //支付密码不能为空！
            return ResultUtil.errorJson("The payPassword cannot be empty!");
         }
-        return walletService.generateWallet(userId,payPassword);
+        return walletService.generateWallet(userId,paymentCode);
     }
 
     /**

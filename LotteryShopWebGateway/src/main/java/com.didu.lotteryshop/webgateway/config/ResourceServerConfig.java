@@ -34,6 +34,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/authservice/**").permitAll()
                 .antMatchers("/apiauthorization/**").permitAll()
                 .antMatchers("/manage/**").permitAll()
+                //TODO 这个请求在测试阶段不需要验证 上线需要验证
+                .antMatchers("/person/**").permitAll()
                 .anyRequest().authenticated()
                 //.and().formLogin().loginPage("/login").permitAll()
                 // .and().logout().permitAll()

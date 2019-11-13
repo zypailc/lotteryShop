@@ -52,6 +52,8 @@ public class BaseService extends BaseStat {
     protected ResultUtil getDecryptRequestToResultUtil(String enStr){
         ResultUtil resultUtil = null;
         if(StringUtils.isNotBlank(enStr)){
+            //数据返回的数据可能有双引号，去除双引号
+            enStr = enStr.replaceAll("\"","");
             String jsonStr = this.getDecryptRequest(enStr);
             JSONObject jsonObject = JSONObject.fromObject(jsonStr);
             resultUtil =(ResultUtil)JSONObject.toBean(jsonObject,ResultUtil.class);

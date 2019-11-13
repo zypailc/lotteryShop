@@ -84,8 +84,6 @@
 			var  data_array = $("#reply_form").serializeArray();
 			//验证邮箱格式
             var mail_reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
-            console.log(data_array);
-            console.log(data_array['email']);
             var email = $("#reply_form_email").val() || "";
             if(!mail_reg.test(email)){
                 layer.msg("Please enter the correct email address !");
@@ -98,10 +96,7 @@
 					dataType: "json",
 					success:function (data){
 						if(data.code == '200'){//注册成功
-
-						}
-						if(data.code == '500'){//注册失败
-
+							window.location.href='../web/login';
 						}
 						layer.msg(data.msg);
 					}

@@ -109,43 +109,6 @@ public class IndexController extends BaseContorller {
     }
 
     /**
-     * 个人中心
-     * @param model
-     * @return
-     */
-    @RequestMapping("/personalCenter")
-    public String personalCenter(Model model){
-        model.addAttribute("top_login",true);
-        model.addAttribute("top_login_1",false);
-        return "personalCenter";
-    }
-
-    /**
-     * 手机模块显示页面
-     * @param model
-     * @param type
-     * @return
-     */
-    @RequestMapping("/phoneType")
-    public String phoneType(Model model, @Param(value = "type")String type){
-        model.addAttribute("top_login",true);
-        model.addAttribute("top_login_1",false);
-        return type+"_phone";
-    }
-
-    /**
-     * 平台币提取记录页面
-     * @param model
-     * @return
-     */
-    @RequestMapping("/walletRecordPhone")
-    public String walletRecordPhone(Model model){
-        model.addAttribute("top_login",true);
-        model.addAttribute("top_login_1",false);
-        return "wallet_record_phone";
-    }
-
-    /**
      * 推广记录
      * @param model
      * @return

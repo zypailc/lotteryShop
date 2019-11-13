@@ -946,8 +946,13 @@ section
 	margin: 5px 5px 5px 0px;border: solid;
 }
 .wallet_button{
-	border: solid;cursor: pointer;color: #999999;padding: 0px 5px;
+	cursor: pointer;
+	color: #999999;
+	padding: 0px 5px;
 	border-radius: 5px;
+	font-size: 20px;
+	background: #9f88be;
+	color: white;
 }
 .base_head{
 	padding-top: 120px;

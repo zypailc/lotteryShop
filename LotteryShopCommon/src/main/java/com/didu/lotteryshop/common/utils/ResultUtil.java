@@ -18,12 +18,12 @@ public class ResultUtil {
     /**
      * 请求成功返回码
      */
-    //public static final int SUCCESS_CODE = 200;
+    public static final int SUCCESS_CODE = 200;
 
     /**
      * 请求失败返回码
      */
-    //public static final int ERROR_CODE = 500;
+    public static final int ERROR_CODE = 500;
 
 
     /**

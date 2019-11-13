@@ -40,10 +40,13 @@
     padding-left: 2px;
     padding-right: 2px;*/
 }
+.title_span_1{
+    font-size: 18px;
+    font-weight: 500;
+}
 #goog-gt-tt{
     display: none;
 }
-
 @media only screen and (max-width: 991px)
 {
     .hamburger_container_language

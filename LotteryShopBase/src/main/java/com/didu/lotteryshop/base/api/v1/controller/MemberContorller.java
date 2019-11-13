@@ -1,56 +1,64 @@
 package com.didu.lotteryshop.base.api.v1.controller;
 
-import com.didu.lotteryshop.base.api.v1.service.imp.MemberServiceImp;
+import com.didu.lotteryshop.base.api.v1.service.form.MemberService;
 import com.didu.lotteryshop.common.base.contorller.BaseContorller;
+import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.entity.Member;
-import com.didu.lotteryshop.common.enumeration.ResultCode;
-import com.didu.lotteryshop.common.utils.EmailUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
-import org.apache.ibatis.session.SqlSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.didu.lotteryshop.common.utils.VerifyETHAddressUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.security.Principal;
-
 @Controller
-@RequestMapping("/authorization/v1/member")
+@RequestMapping("/v1/member")
 public class MemberContorller extends BaseContorller {
 
-    Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private MemberServiceImp memberService;
-    @Autowired
-    private SqlSession sqlSession;
+    private MemberService memberService;
 
-    /**
-     * 注册账号
-     * @param member
-     * @return
-     */
     @ResponseBody
-    @RequestMapping("/register")//可不过验证访问
-    public ResultUtil register(Member member){
-        //验证邮箱格式
-        if(!EmailUtil.verificationEmail(member.getEmail())){
-            return ResultUtil.jsonObject("Please enter the correct email address !", ResultCode.FAILED.getCode());
+    @RequestMapping("/bindWallet")
+    public ResultUtil bindWallet(String paymentCode,String bAddress){
+        //获取用户信息
+        LoginUser loginUser= getLoginUser();
+        String userId = loginUser.getId();
+        if(userId == null || "".equals(userId)){
+            return ResultUtil.errorJson("Bind failed. Please try again!");
         }
-        return memberService.register(member);
+        if(paymentCode == null || "".equals(paymentCode)){
+            return ResultUtil.errorJson("Please enter your password!");
+        }
+        if(bAddress == null || "".equals(bAddress)){
+            return ResultUtil.errorJson("Please enter your wallet address!");
+        }
+        if(!VerifyETHAddressUtil.isETHValidAddress(bAddress)){
+            return ResultUtil.errorJson("Please fill in your wallet address correctly!");
+        }
+        return memberService.bindWallet(userId,paymentCode,bAddress);
     }
 
     /**
-     * 修改头像
-     * @param member
+     * bangding
+     * @param bAddress
      * @return
      */
     @ResponseBody
-    @RequestMapping("/headPortrait")
-    public ResultUtil headPortrait(Member member,Principal user){
-        return memberService.headPortrait(member);
+    @RequestMapping("/updateBindWallet")
+    public ResultUtil updateBindWallet(String bAddress){
+        //获取用户信息
+        LoginUser loginUser= getLoginUser();
+        if(bAddress == null || "".equals(bAddress)){
+            return ResultUtil.errorJson("Please enter your wallet address !");
+        }
+        if(!VerifyETHAddressUtil.isETHValidAddress(bAddress)){
+            return ResultUtil.errorJson("Please fill in your wallet address correctly !");
+        }
+        Member member = new Member();
+        member.setId(loginUser.getId());
+        member.setBAddress(bAddress);
+        return memberService.modifyMember(member);
     }
-
 }

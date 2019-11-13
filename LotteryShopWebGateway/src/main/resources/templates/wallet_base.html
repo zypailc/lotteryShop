@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Lottery - Home</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="RanGO Project">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 公共style -->
+    <%
+    include("common.css.html"){}
+    %>
+    <link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_styles.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_responsive.css">
+</head>
+<!-- 公共js -->
+<%
+include("common.js.html"){}
+%>
+<script src="../js/portfolio_custom.js"></script>
+<script>
+    $(function(){
+        $(".back").click(function(){
+            history.back();
+        });
+    })
+</script>
+<style>
+
+    .base_head{
+        padding-top: 50px;
+    }
+    .wallet_head{
+        padding: 10px;
+        /*border-radius: 5px;*/
+        background: #322445;
+        position: fixed;
+        width: 100%;
+        border-top: solid 10px white;
+        z-index:1;
+    }
+    .record{
+        padding: 10px;
+        padding-top: 150px;
+    }
+    .ul_personal_lottery li{
+        margin-bottom: 5px;
+        background: aliceblue;
+    }
+    .wallet_type{
+
+    }
+
+</style>
+<body class="body_top">
+
+<div class="super_container">
+
+    <!-- 引入头部文件 -->
+    <%
+    include("/top.html"){}
+    %>
+    <!-- Home -->
+
+
+    <div class="base_head">
+        <div class="wallet_head">
+            <p>总净资产</p>
+            <p>10ETH  ≈ 1000$</p>
+            <div class="wallet_type">
+                <ul>
+                    <% if(has(type) &&  type == 'wallet_eth'){ %>
+                        <li>Flat t : 10000</li>
+                    <% } else if(has(type) &&  type == 'wallet_flat'){ %>
+                        <li>ETH : 10</li>
+                    <% }%>
+                </ul>
+            </div>
+        </div>
+        <div class="record">
+            <ul class="ul_personal_lottery">
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        <p><span>2018.01.01 00:00:00</span></p>
+                        <p>
+                            <span class="span_left">extract：1000</span>
+                            <span>residue ：323</span>
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 引入底部文件 -->
+    <%
+    include("bottom.html"){}
+    %>
+
+</div>
+</body>
+
+</html>

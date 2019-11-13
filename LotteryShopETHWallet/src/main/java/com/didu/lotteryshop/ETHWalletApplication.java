@@ -1,5 +1,6 @@
 package com.didu.lotteryshop;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -12,6 +13,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @SpringBootApplication
 @EnableEurekaClient
 @ComponentScan("com")
+@MapperScan("com.didu.lotteryshop.*.mapper*")
 @EnableOAuth2Client
 @EnableResourceServer
 public class ETHWalletApplication extends SpringBootServletInitializer {
