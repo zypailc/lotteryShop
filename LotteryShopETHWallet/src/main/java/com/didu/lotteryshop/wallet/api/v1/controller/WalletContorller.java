@@ -103,4 +103,21 @@ public class WalletContorller {
         }
         return walletService.findTransactionStatus(transactionHashValue);
     }
+
+    /**
+     * 查询钱包明细
+     * @param walletFileName 钱包文件名称
+     * @param payPassword 支付密码
+     * @return
+     */
+    @RequestMapping(value = "/findWalletDetail")
+    @ResponseBody
+    @SecurityParameter
+    public ResultUtil findWalletDetail(String walletFileName,String payPassword){
+        if(StringUtils.isBlank(walletFileName) || StringUtils.isBlank(walletFileName)){
+            //参数错误
+            return ResultUtil.errorJson("Parameter error!");
+        }
+        return walletService.findWalletDetail(walletFileName,payPassword);
+    }
 }

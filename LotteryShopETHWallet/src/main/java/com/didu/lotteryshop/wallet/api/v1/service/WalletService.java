@@ -168,4 +168,26 @@ public class WalletService {
         }
         return ResultUtil.errorJson(reMap);
     }
+
+    /**
+     * 查询钱包明细
+     * @param walletFileName 钱包文件名称
+     * @param payPassword 支付密码
+     * @return
+     */
+    public ResultUtil findWalletDetail(String walletFileName,String payPassword){
+        try {
+            Credentials credentials = WalletUtils.loadCredentials(payPassword, walletFilePath+walletFileName);
+            Map<String,Object> reMap = new HashMap<>();
+            reMap.put("address",credentials.getAddress());
+            reMap.put("ecKeyPair",credentials.getEcKeyPair());
+            return ResultUtil.successJson(reMap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (CipherException e) {
+            e.printStackTrace();
+        }
+        //支付密码错误
+        return ResultUtil.errorJson("Payment password error!");
+    }
 }
