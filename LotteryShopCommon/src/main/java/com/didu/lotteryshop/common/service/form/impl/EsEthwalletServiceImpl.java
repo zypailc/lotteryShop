@@ -62,7 +62,7 @@ public class EsEthwalletServiceImpl extends ServiceImpl<EsEthwalletMapper, EsEth
         if(StringUtils.isBlank(memberId) || amount == null ) return false;
         EsEthwallet esEthwallet = this.findByMemberId(memberId);
         if(esEthwallet != null && esEthwallet.getBalance().compareTo(amount) >= 0){
-            //TODO 需要判断，还未处理的出账数据，根据当前燃气价格进行减去
+            //TODO 需要判断，还未处理的出账数据和本次需要燃气费,根据当前燃气价格进行减去
             return true;
         }
         return false;

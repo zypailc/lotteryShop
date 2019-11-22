@@ -30,35 +30,24 @@ spring:
         max-open-prepared-statements: 50
         max-pool-prepared-statement-per-connection-size: 20
 
-      #security 安全认证用于测试
-#      security:
-#        user:
-#          name: admin
-#          password: admin
-
 #微服务注册服务配置
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8090/eureka/
 
+#security&oauth2 配置
 security:
   oauth2:
     resource:
       id: wallet-service
-      #user-info-uri: http://localhost:8080/authservice/auth/user # 资源服务认证
       user-info-uri: http://localhost:8083/auth/api/member # 资源服务认证
       prefer-token-info: false
 #    client:
-#      client-id: zhuohao # 认证服务ID
-#      client-secret: zhuohao888 # 认证服务密码
-#      access-token-uri: http://localhost:8181/auth/oauth/token # 获取token
-#      user-authorization-uri: http://localhost:8181/auth/oauth/authorize # 获取授权码
-
-#jwt 配置
-#jwt:
-#  header: token   #jwt的请求头
-#  secret: eyJleHAiOjE1NDMyMDUyODUsInN1YiI6ImFkbWluIiwiY3Jl   #jwt的加密字符串
-#  expiration: 3600000   #jwt token有效时间（毫秒）一个小时
+#      client-id: browser # 认证服务ID
+#      client-secret: browser # 认证服务密码
+#      grantType: password
+#      access-token-uri: http://localhost:8083/auth/oauth/token # 获取token
+#      user-authorization-uri: http://localhost:8083/auth/oauth/authorize # 获取授权码
 
 

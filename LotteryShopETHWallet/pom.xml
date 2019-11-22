@@ -19,11 +19,11 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- security安全框架依赖 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-security</artifactId>
-        </dependency>
+        <!--&lt;!&ndash; security安全框架依赖 &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.cloud</groupId>-->
+            <!--<artifactId>spring-cloud-starter-security</artifactId>-->
+        <!--</dependency>-->
         <!-- oauth2安全验证授权依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

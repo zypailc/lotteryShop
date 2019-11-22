@@ -1,15 +1,16 @@
 package com.didu.lotteryshop.wallet.api.v1.controller;
 
+import com.didu.lotteryshop.common.base.contorller.BaseContorller;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.wallet.annotation.SecurityParameter;
+import com.didu.lotteryshop.wallet.api.v1.RequestEntity.GenerateWalletEntity;
 import com.didu.lotteryshop.wallet.api.v1.service.WalletService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 
 /**
@@ -21,31 +22,33 @@ import javax.websocket.server.PathParam;
  */
 @Controller
 @RequestMapping("/v1/wallet")
-public class WalletContorller {
+public class WalletContorller extends BaseContorller {
     @Autowired
     private WalletService walletService;
 
 
     /**
      * 创建钱包
-     * @param userId 用户ID
-     * @param paymentCode 口令
+     * @param gwEntity
      * @return
      */
-    @PostMapping(value = "/generate")
-    //@RequestMapping(value = "/generate")
+    @PostMapping(value = "/generate",consumes = "application/json")
     @ResponseBody
     @SecurityParameter
-    public ResultUtil generateWallet(String userId,String paymentCode){
-        if(StringUtils.isBlank(userId)){
+    public ResultUtil generateWallet( @RequestBody  GenerateWalletEntity gwEntity){
+        if(gwEntity == null){
+            //参数错误
+            return ResultUtil.errorJson("Parameter error!");
+        }
+        if(StringUtils.isBlank(gwEntity.getUserId())){
             //用户ID不能为空！
             return ResultUtil.errorJson("The userId cannot be empty!");
         }
-        if(StringUtils.isBlank(paymentCode)){
+        if(StringUtils.isBlank(gwEntity.getPaymentCode())){
             //支付密码不能为空！
            return ResultUtil.errorJson("The payPassword cannot be empty!");
         }
-        return walletService.generateWallet(userId,paymentCode);
+        return walletService.generateWallet(gwEntity.getUserId(),gwEntity.getPaymentCode());
     }
 
     /**
@@ -113,7 +116,7 @@ public class WalletContorller {
     @RequestMapping(value = "/findWalletDetail")
     @ResponseBody
     @SecurityParameter
-    public ResultUtil findWalletDetail(String walletFileName,String payPassword){
+    public ResultUtil findWalletDetail(@RequestParam("walletFileName") String walletFileName, @RequestParam("payPassword") String payPassword){
         if(StringUtils.isBlank(walletFileName) || StringUtils.isBlank(walletFileName)){
             //参数错误
             return ResultUtil.errorJson("Parameter error!");

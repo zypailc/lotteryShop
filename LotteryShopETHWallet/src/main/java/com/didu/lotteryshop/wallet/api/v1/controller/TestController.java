@@ -1,9 +1,11 @@
 package com.didu.lotteryshop.wallet.api.v1.controller;
 
+import com.didu.lotteryshop.common.base.contorller.BaseContorller;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.wallet.annotation.SecurityParameter;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 
 /**
@@ -11,7 +13,7 @@ import javax.websocket.server.PathParam;
  */
 @RestController
 @RequestMapping("/v1/test")
-public class TestController {
+public class TestController extends BaseContorller {
 
     /*
      * 测试返回数据，会自动加密
@@ -40,8 +42,16 @@ public class TestController {
 
     @ResponseBody
     @RequestMapping("/test")
-    public ResultUtil test(@PathParam(value = "name") String name){
+    public ResultUtil  test(@PathParam(value = "name") String name){
         return  ResultUtil.successJson(name);
+    }
+
+    @ResponseBody
+    @RequestMapping("/test1")
+    @SecurityParameter
+    public ResultUtil  test1(String requestData){
+        HttpServletRequest request = super.getRequest();
+        return  ResultUtil.successJson("");
     }
 
     class Persion {

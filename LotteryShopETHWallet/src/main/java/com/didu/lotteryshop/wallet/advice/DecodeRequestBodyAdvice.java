@@ -99,8 +99,8 @@ public class DecodeRequestBodyAdvice implements RequestBodyAdvice {
                     //throw new RuntimeException("参数【requestData】缺失异常！");
                     throw new RuntimeException("Parameter [requestData] missing exception！");
                 } else {
-                    int closeLen = requestData.length() - 1;
-                    int openLen = "{\"requestData\":".length();
+                    int closeLen = requestData.length() - 2;
+                    int openLen = "{\"requestData\":\"".length();
                     String substring = StringUtils.substring(requestData, openLen, closeLen);
                     return substring;
                 }

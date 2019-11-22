@@ -33,18 +33,31 @@ public class LotteryAController extends BaseContorller {
     /**
      * eth购买彩票
      * @param luckNum 幸运号码
+     * @param multipleNumber 倍数
      * @param  payPasswod 支付密码
      * @return
      */
     @RequestMapping("/ethBuyLottery")
     @ResponseBody
-    public ResultUtil ethBuyLottery(String luckNum,String payPasswod){
-        if(StringUtils.isBlank(luckNum) || StringUtils.isBlank(payPasswod) ){
+    public ResultUtil ethBuyLottery(String luckNum,Integer multipleNumber,String payPasswod){
+        if(StringUtils.isBlank(luckNum) || multipleNumber == null || StringUtils.isBlank(payPasswod) ||
+           luckNum.length() != 3 || multipleNumber <= 0 || multipleNumber > 100
+        ){
             //参数错误
             return ResultUtil.errorJson("Parameter error!");
         }
-        return lotteryAService.ethBuyLottery(luckNum,payPasswod);
+        return lotteryAService.ethBuyLottery(luckNum,multipleNumber,payPasswod);
     }
 
+    @RequestMapping(value = "/test")
+    @ResponseBody
+    public ResultUtil test(){
+        return lotteryAService.test();
+    }
+    @RequestMapping(value = "/test1")
+    @ResponseBody
+    public ResultUtil test1(){
+        return lotteryAService.test1();
+    }
 
 }
