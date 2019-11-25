@@ -1,8 +1,6 @@
 package com.didu.lotteryshop.wallet.service;
 
-import com.didu.lotteryshop.common.entity.SysConfig;
-import com.didu.lotteryshop.common.service.form.impl.GasProviderService;
-import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
+import com.didu.lotteryshop.common.service.GasProviderService;
 import com.didu.lotteryshop.common.utils.Web3jUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,8 +26,13 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * web3jService
+ * @author CHJ
+ * @date 2019-11-25
+ */
 @Service
-public class Web3jService {
+public class Web3jService extends WalletBaseService {
     /** 生成钱包文件地址*/
     @Value("${ethwallet.web3j.url}")
     private String ethwalletWeb3jUrl;

@@ -1,10 +1,9 @@
 package com.didu.lotteryshop.wallet.api.v1.service;
 
 import com.didu.lotteryshop.common.entity.SysConfig;
-import com.didu.lotteryshop.common.service.form.impl.GasProviderService;
-import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
+import com.didu.lotteryshop.common.service.GasProviderService;
 import com.didu.lotteryshop.common.utils.ResultUtil;
-import com.didu.lotteryshop.common.utils.Web3jUtils;
+import com.didu.lotteryshop.wallet.service.WalletBaseService;
 import com.didu.lotteryshop.wallet.service.Web3jService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ import java.util.Map;
  * @date 2019-10-23
  */
 @Service
-public class WalletService {
+public class WalletService extends WalletBaseService {
     /** 生成钱包文件地址*/
     @Value("${ethwallet.filePath}")
     private String walletFilePath;

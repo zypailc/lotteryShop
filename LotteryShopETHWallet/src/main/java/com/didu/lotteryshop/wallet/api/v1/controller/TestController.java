@@ -1,8 +1,8 @@
 package com.didu.lotteryshop.wallet.api.v1.controller;
 
-import com.didu.lotteryshop.common.base.contorller.BaseContorller;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.wallet.annotation.SecurityParameter;
+import com.didu.lotteryshop.wallet.controller.WalletBaseController;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,10 +10,12 @@ import javax.websocket.server.PathParam;
 
 /**
  * 测试Controller
+ * @author CHJ
+ * @date 209-11-25
  */
 @RestController
 @RequestMapping("/v1/test")
-public class TestController extends BaseContorller {
+public class TestController extends WalletBaseController {
 
     /*
      * 测试返回数据，会自动加密

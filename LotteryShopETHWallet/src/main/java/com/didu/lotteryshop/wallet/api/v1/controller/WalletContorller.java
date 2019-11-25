@@ -1,29 +1,27 @@
 package com.didu.lotteryshop.wallet.api.v1.controller;
 
-import com.didu.lotteryshop.common.base.contorller.BaseContorller;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.wallet.annotation.SecurityParameter;
 import com.didu.lotteryshop.wallet.api.v1.RequestEntity.FindWalletDetailEntity;
 import com.didu.lotteryshop.wallet.api.v1.RequestEntity.GenerateWalletEntity;
 import com.didu.lotteryshop.wallet.api.v1.service.WalletService;
+import com.didu.lotteryshop.wallet.controller.WalletBaseController;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.websocket.server.PathParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 钱包Contorller
  * @author CHJ
  * @date 2019-09-26 10:06
- * @param
- * @return
  */
 @Controller
 @RequestMapping("/v1/wallet")
-public class WalletContorller extends BaseContorller {
+public class WalletContorller extends WalletBaseController {
     @Autowired
     private WalletService walletService;
 
