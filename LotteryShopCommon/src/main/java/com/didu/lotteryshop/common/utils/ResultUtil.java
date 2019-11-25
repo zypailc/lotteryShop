@@ -24,6 +24,10 @@ public class ResultUtil {
      * 请求失败返回码
      */
     public static final int ERROR_CODE = 500;
+    /**
+     * 数据可以
+     */
+    public static final String DATA_KEY = "data";
 
 
     /**
