@@ -24,9 +24,9 @@ public class LotteryaInfo extends Model<LotteryaInfo> {
      */
 	private Integer id;
     /**
-     * 彩票名称
+     * 中文彩票名称
      */
-	private String title;
+	private String zhtitle;
     /**
      * 彩票单价
      */
@@ -41,7 +41,15 @@ public class LotteryaInfo extends Model<LotteryaInfo> {
      */
 	@TableField("interval_date")
 	private BigDecimal intervalDate;
-
+	/**
+	 * 英文彩票名称
+	 */
+	private String entitle;
+	/**
+	 * 合约地址
+	 */
+	@TableField("contract_address")
+	private String contractAddress;
 
 	public Integer getId() {
 		return id;
@@ -51,12 +59,12 @@ public class LotteryaInfo extends Model<LotteryaInfo> {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getZhtitle() {
+		return zhtitle;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setZhtitle(String zhtitle) {
+		this.zhtitle = zhtitle;
 	}
 
 	public BigDecimal getPrice() {
@@ -83,6 +91,22 @@ public class LotteryaInfo extends Model<LotteryaInfo> {
 		this.intervalDate = intervalDate;
 	}
 
+	public String getEntitle() {
+		return entitle;
+	}
+
+	public void setEntitle(String entitle) {
+		this.entitle = entitle;
+	}
+
+	public String getContractAddress() {
+		return contractAddress;
+	}
+
+	public void setContractAddress(String contractAddress) {
+		this.contractAddress = contractAddress;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -92,10 +116,11 @@ public class LotteryaInfo extends Model<LotteryaInfo> {
 	public String toString() {
 		return "LotteryaInfo{" +
 			", id=" + id +
-			", title=" + title +
+			", entitle=" + entitle +
 			", price=" + price +
 			", periodDate=" + periodDate +
 			", intervalDate=" + intervalDate +
+			", contractAddress=" + contractAddress +
 			"}";
 	}
 }

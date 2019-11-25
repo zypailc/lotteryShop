@@ -5,10 +5,12 @@
 	<!-- 通用查询映射结果 -->
 	<resultMap id="BaseResultMap" type="com.didu.lotteryshop.lotterya.entity.LotteryaInfo">
 		<id column="id" property="id" />
-		<result column="title" property="title" />
+		<result column="zhtitle" property="zhtitle" />
 		<result column="price" property="price" />
 		<result column="period_date" property="periodDate" />
 		<result column="interval_date" property="intervalDate" />
+		<result column="entitle" property="entitle" />
+		<result column="contract_address" property="contractAddress" />
 	</resultMap>
 
 </mapper>

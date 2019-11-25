@@ -1,7 +1,6 @@
 package com.didu.lotteryshop.lotterya.api.v1.service;
 
 import cn.hutool.core.convert.Convert;
-import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.enumeration.ResultCode;
 import com.didu.lotteryshop.common.service.form.impl.EsEthwalletServiceImpl;
@@ -9,13 +8,11 @@ import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.lotterya.entity.LotteryaBuy;
 import com.didu.lotteryshop.lotterya.entity.LotteryaInfo;
 import com.didu.lotteryshop.lotterya.entity.LotteryaIssue;
+import com.didu.lotteryshop.lotterya.service.LotteryABaseService;
 import com.didu.lotteryshop.lotterya.service.Web3jService;
 import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaBuyServiceImpl;
 import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaInfoServiceImpl;
 import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaIssueServiceImpl;
-import net.sf.json.JSON;
-import net.sf.json.JSONArray;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpEntity;
@@ -36,7 +33,7 @@ import java.util.Map;
   * @date 2019-11-01 14:09
   */
 @Service
-public class LotteryAService extends BaseService {
+public class LotteryAService extends LotteryABaseService {
     @Autowired
     private OAuth2RestTemplate oAuth2RestTemplate;
     @Autowired
@@ -139,6 +136,10 @@ public class LotteryAService extends BaseService {
             //账户余额不足，请先充值！
             return ResultUtil.errorJson("Account balance is insufficient, please recharge first!");
         }
+
+
+
+
 
         Map<String,Object> map = new HashMap<>();
         map.put("walletFileName",walletFileName);

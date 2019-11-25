@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.didu.lotteryshop.lotterya.mapper.LotteryaBuyMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.didu.lotteryshop.lotterya.entity.LotteryaBuy">
+		<id column="id" property="id" />
+		<result column="member_id" property="memberId" />
+		<result column="luck_num" property="luckNum" />
+		<result column="second_num" property="secondNum" />
+		<result column="thirdly_num" property="thirdlyNum" />
+		<result column="total" property="total" />
+		<result column="transfer_hash_value" property="transferHashValue" />
+		<result column="transfer_status" property="transferStatus" />
+		<result column="transfer_status_time" property="transferStatusTime" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+
+</mapper>

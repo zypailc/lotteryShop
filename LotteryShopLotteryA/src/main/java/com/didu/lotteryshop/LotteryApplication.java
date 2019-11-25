@@ -20,7 +20,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @ComponentScan("com")
 @EnableOAuth2Client
 @EnableResourceServer
-@MapperScan("com.didu.lotteryshop.lotterya.mapper*")
+@MapperScan("com.didu.lotteryshop.*.mapper*")
 public class LotteryApplication extends SpringBootServletInitializer {
 
     @Override
