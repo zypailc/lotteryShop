@@ -19,7 +19,7 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!--&lt;!&ndash; security安全框架依赖 &ndash;&gt;-->
+        <!--&lt;!&ndash; security安全框架依赖 &ndash;&gt;--> <!-- 注释，父级common中引用-->
         <!--<dependency>-->
             <!--<groupId>org.springframework.cloud</groupId>-->
             <!--<artifactId>spring-cloud-starter-security</artifactId>-->
@@ -48,12 +48,12 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
 
-        <!-- 引用eth的Web3j-->
-        <dependency>
-            <groupId>org.web3j</groupId>
-            <artifactId>core</artifactId>
-            <version>4.5.0</version>
-        </dependency>
+        <!-- 引用eth的Web3j--><!-- 注释，父级common中引用-->
+        <!--<dependency>-->
+            <!--<groupId>org.web3j</groupId>-->
+            <!--<artifactId>core</artifactId>-->
+            <!--<version>4.5.0</version>-->
+        <!--</dependency>-->
     </dependencies>
 
 </project>
