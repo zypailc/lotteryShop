@@ -1,9 +1,8 @@
 package com.didu.lotteryshop.lotterya.api.v1.controller;
 
-import com.didu.lotteryshop.common.base.contorller.BaseContorller;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.lotterya.api.v1.service.LotteryAService;
-import com.netflix.discovery.util.StringUtil;
+import com.didu.lotteryshop.lotterya.controller.LotteryABaseController;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/v1/lotteryA")
-public class LotteryAController extends BaseContorller {
+public class LotteryAController extends LotteryABaseController {
     @Autowired
     private LotteryAService lotteryAService;
 

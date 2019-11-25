@@ -1,27 +1,34 @@
 package com.didu.lotteryshop.lotterya.service;
 
 import com.didu.lotteryshop.common.config.Constants;
-import com.didu.lotteryshop.common.service.form.impl.GasProviderService;
+import com.didu.lotteryshop.common.entity.LoginUser;
+import com.didu.lotteryshop.common.enumeration.ResultCode;
+import com.didu.lotteryshop.common.service.GasProviderService;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
+import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.lotterya.contract.LotteryAContract;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
-public class Web3jService {
+public class Web3jService extends LotteryABaseService {
     /** 主网络地址 */
     @Value("${ethwallet.web3j.url}")
     private String ethwalletWeb3jUrl;
-    /** 钱包地址文件 */
-//    @Value("${ethwallet.filePath}")
-//    private String  ethwalletFilePath;
     private Web3j web3j;
     @Autowired
     private GasProviderService gasProviderService;
@@ -30,15 +37,18 @@ public class Web3jService {
     private String pManagerPrivateKey;
     /** 解密后的关于员私钥 **/
     private String managerPrivateKey;
-    /*彩票单价*/
-    @Value("${LotterAConifg.price}")
-    private String lotterAPrice;
+    /** 调节基金地址*/
+    @Value("${adjustFundAddress}")
+    private String adjustFundAddress;
+
+    @Autowired
+    private OAuth2RestTemplate oAuth2RestTemplate;
+
 
     @PostConstruct
     public void init() {
         web3j = Web3j.build(new HttpService(ethwalletWeb3jUrl)); //RPC方式
-        // web3j = Web3j.build(new UnixIpcService(ipcSocketPath)); //IPC方式
-
+     // web3j = Web3j.build(new UnixIpcService(ipcSocketPath)); //IPC方式
         try {
             managerPrivateKey =  AesEncryptUtil.decrypt(pManagerPrivateKey, Constants.AES_ETHMANAGER_PRIVATEKEY);
         } catch (Exception e) {
@@ -56,7 +66,7 @@ public class Web3jService {
         try {
             //部署管理员私钥
             Credentials credentials = Credentials.create(managerPrivateKey);
-            LotteryAContract  lotteryAContract = LotteryAContract.deploy(web3j,credentials,gasProviderService.getStaticGasProvider()).send();
+            LotteryAContract  lotteryAContract =LotteryAContract.deploy(web3j,credentials,gasProviderService.getStaticGasProvider(),adjustFundAddress).send();
             contractAddress = lotteryAContract.getContractAddress();
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,11 +75,11 @@ public class Web3jService {
     }
 
     /**
-     * 根据合约地址获取合约
+     * 根据合约地址获取合约(管理员)
      * @param contractAddress
      * @return 合约对象
      */
-    public LotteryAContract loadContract(String contractAddress){
+    public LotteryAContract loadManagerContract(String contractAddress){
         LotteryAContract lotteryAContract = null;
         if(StringUtils.isBlank(contractAddress) &&  StringUtils.isBlank(managerPrivateKey)){
             //部署管理员私钥
@@ -77,6 +87,38 @@ public class Web3jService {
             lotteryAContract = LotteryAContract.load(contractAddress, web3j, credentials, gasProviderService.getStaticGasProvider());
         }
         return lotteryAContract;
+    }
+
+    public LotteryAContract loadLoginMemberContract(String contractAddress){
+
+
+        return null;
+    }
+
+    public Credentials getLoginMemberCredentials(){
+        try{
+            LoginUser loginUser = super.getLoginUser();
+            Map<String,Object> map = new HashMap<>();
+            map.put("walletFileName",loginUser.getWalletName());
+            map.put("payPassword",loginUser.getpAddress());
+            JSONObject jObject = new JSONObject(map);
+            String str = jObject.toString();
+            str = super.getEncryptRequest(str);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.valueOf("application/json;UTF-8"));
+            HttpEntity<String> strEntity = new HttpEntity<String>(str,headers);
+            //查询钱包明细
+            String reStr =   oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/findWalletDetail",strEntity,String.class);
+            ResultUtil result = super.getDecryptRequestToResultUtil(reStr);
+            if(result != null){
+                if(result.getCode() == ResultCode.SUCCESS.getCode() && result.getExtend() != null){
+                    result.getExtend().get(ResultUtil.DATA_KEY);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -89,49 +131,5 @@ public class Web3jService {
         return credentials.getAddress();
     }
 
-    /**
-     * 获取地址
-     * @param walletFilePath
-     * @param password
-     * @return
-     */
-//    public String getWalletAddress(String walletFilePath,String password){
-//        String address = null;
-//        try {
-//            Credentials  credentials = WalletUtils.loadCredentials(password,ethwalletFilePath+walletFilePath);
-//            address = credentials.getAddress();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (CipherException e) {
-//            e.printStackTrace();
-//        }
-//        return address;
-//    }
-
-    /**
-     * 获取钱包证明文件
-     * @param walletFilePath
-     * @param password
-     * @return
-     */
-//    public  Credentials getCredentials(String walletFilePath,String password){
-//        Credentials  credentials = null;
-//        try {
-//            credentials = WalletUtils.loadCredentials(password,ethwalletFilePath+walletFilePath);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (CipherException e) {
-//            e.printStackTrace();
-//        }
-//        return credentials;
-//    }
-
-    /**
-     * 获取彩票单价
-     * @return
-     */
-    public String getLotterAPrice(){
-        return lotterAPrice;
-    }
 
 }
