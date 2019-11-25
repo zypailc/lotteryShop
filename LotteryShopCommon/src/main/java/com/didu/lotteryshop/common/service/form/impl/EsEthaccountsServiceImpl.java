@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.common.entity.EsEthaccounts;
+import com.didu.lotteryshop.common.entity.EsEthwallet;
 import com.didu.lotteryshop.common.mapper.EsEthaccountsMapper;
 import com.didu.lotteryshop.common.service.form.IEsEthaccountsService;
 import com.didu.lotteryshop.common.utils.ResultUtil;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -220,5 +222,17 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
           bool = super.updateById(esEthaccounts);
         }
         return bool;
+    }
+
+    /**
+     * 查询出账账单未处理成功的数据；
+     * @return
+     */
+    public List<EsEthaccounts> findOutBeingProcessed(String memberId){
+        Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
+        wrapper.eq("memberId",memberId)
+                .and().eq("type",TYPE_OUT)
+                .and().eq("status",STATUS_BEINGPROCESSED);
+        return super.selectList(wrapper);
     }
 }

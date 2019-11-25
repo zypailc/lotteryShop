@@ -3,14 +3,19 @@ package com.didu.lotteryshop.common.service.form.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.didu.lotteryshop.common.entity.EsEthaccounts;
 import com.didu.lotteryshop.common.entity.EsEthwallet;
+import com.didu.lotteryshop.common.entity.SysConfig;
 import com.didu.lotteryshop.common.mapper.EsEthwalletMapper;
 import com.didu.lotteryshop.common.service.form.IEsEthwalletService;
+import com.didu.lotteryshop.common.utils.Web3jUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -22,6 +27,11 @@ import java.util.Date;
  */
 @Service
 public class EsEthwalletServiceImpl extends ServiceImpl<EsEthwalletMapper, EsEthwallet> implements IEsEthwalletService {
+    @Autowired
+    private SysConfigServiceImpl sysConfigService;
+    @Autowired
+    private EsEthaccountsServiceImpl esEthaccountsService;
+
     /**
      * 初始化生产用户ETH钱包
      * @param memberId 会员ID
@@ -61,8 +71,19 @@ public class EsEthwalletServiceImpl extends ServiceImpl<EsEthwalletMapper, EsEth
     public boolean judgeBalance(String memberId,BigDecimal amount){
         if(StringUtils.isBlank(memberId) || amount == null ) return false;
         EsEthwallet esEthwallet = this.findByMemberId(memberId);
-        if(esEthwallet != null && esEthwallet.getBalance().compareTo(amount) >= 0){
-            //TODO 需要判断，还未处理的出账数据和本次需要燃气费,根据当前燃气价格进行减去
+        SysConfig sysConfig = sysConfigService.getSysConfig();
+        BigDecimal gasPrice = sysConfig.getGasPrice();
+        BigDecimal gasLimit = sysConfig.getGasLimit();
+        //本次需要燃气费增加本次燃气
+        BigDecimal allAmount = Web3jUtils.etherToAllEtherByBigDecimal(amount,gasPrice,gasLimit);
+        //还未处理的出账数据每条增加当前燃气费
+        List<EsEthaccounts> esEthaccountsList = esEthaccountsService.findOutBeingProcessed(memberId);
+        if(esEthaccountsList != null && esEthaccountsList.size() > 0 ){
+            BigDecimal gasAmount = Web3jUtils.gasToEtherByBigDecimal(gasPrice,gasLimit);
+            gasAmount = gasAmount.multiply(BigDecimal.valueOf(esEthaccountsList.size()));
+            allAmount = allAmount.add(gasAmount);
+        }
+        if(esEthwallet != null && esEthwallet.getBalance().compareTo(allAmount) >= 0){
             return true;
         }
         return false;
