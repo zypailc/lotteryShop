@@ -39,8 +39,6 @@ public class AuthExceptionEntryPoint implements AuthenticationEntryPoint {
                 }else {
                     redirectUrl = redirectUrl + "?"+ entry.getKey() +"=" + entry.getValue();
                 }
-                System.out.println(entry.getKey());//取键值对中的key
-                System.out.println(entry.getValue());//取键值对中的value
             }
 
             if(response.getStatus()==500){

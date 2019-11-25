@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.webgateway.controller;
+package com.didu.lotteryshop.webgateway.api.v1.controller;
 
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.webgateway.config.Constants;

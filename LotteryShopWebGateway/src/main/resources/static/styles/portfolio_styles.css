@@ -673,7 +673,7 @@ section
 .portfolio_items
 {
 	margin-top: 0px;
-	height: 225px !important;
+	height: 120px !important;
 }
 .card
 {
@@ -745,7 +745,7 @@ section
 	padding-left: 30px;
 	padding-right: 0px;
 	padding-top: 0px;
-	margin-top: -6px;
+	/*margin-top: -6px;*/
 }
 .card-header
 {

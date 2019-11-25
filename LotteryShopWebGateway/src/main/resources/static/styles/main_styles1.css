@@ -478,7 +478,7 @@ section
 	display: none;
 	cursor: pointer;
 	/*margin-right: 40px;*/
-	flex-basis: 40px;
+	/*flex-basis: 40px;*/
 	text-align: right;
 }
 .hamburger_container i

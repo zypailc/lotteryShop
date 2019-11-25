@@ -1,6 +1,6 @@
-package com.didu.lotteryshop.webgateway.controller;
+package com.didu.lotteryshop.webgateway.api.v1.controller;
 
-import com.didu.lotteryshop.common.base.contorller.BaseContorller;
+import com.didu.lotteryshop.webgateway.controller.WebgatewayController;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/person")
-public class MemberContorller extends BaseContorller {
+public class MemberContorller extends WebgatewayController {
 
     /**
      * 个人中心

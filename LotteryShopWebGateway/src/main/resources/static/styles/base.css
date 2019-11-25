@@ -18,7 +18,7 @@
 {
     display: none;
     cursor: pointer;
-    flex-basis: 40px;
+   /* flex-basis: 40px;*/
     text-align: right;
 }
 .select_option{
@@ -43,6 +43,25 @@
 .title_span_1{
     font-size: 18px;
     font-weight: 500;
+}
+.span_personal{
+    color: #868e96;
+    font-size: 8px;
+    font-weight: 100;
+}
+.a_person{
+    color: #868e96;
+    font-weight: 100;
+}
+.a_person:hover{
+    color: #999999;
+    font-weight: 300;
+}
+.wallet_span_total{
+    font-size: 15px;
+}
+.wallet_span_title{
+    font-size: 11px;
 }
 #goog-gt-tt{
     display: none;

@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.webgateway.controller;
+package com.didu.lotteryshop.webgateway.api.v1.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

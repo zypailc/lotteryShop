@@ -1,8 +1,7 @@
-package com.didu.lotteryshop.webgateway.controller;
+package com.didu.lotteryshop.webgateway.api.v1.controller;
 
-import com.didu.lotteryshop.common.base.contorller.BaseContorller;
+import com.didu.lotteryshop.webgateway.controller.WebgatewayController;
 import org.apache.commons.lang.StringUtils;
-import org.beetl.sql.core.annotatoin.Param;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping("/web")
-public class IndexController extends BaseContorller {
+public class IndexController extends WebgatewayController {
     @Value("${security.oauth2.client.client-id}")
     private String securityClientId;
     @Value("${security.oauth2.client.client-secret}")
@@ -91,8 +90,6 @@ public class IndexController extends BaseContorller {
      */
     @RequestMapping("/lotteryServices")
     public String services(Model model){
-        model.addAttribute("top_login",true);
-        model.addAttribute("top_login_1",false);
         return "lotteryServices";
     }
 
@@ -103,8 +100,6 @@ public class IndexController extends BaseContorller {
      */
     @RequestMapping("/playTheLottery")
     public String playTheLottery(Model model){
-        model.addAttribute("top_login",true);
-        model.addAttribute("top_login_1",false);
         return "playTheLottery";
     }
 
@@ -115,8 +110,6 @@ public class IndexController extends BaseContorller {
      */
     @RequestMapping("/generalizeRecord")
     public String generalizeRecord(Model model){
-        model.addAttribute("top_login",true);
-        model.addAttribute("top_login_1",false);
         return "generalize_record";
     }
 
@@ -127,9 +120,12 @@ public class IndexController extends BaseContorller {
      */
     @RequestMapping("/generalizeEarnings")
     public String generalizeEarnings(Model model){
-        model.addAttribute("top_login",true);
-        model.addAttribute("top_login_1",false);
         return "generalize_earnings";
+    }
+
+    @RequestMapping("/forgotPassword")
+    public String forgotPassword(Model model){
+        return  "forgotPassword";
     }
 
 }

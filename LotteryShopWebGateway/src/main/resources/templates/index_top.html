@@ -1,3 +1,32 @@
+<style>
+    .a_language_select_onchange{
+
+    }
+    .select_language_option{
+        /*width: 30px;*/
+        /*height: 30px;*/
+    }
+    .dropdown-menu{
+        padding: 0;
+        margin: 0;
+        min-width:0;
+        color: white;
+        background: rgba(0,0,0,0.1);
+    }
+    .dropdown-item{
+        padding: 0;
+        margin: 0;
+        color:#333 !important;
+        cursor:pointer
+    }
+    .dropdown-item:hover{
+        color: #999999 !important;
+        background: rgba(0,0,0,0.1);
+    }
+    .language_img{
+        border-radius: 2px;
+    }
+</style>
 <!-- Header -->
 <header id="header_load" class="header d-flex flex-row justify-content-end align-items-center trans_200">
 
@@ -12,8 +41,8 @@
             <div class="search_content d-flex flex-column align-items-center justify-content-center">
                 <% if(has(whetherLogin) && whetherLogin){ %>
                 <div class="top_center_span">
-                    <span>2019-09-26 00:00:00</span><br/>
-                    <span><a href="../person/personalCenter">${loginUser.memberName!"without"} ，<span data-localize="base.PersonalCenter"> Personal Center</span></a> </span>
+                    <span class="span_personal">2019-09-26 00:00:00</span><br/>
+                    <span><a class="a_person" href="../person/personalCenter">${loginUser.memberName!"without"} ，<span data-localize="base.PersonalCenter"> Personal Center</span></a> </span>
                 </div>
                 <% }else{ %>
                 <div class="top_login_span">
@@ -32,12 +61,31 @@
                 <% } %>
             </div>
             <div>
-                <select class="language_select_onchange">
-                    <option class="select_option" value="zh">Chinese</option>
+
+                <a class="a_language_select_onchange dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img class="language_img" src="../images/flags/zh.png"> <!--en-->
+                </a>
+
+                <div class="dropdown-menu"  aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="zh">
+                        <img class="language_img" src="../images/flags/zh.png"> <!--<span>zh</span>-->
+                    </a>
+                    <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="en">
+                        <img class="language_img" src="../images/flags/en.png"> <!--<span>en</span>-->
+                    </a>
+                    <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="ja">
+                        <img class="language_img" src="../images/flags/ja.png"> <!--<span>ja</span>-->
+                    </a>
+                    <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="da">
+                        <img class="language_img" src="../images/flags/da.png"> <!--<span>da</span>-->
+                    </a>
+                </div>
+                <!--<select class="language_select_onchange">
+                    <option class="select_option" value="zh">cn</option>
                     <option class="select_option" value="en">English</option>
                     <option class="select_option" value="ja">Japanese</option>
-                    <option class="select_option" value="da">Danish</option>
-                </select>
+                    <option class="select_option" value="da">Danish</option>&ndash;&gt;
+                </select>-->
             </div>
         </div>
         <div class="top_div">
@@ -49,12 +97,30 @@
     </nav>
 
     <div class="hamburger_container_language">
-        <select class="language_select_onchange">
+        <a class="a_language_select_onchange dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <!--<img class="language_img" src="../images/flags/zh.png"> en-->
+        </a>
+
+        <div class="dropdown-menu"  aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="zh">
+                <img class="language_img" src="../images/flags/zh.png"> <!--zh-->
+            </a>
+            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="en">
+                <img class="language_img" src="../images/flags/en.png"> <!--en-->
+            </a>
+            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="ja">
+                <img class="language_img" src="../images/flags/ja.png"> <!--ja-->
+            </a>
+            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="da">
+                <img class="language_img" src="../images/flags/da.png"> <!--da-->
+            </a>
+        </div>
+        <!--<select class="language_select_onchange">
             <option class="select_option" value="zh">Chinese</option>
             <option class="select_option" value="en">English</option>
             <option class="select_option" value="ja">Japanese</option>
             <option class="select_option" value="da">Danish</option>
-        </select>
+        </select>-->
     </div>
     <!-- Hamburger -->
     <div class="hamburger_container">
@@ -107,52 +173,58 @@
     }
     $(function(){
         //初始化语言选择
-        var language_cookie = getCookie("somoveLanguage");
-        $(".language_select_onchange").prop('value',language_cookie);
-        $(".language_select_onchange").change(function (){
-            var language_select = $(this).val() || "";
-            var language_select_1 = $(this).val() || "";
-            //获取浏览器的语言
-            var browserLanguage = navigator.language.toLowerCase();
-            var browserLanguage_array;
-            var langeage_zh = {ja:"日语",da:"丹麦语"};//中文繁体
-            var langeage_en = {ja:"Japanese",da:"Danish"};//英文
-            var language_ja = {ja:"日本語",da:"デンマーク語"};//日本
-            var language_da = {ja:"Japansk",da:"Dansk"};//丹麦
-            var name = "somoveLanguage";
-            var flag = true;
-            if(browserLanguage){
-                switch (browserLanguage) {
-                    case 'zh-cn':
-                        browserLanguage_array = language_ja;
-                        language_select = langeage_zh[language_select];
-                        break;
-                    case 'en':
-                        browserLanguage_array = language_ja;
-                        language_select = langeage_en[language_select];
-                        break;
-                    case 'ja':
-                        browserLanguage_array = language_ja;
-                        language_select = language_ja[language_select];
-                        break;
-                    case 'da':
-                        browserLanguage_array = language_da;
-                        language_select = language_da[language_select];
-                        break;
-                    default:
-                }
-            }
-           if((language_select_1 != 'zh' && language_select_1 != 'en')) {
-                $("iframe.goog-te-menu-frame").contents().find("table").find("span.text").each(function (i, data) {
-                    if ($(this).html() == language_select) {
-                        $(this).click();
-                    }
-                })
-            }else {
-               SetCookie(name, language_select_1);
-               location.reload();
-           }
-        });
-        //初始化参数绑定
+        var language_cookie = getCookie("somoveLanguage") || "en";
+        //$(".language_select_onchange").prop('value',language_cookie);
+        var imgHtml = "<img class='language_img' src='../images/flags/"+ language_cookie +".png'> ";
+        $(".a_language_select_onchange").html(imgHtml);
     })
+
+    function language_select_onchange(e){
+        var language_select = $(e).attr("data_value") || "en";
+        var language_select_1 = $(e).attr("data_value") || "en";
+        //获取浏览器的语言
+        imgHtml = "<img class='language_img' src='../images/flags/"+ language_select +".png'> ";
+        $(".a_language_select_onchange").html(imgHtml);
+        var browserLanguage = navigator.language.toLowerCase();
+        var browserLanguage_array;
+        var langeage_zh = {ja:"日语",da:"丹麦语"};//中文繁体
+        var langeage_en = {ja:"Japanese",da:"Danish"};//英文
+        var language_ja = {ja:"日本語",da:"デンマーク語"};//日本
+        var language_da = {ja:"Japansk",da:"Dansk"};//丹麦
+        var name = "somoveLanguage";
+        var flag = true;
+        if(browserLanguage){
+            switch (browserLanguage) {
+                case 'zh-cn':
+                    browserLanguage_array = language_ja;
+                    language_select = langeage_zh[language_select];
+                    break;
+                case 'en':
+                    browserLanguage_array = language_ja;
+                    language_select = langeage_en[language_select];
+                    break;
+                case 'ja':
+                    browserLanguage_array = language_ja;
+                    language_select = language_ja[language_select];
+                    break;
+                case 'da':
+                    browserLanguage_array = language_da;
+                    language_select = language_da[language_select];
+                    break;
+                default:
+            }
+        }
+        if((language_select_1 != 'zh' && language_select_1 != 'en')) {
+            $("iframe.goog-te-menu-frame").contents().find("table").find("span.text").each(function (i, data) {
+                if ($(this).html() == language_select) {
+                    $(this).click();
+                }
+            })
+        }else {
+            //清除谷歌翻译插件存入的cookie值
+            delCookie("googtrans");
+            SetCookie(name, language_select_1);
+            location.reload();
+        }
+    }
 </script>

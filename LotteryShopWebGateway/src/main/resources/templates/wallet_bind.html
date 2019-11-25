@@ -20,65 +20,13 @@
 include("common.js.html"){}
 %>
 <script src="../js/portfolio_custom.js"></script>
+<script src="../js/lotteryshop/person_center.js" ></script>
 <script>
     $(function(){
         $(".back").click(function(){
             history.back();
         });
     })
-    function create_confirm(){
-        var bAddress = $("input[name=bAddress]").val() || "";
-        var paymentCode = $("input[name=paymentCode]").val() || "";
-        var paymentCodeConfirm = $("input[name=paymentCodeConfirm]").val() || "";
-        if(bAddress == ""){
-            layer.msg("Please enter your wallet address !");
-            return "";
-        }
-        if(paymentCode == ""){
-            layer.msg("Please enter your password !");
-            return;
-        }
-        if(paymentCodeConfirm == ""){
-            layer.msg("Please enter your confirm password !");
-            return;
-        }
-        if(paymentCode != paymentCodeConfirm){
-            layer.msg("The password is inconsistent with the confirmation code !");
-            return;
-        }
-        $.ajax({
-            method: "post",
-            url: "/api/base/v1/member/bindWallet",
-            data:{"bAddress":bAddress,"paymentCode":paymentCode},
-            dataType: "json",
-            success:function (data){
-                console.log(data);
-                if(data.code == '200'){//success
-                    location.reload();
-                }else {
-                    layer.msg(data.msg)
-                }
-            }
-        })
-    }
-    function update_confirm(){
-        var bAddress = $(".update_bAddress").val() || "";
-        if(bAddress == ""){
-            layer.msg("Please enter your wallet address !");
-            return;
-        }
-        $.ajax({
-            method: "post",
-            url: "/api/base/v1/member/updateBindWallet",
-            data:{"bAddress":bAddress},
-            dataType: "json",
-            success:function (data){
-                if(data.code == '200'){//success
-                    location.reload();
-                }
-            }
-        })
-    }
 </script>
 <style>
     .create_wallet_local{
@@ -112,8 +60,6 @@ include("common.js.html"){}
     include("/top.html"){}
     %>
     <!-- Home -->
-
-
     <div class="base_head">
         <div class="wallet_phone">
             <div class="wallet_extract">
@@ -123,7 +69,7 @@ include("common.js.html"){}
                     <p><span>${loginUser.bAddress!"error"}</span></p>
                     <input class="input_class_2 wallet_password_input" type="text" name="update_bAddress" placeholder="wallet address">
                     <div class="div_btn">
-                        <a class="wallet_button button_display" href="#" onclick="update_confirm">Update</a>
+                        <a class="wallet_button button_display" href="#" onclick="update_confirm()">Update</a>
                     </div>
                 </div>
             <% }else{ %>
