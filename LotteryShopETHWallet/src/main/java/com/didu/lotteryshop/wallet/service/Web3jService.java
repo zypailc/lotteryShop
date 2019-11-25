@@ -1,6 +1,8 @@
 package com.didu.lotteryshop.wallet.service;
 
-import com.didu.lotteryshop.wallet.utils.Web3jUtils;
+import com.didu.lotteryshop.common.entity.SysConfig;
+import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
+import com.didu.lotteryshop.common.utils.Web3jUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -31,8 +33,12 @@ public class Web3jService {
     @Value("${ethwallet.web3j.url}")
     private String ethwalletWeb3jUrl;
     private Web3j web3j;
+
     @Autowired
-    private GasProviderService gasProviderService;
+    private SysConfigServiceImpl sysConfigService;
+
+    /*@Autowired
+    private GasProviderService gasProviderService;*/
     /** 是否确认状态，0为确认，1已确认 */
     public static final String TRANSACTION_STATUS = "transaction_status";
     /** 实际确认产生的gas费用 */
@@ -65,13 +71,13 @@ public class Web3jService {
             EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
                     credentials.getAddress(), DefaultBlockParameterName.LATEST).send();
             BigInteger nonce = ethGetTransactionCount.getTransactionCount();
-
+            SysConfig sysConfig = sysConfigService.getSysConfig();
             // create our transaction
             // DefaultGasProvider defaultGasProvider = new DefaultGasProvider();
             // StaticGasProvider defaultGasProvider = new StaticGasProvider(BigInteger.valueOf(22000000000L),BigInteger.valueOf(4300000L));
             RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(
-                    nonce, gasProviderService.getGasPrice(),
-                    gasProviderService.getGasLimit(),
+                    nonce, sysConfig.getGasPrice().toBigInteger(),
+                    sysConfig.getGasLimit().toBigInteger(),
                     toAddress,
                     Convert.toWei(etherValue, Convert.Unit.ETHER).toBigInteger()
             );
