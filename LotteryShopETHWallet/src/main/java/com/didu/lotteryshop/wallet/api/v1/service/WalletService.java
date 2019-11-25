@@ -38,8 +38,6 @@ public class WalletService {
     private Web3jService web3jService;
     @Autowired
     private GasProviderService gasProviderService;
-    /*@Autowired
-    private SysConfigServiceImpl sysConfigService;*/
 
     /**
      * 创建钱包
