@@ -9,15 +9,4 @@ import org.springframework.ui.Model;
 @Controller
 public class BaseContorller extends BaseStat{
 
-    public Model getModel(Model model){
-        LoginUser loginUser= getLoginUser();
-        model.addAttribute("loginUser",loginUser);
-        model.addAttribute("defaultHeadImg", Constants.HEAD_PORTRAIT_URL);
-        if(loginUser == null){
-            model.addAttribute("whetherLogin",false);
-        }else{
-            model.addAttribute("whetherLogin",true);
-        }
-        return model;
-    }
 }

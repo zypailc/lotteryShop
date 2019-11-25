@@ -1,7 +1,10 @@
 package com.didu.lotteryshop.common.entity;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
 
 import java.io.Serializable;
 
@@ -11,20 +14,17 @@ import java.io.Serializable;
  * </p>
  *
  * @author null123
- * @since 2019-10-29
+ * @since 2019-11-18
  */
 @TableName("ls_image")
 public class LsImage extends Model<LsImage> {
 
-
-    /**
-     * 图像类型： 1 头像类别
-     */
-    public static final Integer IMAGE_TYPE = 1;
+    public static final  Integer IMAGE_TYPE = 1;
 
     private static final long serialVersionUID = 1L;
 
-    private String id;
+    @TableId(type=IdType.AUTO)
+    private Integer id;
     /**
      * 图片类型：1 头像 （图片类型可添加，）
      */
@@ -34,12 +34,19 @@ public class LsImage extends Model<LsImage> {
      */
     private String url;
 
+    /**
+     * 图片保存的本地地址
+     * @return
+     */
+    @TableField("localhost_url")
+    private String localhostUrl;
 
-    public String getId() {
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -59,6 +66,14 @@ public class LsImage extends Model<LsImage> {
         this.url = url;
     }
 
+    public String getLocalhostUrl() {
+        return localhostUrl;
+    }
+
+    public void setLocalhostUrl(String localhostUrl) {
+        this.localhostUrl = localhostUrl;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -70,6 +85,7 @@ public class LsImage extends Model<LsImage> {
         ", id=" + id +
         ", type=" + type +
         ", url=" + url +
+        ", localhostUrl=" + localhostUrl +
         "}";
     }
 }

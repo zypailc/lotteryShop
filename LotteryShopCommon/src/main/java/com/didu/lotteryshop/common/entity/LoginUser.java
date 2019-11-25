@@ -12,6 +12,7 @@ public class LoginUser {
     private String pAddress;//平台钱包地址
     private String bAddress;//绑定钱包地址
     private String WalletName;//钱包名称
+    private String paymentCode;//支付密码
 
     public String getId() {
         return id;
@@ -45,19 +46,19 @@ public class LoginUser {
         this.headPortraitUrl = headPortraitUrl;
     }
 
-    public String getpAddress() {
+    public String getPAddress() {
         return pAddress;
     }
 
-    public void setpAddress(String pAddress) {
+    public void setPAddress(String pAddress) {
         this.pAddress = pAddress;
     }
 
-    public String getbAddress() {
+    public String getBAddress() {
         return bAddress;
     }
 
-    public void setbAddress(String bAddress) {
+    public void setBAddress(String bAddress) {
         this.bAddress = bAddress;
     }
 

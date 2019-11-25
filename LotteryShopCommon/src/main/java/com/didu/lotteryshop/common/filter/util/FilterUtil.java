@@ -1,6 +1,6 @@
 package com.didu.lotteryshop.common.filter.util;
 
-import com.didu.lotteryshop.common.utils.ConfigurationUtil;
+import com.didu.lotteryshop.common.config.Constants;
 import org.apache.commons.lang.ArrayUtils;
 
 public class FilterUtil {
@@ -15,7 +15,7 @@ public class FilterUtil {
     }
 
     public static String path_s(){
-        return ArrayUtils.toString(ConfigurationUtil.STATIC_RESOURCE_FILENAME, ",");
+        return ArrayUtils.toString(Constants.STATIC_RESOURCE_FILENAME, ",");
     }
 
 }

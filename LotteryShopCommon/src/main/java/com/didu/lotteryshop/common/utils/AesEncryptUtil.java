@@ -1,10 +1,8 @@
 package com.didu.lotteryshop.common.utils;
 
 import cn.hutool.core.convert.Convert;
-import cn.hutool.core.lang.UUID;
 import com.didu.lotteryshop.common.config.Constants;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-//import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -13,6 +11,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+
+//import org.apache.tomcat.util.codec.binary.Base64;
 
 
 /**
@@ -152,12 +152,12 @@ public class AesEncryptUtil {
                 "{fileName=UTC--2019-11-12T06-17-58.702000000Z--327f742b07dc456f54b2f2815bd964bc17328ae0.json, address=0x327f742b07dc456f54b2f2815bd964bc17328ae0, userId=2}"+
                 //         UTC--2019-11-12T06-17-58.702000000Z--327f742b07dc456f54b2f2815bd964bc17328ae0.json
                 "]";
-        System.out.println(AesEncryptUtil.encrypt("UTC--2019-11-12T06-17-5fadsfasdfadsfadsfdsf8.702000000Z--327f742b07dc456f54b2f2815bd964bc17328ae0.json",ConfigurationUtil.KEY_THREE));
+        System.out.println(AesEncryptUtil.encrypt("UTC--2019-11-12T06-17-5fadsfasdfadsfadsfdsf8.702000000Z--327f742b07dc456f54b2f2815bd964bc17328ae0.json",Constants.KEY_THREE));
         //SLeGFAaTwsTnsqLCNQvXzBY0EcQ65uV1v1jIbQdUFh5Q9fx4XEKPpYYUvWiuUtla5XZPy6cQyvFliLJuNI3/rr/AdtecYaCZIFj0kD8GyOK2Q5B4QUfJrw4IeQBRJ9Ii
         System.out.println("SLeGFAaTwsTnsqLCNQvXzBY0EcQ65uV1v1jIbQdUFh5Q9fx4XEKPpYYUvWiuUtla5XZPy6cQyvFliLJuNI3/rr/AdtecYaCZIFj0kD8GyOK2Q5B4QUfJrw4IeQBRJ9Ii".length());
         //SLeGFAaTwsTnsqLCNQvXzGr6fC5d+KYQJZJZhWhkr9NFtq3t0ykqAzR1r70FtaT6ev2nV4jHPNW3J+7gQElTcu5jvh+6s8M9yYFbXnwXIGuC8VDASazbqYEPKv87d42FsokVJjojUxNRB6k4Of46oQ==
-        System.out.println(AesEncryptUtil.decrypt("SLeGFAaTwsTnsqLCNQvXzBY0EcQ65uV1v1jIbQdUFh5Q9fx4XEKPpYYUvWiuUtla5XZPy6cQyvFliLJuNI3/rr/AdtecYaCZIFj0kD8GyOK2Q5B4QUfJrw4IeQBRJ9Ii",ConfigurationUtil.KEY_THREE));
-        System.out.println("mima:"+AesEncryptUtil.encrypt_code("1",ConfigurationUtil.KEY_TOW));
+        System.out.println(AesEncryptUtil.decrypt("SLeGFAaTwsTnsqLCNQvXzBY0EcQ65uV1v1jIbQdUFh5Q9fx4XEKPpYYUvWiuUtla5XZPy6cQyvFliLJuNI3/rr/AdtecYaCZIFj0kD8GyOK2Q5B4QUfJrw4IeQBRJ9Ii",Constants.KEY_THREE));
+        System.out.println("mima:"+AesEncryptUtil.encrypt_code("1",Constants.KEY_TOW));
     }
 
 }
