@@ -1,10 +1,13 @@
 package com.didu.lotteryshop.wallet.api.v1.RequestEntity;
 
-import javax.validation.constraints.NotNull;
-
+/**
+ * 创建钱包请求实体
+ * @author CHJ
+ * @Date 2019-11-25
+ */
 public class GenerateWalletEntity {
-    private String userId;
-    private String paymentCode;
+    private String userId;//用户ID
+    private String paymentCode; //交易密码
 
     public String getUserId() {
         return userId;

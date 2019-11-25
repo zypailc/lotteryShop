@@ -3,6 +3,7 @@ package com.didu.lotteryshop.wallet.api.v1.controller;
 import com.didu.lotteryshop.common.base.contorller.BaseContorller;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.wallet.annotation.SecurityParameter;
+import com.didu.lotteryshop.wallet.api.v1.RequestEntity.FindWalletDetailEntity;
 import com.didu.lotteryshop.wallet.api.v1.RequestEntity.GenerateWalletEntity;
 import com.didu.lotteryshop.wallet.api.v1.service.WalletService;
 import org.apache.commons.lang3.StringUtils;
@@ -109,18 +110,17 @@ public class WalletContorller extends BaseContorller {
 
     /**
      * 查询钱包明细
-     * @param walletFileName 钱包文件名称
-     * @param payPassword 支付密码
      * @return
      */
-    @RequestMapping(value = "/findWalletDetail")
+    @PostMapping(value = "/findWalletDetail",consumes = "application/json")
     @ResponseBody
     @SecurityParameter
-    public ResultUtil findWalletDetail(@RequestParam("walletFileName") String walletFileName, @RequestParam("payPassword") String payPassword){
-        if(StringUtils.isBlank(walletFileName) || StringUtils.isBlank(walletFileName)){
+    public ResultUtil findWalletDetail(@RequestBody FindWalletDetailEntity findWalletDetailEntity){
+
+        if(findWalletDetailEntity == null || StringUtils.isBlank(findWalletDetailEntity.getWalletFileName()) || StringUtils.isBlank(findWalletDetailEntity.getPayPassword())){
             //参数错误
             return ResultUtil.errorJson("Parameter error!");
         }
-        return walletService.findWalletDetail(walletFileName,payPassword);
+        return walletService.findWalletDetail(findWalletDetailEntity.getWalletFileName(),findWalletDetailEntity.getPayPassword());
     }
 }
