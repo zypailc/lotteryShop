@@ -1,7 +1,10 @@
 package com.didu.lotteryshop.wallet.api.v1.service;
 
+import com.didu.lotteryshop.common.entity.SysConfig;
+import com.didu.lotteryshop.common.service.form.impl.GasProviderService;
+import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
 import com.didu.lotteryshop.common.utils.ResultUtil;
-import com.didu.lotteryshop.wallet.service.GasProviderService;
+import com.didu.lotteryshop.common.utils.Web3jUtils;
 import com.didu.lotteryshop.wallet.service.Web3jService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,8 @@ public class WalletService {
     private Web3jService web3jService;
     @Autowired
     private GasProviderService gasProviderService;
+    /*@Autowired
+    private SysConfigServiceImpl sysConfigService;*/
 
     /**
      * 创建钱包
@@ -110,6 +115,7 @@ public class WalletService {
         //交易地址
         reMap.put("formAddress",formAddress);
         try {
+            SysConfig sysConfig = new SysConfig();
             Credentials credentials = WalletUtils.loadCredentials(payPassword, walletFilePath+walletFileName);
             BigDecimal  etherBalance =  web3jService.getBalanceByEther(formAddress);
             BigDecimal allEther = gasProviderService.getAllEther(new BigDecimal(etherValue));

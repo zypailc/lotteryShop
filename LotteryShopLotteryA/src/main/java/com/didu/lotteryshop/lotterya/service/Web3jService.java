@@ -1,21 +1,18 @@
 package com.didu.lotteryshop.lotterya.service;
 
 import com.didu.lotteryshop.common.config.Constants;
+import com.didu.lotteryshop.common.service.form.impl.GasProviderService;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.lotterya.contract.LotteryAContract;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.math.BigDecimal;
 
 @Service
 public class Web3jService {

@@ -49,11 +49,11 @@
         </dependency>
 
         <!-- 引用eth的Web3j--><!-- 注释，父级common中引用-->
-        <!--<dependency>-->
-            <!--<groupId>org.web3j</groupId>-->
-            <!--<artifactId>core</artifactId>-->
-            <!--<version>4.5.0</version>-->
-        <!--</dependency>-->
+        <!--<dependency>
+            <groupId>org.web3j</groupId>
+            <artifactId>core</artifactId>
+            <version>4.5.0</version>
+        </dependency>-->
     </dependencies>
 
 </project>
