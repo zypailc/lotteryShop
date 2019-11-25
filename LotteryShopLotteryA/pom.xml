@@ -19,16 +19,16 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- security安全框架依赖 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-security</artifactId>
-        </dependency>
-        <!-- 引入web依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+        <!-- security安全框架依赖 --><!-- 注释，父级common中引用-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.cloud</groupId>-->
+            <!--<artifactId>spring-cloud-starter-security</artifactId>-->
+        <!--</dependency>-->
+        <!-- 引入web依赖 --><!-- 注释，父级common中引用-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-web</artifactId>-->
+        <!--</dependency>-->
         <!-- oauth2安全验证授权依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -51,12 +51,12 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
 
-        <!-- 引用eth的Web3j-->
-        <dependency>
-            <groupId>org.web3j</groupId>
-            <artifactId>core</artifactId>
-            <version>4.5.0</version>
-        </dependency>
+        <!-- 引用eth的Web3j--><!-- 注释，父级common中引用-->
+        <!--<dependency>-->
+            <!--<groupId>org.web3j</groupId>-->
+            <!--<artifactId>core</artifactId>-->
+            <!--<version>4.5.0</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
