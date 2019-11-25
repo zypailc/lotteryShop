@@ -1,18 +1,14 @@
-package com.didu.lotteryshop.base.api.v1.service.form.imp;
+package com.didu.lotteryshop.base.api.v1.service.form.impl;
 
-import com.didu.lotteryshop.base.api.v1.service.MailService;
+import com.didu.lotteryshop.base.api.v1.service.form.MailService;
 import com.didu.lotteryshop.common.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import javax.mail.internet.InternetAddress;
 import java.io.*;
 import java.net.Socket;
 import java.util.Base64;
-import java.util.Date;
 
 @Service
 public class MailServiceImp implements MailService {
@@ -87,8 +83,8 @@ public class MailServiceImp implements MailService {
             //注意这个空行是必须的，设置好了类型，需要空一行再起一行输入正文内容
             printWriter.println();
 
-            printWriter.println("您注册的账号为：" + member.getEmail() + "<br/>");
-            printWriter.println("您注册的账号密码为："+ text);
+            printWriter.println("Your account number is : " + member.getEmail() + "<br/>");
+            printWriter.println("Your password is : "+ text);
 
             printWriter.println();
             //结束邮件发送"."命令

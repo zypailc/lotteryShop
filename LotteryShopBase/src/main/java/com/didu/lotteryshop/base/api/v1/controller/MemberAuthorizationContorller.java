@@ -1,7 +1,7 @@
 package com.didu.lotteryshop.base.api.v1.controller;
 
-import com.didu.lotteryshop.base.api.v1.service.form.imp.MemberServiceImp;
-import com.didu.lotteryshop.common.base.contorller.BaseContorller;
+import com.didu.lotteryshop.base.api.v1.service.form.impl.MemberServiceImp;
+import com.didu.lotteryshop.base.controller.BaseController;
 import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.enumeration.ResultCode;
 import com.didu.lotteryshop.common.utils.EmailUtil;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/authorization/v1/member")
-public class MemberAuthorizationContorller extends BaseContorller {
+public class MemberAuthorizationContorller extends BaseController {
 
     Logger log = LoggerFactory.getLogger(getClass());
 
@@ -39,5 +39,15 @@ public class MemberAuthorizationContorller extends BaseContorller {
             return ResultUtil.jsonObject("Please enter the correct email address !", ResultCode.FAILED.getCode());
         }
         return memberService.register(member);
+    }
+
+    @ResponseBody
+    @RequestMapping("/forgotPassword")
+    public ResultUtil forgotPassword(String email){
+        //验证邮箱格式
+        if(!EmailUtil.verificationEmail(email)){
+            return ResultUtil.jsonObject("Please enter the correct email address !", ResultCode.FAILED.getCode());
+        }
+        return memberService.forgotPassword(email);
     }
 }

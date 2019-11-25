@@ -1,6 +1,7 @@
-package com.didu.lotteryshop.base.api.v1.service.form.imp;
+package com.didu.lotteryshop.base.api.v1.service.form.impl;
 
-import cn.hutool.core.convert.Convert;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.base.api.v1.mapper.MemberMapper;
 import com.didu.lotteryshop.common.base.service.BaseService;
@@ -12,10 +13,6 @@ import com.didu.lotteryshop.common.utils.CodeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -59,7 +56,7 @@ public class MemberServiceImp extends ServiceImpl<MemberMapper, Member> {
         if(member.getGeneralizeMemberType() == null ){
             member.setGeneralizeMemberType(Member.generalizeMemberType_1);
         }
-        mailServiceImp.sendSimpleMail(member,"密码",password);
+        mailServiceImp.sendSimpleMail(member,"new password",password);
         //保存用户信息
         boolean b = insert(member);
         if(b){
@@ -67,6 +64,30 @@ public class MemberServiceImp extends ServiceImpl<MemberMapper, Member> {
         }else {
             return ResultUtil.errorJson("Registered error , please operate again !");
         }
+    }
+
+    public ResultUtil forgotPassword(String email){
+        Member member = new Member();
+        member.setEmail(email);
+        //随机生成随机密码
+        String password = CodeUtil.getCode(18);
+        try {
+            //秘钥和密码加密生成暗文
+            String ciphertext = AesEncryptUtil.encrypt_code(password,ConfigurationUtil.KEY_TOW);
+            member.setPassword(ciphertext);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("email",email);
+        Wrapper wrapper = new EntityWrapper<Member>();
+        wrapper.allEq(map);
+        boolean b = update(member,wrapper);
+        if(b) {
+            mailServiceImp.sendSimpleMail(member, "new password", password);
+            return ResultUtil.successJson("Your new password has been sent to your email !");
+        }
+        return  ResultUtil.errorJson("error , please operate again !");
     }
 
     /**

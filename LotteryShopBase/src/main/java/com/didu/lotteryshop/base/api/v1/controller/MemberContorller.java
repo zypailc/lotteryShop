@@ -1,6 +1,6 @@
 package com.didu.lotteryshop.base.api.v1.controller;
 
-import com.didu.lotteryshop.base.api.v1.service.form.MemberService;
+import com.didu.lotteryshop.base.api.v1.service.MemberService;
 import com.didu.lotteryshop.common.base.contorller.BaseContorller;
 import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.entity.Member;

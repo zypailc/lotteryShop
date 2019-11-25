@@ -1,6 +1,7 @@
 package com.didu.lotteryshop.base.api.v1.controller;
 
-import com.didu.lotteryshop.base.api.v1.service.form.imp.WalletTestService;
+import com.didu.lotteryshop.base.api.v1.service.form.impl.WalletTestService;
+import com.didu.lotteryshop.base.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/wallet")
-public class WalletTestContorller {
+public class WalletTestContorller extends BaseController {
     @Autowired
     private WalletTestService walletTestService;
 
