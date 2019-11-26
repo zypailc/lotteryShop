@@ -1,12 +1,12 @@
 package com.didu.lotteryshop.base.api.v1.controller;
 
 
-import com.didu.lotteryshop.base.api.v1.service.form.impl.LsImageServiceImpl;
 import com.didu.lotteryshop.base.api.v1.service.form.impl.MemberServiceImp;
 import com.didu.lotteryshop.common.base.contorller.BaseContorller;
 import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.entity.LsImage;
 import com.didu.lotteryshop.common.entity.Member;
+import com.didu.lotteryshop.common.service.form.impl.LsImageServiceImpl;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,6 @@ public class LsImageContorller extends BaseContorller {
 
     @Autowired
     private LsImageServiceImpl imageService;
-    @Autowired
-    private SqlSession sqlSession;
     @Autowired
     private MemberServiceImp memberService;
 

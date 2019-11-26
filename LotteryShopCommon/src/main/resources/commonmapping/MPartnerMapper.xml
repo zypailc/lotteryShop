@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.lotteryshopmanagement.mapper.MPartnerMapper">
+<mapper namespace="com.didu.lotteryshop.common.mapper.MPartnerMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.example.lotteryshopmanagement.model.MPartner">
+    <resultMap id="BaseResultMap" type="com.didu.lotteryshop.common.entity.MPartner">
         <id column="id" property="id" />
         <result column="link_address" property="linkAddress" />
         <result column="ls_image_id" property="lsImageId" />

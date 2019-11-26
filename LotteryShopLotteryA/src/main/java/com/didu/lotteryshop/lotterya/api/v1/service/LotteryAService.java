@@ -127,7 +127,7 @@ public class LotteryAService extends LotteryABaseService {
     public ResultUtil ethBuyLottery(String luckNum,Integer multipleNumber,String payPasswod){
         LoginUser loginUser = super.getLoginUser();
         String walletFileName = loginUser.getWalletName();
-        String formAddress = loginUser.getpAddress();
+        String formAddress = loginUser.getPAddress();
         String memberId  = loginUser.getId();
         String toAddress = web3jService.getManagerAddress();
         LotteryaInfo lotteryaInfo = lotteryaInfoService.findLotteryaInfo();
