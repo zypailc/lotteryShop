@@ -102,7 +102,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * @param operId  操作业务表主键ID
      * @return
      */
-    public boolean addOutBeingprocessed(String memberId,String dicTypeValue,BigDecimal total,String operId){
+    public boolean addOutBeingProcessed(String memberId,String dicTypeValue,BigDecimal total,String operId){
         return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO);
     }
 
