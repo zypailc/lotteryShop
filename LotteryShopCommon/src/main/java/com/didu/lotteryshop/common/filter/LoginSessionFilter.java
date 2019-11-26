@@ -4,7 +4,6 @@ import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.filter.util.FilterUtil;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
-import com.didu.lotteryshop.common.utils.ConfigurationUtil;
 import com.github.abel533.sql.SqlMapper;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -94,13 +93,13 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                         loginUser.setPAddress(map.get("pAddress") != null ? map.get("pAddress").toString() : "");
                         loginUser.setBAddress(map.get("bAddress") != null ? map.get("bAddress").toString() : "");
                         loginUser.setPaymentCode(map.get("paymentCode") != null ? map.get("paymentCode").toString() : "");
-                        String walletName = "";
+                        /*String walletName = "";
                         try {
                             walletName = map.get("walletName") != null && !"".equals(map.get("walletName")) ? AesEncryptUtil.decrypt(map.get("walletName").toString(), Constants.KEY_THREE) : "";
                         } catch (Exception e) {
                             e.printStackTrace();
-                        }
-                        loginUser.setWalletName(walletName);
+                        }*/
+                        loginUser.setWalletName(map.get("walletName") != null ? map.get("walletName").toString() : "");
                     }
                 }
                 if (loginUser != null) {

@@ -1,5 +1,7 @@
 package com.didu.lotteryshop.common.entity;
 
+import com.didu.lotteryshop.common.config.Constants;
+import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import lombok.Data;
 
 @Data
@@ -63,10 +65,28 @@ public class LoginUser {
     }
 
     public String getWalletName() {
+        try {
+            WalletName = AesEncryptUtil.decrypt(WalletName, Constants.KEY_THREE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return WalletName;
     }
 
     public void setWalletName(String walletName) {
         WalletName = walletName;
+    }
+
+    public String getPaymentCode() {
+        try {
+            paymentCode = AesEncryptUtil.decrypt(paymentCode, Constants.KEY_TOW);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return paymentCode;
+    }
+
+    public void setPaymentCode(String paymentCode) {
+        this.paymentCode = paymentCode;
     }
 }

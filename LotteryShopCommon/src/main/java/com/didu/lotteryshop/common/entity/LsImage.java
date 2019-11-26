@@ -40,6 +40,8 @@ public class LsImage extends Model<LsImage> {
      */
     @TableField("localhost_url")
     private String localhostUrl;
+    @TableField("file_name")
+    private String fileName;
 
 
     public Integer getId() {
@@ -74,6 +76,14 @@ public class LsImage extends Model<LsImage> {
         this.localhostUrl = localhostUrl;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -86,6 +96,7 @@ public class LsImage extends Model<LsImage> {
         ", type=" + type +
         ", url=" + url +
         ", localhostUrl=" + localhostUrl +
+        ", fileName=" + fileName +
         "}";
     }
 }

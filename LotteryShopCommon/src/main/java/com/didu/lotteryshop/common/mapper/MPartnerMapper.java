@@ -1,7 +1,7 @@
 package com.didu.lotteryshop.common.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.didu.lotteryshop.common.entity.MIntro;
+import com.didu.lotteryshop.common.entity.MPartner;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.Map;
  * </p>
  *
  * @author null123
- * @since 2019-11-21
+ * @since 2019-11-19
  */
-public interface MIntroMapper extends BaseMapper<MIntro> {
+public interface MPartnerMapper extends BaseMapper<MPartner> {
 
-    public List<Map<String,Object>> selectMIntro(@Param("type") String type);
+    List<Map<String,Object>> findPartnerList(@Param("type") String type);
 
 }

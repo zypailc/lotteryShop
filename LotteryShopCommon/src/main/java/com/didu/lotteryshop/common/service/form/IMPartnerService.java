@@ -1,7 +1,7 @@
 package com.didu.lotteryshop.common.service.form;
 
 import com.baomidou.mybatisplus.service.IService;
-import com.didu.lotteryshop.common.entity.MIntro;
+import com.didu.lotteryshop.common.entity.MPartner;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.didu.lotteryshop.common.entity.MIntro;
  * </p>
  *
  * @author null123
- * @since 2019-11-21
+ * @since 2019-11-19
  */
-public interface IMIntroService extends IService<MIntro> {
+public interface IMPartnerService extends IService<MPartner> {
 
 }

@@ -19,6 +19,8 @@ import java.io.Serializable;
 @TableName("m_intro")
 public class MIntro extends Model<MIntro> {
 
+	public static final String[] LANGUAGES = new String[]{"zh", "en"};
+	public static final String LANGUAGES_STR = "zh,en";
 	/**
 	 * 项目特点
 	 */
@@ -55,6 +57,8 @@ public class MIntro extends Model<MIntro> {
 	private Integer sort;
 	@TableField("create_time")
 	private Date createTime;
+	@TableField("language_id")
+	private Integer languageId;
 
 
 	public Integer getId() {
@@ -105,6 +109,14 @@ public class MIntro extends Model<MIntro> {
 		this.createTime = createTime;
 	}
 
+	public Integer getLanguageId() {
+		return languageId;
+	}
+
+	public void setLanguageId(Integer languageId) {
+		this.languageId = languageId;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -119,6 +131,7 @@ public class MIntro extends Model<MIntro> {
 			", type=" + type +
 			", sort=" + sort +
 			", createTime=" + createTime +
+			", languageId=" + languageId +
 			"}";
 	}
 }
