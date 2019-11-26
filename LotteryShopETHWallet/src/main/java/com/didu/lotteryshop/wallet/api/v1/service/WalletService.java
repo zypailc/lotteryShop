@@ -1,8 +1,7 @@
 package com.didu.lotteryshop.wallet.api.v1.service;
 
 import com.didu.lotteryshop.common.entity.SysConfig;
-import com.didu.lotteryshop.common.service.form.impl.GasProviderService;
-import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
+import com.didu.lotteryshop.common.service.GasProviderService;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.wallet.service.WalletBaseService;
 import com.didu.lotteryshop.wallet.service.Web3jService;
