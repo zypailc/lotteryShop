@@ -7,13 +7,12 @@
 		<id column="id" property="id" />
 		<result column="member_id" property="memberId" />
 		<result column="luck_num" property="luckNum" />
-		<result column="second_num" property="secondNum" />
-		<result column="thirdly_num" property="thirdlyNum" />
 		<result column="total" property="total" />
 		<result column="transfer_hash_value" property="transferHashValue" />
 		<result column="transfer_status" property="transferStatus" />
 		<result column="transfer_status_time" property="transferStatusTime" />
 		<result column="create_time" property="createTime" />
+		<result column="multiple_num" property="multipleNum" />
 	</resultMap>
 
 </mapper>

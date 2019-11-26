@@ -6,6 +6,7 @@ import com.didu.lotteryshop.common.enumeration.ResultCode;
 import com.didu.lotteryshop.common.service.GasProviderService;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
+import com.didu.lotteryshop.common.utils.Web3jUtils;
 import com.didu.lotteryshop.lotterya.contract.LotteryAContract;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,22 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.http.HttpService;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * web3jService
+ * @author CHJ
+ * @date 2019-11-26
+ */
 @Service
 public class Web3jService extends LotteryABaseService {
     /** 主网络地址 */
@@ -66,7 +77,7 @@ public class Web3jService extends LotteryABaseService {
         try {
             //部署管理员私钥
             Credentials credentials = Credentials.create(managerPrivateKey);
-            LotteryAContract  lotteryAContract =LotteryAContract.deploy(web3j,credentials,gasProviderService.getStaticGasProvider(),adjustFundAddress).send();
+            LotteryAContract  lotteryAContract = LotteryAContract.deploy(web3j,credentials,gasProviderService.getStaticGasProvider(),adjustFundAddress).send();
             contractAddress = lotteryAContract.getContractAddress();
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,18 +100,30 @@ public class Web3jService extends LotteryABaseService {
         return lotteryAContract;
     }
 
+    /**
+     * 加载登录用户合约
+     * @param contractAddress 合约地址
+     * @return LotteryAContract
+     */
     public LotteryAContract loadLoginMemberContract(String contractAddress){
-
-
+        if(StringUtils.isNotBlank(contractAddress)){
+            Credentials credentials = this.getLoginMemberCredentials();
+            if(credentials != null)
+            return LotteryAContract.load(contractAddress, web3j, credentials, gasProviderService.getStaticGasProvider());
+        }
         return null;
     }
 
+    /**
+     * 获取登录用户Credentials
+     * @return Credentials
+     */
     public Credentials getLoginMemberCredentials(){
         try{
             LoginUser loginUser = super.getLoginUser();
             Map<String,Object> map = new HashMap<>();
             map.put("walletFileName",loginUser.getWalletName());
-            map.put("payPassword",loginUser.getpAddress());
+            map.put("payPassword",loginUser.getPaymentCode());
             JSONObject jObject = new JSONObject(map);
             String str = jObject.toString();
             str = super.getEncryptRequest(str);
@@ -112,7 +135,10 @@ public class Web3jService extends LotteryABaseService {
             ResultUtil result = super.getDecryptRequestToResultUtil(reStr);
             if(result != null){
                 if(result.getCode() == ResultCode.SUCCESS.getCode() && result.getExtend() != null){
-                    result.getExtend().get(ResultUtil.DATA_KEY);
+                    JSONObject resultJObject = new JSONObject(result.getExtend().get(ResultUtil.DATA_KEY).toString());
+                    if(resultJObject != null && !"".equals(resultJObject.get("ecKeyPair").toString())){
+                       return Credentials.create(resultJObject.get("ecKeyPair").toString());
+                    }
                 }
             }
         }catch (Exception e){
@@ -129,6 +155,68 @@ public class Web3jService extends LotteryABaseService {
         //部署管理员私钥
         Credentials credentials = Credentials.create(managerPrivateKey);
         return credentials.getAddress();
+    }
+
+    /**
+     * 获取登录用户钱包余额
+     * @return ether
+     */
+    public BigDecimal getLoginMmeberBalanceByEther(){
+        BigDecimal total = BigDecimal.ZERO;
+        try {
+            EthGetBalance ethGetBalancel = web3j.ethGetBalance(super.getLoginUser().getPAddress(), DefaultBlockParameter.valueOf("latest")).send();
+            total = Web3jUtils.bigIntegerToBigDecimal(ethGetBalancel.getBalance());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
+
+    /**
+     * 获取调节基金账户余额
+     * @return ether
+     */
+    public BigDecimal getAdjustFundBalanceByEther(){
+        BigDecimal total = BigDecimal.ZERO;
+        try {
+            EthGetBalance ethGetBalancel = web3j.ethGetBalance(adjustFundAddress, DefaultBlockParameter.valueOf("latest")).send();
+            total = Web3jUtils.bigIntegerToBigDecimal(ethGetBalancel.getBalance());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
+
+    /**
+     * 获取管理员账户余额
+     * @return ether
+     */
+    public BigDecimal getManagerBalanceByEther(){
+        BigDecimal total = BigDecimal.ZERO;
+        try {
+            EthGetBalance ethGetBalancel = web3j.ethGetBalance(this.getManagerAddress(), DefaultBlockParameter.valueOf("latest")).send();
+            total = Web3jUtils.bigIntegerToBigDecimal(ethGetBalancel.getBalance());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
+
+    /**
+     * 获取合约账户余额
+     * @param contractAddress 合约地址
+     * @return ether
+     */
+    public BigDecimal getContractBalanceByEther(String contractAddress){
+        BigDecimal total = BigDecimal.ZERO;
+        try {
+            LotteryAContract lotteryAContract = this.loadManagerContract(contractAddress);
+            BigInteger balance = lotteryAContract.ShowContractBalance().send();
+            total = Web3jUtils.bigIntegerToBigDecimal(balance);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return total;
     }
 
 

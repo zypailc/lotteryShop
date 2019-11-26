@@ -10,7 +10,12 @@
 		<result column="period_date" property="periodDate" />
 		<result column="interval_date" property="intervalDate" />
 		<result column="entitle" property="entitle" />
-		<result column="contract_address" property="contractAddress" />
+		<result column="contract_address" property="currenBonusDown" />
+		<result column="curren_bonus_down" property="contractAddress" />
+		<result column="curren_bonus_ratio" property="currenBonusRatio" />
+		<result column="adjust_bonus_up" property="adjustBonusUp" />
+		<result column="adjust_bonus_down" property="adjustBonusDown" />
+		<result column="adjust_bonus_ratio" property="adjustBonusRatio" />
 	</resultMap>
 
 </mapper>

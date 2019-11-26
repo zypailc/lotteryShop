@@ -38,16 +38,6 @@ public class LotteryaBuy extends Model<LotteryaBuy> {
 	@TableField("luck_num")
 	private String luckNum;
     /**
-     * 第二关，0：未购买，1：极小，2：极大
-     */
-	@TableField("second_num")
-	private String secondNum;
-    /**
-     * 第三关，0：未购买，1：顺子，2：豹子，3：龙角，4：幅面，5：两对
-     */
-	@TableField("thirdly_num")
-	private String thirdlyNum;
-    /**
      * 购买金额
      */
 	private BigDecimal total;
@@ -72,6 +62,8 @@ public class LotteryaBuy extends Model<LotteryaBuy> {
 	@TableField("create_time")
 	private Date createTime;
 
+	@TableField("multiple_num")
+	private Integer multipleNum;
 
 	public Integer getId() {
 		return id;
@@ -95,22 +87,6 @@ public class LotteryaBuy extends Model<LotteryaBuy> {
 
 	public void setLuckNum(String luckNum) {
 		this.luckNum = luckNum;
-	}
-
-	public String getSecondNum() {
-		return secondNum;
-	}
-
-	public void setSecondNum(String secondNum) {
-		this.secondNum = secondNum;
-	}
-
-	public String getThirdlyNum() {
-		return thirdlyNum;
-	}
-
-	public void setThirdlyNum(String thirdlyNum) {
-		this.thirdlyNum = thirdlyNum;
 	}
 
 	public BigDecimal getTotal() {
@@ -153,6 +129,14 @@ public class LotteryaBuy extends Model<LotteryaBuy> {
 		this.createTime = createTime;
 	}
 
+	public Integer getMultipleNum() {
+		return multipleNum;
+	}
+
+	public void setMultipleNum(Integer multipleNum) {
+		this.multipleNum = multipleNum;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -164,13 +148,12 @@ public class LotteryaBuy extends Model<LotteryaBuy> {
 			", id=" + id +
 			", memberId=" + memberId +
 			", luckNum=" + luckNum +
-			", secondNum=" + secondNum +
-			", thirdlyNum=" + thirdlyNum +
 			", total=" + total +
 			", transferHashValue=" + transferHashValue +
 			", transferStatus=" + transferStatus +
 			", transferStatusTime=" + transferStatusTime +
 			", createTime=" + createTime +
+			", multipleNum=" + multipleNum +
 			"}";
 	}
 }

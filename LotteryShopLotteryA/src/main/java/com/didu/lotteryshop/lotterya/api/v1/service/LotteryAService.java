@@ -3,12 +3,15 @@ package com.didu.lotteryshop.lotterya.api.v1.service;
 import cn.hutool.core.convert.Convert;
 import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.enumeration.ResultCode;
+import com.didu.lotteryshop.common.service.form.impl.EsEthaccountsServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsEthwalletServiceImpl;
 import com.didu.lotteryshop.common.utils.ResultUtil;
+import com.didu.lotteryshop.lotterya.entity.LotteryAContractResultEntity;
 import com.didu.lotteryshop.lotterya.entity.LotteryaBuy;
 import com.didu.lotteryshop.lotterya.entity.LotteryaInfo;
 import com.didu.lotteryshop.lotterya.entity.LotteryaIssue;
 import com.didu.lotteryshop.lotterya.service.LotteryABaseService;
+import com.didu.lotteryshop.lotterya.service.LotteryAContractService;
 import com.didu.lotteryshop.lotterya.service.Web3jService;
 import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaBuyServiceImpl;
 import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaInfoServiceImpl;
@@ -46,52 +49,10 @@ public class LotteryAService extends LotteryABaseService {
     private LotteryaBuyServiceImpl lotteryaBuyService;
     @Autowired
     private EsEthwalletServiceImpl esEthwalletService;
-
-    public  ResultUtil test1(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("name","CHJ");
-        String str =  Convert.toStr(map);
-        str = super.getEncryptRequest(str);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf("application/json;UTF-8"));
-        headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
-        headers.add("access_token",oAuth2RestTemplate.getAccessToken().getValue());
-        HttpEntity<String> strEntity = new HttpEntity<String>(str,headers);
-        String reStr = oAuth2RestTemplate.postForObject("http://wallet-service/v1/test/save?access_token="+oAuth2RestTemplate.getAccessToken().getValue(),strEntity,String.class);
-       // String reStr  = oAuth2RestTemplate.postForEntity("http://wallet-service/v1/test/save",strEntity,String.class).getBody();
-        //String reStr = oAuth2RestTemplate.getForObject("http://wallet-service/v1/test/save",String.class,map);
-        ResultUtil result = super.getDecryptRequestToResultUtil(reStr);
-        if(result != null){
-
-        }
-//        String reStr = oAuth2RestTemplate.postForObject("http://wallet-service/v1/test/test1",str,String.class);
-//        ResultUtil result = super.getDecryptRequestToResultUtil(reStr);
-//        if(result != null){
-//
-//        }
-        return ResultUtil.successJson("成功");
-    }
-    public  ResultUtil test(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("userId",getLoginUser().getId());
-        map.put("paymentCode","123");
-       // String str =  Convert.toStr(map);
-        JSONObject jObject = new JSONObject(map);
-        String str = jObject.toString();
-        str = super.getEncryptRequest(str);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf("application/json;UTF-8"));
-       // headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
-        HttpEntity<String> strEntity = new HttpEntity<String>(str,headers);
-        //生成钱包
-        String reStr =   oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/generate",strEntity,String.class);
-        ResultUtil result = super.getDecryptRequestToResultUtil(reStr);
-        if(result != null){
-
-        }
-        return ResultUtil.successJson("成功");
-    }
-
+    @Autowired
+    private EsEthaccountsServiceImpl esEthaccountsService;
+    @Autowired
+    private LotteryAContractService lotteryAContractService;
 
     /**
      * 获取彩票信息
@@ -99,7 +60,6 @@ public class LotteryAService extends LotteryABaseService {
      */
     public ResultUtil getLotteryInfo(){
         Map<String,Object> rMap = new HashMap<>();
-
         LotteryaInfo lotteryaInfo = lotteryaInfoService.findLotteryaInfo();
         LotteryaIssue lotteryaIssue = lotteryaIssueService.findCurrentPeriodLotteryaIssue();
         //彩票名称
@@ -125,62 +85,51 @@ public class LotteryAService extends LotteryABaseService {
      * @return
      */
     public ResultUtil ethBuyLottery(String luckNum,Integer multipleNumber,String payPasswod){
-        LoginUser loginUser = super.getLoginUser();
-        String walletFileName = loginUser.getWalletName();
-        String formAddress = loginUser.getPAddress();
-        String memberId  = loginUser.getId();
-        String toAddress = web3jService.getManagerAddress();
+        //判断支付密码是否错误 //支付密码错
+        if(!super.getLoginUser().getPaymentCode().equals(payPasswod)) return ResultUtil.errorJson("Payment password error!");
+        //判断是否正在开奖中 //正在开奖，禁止购买
+        if(!lotteryAContractService.isBuyLotteryA()) return ResultUtil.errorJson("Lottery drawing in progress, no purchase!");
+        //判断倍数是否超出最高倍数限制 //该注幸运号码已经达到最高注数，请降低倍数或更换其它幸运号码！
+        if(lotteryAContractService.isBuyMultipleNumber(luckNum,multipleNumber)) return ResultUtil.errorJson("This note lucky number has reached the highest note number, please lower the multiple or replace other lucky number!");
+        //判断账户余额是否充足
         LotteryaInfo lotteryaInfo = lotteryaInfoService.findLotteryaInfo();
         BigDecimal eValue = lotteryaInfo.getPrice().multiply(BigDecimal.valueOf(multipleNumber));
         if(!esEthwalletService.judgeBalance(memberId,eValue)){
             //账户余额不足，请先充值！
             return ResultUtil.errorJson("Account balance is insufficient, please recharge first!");
         }
-
-
-
-
-
-        Map<String,Object> map = new HashMap<>();
-        map.put("walletFileName",walletFileName);
-        map.put("payPassword",payPasswod);
-        map.put("formAddress",formAddress);
-        map.put("toAddress",toAddress);
-        map.put("etherValue",eValue.toPlainString());
-        String str =  Convert.toStr(map);
-        str = super.getEncryptRequest(str);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf("application/json;UTF-8"));
-        HttpEntity<String> strEntity = new HttpEntity<String>(str,headers);
-        //ETH 转账
-        String reStr =   oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/transfer",strEntity,String.class);
-        ResultUtil result = super.getDecryptRequestToResultUtil(reStr);
-        if(result != null){
-            //成功
-            if(result.getCode() == ResultCode.SUCCESS.getCode()){
-                //存入购买记录
-                LotteryaBuy lotteryaBuy = new LotteryaBuy();
-                if(result.getExtend() != null && !result.getExtend().isEmpty()){
-                    lotteryaBuy.setMemberId(memberId);
-                    lotteryaBuy.setLuckNum(luckNum);
-                    //lotteryaBuy.setSecondNum(secondNum);
-                    //lotteryaBuy.setThirdlyNum(thirdlyNum);
-                    lotteryaBuy.setTotal(eValue);
-                    lotteryaBuy.setTransferHashValue(result.getExtend().get("transactionHashValue").toString());
-                    lotteryaBuy.setTransferStatus(result.getExtend().get("transactionStatus").toString());
-                    lotteryaBuy.setTransferStatusTime(new Date());
-                    lotteryaBuy.setCreateTime(new Date());
-                }
-                boolean bool =  lotteryaBuyService.insert(lotteryaBuy);
-                if(bool){
-                    //TODO 存入转账记录
-
-                }
-
-            }else{
-                //失败
-                return ResultUtil.errorJson(result.getMsg());
+        //购买彩票
+        LotteryAContractResultEntity lacre = lotteryAContractService.buyLotterA(luckNum,multipleNumber,eValue);
+        //存入购买记录
+        LotteryaBuy lotteryaBuy = new LotteryaBuy();
+        lotteryaBuy.setMemberId(super.getLoginUser().getId());
+        lotteryaBuy.setLuckNum(luckNum);
+        lotteryaBuy.setTotal(eValue);
+        lotteryaBuy.setTransferHashValue(lacre.getTransactionHash());
+        //等待确认
+        if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_WAIT){
+            lotteryaBuy.setTransferStatus("1");
+        }
+        //成功
+        if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_SUCCESS){
+          lotteryaBuy.setTransferStatus("1");
+        }
+        //失败
+        if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_FAIL){
+            lotteryaBuy.setTransferStatus("2");
+        }
+        lotteryaBuy.setTransferStatusTime(new Date());
+        lotteryaBuy.setCreateTime(new Date());
+        lotteryaBuy.setMultipleNum(multipleNumber);
+        boolean bool =  lotteryaBuyService.insert(lotteryaBuy);
+        if(bool && (lacre.getStatus() == LotteryAContractResultEntity.STATUS_WAIT || lacre.getStatus() == LotteryAContractResultEntity.STATUS_SUCCESS)){
+            if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_WAIT ){
+               bool = esEthaccountsService.addOutBeingProcessed(super.getLoginUser().getId(),EsEthaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA,eValue,lotteryaBuy.getId().toString());
             }
+            if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_SUCCESS){
+                bool = esEthaccountsService.addOutSuccess(super.getLoginUser().getId(),EsEthaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA,eValue,lotteryaBuy.getId().toString(),lacre.getGasUsed());
+            }
+            return bool ? ResultUtil.errorJson("") :  ResultUtil.errorJson("Execution error, please contact administrator!");
         }
         //执行错误，请联系管理员！
         return ResultUtil.errorJson("Execution error, please contact administrator!");

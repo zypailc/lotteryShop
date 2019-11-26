@@ -29,6 +29,7 @@ public class LotteryAController extends LotteryABaseController {
     public ResultUtil getLotteryInfo(){
         return lotteryAService.getLotteryInfo();
     }
+
     /**
      * eth购买彩票
      * @param luckNum 幸运号码
@@ -46,17 +47,6 @@ public class LotteryAController extends LotteryABaseController {
             return ResultUtil.errorJson("Parameter error!");
         }
         return lotteryAService.ethBuyLottery(luckNum,multipleNumber,payPasswod);
-    }
-
-    @RequestMapping(value = "/test")
-    @ResponseBody
-    public ResultUtil test(){
-        return lotteryAService.test();
-    }
-    @RequestMapping(value = "/test1")
-    @ResponseBody
-    public ResultUtil test1(){
-        return lotteryAService.test1();
     }
 
 }

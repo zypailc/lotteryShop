@@ -51,6 +51,36 @@ public class LotteryaInfo extends Model<LotteryaInfo> {
 	@TableField("contract_address")
 	private String contractAddress;
 
+	/**
+	 * 当期奖金下限（单位ether）
+	 */
+	@TableField("curren_bonus_down")
+	private BigDecimal currenBonusDown;
+
+	/**
+	 * 当期奖金倍数比例（单位%）
+	 */
+	@TableField("curren_bonus_ratio")
+	private BigDecimal currenBonusRatio;
+
+	/**
+	 * 调节基金上限（单位ether）
+	 */
+	@TableField("adjust_bonus_up")
+	private BigDecimal adjustBonusUp;
+
+	/**
+	 * 调节基金下限（单位ether）
+	 */
+	@TableField("adjust_bonus_down")
+	private BigDecimal adjustBonusDown;
+
+	/**
+	 * 调节基金倍数比率（单位%）
+	 */
+	@TableField("adjust_bonus_ratio")
+	private BigDecimal adjustBonusRatio;
+
 	public Integer getId() {
 		return id;
 	}
@@ -107,6 +137,46 @@ public class LotteryaInfo extends Model<LotteryaInfo> {
 		this.contractAddress = contractAddress;
 	}
 
+	public BigDecimal getCurrenBonusDown() {
+		return currenBonusDown;
+	}
+
+	public void setCurrenBonusDown(BigDecimal currenBonusDown) {
+		this.currenBonusDown = currenBonusDown;
+	}
+
+	public BigDecimal getCurrenBonusRatio() {
+		return currenBonusRatio;
+	}
+
+	public void setCurrenBonusRatio(BigDecimal currenBonusRatio) {
+		this.currenBonusRatio = currenBonusRatio;
+	}
+
+	public BigDecimal getAdjustBonusUp() {
+		return adjustBonusUp;
+	}
+
+	public void setAdjustBonusUp(BigDecimal adjustBonusUp) {
+		this.adjustBonusUp = adjustBonusUp;
+	}
+
+	public BigDecimal getAdjustBonusDown() {
+		return adjustBonusDown;
+	}
+
+	public void setAdjustBonusDown(BigDecimal adjustBonusDown) {
+		this.adjustBonusDown = adjustBonusDown;
+	}
+
+	public BigDecimal getAdjustBonusRatio() {
+		return adjustBonusRatio;
+	}
+
+	public void setAdjustBonusRatio(BigDecimal adjustBonusRatio) {
+		this.adjustBonusRatio = adjustBonusRatio;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -121,6 +191,11 @@ public class LotteryaInfo extends Model<LotteryaInfo> {
 			", periodDate=" + periodDate +
 			", intervalDate=" + intervalDate +
 			", contractAddress=" + contractAddress +
+			", currenBonusDown=" + currenBonusDown +
+			", currenBonusRatio=" + currenBonusRatio +
+			", adjustBonusUp=" + adjustBonusUp +
+			", adjustBonusDown=" + adjustBonusDown +
+			", adjustBonusRatio=" + adjustBonusRatio +
 			"}";
 	}
 }
