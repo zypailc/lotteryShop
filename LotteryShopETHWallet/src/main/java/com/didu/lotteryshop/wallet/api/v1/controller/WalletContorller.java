@@ -1,7 +1,9 @@
 package com.didu.lotteryshop.wallet.api.v1.controller;
 
 import com.didu.lotteryshop.common.utils.ResultUtil;
+import com.didu.lotteryshop.common.utils.Web3jUtils;
 import com.didu.lotteryshop.wallet.annotation.SecurityParameter;
+import com.didu.lotteryshop.wallet.api.v1.RequestEntity.FindBalanceEntity;
 import com.didu.lotteryshop.wallet.api.v1.RequestEntity.FindWalletDetailEntity;
 import com.didu.lotteryshop.wallet.api.v1.RequestEntity.GenerateWalletEntity;
 import com.didu.lotteryshop.wallet.api.v1.service.WalletService;
@@ -52,19 +54,21 @@ public class WalletContorller extends WalletBaseController {
 
     /**
      *  查询钱包余额
-     * @param address 钱包地址
      * @return
      */
-    @RequestMapping(value = "/findBalance")
+    @PostMapping(value = "/findBalance",consumes = "application/json")
     @ResponseBody
     @SecurityParameter
-    public ResultUtil findBalance(String address){
-        if(StringUtils.isBlank(address)){
-            //支付密码不能为空！
-            return ResultUtil.errorJson("The address cannot be empty!");
+    public ResultUtil findBalance(@RequestBody FindBalanceEntity findBalanceEntity){
+        if(findBalanceEntity == null){
+            //参数错误
+            return ResultUtil.errorJson("Parameter error!");
         }
-        //TODO 需要判断钱包地址规则
-        return walletService.findBalance(address);
+        if(StringUtils.isBlank(findBalanceEntity.getAddress()))
+            return ResultUtil.errorJson("The address cannot be empty!");  //钱包地址不能为空！
+        if(!Web3jUtils.isETHValidAddress(findBalanceEntity.getAddress()))
+            return ResultUtil.errorJson("The address error!");//钱包地址不能为空！
+        return walletService.findBalance(findBalanceEntity.getAddress());
     }
 
 
