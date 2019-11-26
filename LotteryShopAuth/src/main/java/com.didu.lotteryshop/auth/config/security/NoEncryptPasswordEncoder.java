@@ -1,7 +1,7 @@
 package com.didu.lotteryshop.auth.config.security;
 
+import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
-import com.didu.lotteryshop.common.utils.ConfigurationUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
@@ -22,7 +22,7 @@ public class NoEncryptPasswordEncoder implements PasswordEncoder {
     @Override
     public boolean matches(CharSequence charSequence, String s) {
         if(!(s.equals("browser") && charSequence.equals("browser"))){//这个是其他验证，文字不需要加密，只有密码需要加密
-            return s.equals(AesEncryptUtil.encrypt_code((String)charSequence, ConfigurationUtil.KEY_TOW));
+            return s.equals(AesEncryptUtil.encrypt_code((String)charSequence, Constants.KEY_TOW));
         }
         return s.equals(charSequence);
     }

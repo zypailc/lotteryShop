@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.base.api.v1.mapper.MemberMapper;
 import com.didu.lotteryshop.common.base.service.BaseService;
+import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
-import com.didu.lotteryshop.common.utils.ConfigurationUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.common.utils.CodeUtil;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ public class MemberServiceImp extends ServiceImpl<MemberMapper, Member> {
             return ResultUtil.errorJson("The email address has been registered !");
         }
         //随机生成一个秘钥jsonObjectjsonObject
-        String secretKey = ConfigurationUtil.KEY_TOW;
+        String secretKey = Constants.KEY_TOW;
         //随机生成随机密码
         String password = CodeUtil.getCode(18);
         try {
@@ -73,7 +73,7 @@ public class MemberServiceImp extends ServiceImpl<MemberMapper, Member> {
         String password = CodeUtil.getCode(18);
         try {
             //秘钥和密码加密生成暗文
-            String ciphertext = AesEncryptUtil.encrypt_code(password,ConfigurationUtil.KEY_TOW);
+            String ciphertext = AesEncryptUtil.encrypt_code(password,Constants.KEY_TOW);
             member.setPassword(ciphertext);
         }catch (Exception e){
             e.printStackTrace();

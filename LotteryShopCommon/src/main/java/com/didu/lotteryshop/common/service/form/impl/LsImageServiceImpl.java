@@ -27,6 +27,16 @@ import java.util.Map;
 @Service
 public class LsImageServiceImpl extends ServiceImpl<LsImageMapper, LsImage> implements ILsImageService {
 
-
+    /**
+     * 按类别查询图片
+     * @param type
+     * @return
+     */
+    public List<LsImage> findImageType(Integer type){
+        Map<String,Object> map = new HashMap<>();
+        map.put("type",LsImage.IMAGE_TYPE);
+        List<LsImage> list = selectByMap(map);
+        return list;
+    }
 
 }
