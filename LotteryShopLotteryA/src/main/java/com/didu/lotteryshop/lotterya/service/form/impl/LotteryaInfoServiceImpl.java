@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 /**
  * <p>
  * A彩票基础信息 服务实现类
@@ -26,6 +28,28 @@ public class LotteryaInfoServiceImpl extends ServiceImpl<LotteryaInfoMapper, Lot
      */
     public LotteryaInfo findLotteryaInfo(){
         return lotteryaInfoMapper.selectById(1);
+    }
+    /**
+     * 计算A彩票单笔奖金
+     * @return 返回单注奖金
+     */
+    public BigDecimal calculateSingleBonus(){
+        return this.calculateSingleBonus(this.findLotteryaInfo());
+    }
+    /**
+     * 计算A彩票单笔奖金
+     * @param lotteryaInfo A彩票基本信息
+     * @return 返回单注奖金
+     */
+    public BigDecimal calculateSingleBonus(LotteryaInfo lotteryaInfo){
+        BigDecimal pTotal = BigDecimal.ZERO;
+        if(lotteryaInfo != null && lotteryaInfo.getPrice() != null){
+            //单注奖金，公式：(price*1000)/100*50
+            pTotal =  lotteryaInfo.getPrice().multiply(new BigDecimal("1000"))
+                    .divide(new BigDecimal("100"))
+                    .multiply(new BigDecimal("50"));
+        }
+        return pTotal;
     }
 	
 }

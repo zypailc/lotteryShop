@@ -61,9 +61,27 @@ public class LotteryaBuy extends Model<LotteryaBuy> {
      */
 	@TableField("create_time")
 	private Date createTime;
-
+	/**
+	 * 倍数
+	 */
 	@TableField("multiple_num")
 	private Integer multipleNum;
+	/**
+	 * A彩票期数主键ID
+	 */
+	@TableField("lotterya_issue_id")
+	private Integer lotteryaIssueId;
+	/**
+	 * 是否中奖；0：否；1：是
+	 */
+	@TableField("is_luck")
+	private String  isLuck;
+	/**
+	 * 中奖金额
+	 */
+	@TableField("luck_total")
+	private BigDecimal luckTotal;
+
 
 	public Integer getId() {
 		return id;
@@ -137,6 +155,30 @@ public class LotteryaBuy extends Model<LotteryaBuy> {
 		this.multipleNum = multipleNum;
 	}
 
+	public Integer getLotteryaIssueId() {
+		return lotteryaIssueId;
+	}
+
+	public void setLotteryaIssueId(Integer lotteryaIssueId) {
+		this.lotteryaIssueId = lotteryaIssueId;
+	}
+
+	public String getIsLuck() {
+		return isLuck;
+	}
+
+	public void setIsLuck(String isLuck) {
+		this.isLuck = isLuck;
+	}
+
+	public BigDecimal getLuckTotal() {
+		return luckTotal;
+	}
+
+	public void setLuckTotal(BigDecimal luckTotal) {
+		this.luckTotal = luckTotal;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -154,6 +196,9 @@ public class LotteryaBuy extends Model<LotteryaBuy> {
 			", transferStatusTime=" + transferStatusTime +
 			", createTime=" + createTime +
 			", multipleNum=" + multipleNum +
+			", lotteryaIssueId=" + lotteryaIssueId +
+			", isLuck=" + isLuck +
+			", luckTotal=" + luckTotal +
 			"}";
 	}
 }

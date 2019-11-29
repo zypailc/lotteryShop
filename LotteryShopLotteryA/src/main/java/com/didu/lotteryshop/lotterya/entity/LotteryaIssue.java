@@ -1,5 +1,6 @@
 package com.didu.lotteryshop.lotterya.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
@@ -55,6 +56,41 @@ public class LotteryaIssue extends Model<LotteryaIssue> {
      */
 	@TableField("bs_time")
 	private Date bsTime;
+	/**
+	 * 当期中奖金额
+	 */
+	@TableField("luck_total")
+	private BigDecimal luckTotal;
+	/**
+	 *当期中奖号码
+	 */
+	@TableField("luck_num")
+	private String luckNum;
+	/**
+	 *当期合约奖金
+	 */
+	@TableField("current_total")
+	private BigDecimal currentTotal;
+	/**
+	 *当调节基金调节金额
+	 */
+	@TableField("adjust_total")
+	private BigDecimal adjustTotal;
+	/**
+	 *奖金状态，0：未发放；1：已发放
+	 */
+	@TableField("bonus_status")
+	private String bonusStatus;
+	/**
+	 * 奖金状态操作时间
+	 */
+	@TableField("bonus_status_time")
+	private Date bonusStatusTime;
+	/**
+	 *允许发放奖金，0：不允许；1：允许发放
+	 */
+	@TableField("bonus_grant")
+	private String bonusGrant;
 
 
 	public Integer getId() {
@@ -113,6 +149,62 @@ public class LotteryaIssue extends Model<LotteryaIssue> {
 		this.bsTime = bsTime;
 	}
 
+	public BigDecimal getLuckTotal() {
+		return luckTotal;
+	}
+
+	public void setLuckTotal(BigDecimal luckTotal) {
+		this.luckTotal = luckTotal;
+	}
+
+	public String getLuckNum() {
+		return luckNum;
+	}
+
+	public void setLuckNum(String luckNum) {
+		this.luckNum = luckNum;
+	}
+
+	public BigDecimal getCurrentTotal() {
+		return currentTotal;
+	}
+
+	public void setCurrentTotal(BigDecimal currentTotal) {
+		this.currentTotal = currentTotal;
+	}
+
+	public BigDecimal getAdjustTotal() {
+		return adjustTotal;
+	}
+
+	public void setAdjustTotal(BigDecimal adjustTotal) {
+		this.adjustTotal = adjustTotal;
+	}
+
+	public String getBonusStatus() {
+		return bonusStatus;
+	}
+
+	public void setBonusStatus(String bonusStatus) {
+		this.bonusStatus = bonusStatus;
+	}
+
+	public Date getBonusStatusTime() {
+		return bonusStatusTime;
+	}
+
+	public void setBonusStatusTime(Date bonusStatusTime) {
+		this.bonusStatusTime = bonusStatusTime;
+	}
+
+	public String getBonusGrant() {
+		return bonusGrant;
+	}
+
+	public void setBonusGrant(String bonusGrant) {
+		this.bonusGrant = bonusGrant;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -128,6 +220,13 @@ public class LotteryaIssue extends Model<LotteryaIssue> {
 			", createTime=" + createTime +
 			", buyStatus=" + buyStatus +
 			", bsTime=" + bsTime +
+			", luckTotal=" + luckTotal +
+			", luckNum=" + luckNum +
+			", currentTotal=" + currentTotal +
+			", adjustTotal=" + adjustTotal +
+			", bonusStatus=" + bonusStatus +
+			", bsTbonusStatusTimeime=" + bonusStatusTime +
+			", bonusGrant=" + bonusGrant +
 			"}";
 	}
 }

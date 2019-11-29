@@ -21,6 +21,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 
 import javax.annotation.PostConstruct;
@@ -51,6 +52,10 @@ public class Web3jService extends LotteryABaseService {
     /** 调节基金地址*/
     @Value("${adjustFundAddress}")
     private String adjustFundAddress;
+    /** 是否确认状态，0未确认，1已确认，2失败 */
+    public static final String TRANSACTION_STATUS = "transaction_status";
+    /** 实际确认产生的gas费用 */
+    public static final String TRANSACTION_GASUSED = "transaction_gasUsed";
 
     @Autowired
     private OAuth2RestTemplate oAuth2RestTemplate;
@@ -217,6 +222,31 @@ public class Web3jService extends LotteryABaseService {
             e.printStackTrace();
         }
         return total;
+    }
+
+    /**
+     * 查询交易状态
+     * @param transactionHashValue 事务哈希码
+     * @return Map
+     */
+    public Map<String,Object> findTransactionStatus(String transactionHashValue){
+        Map<String,Object> reMap = new HashMap<>();
+        EthGetTransactionReceipt transactionReceipt = null;
+        try {
+            transactionReceipt = web3j.ethGetTransactionReceipt(transactionHashValue).send();
+            //是否确认状态，0未确认，1已确认，2失败
+            reMap.put(TRANSACTION_STATUS,0);
+            if (transactionReceipt.getTransactionReceipt().isPresent()) {
+                //TODO 需要看时间数据，查询状态
+                transactionReceipt.getTransactionReceipt().get().getStatus();
+                reMap.put(TRANSACTION_STATUS,1);
+                //实际确认产生的gas费用
+                reMap.put(TRANSACTION_GASUSED,Web3jUtils.bigIntegerToBigDecimal(transactionReceipt.getTransactionReceipt().get().getGasUsed()).toPlainString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return reMap;
     }
 
 

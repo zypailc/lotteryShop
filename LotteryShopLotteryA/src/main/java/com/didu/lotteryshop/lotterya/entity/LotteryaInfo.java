@@ -32,12 +32,12 @@ public class LotteryaInfo extends Model<LotteryaInfo> {
      */
 	private BigDecimal price;
     /**
-     * 周期（单位小时）
+     * 周期（单位分钟）
      */
 	@TableField("period_date")
 	private BigDecimal periodDate;
     /**
-     * 间隔时间（单位小时）
+     * 间隔时间（单位分钟）
      */
 	@TableField("interval_date")
 	private BigDecimal intervalDate;

@@ -30,4 +30,5 @@ public class LotteryaIssueServiceImpl extends ServiceImpl<LotteryaIssueMapper, L
         wrapper.last("limit 1");
         return super.selectOne(wrapper);
     }
+
 }

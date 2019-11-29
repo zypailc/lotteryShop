@@ -1,8 +1,5 @@
 package com.didu.lotteryshop.lotterya.api.v1.service;
 
-import cn.hutool.core.convert.Convert;
-import com.didu.lotteryshop.common.entity.LoginUser;
-import com.didu.lotteryshop.common.enumeration.ResultCode;
 import com.didu.lotteryshop.common.service.form.impl.EsEthaccountsServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsEthwalletServiceImpl;
 import com.didu.lotteryshop.common.utils.ResultUtil;
@@ -17,10 +14,6 @@ import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaBuyServiceImpl;
 import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaInfoServiceImpl;
 import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaIssueServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 
@@ -88,13 +81,15 @@ public class LotteryAService extends LotteryABaseService {
         //判断支付密码是否错误 //支付密码错
         if(!super.getLoginUser().getPaymentCode().equals(payPasswod)) return ResultUtil.errorJson("Payment password error!");
         //判断是否正在开奖中 //正在开奖，禁止购买
+        LotteryaIssue lotteryaIssue = lotteryaIssueService.findCurrentPeriodLotteryaIssue();
         if(!lotteryAContractService.isBuyLotteryA()) return ResultUtil.errorJson("Lottery drawing in progress, no purchase!");
         //判断倍数是否超出最高倍数限制 //该注幸运号码已经达到最高注数，请降低倍数或更换其它幸运号码！
-        if(lotteryAContractService.isBuyMultipleNumber(luckNum,multipleNumber)) return ResultUtil.errorJson("This note lucky number has reached the highest note number, please lower the multiple or replace other lucky number!");
+        if(lotteryAContractService.isBuyMultipleNumber(lotteryaIssue.getId(),luckNum,multipleNumber)) return ResultUtil.errorJson("This note lucky number has reached the highest note number, please lower the multiple or replace other lucky number!");
         //判断账户余额是否充足
         LotteryaInfo lotteryaInfo = lotteryaInfoService.findLotteryaInfo();
+
         BigDecimal eValue = lotteryaInfo.getPrice().multiply(BigDecimal.valueOf(multipleNumber));
-        if(!esEthwalletService.judgeBalance(memberId,eValue)){
+        if(!esEthwalletService.judgeBalance(super.getLoginUser().getId(),eValue)){
             //账户余额不足，请先充值！
             return ResultUtil.errorJson("Account balance is insufficient, please recharge first!");
         }
@@ -121,6 +116,9 @@ public class LotteryAService extends LotteryABaseService {
         lotteryaBuy.setTransferStatusTime(new Date());
         lotteryaBuy.setCreateTime(new Date());
         lotteryaBuy.setMultipleNum(multipleNumber);
+        lotteryaBuy.setIsLuck("0");
+        lotteryaBuy.setLotteryaIssueId(lotteryaIssue.getId());
+        lotteryaBuy.setLuckTotal(BigDecimal.ZERO);
         boolean bool =  lotteryaBuyService.insert(lotteryaBuy);
         if(bool && (lacre.getStatus() == LotteryAContractResultEntity.STATUS_WAIT || lacre.getStatus() == LotteryAContractResultEntity.STATUS_SUCCESS)){
             if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_WAIT ){
