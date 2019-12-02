@@ -15,10 +15,10 @@ import java.io.Serializable;
  * </p>
  *
  * @author ${author}
- * @since 2019-11-07
+ * @since 2019-11-29
  */
-@TableName("es_slbwallet")
-public class EsSlbwallet extends Model<EsSlbwallet> {
+@TableName("es_lsbwallet")
+public class EsLsbwallet extends Model<EsLsbwallet> {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,7 +54,6 @@ public class EsSlbwallet extends Model<EsSlbwallet> {
      */
 	@TableField("update_time")
 	private Date updateTime;
-
 
 	public Integer getId() {
 		return id;
@@ -119,7 +118,7 @@ public class EsSlbwallet extends Model<EsSlbwallet> {
 
 	@Override
 	public String toString() {
-		return "EsSlbwallet{" +
+		return "EsLsbwallet{" +
 			", id=" + id +
 			", memberId=" + memberId +
 			", total=" + total +

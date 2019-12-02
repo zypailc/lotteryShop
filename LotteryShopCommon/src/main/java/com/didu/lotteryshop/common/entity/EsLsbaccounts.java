@@ -69,7 +69,6 @@ public class EsLsbaccounts extends Model<EsLsbaccounts> {
 	@TableField("oper_id")
 	private String operId;
 
-
 	public Integer getId() {
 		return id;
 	}
