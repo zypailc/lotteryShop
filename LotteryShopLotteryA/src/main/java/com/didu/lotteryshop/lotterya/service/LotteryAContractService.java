@@ -404,4 +404,33 @@ public class LotteryAContractService extends LotteryABaseService {
         return buyLuckNumberList;
     }
 
+    /**
+     * 修改合约彩票单价
+     * @param contractAddress
+     * @param price
+     * @return
+     */
+    public  boolean updateLotteryAPrice(String contractAddress,BigDecimal price){
+        boolean bool = false;
+        try {
+            LotteryAContract lotteryAContract = web3jService.loadManagerContract(contractAddress);
+            BigInteger cPrice = lotteryAContract.ShowPrice().send();
+            cPrice = cPrice == null ? BigInteger.ZERO : cPrice;
+            BigDecimal cbPrice =  Web3jUtils.bigIntegerToBigDecimal(cPrice);
+            if(cbPrice.compareTo(price) != 0){
+               TransactionReceipt transactionReceipt = lotteryAContract.updatePrice(price.toBigInteger()).send();
+               //状态 TODO 状态需要测试进行修改
+               String status = transactionReceipt.getStatus();
+               if(true){
+                   bool = true;
+               }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Method 'updateLotteryAPrice' Error:"+e.getMessage());
+        }
+        return bool;
+
+    }
+
 }

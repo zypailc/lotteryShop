@@ -13,6 +13,8 @@ import com.didu.lotteryshop.lotterya.service.Web3jService;
 import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaBuyServiceImpl;
 import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaInfoServiceImpl;
 import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaIssueServiceImpl;
+import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaPmDetailServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
@@ -31,10 +33,6 @@ import java.util.Map;
 @Service
 public class LotteryAService extends LotteryABaseService {
     @Autowired
-    private OAuth2RestTemplate oAuth2RestTemplate;
-    @Autowired
-    private Web3jService web3jService;
-    @Autowired
     private LotteryaInfoServiceImpl lotteryaInfoService;
     @Autowired
     private LotteryaIssueServiceImpl lotteryaIssueService;
@@ -46,6 +44,8 @@ public class LotteryAService extends LotteryABaseService {
     private EsEthaccountsServiceImpl esEthaccountsService;
     @Autowired
     private LotteryAContractService lotteryAContractService;
+    @Autowired
+    private LotteryaPmDetailServiceImpl lotteryaPmDetailService;
 
     /**
      * 获取彩票信息
@@ -66,7 +66,19 @@ public class LotteryAService extends LotteryABaseService {
         rMap.put("buyStatus",lotteryaIssue.getBuyStatus());
         //开奖时间
         rMap.put("endTime",lotteryaIssue.getEndTime());
-        //开奖间隔时间
+        //合约地址
+        rMap.put("contractAddress",lotteryaInfo.getContractAddress());
+        //提成有效xx期数
+        rMap.put("pmVnum(",lotteryaInfo.getPmVnum());
+        //提成补签xx注数
+        rMap.put("pmRnum",lotteryaInfo.getPmRnum());
+        //购买提成比例（单位%）
+        rMap.put("buyPm",lotteryaInfo.getBuyPm());
+        //中奖提成比例（单位%）
+        rMap.put("drawPm",lotteryaInfo.getDrawPm());
+        //修改合约彩票单价
+        if(StringUtils.isNotBlank(lotteryaInfo.getContractAddress()) && lotteryaInfo.getPrice() != null)
+        lotteryAContractService.updateLotteryAPrice(lotteryaInfo.getContractAddress(),lotteryaInfo.getPrice());
         return ResultUtil.successJson(rMap);
     }
 
@@ -87,7 +99,6 @@ public class LotteryAService extends LotteryABaseService {
         if(lotteryAContractService.isBuyMultipleNumber(lotteryaIssue.getId(),luckNum,multipleNumber)) return ResultUtil.errorJson("This note lucky number has reached the highest note number, please lower the multiple or replace other lucky number!");
         //判断账户余额是否充足
         LotteryaInfo lotteryaInfo = lotteryaInfoService.findLotteryaInfo();
-
         BigDecimal eValue = lotteryaInfo.getPrice().multiply(BigDecimal.valueOf(multipleNumber));
         if(!esEthwalletService.judgeBalance(super.getLoginUser().getId(),eValue)){
             //账户余额不足，请先充值！
@@ -126,6 +137,10 @@ public class LotteryAService extends LotteryABaseService {
             }
             if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_SUCCESS){
                 bool = esEthaccountsService.addOutSuccess(super.getLoginUser().getId(),EsEthaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA,eValue,lotteryaBuy.getId().toString(),lacre.getGasUsed());
+                if(bool){
+                    //购买提成
+                    bool = lotteryaPmDetailService.buyPM(lotteryaBuy,lotteryaInfo);
+                }
             }
             return bool ? ResultUtil.errorJson("") :  ResultUtil.errorJson("Execution error, please contact administrator!");
         }

@@ -7,7 +7,6 @@ import com.didu.lotteryshop.common.service.form.impl.EsEthaccountsServiceImpl;
 import com.didu.lotteryshop.lotterya.entity.LotteryaBuy;
 import com.didu.lotteryshop.lotterya.entity.LotteryaInfo;
 import com.didu.lotteryshop.lotterya.mapper.LotteryaBuyMapper;
-import com.didu.lotteryshop.lotterya.service.LotteryAContractService;
 import com.didu.lotteryshop.lotterya.service.form.ILotteryaBuyService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,8 @@ import java.util.List;
  */
 @Service
 public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, LotteryaBuy> implements ILotteryaBuyService {
+    @Autowired
+    private LotteryaPmDetailServiceImpl lotteryaPmDetailService;
     @Autowired
     private EsEthaccountsServiceImpl esEthaccountsService;
     @Autowired
@@ -66,6 +67,11 @@ public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, Lotte
             if(bool){
                 if(transferStatus.equals(LotteryaBuyServiceImpl.TRANSFER_STATUS_SUCCESS)){
                     bool = esEthaccountsService.updateSuccess(lotteryaBuy.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA,lotteryaBuy.getId().toString(),gasFee);
+                    //购买提成
+                    if(bool){
+                        LotteryaInfo lotteryaInfo = lotteryaInfoService.findLotteryaInfo();
+                        bool = lotteryaPmDetailService.buyPM(lotteryaBuy,lotteryaInfo);
+                    }
                 }
                 if(transferStatus.equals(LotteryaBuyServiceImpl.TRANSFER_STATUS_FAIL)){
                     bool = esEthaccountsService.updateFail(lotteryaBuy.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA,lotteryaBuy.getId().toString());
@@ -116,14 +122,32 @@ public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, Lotte
                 lb.setIsLuck("1");
                 BigDecimal luckTotal = pTotal.multiply(new BigDecimal(lb.getMultipleNum()));
                 lb.setLuckTotal(luckTotal);
-                super.updateAllColumnById(lb);
+                bool =  super.updateAllColumnById(lb);
                 //新增流水账记录
-                esEthaccountsService.addInSuccess(lb.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_WINLOTTERYA,luckTotal,lb.getId().toString())
-                //TODO 中奖分成
+                if(bool)
+                bool =  esEthaccountsService.addInSuccess(lb.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_WINLOTTERYA,luckTotal,lb.getId().toString());
+                //中奖分成
+                if(bool)
+                bool = lotteryaPmDetailService.drawPM(lb,lotteryaInfo);
+                if(!bool) return false;
 ;            }
             bool = true;
         }
         return bool;
+    }
+
+    /**
+     * 查询购买总笔数
+     * @param memberId
+     * @param lotteryAIssueId
+     * @return
+     */
+    public int getBuyCount(String memberId,Integer lotteryAIssueId){
+        Wrapper<LotteryaBuy> wrapper = new EntityWrapper<>();
+        wrapper.eq("transfer_status",LotteryaBuyServiceImpl.TRANSFER_STATUS_SUCCESS)
+            .and().eq("lotterya_issue_id",lotteryAIssueId)
+            .and().eq("member_id",memberId);
+        return super.selectCount(wrapper);
     }
 
 }

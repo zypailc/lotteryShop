@@ -40,7 +40,7 @@ public class LotteryaIssue extends Model<LotteryaIssue> {
      * 期数
      */
 	@TableField("issue_num")
-	private String issueNum;
+	private Integer issueNum;
     /**
      * 创建时间
      */
@@ -117,11 +117,11 @@ public class LotteryaIssue extends Model<LotteryaIssue> {
 		this.endTime = endTime;
 	}
 
-	public String getIssueNum() {
+	public Integer getIssueNum() {
 		return issueNum;
 	}
 
-	public void setIssueNum(String issueNum) {
+	public void setIssueNum(Integer issueNum) {
 		this.issueNum = issueNum;
 	}
 
