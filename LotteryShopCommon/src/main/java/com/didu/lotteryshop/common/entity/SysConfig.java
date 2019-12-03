@@ -33,7 +33,21 @@ public class SysConfig extends Model<SysConfig> {
      */
 	@TableField("gas_limit")
 	private BigDecimal gasLimit;
-
+	/**
+	 * 以太币兑换平台币，1：xx
+	 */
+	@TableField("eth_to_lsb")
+	private BigDecimal ethToLsb;
+	/**
+	 * 平台币兑换以太币，xx：1
+	 */
+	@TableField("lsb_to_eth")
+	private BigDecimal lsbToEth;
+	/**
+	 * 注册送xx待领币
+	 */
+	@TableField("register_dlb")
+	private BigDecimal registerDlb;
 
 	public Integer getId() {
 		return id;
@@ -59,6 +73,30 @@ public class SysConfig extends Model<SysConfig> {
 		this.gasLimit = gasLimit;
 	}
 
+	public BigDecimal getEthToLsb() {
+		return ethToLsb;
+	}
+
+	public void setEthToLsb(BigDecimal ethToLsb) {
+		this.ethToLsb = ethToLsb;
+	}
+
+	public BigDecimal getLsbToEth() {
+		return lsbToEth;
+	}
+
+	public void setLsbToEth(BigDecimal lsbToEth) {
+		this.lsbToEth = lsbToEth;
+	}
+
+	public BigDecimal getRegisterDlb() {
+		return registerDlb;
+	}
+
+	public void setRegisterDlb(BigDecimal registerDlb) {
+		this.registerDlb = registerDlb;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -70,6 +108,9 @@ public class SysConfig extends Model<SysConfig> {
 			", id=" + id +
 			", gasPrice=" + gasPrice +
 			", gasLimit=" + gasLimit +
+			", ethToLsb=" + ethToLsb +
+			", lsbToEth=" + lsbToEth +
+			", registerDlb=" + registerDlb +
 			"}";
 	}
 }
