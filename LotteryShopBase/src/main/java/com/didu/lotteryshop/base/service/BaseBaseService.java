@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.base.api.v1.service;
+package com.didu.lotteryshop.base.service;
 
 import com.didu.lotteryshop.common.base.service.BaseService;
 
