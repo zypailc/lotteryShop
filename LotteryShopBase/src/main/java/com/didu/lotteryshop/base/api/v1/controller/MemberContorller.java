@@ -2,8 +2,7 @@ package com.didu.lotteryshop.base.api.v1.controller;
 
 import com.didu.lotteryshop.base.api.v1.service.MemberService;
 import com.didu.lotteryshop.base.config.BaseConfig;
-import com.didu.lotteryshop.common.base.contorller.BaseContorller;
-import com.didu.lotteryshop.common.config.Constants;
+import com.didu.lotteryshop.base.controller.BaseBaseController;
 import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.entity.LsImage;
 import com.didu.lotteryshop.common.entity.Member;
@@ -13,14 +12,12 @@ import com.didu.lotteryshop.common.utils.QRCodeUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.common.utils.VerifyETHAddressUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -31,7 +28,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/v1/member")
-public class MemberContorller extends BaseContorller {
+public class MemberContorller extends BaseBaseController {
 
 
     @Autowired

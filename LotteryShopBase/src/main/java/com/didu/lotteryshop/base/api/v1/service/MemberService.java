@@ -2,9 +2,9 @@ package com.didu.lotteryshop.base.api.v1.service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.didu.lotteryshop.base.service.BaseBaseService;
 import com.didu.lotteryshop.base.service.MailService;
 import com.didu.lotteryshop.base.service.form.impl.MemberServiceImp;
-import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.EsEthwallet;
 import com.didu.lotteryshop.common.entity.Member;
@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class MemberService extends BaseService {
+public class MemberService extends BaseBaseService {
 
     @Autowired
     private OAuth2RestTemplate oAuth2RestTemplate;

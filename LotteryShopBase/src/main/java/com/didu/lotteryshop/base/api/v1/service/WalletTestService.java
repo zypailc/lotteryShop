@@ -1,5 +1,6 @@
 package com.didu.lotteryshop.base.api.v1.service;
 
+import com.didu.lotteryshop.base.service.BaseBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -8,7 +9,7 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WalletTestService {
+public class WalletTestService extends BaseBaseService {
     //auth2.0授权码模式
     @Autowired
     private OAuth2RestTemplate oAuth2RestTemplate;

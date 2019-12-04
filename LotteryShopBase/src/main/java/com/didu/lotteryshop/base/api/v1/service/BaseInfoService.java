@@ -1,21 +1,17 @@
 package com.didu.lotteryshop.base.api.v1.service;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.didu.lotteryshop.common.base.service.BaseService;
+import com.didu.lotteryshop.base.service.BaseBaseService;
 import com.didu.lotteryshop.common.entity.MIntro;
 import com.didu.lotteryshop.common.mapper.MIntroMapper;
-import com.didu.lotteryshop.common.service.form.impl.MIntroServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class BaseInfoService extends BaseService {
+public class BaseInfoService extends BaseBaseService {
 
     @Autowired
     private MIntroMapper mIntroMapper;

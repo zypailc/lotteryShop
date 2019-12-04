@@ -2,7 +2,7 @@ package com.didu.lotteryshop.base.api.v1.controller;
 
 
 import com.didu.lotteryshop.base.api.v1.service.MemberService;
-import com.didu.lotteryshop.common.base.contorller.BaseContorller;
+import com.didu.lotteryshop.base.controller.BaseBaseController;
 import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.entity.LsImage;
 import com.didu.lotteryshop.common.entity.Member;
@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/v1/lsimage")
-public class LsImageContorller extends BaseContorller {
+public class LsImageContorller extends BaseBaseController {
 
     @Autowired
     private LsImageServiceImpl imageService;
