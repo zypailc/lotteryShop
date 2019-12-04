@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Flat Admin V.2 - Free Bootstrap Admin Templates</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%
+    include("../config/css_all.html"){};
+    %>
+    <style>
+        .lable_title{
+            width: 100px;
+            text-align: right;
+        }
+        .input_content{
+            border-radius: 5px;
+            border: solid 1px black;
+        }
+    </style>
+</head>
+
+<body class="flat-blue">
+    <div class="app-container">
+        <div class="row content-container">
+            <%
+            include("../nav_top.html"){};
+            %>
+            <%
+            include("../menu_url.html"){};
+            %>
+            <!-- Main Content -->
+            <div class="container-fluid">
+                <div class="side-body">
+                    <div class="page-title">
+                        <span class="title">partner</span>
+                        <!--<div class="description">A bootstrap table for display list of data.</div>-->
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="card">
+                                <div class="card-header">
+
+                                    <div class="card-title">
+                                    <div class="title">Table</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table_partner">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="app-footer">
+            <div class="wrapper">
+                <span class="pull-right">2.1 <a href="#"><i class="fa fa-long-arrow-up"></i></a></span> © 2015 Copyright.
+            </div>
+        </footer>
+    <div>
+    </div>
+    </div>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="add_partner" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        add
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form_img" enctype="multipart/form-data">
+                        <div>
+                            <label class="lable_title">link address:</label>
+                            <input id="linkAddress" class="input_content" type="text" />
+                        </div>
+                        <div class="file-loading">
+                            <label class="lable_title">LOGO:</label>
+                            <input id="file_upload" class="input_content" type="text" readonly="readonly">
+                            <input id="partner" style="display: none;"  type="file" name="imgFile" onchange="input_setFileName()" class="form-control inline-form-control">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">close
+                    </button>
+                    <button type="button" class="btn btn-primary addPartner">
+                        add
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="update_sort" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel_1">
+                        add
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label class="lable_title">sort:</label>
+                        <input id="sort" class="input_content" type="text" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">close
+                    </button>
+                    <button type="button" class="btn btn-primary update_sort">
+                        confirm
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <!-- Javascript Libs -->
+
+        <%
+        include("../config/js_all.html"){}
+        %>
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="../../js/app.js"></script>
+    <script>
+
+        $(function() {
+            $(".table_partner").bootstrapTable({
+                url: '../../mPartner/getPartnerList',        // 表格数据来源
+                columns: [{
+                    field: 'fileName',
+                    title: 'LOGO',
+                    formatter: function (value, row, index){
+                        return "<img src='../../file/fileImg?fileName="+(value || "")+"&type=partner'>";
+                    }
+                },{
+                    field:'linkAddress',
+                    title:'Link address'
+                }, {
+                    field:"localhostUrl",
+                    title:"Physical address"
+                },{
+                    field:"operation",
+                    title:"operation",
+                    formatter: function (value, row, index){
+                        return "<button class='btn' onclick='delete_parrner("+row.id+")'>delete" +
+                            "</button> <button class='btn'data-toggle='modal' data-target='#add_partner'>add</button>" +
+                            " <button class='btn'data-toggle='modal' onclick='update_Id("+row.id+")' data-target='#update_sort'>updateSort</button>";
+                    }
+                }]
+            })
+
+            //控制模态框出现位置
+            $('#add_partner').on('show.bs.modal', function(){
+                var $this = $(this);
+                var $modal_dialog = $this.find('.modal-dialog');
+                $this.css('display', 'block');
+                $modal_dialog.css({'margin-top': Math.max(0, ($(window).height() - $modal_dialog.height()) / 3) });
+            });
+
+            $("#file_upload").click(function(){
+                $("#partner").click();
+            });
+
+            $(".addPartner").click(function (){
+                var file = document.getElementById('partner') == null ?  "":document.getElementById('partner').files[0];
+                var linkAddress = $("#linkAddress").val() || "";
+                if(!linkAddress){
+                    alert("Link address not null !");
+                    return;
+                }
+                if(!file){
+                    alert("LOGO not null！");
+                    return;
+                }
+                var data = new FormData();
+                data.append("dataFile",file);
+                data.append("linkAddress",linkAddress);
+                $.ajax({
+                    url:'../../mPartner/savePartner',
+                    type:'POST',
+                    data:data,
+                    processData:false,  //tell jQuery not to process the data
+                    contentType: false,  //tell jQuery not to set contentType
+                    //这儿的三个参数其实就是XMLHttpRequest里面带的信息。
+                    success:function (data) {
+                        window.location.reload();
+                    }
+
+                })
+            });
+            $(".update_sort").click(function (){
+                var ob = $("#sort");
+                var id = ob.attr("dataId");
+                var sort = ob.val() || 0;
+                var data = new FormData();
+                data.append("id",id);
+                data.append("sort",sort);
+                if(!id){
+                    alert("operation error");
+                    return;
+                }
+                if(!sort){
+                    alert("operation error");
+                    return;
+                }
+                $.ajax({
+                    url:'../../mPartner/updateSort',
+                    type:'POST',
+                    data:{"id":id,"sort":sort},
+                    success:function (data) {
+                        window.location.reload();
+                    }
+                })
+            });
+        });
+
+        function input_setFileName(){
+            var file = document.getElementById('partner') == null ?  "":document.getElementById('partner').files[0];
+            $("#file_upload").val(file.name);
+        }
+
+        function delete_parrner(id){
+            $.ajax({
+                url:'../../mPartner/deleteMPartner',
+                type:'POST',
+                data:{"id":id},
+                success:function (data) {
+                    window.location.reload();
+                }
+            })
+        }
+
+        function update_Id(id){
+            $("#sort").attr("dataId",id);
+        }
+
+    </script>
+</body>
+
+</html>

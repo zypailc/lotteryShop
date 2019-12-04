@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Flat Admin V.2 - Free Bootstrap Admin Templates</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%
+    include("../config/css_all.html"){};
+    %>
+    <style>
+        .lable_title{
+            width: 100px;
+            text-align: right;
+        }
+        .input_content{
+            border-radius: 5px;
+            border: solid 1px black;
+        }
+    </style>
+</head>
+
+<body class="flat-blue">
+    <div class="app-container">
+        <div class="row content-container">
+            <%
+            include("../nav_top.html"){};
+            %>
+            <%
+            include("../menu_url.html"){};
+            %>
+            <!-- Main Content -->
+            <div class="container-fluid">
+                <div class="side-body">
+                    <div class="page-title">
+                        <span class="title">headImg</span>
+                        <!--<div class="description">A bootstrap table for display list of data.</div>-->
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="card">
+                                <div class="card-header">
+
+                                    <div class="card-title">
+                                    <div class="title">Table</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table_img">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="app-footer">
+            <div class="wrapper">
+                <span class="pull-right">2.1 <a href="#"><i class="fa fa-long-arrow-up"></i></a></span> © 2015 Copyright.
+            </div>
+        </footer>
+    <div>
+    </div>
+    </div>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="add_headImg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        add
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form_img" enctype="multipart/form-data">
+                        <div class="file-loading">
+                            <label>head portrait</label>
+                            <input id="file_upload" class="input_content" type="text" readonly="readonly">
+                            <input id="input_img" style="display: none;" type="file" name="imgFile" onchange="input_setFileName()" class="form-control inline-form-control">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">close
+                    </button>
+                    <button type="button" class="btn btn-primary addHeadImg">
+                        add
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <!-- Javascript Libs -->
+
+        <%
+        include("../config/js_all.html"){}
+        %>
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="../../js/app.js"></script>
+    <script>
+
+        $(function() {
+
+            $("#file_upload").click(function(){
+                $("#input_img").click();
+            });
+
+            $(".addHeadImg").click(function(){
+                var file = document.getElementById('input_img').files[0];
+                var data = new FormData();
+                data.append("dataFile",file);
+                $.ajax({
+                    url:'../../lsImage/headImg',
+                    type:'POST',
+                    data:data,
+                    processData:false,  //tell jQuery not to process the data
+                    contentType: false,  //tell jQuery not to set contentType
+                    //这儿的三个参数其实就是XMLHttpRequest里面带的信息。
+                    success:function (data) {
+                        window.location.reload();
+                    }
+
+                })
+            });
+
+            //控制模态框出现位置
+            $('#add_headImg').on('show.bs.modal', function(){
+                var $this = $(this);
+                var $modal_dialog = $this.find('.modal-dialog');
+                $this.css('display', 'block');
+                $modal_dialog.css({'margin-top': Math.max(0, ($(window).height() - $modal_dialog.height()) / 3) });
+
+            });
+
+
+
+            $(".table_img").bootstrapTable({
+                url: '../../lsImage/getHeadImgList?type=1',        // 表格数据来源
+                columns: [{
+                    field: 'type',
+                    title: 'type',
+                    formatter: function (value, row, index){
+                        if(value == '1'){
+                            return "head portrait";
+                        }
+                        return "rests";
+                    }
+                }, {
+                    field:"fileName",
+                    title:"头像",
+                    formatter:function(value, row, index){
+                        return "<img src='../../lsImage/getImg?id="+(row.id || "")+"'>";
+                    }
+                },{
+                    field:"operation",
+                    title:"操作",
+                    formatter: function (value, row, index){
+                        return "<button class='btn' onclick='delete_img("+row.id+")'>删除</button> <button class='btn'data-toggle='modal' data-target='#add_headImg'>添加</button>";
+                    }
+                }]
+            })
+        });
+
+        function input_setFileName(){
+            var file = document.getElementById('input_img') == null ?  "":document.getElementById('input_img').files[0];
+            $("#file_upload").val(file.name);
+        }
+
+        function delete_img(id){
+            $.ajax({
+                url:'../../lsImage/deleteHeadImg',
+                type:'POST',
+                data:{"id":id},
+                success:function (data) {
+                    window.location.reload();
+                }
+            })
+        }
+
+    </script>
+</body>
+
+</html>

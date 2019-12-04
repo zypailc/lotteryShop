@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Flat Admin V.2 - Free Bootstrap Admin Templates</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%
+    include("../config/css_all.html"){};
+    %>
+    <style>
+        .lable_title{
+            width: 100px;
+            text-align: right;
+        }
+        .input_content{
+            border-radius: 5px;
+            border: solid 1px black;
+        }
+    </style>
+</head>
+
+<body class="flat-blue">
+    <div class="app-container">
+        <div class="row content-container">
+            <%
+            include("../nav_top.html"){};
+            %>
+            <%
+            include("../menu_url.html"){};
+            %>
+            <!-- Main Content -->
+            <div class="container-fluid">
+                <div class="side-body">
+                    <div class="page-title">
+                        <span class="title">white</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-title">
+                                    <div class="title">Table</div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table_partner">
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="app-footer">
+            <div class="wrapper">
+                <span class="pull-right">2.1 <a href="#"><i class="fa fa-long-arrow-up"></i></a></span> © 2015 Copyright.
+            </div>
+        </footer>
+    <div>
+    </div>
+    </div>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="update_sort" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel_1">
+                        update
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="file-loading">
+                    <label class="lable_title">title-zh:</label>
+                    <input id="update_title_zh" class="input_content" type="text" />
+                </div>
+                    <div class="file-loading">
+                        <label class="lable_title">white book -zh:</label>
+                        <textarea id="update_content_zh" style="width: 75%;border: solid 1px black;border-radius: 5px;"></textarea>
+                    </div>
+                    <div class="file-loading">
+                        <label class="lable_title">title-en:</label>
+                        <input id="update_title_en" class="input_content" type="text" />
+                    </div>
+                    <div class="file-loading">
+                        <label class="lable_title">white book -en:</label>
+                        <textarea id="update_content_en" style="width: 75%;border: solid 1px black;border-radius: 5px;"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">close
+                    </button>
+                    <button type="button" class="btn btn-primary update_sort">
+                        confirm
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <!-- Javascript Libs -->
+
+        <%
+        include("../config/js_all.html"){}
+        %>
+
+    <!-- Javascript -->
+    <script type="text/javascript" src="../../js/app.js"></script>
+    <script>
+
+        $(function() {
+            var language = "${language}";
+            var columns_s = [];
+            var fild = "";
+            $.each(language.split(","),function(index,data){
+                columns_s.push({field: 'title_'+data, title: 'title_'+data},{field:'content_'+data,title:'content_'+data});
+            })
+
+            columns_s.push({
+                field:'sort',
+                title:'sort',
+                formatter:function (value, row, index){
+                    if(value){
+                        return value;
+                    }
+                    return "No sorting";
+                }
+            },{
+                field:"operation",
+                title:"operation",
+                formatter: function (value, row, index){
+                    return " <button class='btn'data-toggle='modal' onclick='update_Id("+row.id+",\""+(row.title_zh || "")+"\",\""+ (row.content_zh || "") +"\",\""+(row.title_en || "")+"\",\""+ (row.content_en || "") +"\",\""+(row.sort || 0)+"\")' data-target='#update_sort'>updateSort</button>";
+                }
+            })
+            $(".table_partner").bootstrapTable({
+                url: '../../mIntro/findMIntro?type=3',        // 表格数据来源
+                columns: columns_s
+            })
+
+            $(".update_sort").click(function (){
+                var id = $("#update_title_zh").attr("dataId");
+                var title_zh = $("#update_title_zh").val() || "";
+                var content_zh = $("#update_content_zh").val() || "";
+                var title_en = $("#update_title_en").val() || "";
+                var content_en = $("#update_content_en").val() || "";
+                var sort = $("#sort").val() || 0;
+                if(!id){
+                    alert("operation error");
+                    return;
+                }
+                if(!title_zh){
+                    alert("title_zh no sorting");
+                    return;
+                }
+                if(!content_zh){
+                    alert("content_zh no sorting");
+                    return;
+                }
+                if(!title_en){
+                    alert("title_en no sorting");
+                    return;
+                }
+                if(!content_en){
+                    alert("content_en no sorting");
+                    return;
+                }
+                $.ajax({
+                    url:'../../mIntro/updateWhiteBoob',
+                    type:'POST',
+                    data:{"id":id,"sort":sort,"title_zh":title_zh,"content_zh":content_zh,"title_en":title_en,"content_en":content_en},
+                    success:function (data) {
+                        window.location.reload();
+                    }
+                })
+            });
+        });
+
+        function input_setFileName(){
+            var file = document.getElementById('partner') == null ?  "":document.getElementById('partner').files[0];
+            $("#file_upload").val(file.name);
+        }
+
+        function update_Id(id,title_zh,content_zh,title_en,content_en,sort){
+            $("#update_title_zh").attr("dataId",id);
+            $("#update_title_zh").val(title_zh);
+            $("#update_content_zh").val(content_zh);
+            $("#update_title_en").val(title_en);
+            $("#update_content_en").val(content_en);
+
+        }
+
+    </script>
+</body>
+
+</html>
