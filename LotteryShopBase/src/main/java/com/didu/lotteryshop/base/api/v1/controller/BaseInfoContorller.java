@@ -1,7 +1,7 @@
 package com.didu.lotteryshop.base.api.v1.controller;
 
 import com.didu.lotteryshop.base.api.v1.service.BaseInfoService;
-import com.didu.lotteryshop.base.controller.BaseController;
+import com.didu.lotteryshop.base.controller.BaseBaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/authorization/v1/baseInfo")
-public class BaseInfoContorller extends BaseController {
+public class BaseInfoContorller extends BaseBaseController {
 
 
     @Autowired

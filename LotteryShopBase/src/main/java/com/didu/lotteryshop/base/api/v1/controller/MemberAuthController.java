@@ -1,19 +1,11 @@
 package com.didu.lotteryshop.base.api.v1.controller;
 
 import com.didu.lotteryshop.base.api.v1.service.MemberService;
-import com.didu.lotteryshop.base.service.MailService;
-import com.didu.lotteryshop.base.service.form.impl.MemberServiceImp;
-import com.didu.lotteryshop.base.controller.BaseController;
-import com.didu.lotteryshop.common.base.service.BaseService;
+import com.didu.lotteryshop.base.controller.BaseBaseController;
 import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.enumeration.ResultCode;
-import com.didu.lotteryshop.common.service.form.impl.EsDlbaccountsServiceImpl;
-import com.didu.lotteryshop.common.service.form.impl.EsDlbwalletServiceImpl;
-import com.didu.lotteryshop.common.service.form.impl.EsLsbwalletServiceImpl;
-import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
 import com.didu.lotteryshop.common.utils.EmailUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
-import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/authorization/v1/member")
-public class MemberAuthorizationContorller extends BaseController {
+public class MemberAuthController extends BaseBaseController {
 
     Logger log = LoggerFactory.getLogger(getClass());
 
