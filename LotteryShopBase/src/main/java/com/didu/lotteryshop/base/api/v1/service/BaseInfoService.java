@@ -29,7 +29,10 @@ public class BaseInfoService extends BaseService {
         sql = "select mp_.link_address as linkAddress,ls_.url as viewUrl from m_partner mp_ left join ls_image ls_ on (mp_.ls_image_id = ls_.id) where mp_.type = 2";
         List<Map<String,Object>> external = getSqlMapper().selectList(sql);
 
-        sql = "select i_"+languageType+".title as title,i_"+languageType+".content as content from m_intro mi_ left join intro_"+languageType + " i_"+languageType + " on (mi_.language_id = i_"+languageType+".id) where mi_.type = ";
+        sql = "select li_.url as url , i_"+languageType+".title as title,i_"+languageType+".content as content " +
+                " from m_intro mi_ " +
+                " left join ls_image li_ on (mi_.ls_image_id = li_.id)"+
+                " left join intro_"+languageType + " i_"+languageType + " on (mi_.language_id = i_"+languageType+".id) where mi_.type = ";
         //项目特点
         List<Map<String,Object>> characteristicProject = getSqlMapper().selectList(sql + MIntro.TYPE_CHARACTERISTIC_PROJECT);
         //分配资金

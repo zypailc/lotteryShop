@@ -52,10 +52,11 @@ public class MemberServiceImp extends ServiceImpl<MemberMapper, Member> {
         member.setId(CodeUtil.getUuid());
         member.setSecretKey(secretKey);
         member.setCreateTime(new Date());
-        //判断用户是否有推荐用户 如果没有设定为初始用户
-        if(member.getGeneralizeMemberType() == null ){
-            member.setGeneralizeMemberType(Member.generalizeMemberType_1);
-        }
+        /*//判断用户是否有推荐用户 如果没有设定为初始用户
+        //if(member.getGeneralizeMemberType() == null ){
+            //用户怎是不设置推广层数
+            //member.setGeneralizeMemberType(Member.generalizeMemberType_1);
+        //}*/
         mailServiceImp.sendSimpleMail(member,"new password",password);
         //保存用户信息
         boolean b = insert(member);
@@ -66,6 +67,11 @@ public class MemberServiceImp extends ServiceImpl<MemberMapper, Member> {
         }
     }
 
+    /**
+     * 重置密码
+     * @param email
+     * @return
+     */
     public ResultUtil forgotPassword(String email){
         Member member = new Member();
         member.setEmail(email);

@@ -1,5 +1,7 @@
 package com.didu.lotteryshop.base.api.v1.service;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.didu.lotteryshop.base.api.v1.service.form.impl.MemberServiceImp;
 import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.config.Constants;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -76,6 +79,11 @@ public class MemberService extends BaseService {
         return resultUtil;
     }
 
+    /**
+     * 修改用户
+     * @param member
+     * @return
+     */
     public ResultUtil modifyMember(Member member){
         member.setCreateTime(new Date());
         boolean b = memberServiceImp.updateById(member);
@@ -83,6 +91,18 @@ public class MemberService extends BaseService {
             return ResultUtil.successJson("success");
         }
         return ResultUtil.errorJson("error");
+    }
+
+    /**
+     * 查找推广用户
+     * @param userId
+     * @return
+     */
+    public List<Map<String,Object>> findGeneralizeMemberList(String userId){
+        Wrapper wrapper = new EntityWrapper();
+        wrapper.eq("generalize_member_id",userId);
+        List<Map<String,Object>> list = memberServiceImp.selectMaps(wrapper);
+        return  list;
     }
 
 }

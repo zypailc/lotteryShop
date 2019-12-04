@@ -34,6 +34,10 @@ public class MemberAuthorizationContorller extends BaseController {
     @ResponseBody
     @RequestMapping("/register")//可不过验证访问
     public ResultUtil register(Member member){
+        //判断昵称是否为空
+        if(member.getMemberName() == null || "".equals(member.getMemberName())){
+            return ResultUtil.jsonObject("pet name cannot be empty !", ResultCode.FAILED.getCode());
+        }
         //验证邮箱格式
         if(!EmailUtil.verificationEmail(member.getEmail())){
             return ResultUtil.jsonObject("Please enter the correct email address !", ResultCode.FAILED.getCode());

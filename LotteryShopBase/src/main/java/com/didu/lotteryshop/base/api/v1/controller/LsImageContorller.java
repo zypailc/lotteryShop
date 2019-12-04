@@ -6,7 +6,9 @@ import com.didu.lotteryshop.common.base.contorller.BaseContorller;
 import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.entity.LsImage;
 import com.didu.lotteryshop.common.entity.Member;
+import com.didu.lotteryshop.common.mapper.LsImageMapper;
 import com.didu.lotteryshop.common.service.form.impl.LsImageServiceImpl;
+import com.didu.lotteryshop.common.utils.FileUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -27,6 +30,8 @@ public class LsImageContorller extends BaseContorller {
     private LsImageServiceImpl imageService;
     @Autowired
     private MemberServiceImp memberService;
+    @Autowired
+    private LsImageMapper lsImageMapper;
 
 
     /**
@@ -53,4 +58,13 @@ public class LsImageContorller extends BaseContorller {
         return memberService.headPortrait(member);
     }
 
+    @ResponseBody
+    @RequestMapping("/getImg")
+    public void getImg(String id, HttpServletResponse response){
+        if(id != null && !"".equals(id)){
+            LsImage lsImage = new LsImage();
+            lsImage = lsImageMapper.selectById(Integer.parseInt(id));
+            FileUtil.outImg(response,lsImage.getByteData());
+        }
+    }
 }
