@@ -23,9 +23,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.antMatcher("/**").authorizeRequests()
-                .antMatchers( "/login").permitAll()
+                .antMatchers( "/css/**","/img/**","/js/**","/lib/**","/web/login","/login").permitAll()
                 .anyRequest().authenticated()
-                .and().formLogin().successForwardUrl("/main/main1")
+                .and().formLogin().loginPage("/web/login").loginProcessingUrl("/login").successForwardUrl("/web/index")
                 .and().csrf().disable();
     }
 

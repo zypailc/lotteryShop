@@ -2,9 +2,8 @@ package com.didu.lotteryshop.common.filter;
 
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.LoginUser;
-import com.didu.lotteryshop.common.filter.util.FilterUtil;
-import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.github.abel533.sql.SqlMapper;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +33,9 @@ public class LoginSessionFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        String path = FilterUtil.path(httpServletRequest.getRequestURI());
+        String path = path(httpServletRequest.getRequestURI());
         //如果是前台请求的资源文件 不需要过滤请求
-        if(FilterUtil.path_s().indexOf(path) < 0){
+        if(path_s().indexOf(path) < 0){
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             //最新登陆的用户名
             String memberName = null;
@@ -51,6 +50,7 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                 //如果 memberName == ‘anonymousUser’ 没有登陆用户
                 //登陆后记录的用户名
                 String user_name = (String) httpServletRequest.getSession().getAttribute(Constants.LOGIN_SESSION_KEY);
+
                 Map<String, Object> map = null;
                 LoginUser loginUser = null;
                 //判断用户 如果没有存在或者最新登陆的用户和登陆后记录的用户不匹配 重新查询用户的信息 存入session
@@ -112,4 +112,18 @@ public class LoginSessionFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
+
+    private static String path(String path){
+        int index = path.indexOf("/",2);
+        String path_1 = path.substring(0,index != -1 ? (index+1):path.length());
+        if(index < 0){
+            return path_1 = path_1+"/";
+        }
+        return path_1;
+    }
+
+    public static String path_s(){
+        return ArrayUtils.toString(Constants.STATIC_RESOURCE_FILENAME, ",");
+    }
+
 }

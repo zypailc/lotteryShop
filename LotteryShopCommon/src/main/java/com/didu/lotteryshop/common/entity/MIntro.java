@@ -34,6 +34,10 @@ public class MIntro extends Model<MIntro> {
 	 * 白皮书
 	 */
 	public static final Integer TYPE_WHITE_BOOK = 3;
+	/**
+	 * 头像
+	 */
+	public static final  Integer TYPE_HEADIMG = 1;
 
     private static final long serialVersionUID = 1L;
 
@@ -59,6 +63,8 @@ public class MIntro extends Model<MIntro> {
 	private Date createTime;
 	@TableField("language_id")
 	private Integer languageId;
+	@TableField("ls_image_id")
+	private Integer lsImageId;
 
 
 	public Integer getId() {
@@ -117,6 +123,14 @@ public class MIntro extends Model<MIntro> {
 		this.languageId = languageId;
 	}
 
+	public Integer getLsImageId() {
+		return lsImageId;
+	}
+
+	public void setLsImageId(Integer lsImageId) {
+		this.lsImageId = lsImageId;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -132,6 +146,7 @@ public class MIntro extends Model<MIntro> {
 			", sort=" + sort +
 			", createTime=" + createTime +
 			", languageId=" + languageId +
+			", lsImageId=" + lsImageId +
 			"}";
 	}
 }

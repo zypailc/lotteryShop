@@ -28,6 +28,10 @@ public class Constants {
     public static final  String KEY_THREE = "9d949958cccd454a";
     /** 静态资源的文件名*/
     public static final  String []STATIC_RESOURCE_FILENAME = {"/plugins/","/js/","/lang/","/images/","/static/","/styles/"};
+    /**项目访问地址*/
+    //public static final String URL = "www.baidu.com";
+    /**二维码背景图片id*/
+    //public static final String id = "";
 
     public static void main(String[] args) {
         System.out.println(getRandomString(16));

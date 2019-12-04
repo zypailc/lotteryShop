@@ -19,7 +19,21 @@ import java.io.Serializable;
 @TableName("ls_image")
 public class LsImage extends Model<LsImage> {
 
+    /**
+     * 头像类型图片
+     */
     public static final  Integer IMAGE_TYPE = 1;
+
+    /**
+     * 项目图片类型
+     */
+    public static final  Integer PROJECT_TYPE = 2;
+
+    /**
+     * 二维码图片类型
+     */
+    public static final  Integer QR_BACKGROUND = 3;
+
 
     private static final long serialVersionUID = 1L;
 
@@ -42,7 +56,8 @@ public class LsImage extends Model<LsImage> {
     private String localhostUrl;
     @TableField("file_name")
     private String fileName;
-
+    @TableField("byte_data")
+    private byte [] byteData;
 
     public Integer getId() {
         return id;
@@ -82,6 +97,14 @@ public class LsImage extends Model<LsImage> {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public byte[] getByteData() {
+        return byteData;
+    }
+
+    public void setByteData(byte[] byteData) {
+        this.byteData = byteData;
     }
 
     @Override
