@@ -16,16 +16,4 @@
         <result column="create_time" property="createTime" />
         <!--<collection property="roles" fetchType="eager" column="id" select="com.didu.lotteryshop.auth.mapper.RoleMapper.findByMemberId"></collection>-->
     </resultMap>
-
-    <sql id="normalItems">
-        id,member_name,email
-    </sql>
-
-    <select id="findByMemberName" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select * from es_member where member_name = #{memberName,jdbcType=VARCHAR}
-    </select>
-
-
-
-
 </mapper>

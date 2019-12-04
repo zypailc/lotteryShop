@@ -13,6 +13,4 @@ import com.didu.lotteryshop.common.entity.Member;
  */
 public interface MemberMapper extends BaseMapper<Member> {
 
-    //Member findByMemberName(String memberName);
-
 }
