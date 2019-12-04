@@ -11,6 +11,13 @@
 		<result column="create_time" property="createTime" />
 		<result column="buy_status" property="buyStatus" />
 		<result column="bs_time" property="bsTime" />
+		<result column="luck_total" property="luckTotal" />
+		<result column="luck_num" property="luckNum" />
+		<result column="current_total" property="currentTotal" />
+		<result column="adjust_total" property="adjustTotal" />
+		<result column="bonus_status" property="bonusStatus" />
+		<result column="bonus_status_time" property="bonusStatusTime" />
+		<result column="bonus_grant" property="bonusGrant" />
 	</resultMap>
 
 </mapper>

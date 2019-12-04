@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.didu.lotteryshop.lotterya.mapper.LotteryaInfoPcMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.didu.lotteryshop.lotterya.entity.LotteryaInfoPc">
+		<id column="id" property="id" />
+		<result column="lotterya_info_id" property="lotteryaInfoId" />
+		<result column="type" property="type" />
+		<result column="level" property="level" />
+		<result column="ratio" property="ratio" />
+		<result column="create_time" property="createTime" />
+	</resultMap>
+
+</mapper>

@@ -3,9 +3,9 @@ package com.didu.lotteryshop.common.service.form.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.didu.lotteryshop.common.entity.EsLsbaccounts;
-import com.didu.lotteryshop.common.mapper.EsLsbaccountsMapper;
-import com.didu.lotteryshop.common.service.form.IEsLsbaccountsService;
+import com.didu.lotteryshop.common.entity.EsDlbaccounts;
+import com.didu.lotteryshop.common.mapper.EsDlbaccountsMapper;
+import com.didu.lotteryshop.common.service.form.IEsDlbaccountsService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,23 +15,25 @@ import java.util.Date;
 
 /**
  * <p>
- * lsb平台账目流水记录 服务实现类
+ * 待领币平台账目流水记录 服务实现类
  * </p>
  *
  * @author ${author}
- * @since 2019-11-11
+ * @since 2019-12-03
  */
 @Service
-public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, EsLsbaccounts> implements IEsLsbaccountsService {
+public class EsDlbaccountsServiceImpl extends ServiceImpl<EsDlbaccountsMapper, EsDlbaccounts> implements IEsDlbaccountsService {
     @Autowired
-    private EsLsbwalletServiceImpl esLsbwalletService;
+    private EsDlbwalletServiceImpl esDlbwalletService;
 
     /** dic_type 在sys_dic字段值*/
-    public static String DIC_TYPE = "lsbaccounts_dictype";
-    /** 充值 */
-    public static String DIC_TYPE_IN = "1";
-    /** 提现 */
-    public static String DIC_TYPE_DRAW = "2";
+    public static String DIC_TYPE = "dlbaccounts_dictype";
+    /** 购买A彩票提成 */
+    public static String DIC_TYPE_BUYLOTTERYA_PM = "1";
+    /** 赢得A彩票提成 */
+    public static String DIC_TYPE_WINLOTTERYA_PM = "2";
+    /** 注册奖金 */
+    public static String DIC_TYPE_REGISTRATIONINCENTIVES = "3";
 
     /** 类型：入账 */
     public static int TYPE_IN = 1;
@@ -53,7 +55,7 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
      * @param operId  操作业务表主键ID
      * @return
      */
-    public boolean addInSuccess(String memberId,String dicTypeValue,BigDecimal total,String operId){
+    public boolean addInSuccess(String memberId, String dicTypeValue, BigDecimal total, String operId){
         return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_SUCCESS,operId);
     }
     /**
@@ -107,30 +109,30 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
             BigDecimal  balance = null;
             //进账
             if(type == TYPE_IN && status == STATUS_SUCCESS){
-                balance = esLsbwalletService.updateBalance(total,memberId,true);
-            //出账
+                balance = esDlbwalletService.updateBalance(total,memberId,true);
+                //出账
             }else if(type == TYPE_OUT){
                 if(status == STATUS_SUCCESS){
                     //成功，直接减余额
-                    balance = esLsbwalletService.updateBalance(total,memberId,false);
+                    balance = esDlbwalletService.updateBalance(total,memberId,false);
                 }else if(status == STATUS_BEINGPROCESSED){
                     //处理中，冻结金额
-                    balance = esLsbwalletService.updateAddFreeze(total,memberId);
+                    balance = esDlbwalletService.updateAddFreeze(total,memberId);
                 }
             }
             //balance是null时，以上方法执行失败，请认真查看。
             if(balance == null) return bool;
-            EsLsbaccounts esLsbaccounts = new EsLsbaccounts();
-            esLsbaccounts.setMemberId(memberId);
-            esLsbaccounts.setDicType(dicTypeValue);
-            esLsbaccounts.setType(type);
-            esLsbaccounts.setAmount(total);
-            esLsbaccounts.setBalance(balance);
-            esLsbaccounts.setStatus(status);
-            esLsbaccounts.setStatusTime(new Date());
-            esLsbaccounts.setCreateTime(new Date());
-            esLsbaccounts.setOperId(operId);
-            bool = super.insert(esLsbaccounts);
+            EsDlbaccounts esDlbaccounts = new EsDlbaccounts();
+            esDlbaccounts.setMemberId(memberId);
+            esDlbaccounts.setDicType(dicTypeValue);
+            esDlbaccounts.setType(type);
+            esDlbaccounts.setAmount(total);
+            esDlbaccounts.setBalance(balance);
+            esDlbaccounts.setStatus(status);
+            esDlbaccounts.setStatusTime(new Date());
+            esDlbaccounts.setCreateTime(new Date());
+            esDlbaccounts.setOperId(operId);
+            bool = super.insert(esDlbaccounts);
         }
         return bool;
     }
@@ -169,22 +171,22 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
     private  boolean update(String memberId,String dicTypeValue,String operId,int status){
         boolean bool = false;
         if(StringUtils.isBlank(dicTypeValue) || StringUtils.isBlank(operId)) return bool;
-        Wrapper<EsLsbaccounts> wrapper = new EntityWrapper<>();
+        Wrapper<EsDlbaccounts> wrapper = new EntityWrapper<>();
         wrapper.eq("memberId",memberId).and().eq("dicType",dicTypeValue).and().eq("operId",operId);
-        EsLsbaccounts  esLsbaccounts = super.selectOne(wrapper);
-        if(esLsbaccounts != null &&  esLsbaccounts.getStatus() != STATUS_FAIL && esLsbaccounts.getStatus() != STATUS_SUCCESS){
-            esLsbaccounts.setStatus(status);
-            esLsbaccounts.setStatusTime(new Date());
+        EsDlbaccounts  esDlbaccounts = super.selectOne(wrapper);
+        if(esDlbaccounts != null &&  esDlbaccounts.getStatus() != STATUS_FAIL && esDlbaccounts.getStatus() != STATUS_SUCCESS){
+            esDlbaccounts.setStatus(status);
+            esDlbaccounts.setStatusTime(new Date());
             BigDecimal balance = null;
             if(status == STATUS_SUCCESS){
-                balance =  esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(),memberId,true);
+                balance =  esDlbwalletService.updateSubtractFreeze(esDlbaccounts.getAmount(),memberId,true);
                 if(balance == null) return bool;
             }else if(status == STATUS_FAIL){
-                balance =  esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(),memberId,false);
+                balance =  esDlbwalletService.updateSubtractFreeze(esDlbaccounts.getAmount(),memberId,false);
                 if(balance == null) return bool;
             }
-            esLsbaccounts.setBalance(balance);
-            bool = super.updateById(esLsbaccounts);
+            esDlbaccounts.setBalance(balance);
+            bool = super.updateById(esDlbaccounts);
         }
         return bool;
     }

@@ -7,6 +7,9 @@
 		<id column="id" property="id" />
 		<result column="gas_price" property="gasPrice" />
 		<result column="gas_limit" property="gasLimit" />
+		<result column="eth_to_lsb" property="ethToLsb" />
+		<result column="lsb_to_eth" property="lsbToEth" />
+		<result column="register_dlb" property="registerDlb" />
 	</resultMap>
 
 </mapper>

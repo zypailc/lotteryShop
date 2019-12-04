@@ -219,6 +219,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
                 balance =  esEthwalletService.updateSubtractFreeze(esEthaccounts.getAmount(),memberId,false);
                 if(balance == null) return bool;
             }
+            esEthaccounts.setBalance(balance);
           bool = super.updateById(esEthaccounts);
         }
         return bool;

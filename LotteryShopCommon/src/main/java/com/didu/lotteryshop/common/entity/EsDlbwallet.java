@@ -11,14 +11,14 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 平台币钱包
+ * 待领币钱包
  * </p>
  *
  * @author ${author}
- * @since 2019-11-07
+ * @since 2019-12-03
  */
-@TableName("es_slbwallet")
-public class EsSlbwallet extends Model<EsSlbwallet> {
+@TableName("es_dlbwallet")
+public class EsDlbwallet extends Model<EsDlbwallet> {
 
     private static final long serialVersionUID = 1L;
 
@@ -119,7 +119,7 @@ public class EsSlbwallet extends Model<EsSlbwallet> {
 
 	@Override
 	public String toString() {
-		return "EsSlbwallet{" +
+		return "EsDlbwallet{" +
 			", id=" + id +
 			", memberId=" + memberId +
 			", total=" + total +

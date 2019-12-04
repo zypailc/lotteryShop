@@ -30,4 +30,16 @@ public class LotteryaIssueServiceImpl extends ServiceImpl<LotteryaIssueMapper, L
         wrapper.last("limit 1");
         return super.selectOne(wrapper);
     }
+
+    /**
+     * 查询上期基本信息
+     * @return
+     */
+    public LotteryaIssue findUpLotteryaIssue(){
+        Wrapper<LotteryaIssue> wrapper = new EntityWrapper<>();
+        wrapper.eq("issueNum",this.findCurrentPeriodLotteryaIssue().getIssueNum()-1);
+        wrapper.last("limit 1");
+        return super.selectOne(wrapper);
+    }
+
 }

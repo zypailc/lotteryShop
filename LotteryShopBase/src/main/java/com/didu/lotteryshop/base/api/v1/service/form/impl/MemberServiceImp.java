@@ -7,6 +7,10 @@ import com.didu.lotteryshop.base.api.v1.mapper.MemberMapper;
 import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.Member;
+import com.didu.lotteryshop.common.service.form.impl.EsDlbaccountsServiceImpl;
+import com.didu.lotteryshop.common.service.form.impl.EsDlbwalletServiceImpl;
+import com.didu.lotteryshop.common.service.form.impl.EsLsbwalletServiceImpl;
+import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.common.utils.CodeUtil;
@@ -29,6 +33,14 @@ public class MemberServiceImp extends ServiceImpl<MemberMapper, Member> {
     private MailServiceImp mailServiceImp;
     @Autowired
     private BaseService baseService;
+    @Autowired
+    private EsLsbwalletServiceImpl esLsbwalletService;
+    @Autowired
+    private EsDlbwalletServiceImpl  esDlbwalletService;
+    @Autowired
+    private EsDlbaccountsServiceImpl esDlbaccountsService;
+    @Autowired
+    private SysConfigServiceImpl sysConfigService;
 
     public ResultUtil register(Member member) {
         //判断邮箱是否被注册
@@ -61,10 +73,21 @@ public class MemberServiceImp extends ServiceImpl<MemberMapper, Member> {
         //保存用户信息
         boolean b = insert(member);
         if(b){
+            //生成平台币钱包
+            b = esLsbwalletService.initInsert(member.getId()) != null;
+            //生成待领币钱包
+            if(b)
+            b = esDlbwalletService.initInsert(member.getId()) != null;
+            //注册送代领币
+            if(b)
+            b = esDlbaccountsService.addInSuccess(member.getId(),
+                    EsDlbaccountsServiceImpl.DIC_TYPE_REGISTRATIONINCENTIVES,
+                    sysConfigService.getSysConfig().getRegisterDlb(),
+                    member.getId());
+            if(b)
             return ResultUtil.successJson("Registered successfully , please log in !");
-        }else {
-            return ResultUtil.errorJson("Registered error , please operate again !");
         }
+        return ResultUtil.errorJson("Registered error , please operate again !");
     }
 
     /**

@@ -11,14 +11,14 @@ import java.io.Serializable;
 
 /**
  * <p>
- * lsb平台账目流水记录
+ * 待领币平台账目流水记录
  * </p>
  *
  * @author ${author}
- * @since 2019-11-11
+ * @since 2019-12-03
  */
-@TableName("es_lsbaccounts")
-public class EsLsbaccounts extends Model<EsLsbaccounts> {
+@TableName("es_dlbaccounts")
+public class EsDlbaccounts extends Model<EsDlbaccounts> {
 
     private static final long serialVersionUID = 1L;
 
@@ -68,6 +68,7 @@ public class EsLsbaccounts extends Model<EsLsbaccounts> {
      */
 	@TableField("oper_id")
 	private String operId;
+
 
 	public Integer getId() {
 		return id;
@@ -156,7 +157,7 @@ public class EsLsbaccounts extends Model<EsLsbaccounts> {
 
 	@Override
 	public String toString() {
-		return "EsLsbaccounts{" +
+		return "EsDlbaccounts{" +
 			", id=" + id +
 			", memberId=" + memberId +
 			", dicType=" + dicType +

@@ -16,6 +16,10 @@
 		<result column="adjust_bonus_up" property="adjustBonusUp" />
 		<result column="adjust_bonus_down" property="adjustBonusDown" />
 		<result column="adjust_bonus_ratio" property="adjustBonusRatio" />
+		<result column="pm_vnum" property="pmVnum" />
+		<result column="pm_rnum" property="pmRnum" />
+		<result column="buy_pm" property="buyPm" />
+		<result column="draw_pm" property="drawPm" />
 	</resultMap>
 
 </mapper>

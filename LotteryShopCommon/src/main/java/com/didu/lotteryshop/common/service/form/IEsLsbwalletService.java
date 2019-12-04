@@ -1,6 +1,6 @@
 package com.didu.lotteryshop.common.service.form;
 
-import com.didu.lotteryshop.common.entity.EsSlbwallet;
+import com.didu.lotteryshop.common.entity.EsLsbwallet;
 import com.baomidou.mybatisplus.service.IService;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.service.IService;
  * </p>
  *
  * @author ${author}
- * @since 2019-11-07
+ * @since 2019-11-29
  */
-public interface IEsSlbwalletService extends IService<EsSlbwallet> {
+public interface IEsLsbwalletService extends IService<EsLsbwallet> {
 	
 }

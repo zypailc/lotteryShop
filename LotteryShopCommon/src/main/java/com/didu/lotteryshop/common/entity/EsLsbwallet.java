@@ -11,14 +11,14 @@ import java.io.Serializable;
 
 /**
  * <p>
- * lsb平台账目流水记录
+ * 平台币钱包
  * </p>
  *
  * @author ${author}
- * @since 2019-11-11
+ * @since 2019-11-29
  */
-@TableName("es_lsbaccounts")
-public class EsLsbaccounts extends Model<EsLsbaccounts> {
+@TableName("es_lsbwallet")
+public class EsLsbwallet extends Model<EsLsbwallet> {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,46 +28,32 @@ public class EsLsbaccounts extends Model<EsLsbaccounts> {
 	@TableId(value="id", type= IdType.AUTO)
 	private Integer id;
     /**
-     * 用户主键ID
+     * 用户ID
      */
 	@TableField("member_id")
 	private String memberId;
     /**
-     * 交易类型，对应sys_dic表key_value值
+     * 总额
      */
-	@TableField("dic_type")
-	private String dicType;
+	private BigDecimal total;
     /**
-     * 交易类型，0：出，1：入
-     */
-	private Integer type;
-    /**
-     * 金额
-     */
-	private BigDecimal amount;
-    /**
-     * 余额
+     * 可用余额
      */
 	private BigDecimal balance;
     /**
-     * 状态，0：处理中；1：成功；2：失败
+     * 冻结金额
      */
-	private Integer status;
-    /**
-     * 状态更时间
-     */
-	@TableField("status_time")
-	private Date statusTime;
+	private BigDecimal freeze;
     /**
      * 创建时间
      */
 	@TableField("create_time")
 	private Date createTime;
     /**
-     * 操作业务表主键ID
+     * 最后更新时间
      */
-	@TableField("oper_id")
-	private String operId;
+	@TableField("update_time")
+	private Date updateTime;
 
 	public Integer getId() {
 		return id;
@@ -85,28 +71,12 @@ public class EsLsbaccounts extends Model<EsLsbaccounts> {
 		this.memberId = memberId;
 	}
 
-	public String getDicType() {
-		return dicType;
+	public BigDecimal getTotal() {
+		return total;
 	}
 
-	public void setDicType(String dicType) {
-		this.dicType = dicType;
-	}
-
-	public Integer getType() {
-		return type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
-	}
-
-	public BigDecimal getAmount() {
-		return amount;
-	}
-
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
+	public void setTotal(BigDecimal total) {
+		this.total = total;
 	}
 
 	public BigDecimal getBalance() {
@@ -117,20 +87,12 @@ public class EsLsbaccounts extends Model<EsLsbaccounts> {
 		this.balance = balance;
 	}
 
-	public Integer getStatus() {
-		return status;
+	public BigDecimal getFreeze() {
+		return freeze;
 	}
 
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
-	public Date getStatusTime() {
-		return statusTime;
-	}
-
-	public void setStatusTime(Date statusTime) {
-		this.statusTime = statusTime;
+	public void setFreeze(BigDecimal freeze) {
+		this.freeze = freeze;
 	}
 
 	public Date getCreateTime() {
@@ -141,12 +103,12 @@ public class EsLsbaccounts extends Model<EsLsbaccounts> {
 		this.createTime = createTime;
 	}
 
-	public String getOperId() {
-		return operId;
+	public Date getUpdateTime() {
+		return updateTime;
 	}
 
-	public void setOperId(String operId) {
-		this.operId = operId;
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 
 	@Override
@@ -156,17 +118,14 @@ public class EsLsbaccounts extends Model<EsLsbaccounts> {
 
 	@Override
 	public String toString() {
-		return "EsLsbaccounts{" +
+		return "EsLsbwallet{" +
 			", id=" + id +
 			", memberId=" + memberId +
-			", dicType=" + dicType +
-			", type=" + type +
-			", amount=" + amount +
+			", total=" + total +
 			", balance=" + balance +
-			", status=" + status +
-			", statusTime=" + statusTime +
+			", freeze=" + freeze +
 			", createTime=" + createTime +
-			", operId=" + operId +
+			", updateTime=" + updateTime +
 			"}";
 	}
 }

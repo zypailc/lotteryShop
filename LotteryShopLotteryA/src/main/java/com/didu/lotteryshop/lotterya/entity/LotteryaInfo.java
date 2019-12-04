@@ -32,12 +32,12 @@ public class LotteryaInfo extends Model<LotteryaInfo> {
      */
 	private BigDecimal price;
     /**
-     * 周期（单位小时）
+     * 周期（单位分钟）
      */
 	@TableField("period_date")
 	private BigDecimal periodDate;
     /**
-     * 间隔时间（单位小时）
+     * 间隔时间（单位分钟）
      */
 	@TableField("interval_date")
 	private BigDecimal intervalDate;
@@ -80,6 +80,26 @@ public class LotteryaInfo extends Model<LotteryaInfo> {
 	 */
 	@TableField("adjust_bonus_ratio")
 	private BigDecimal adjustBonusRatio;
+	/**
+	 * 提成有效xx期数
+	 */
+	@TableField("pm_vnum")
+	private Integer pmVnum;
+	/**
+	 * 提成补签xx注数
+	 */
+	@TableField("pm_rnum")
+	private Integer pmRnum;
+	/**
+	 * 购买提成比例（单位%）
+	 */
+	@TableField("buy_pm")
+	private BigDecimal buyPm;
+	/**
+	 * 中奖提成比例（单位%）
+	 */
+	@TableField("draw_pm")
+	private BigDecimal drawPm;
 
 	public Integer getId() {
 		return id;
@@ -177,6 +197,38 @@ public class LotteryaInfo extends Model<LotteryaInfo> {
 		this.adjustBonusRatio = adjustBonusRatio;
 	}
 
+	public Integer getPmVnum() {
+		return pmVnum;
+	}
+
+	public void setPmVnum(Integer pmVnum) {
+		this.pmVnum = pmVnum;
+	}
+
+	public Integer getPmRnum() {
+		return pmRnum;
+	}
+
+	public void setPmRnum(Integer pmRnum) {
+		this.pmRnum = pmRnum;
+	}
+
+	public BigDecimal getBuyPm() {
+		return buyPm;
+	}
+
+	public void setBuyPm(BigDecimal buyPm) {
+		this.buyPm = buyPm;
+	}
+
+	public BigDecimal getDrawPm() {
+		return drawPm;
+	}
+
+	public void setDrawPm(BigDecimal drawPm) {
+		this.drawPm = drawPm;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -196,6 +248,10 @@ public class LotteryaInfo extends Model<LotteryaInfo> {
 			", adjustBonusUp=" + adjustBonusUp +
 			", adjustBonusDown=" + adjustBonusDown +
 			", adjustBonusRatio=" + adjustBonusRatio +
+			", pmVnum=" + pmVnum +
+			", pmRnum=" + pmRnum +
+			", buyPm=" + buyPm +
+			", drawPm=" + drawPm +
 			"}";
 	}
 }
