@@ -637,10 +637,11 @@ section
 }
 .card
 {
-	width: calc(50% - 15px);
+	width: calc(16% - 15px);
 	margin-bottom: 80px;
 	border-radius: 0px;
 	border: 1px solid #dcdcdc;
+	margin: 5px;
 }
 .card:hover
 {
@@ -655,9 +656,9 @@ section
 .card-body
 {
 	padding-top: 44px;
-	padding-left: 65px;
-	padding-bottom: 72px;
-	padding-right: 40px;
+	/*padding-left: 65px;*/
+	/*padding-bottom: 72px;*/
+	/*padding-right: 40px;*/
 }
 .card-header
 {
@@ -945,9 +946,9 @@ section
 
 .footer
 {
-	padding-top: 99px;
+	/*padding-top: 99px;
 	padding-bottom: 82px;
-	border-top: solid 1px #dcdcdc;
+	border-top: solid 1px #dcdcdc;*/
 }
 .footer_logo
 {

@@ -1,4 +1,7 @@
 $(function (){
+
+
+
     //初始化方法
     var li = $(".wallet_li");
     li.click();
@@ -30,9 +33,9 @@ $(function (){
     $(".li_wallet_module").click(function(){
         var type = $(this).attr("data-class") || "";
         if(type == 'wallet_bind'){
-            $(location).prop('href','./walletBind?'+"type="+type);
+            $(location).prop('href','../web/personalWalletBind?'+"type="+type);
         }else{
-            $(location).prop('href','./walletBase?'+"type="+type);
+            $(location).prop('href','../web/personalWalletBase?'+"type="+type);
         }
     });
 
@@ -51,7 +54,7 @@ $(function (){
     $(".personal_phone").click(function(){
         var type = $(this).attr("data-file") || "";
         if(type){
-            $(location).prop('href','./phoneType?'+"type="+type);
+            $(location).prop('href','../web/personalPhoneType?'+"type="+type);
         }
     });
 
@@ -118,12 +121,13 @@ function div_head_images(){
     var divImages = $(".div_head_images");
     $.ajax({
         type: "post",
-        url: "/api/base/v1/lsimage/imageType",
+        url: "/api/base/v1/lsimage/imageType?type=1",
         dataType: "json",
         success:function (result){
+            console.log(result);
             $.each(result,function(index,data){
                 var div_image = '<div  class="head_img head_img_width">' +
-                    '<img class="img_change" onclick="img_change(this)" src="'+data.url+'">' +
+                    '<img class="img_change" onclick="img_change(this)" src="/api/base/v1/lsimage/getImg?id='+data.id+'">' +
                     '</div>';
                 divImages.append(div_image);
             })
@@ -184,6 +188,29 @@ function update_confirm(){
             if(data.code == '200'){//success
                 location.reload();
             }
+        }
+    })
+}
+
+//init gengeralize record
+function gengeralizeMemberInit(){
+    $.ajax({
+        url: '/api/base/v1/member/findGeneralizeMemberList',
+        type: 'post',
+        dataType: "json",
+        success: function (list) {
+            var  ul = $(".ul_personal_lottery");
+            $.each(list,function(index,data){
+                var li = '<li>'+
+                    '<div>'+
+                    '<p><span class="span_title">'+data.memberName+'</span></p>'+
+                    '<p>'+
+                    '<span>'+data.email+'</span>'+
+                    '</p>'+
+                    '</div>'+
+                    '</li>';
+                ul.append(li);
+            })
         }
     })
 }

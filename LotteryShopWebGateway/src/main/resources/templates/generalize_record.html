@@ -20,6 +20,7 @@
 include("common.js.html"){}
 %>
 <script src="../js/portfolio_custom.js"></script>
+<script src="../js/lotteryshop/person_center.js"></script>
 <script>
     $(function(){
         $(".back").click(function(){
@@ -32,10 +33,6 @@ include("common.js.html"){}
                 viewH =$(this).height() - 90,//可见高度
                 contentH =$(this).get(0).scrollHeight,//内容高度
                 scrollTop =$(this).scrollTop();//滚动高度
-            console.log("viewH:"+viewH);
-            console.log("contentH:"+contentH);
-            console.log("scrollTop:"+scrollTop);
-            console.log("xxxxxxxx:"+scrollTop/(contentH -viewH));
             if(scrollTop/(contentH - viewH) >= 0.95){ //当滚动到距离底部5%时
                 var li = '<li>'+
                     '<div>'+
@@ -48,6 +45,10 @@ include("common.js.html"){}
                 $(".ul_personal_lottery").append(li);
             }
         });
+
+        gengeralizeMemberInit();
+
+
     })
     function getHeigh(){
         var window_height = document.documentElement.clientHeight;
@@ -55,8 +56,6 @@ include("common.js.html"){}
         console.log($(".base_head").clientHeight);
         $(".base_head").height(window_height-90);
     }
-
-
 
 </script>
 <style>
@@ -86,7 +85,7 @@ include("common.js.html"){}
 
     <div class="base_head card-1 card-1_scroll">
         <ul class="ul_personal_lottery">
-            <li>
+            <!--<li>
                 <div>
                     <p><span class="span_title">张三</span></p>
                     <p>
@@ -165,7 +164,7 @@ include("common.js.html"){}
                         <span>推广类型：三层推广</span>
                     </p>
                 </div>
-            </li>
+            </li>-->
         </ul>
     </div>
 

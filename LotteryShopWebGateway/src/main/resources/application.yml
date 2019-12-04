@@ -1,8 +1,8 @@
 # 服务配置
 server:
   port: 8080
-#  servlet:
-#    context-path: /CHJ
+  #servlet:
+    #context-path: /lottery
 # Sping配置
 spring:
   application:
@@ -71,6 +71,9 @@ zuul:
     api-e:
       path: /manage/**
       serviceId: manage-service
+  #sensitiveHeaders: "*"
+  sensitive-headers: "*"
+  add-host-header: false
 
 #security&oauth2 配置
 security:

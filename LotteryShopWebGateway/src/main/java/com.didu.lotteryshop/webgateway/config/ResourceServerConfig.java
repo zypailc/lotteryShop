@@ -22,7 +22,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http
                 .antMatcher("/**").authorizeRequests()
                 //允许通过的请求
-                .antMatchers("/web/**").permitAll()
+                .antMatchers("/web/auth**").permitAll()
                 .antMatchers("/static/**").permitAll()
                 .antMatchers("/images/**").permitAll()
                 .antMatchers("/js/**").permitAll()
@@ -35,8 +35,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/apiauthorization/**").permitAll()
                 .antMatchers("/manage/**").permitAll()
                 .antMatchers("/css/**").permitAll()
-                //TODO 这个请求在测试阶段不需要验证 上线需要验证
-                .antMatchers("/person/**").permitAll()
+                .antMatchers("/favicon**").permitAll()
+                .antMatchers("/web/person**").permitAll()
                 .anyRequest().authenticated()
                 //.and().formLogin().loginPage("/login").permitAll()
                 // .and().logout().permitAll()
@@ -51,4 +51,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //自定义authenticationEntryPoint，实现如果没有访问权限直接跳转到登录页。
         resources.authenticationEntryPoint(new AuthExceptionEntryPoint());
     }
+
+
 }

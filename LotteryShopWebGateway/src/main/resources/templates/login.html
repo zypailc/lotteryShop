@@ -63,7 +63,7 @@
 										<a class="a_color" href="./register">Register</a>
 									</button>
 									<div class="button_parent_div">
-										<span ><a class="a_color" href="./forgotPassword">Forgot Password</a></span>
+										<span ><a class="a_color" href="../web/authForgotPassword">Forgot Password</a></span>
 									</div>
 								</div>
 							</form>
@@ -96,15 +96,15 @@
 	<script type="text/javascript">
 		/*$(function () {
 			$(document).ajaxSend(function(e, xhr, options) {
-				////options.data.put({"access_token":"bae582fc-f5b5-4cad-83d4-2c821a4a6848"});
-				// var dataStr = options.data;
-				// if(dataStr){
-				// 	dataStr = dataStr+"&access_token="+"bae582fc-f5b5-4cad-83d4-2c821a4a6848";
-				// }else{
-				// 	dataStr = "access_token="+"bae582fc-f5b5-4cad-83d4-2c821a4a6848";
-				// }
-				// options.data = dataStr;
-				// xhr.setRequestHeader("access_token", "bae582fc-f5b5-4cad-83d4-2c821a4a6848");
+				options.data.put({"access_token":"bae582fc-f5b5-4cad-83d4-2c821a4a6848"});
+				 var dataStr = options.data;
+				 if(dataStr){
+				 	dataStr = dataStr+"&access_token="+"bae582fc-f5b5-4cad-83d4-2c821a4a6848";
+				 }else{
+				 	dataStr = "access_token="+"bae582fc-f5b5-4cad-83d4-2c821a4a6848";
+				 }
+				 options.data = dataStr;
+				 xhr.setRequestHeader("access_token", "bae582fc-f5b5-4cad-83d4-2c821a4a6848");
 			});
 		});*/
 
@@ -124,12 +124,22 @@
 		}*/
 		function login(){
 			$.ajax({
-				url:"/authservice/auth/oauth/token",
+				url:"${projectPath}/authservice/auth/oauth/token",
 				data:$('#reply_form').serializeArray(),
 				type:"post",
 				dataType:"json",
 				success:function(data){
-					window.location.href = "/loginSession?access_token="+data.access_token+"&accessToken="+data.access_token+"&rdirectUrl="+$('#rdirect_url').val();
+					/*$.ajax({
+						url:"${projectPath}/loginSession?access_token="+data.access_token+"&accessToken="+data.access_token+"&rdirectUrl="+$('#rdirect_url').val(),
+						type:"get",
+						success:function(data){
+							alert(data)
+						}
+					});*/
+					var a = $("<a>");
+					a.attr("href","${projectPath}/loginSession?access_token="+data.access_token+"&accessToken="+data.access_token+"&rdirectUrl="+$('#rdirect_url').val());
+					a[0].click();
+					//window.location.href = "${projectPath}/loginSession?access_token="+data.access_token+"&accessToken="+data.access_token+"&rdirectUrl="+$('#rdirect_url').val();
 				},
 				error:function(){
 					alert("User or password error!")

@@ -12,6 +12,9 @@
 %>
 <link rel="stylesheet" type="text/css" href="../styles/main_styles.css">
 <link rel="stylesheet" type="text/css" href="../styles/responsive.css">
+<link rel="stylesheet" type="text/css" href="../styles/blog_styles.css">
+<link rel="stylesheet" type="text/css" href="../styles/blog_responsive.css">
+<link rel="stylesheet" type="text/css" href="../plugins/colorbox/colorbox.css">
 </head>
 <!-- 公共js -->
 <%
@@ -120,28 +123,19 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="div_characteristicProject row features_row">
+				<div class="col-lg-12">
+					<div class="blog_container">
+						<div class="post_container" data-masonry='{ "itemSelector": ".card", "gutter": 30 }'>
 
-			</div>
-		</div>
-	</div>
-	<!-- 资金分配 -->
-	<div class="features">
-		<div class="container">
-			<div class="row">
-				<div class="col text-center">
-
-					<div class="section_title">
-						<h1>Modern features</h1>
+						</div>
 					</div>
-
 				</div>
 			</div>
-			<div class="div_allocationFunds row features_row">
-
-			</div>
 		</div>
 	</div>
+
 	<!-- 玩法列表 -->
 	<div class="services">
 		<div class="container">
@@ -164,7 +158,7 @@
 						<div class="services_item_inner">
 							<div class="service_item_content">
 								<div class="button service_item_button trans_200">
-									<a href="./lotteryServices" class="trans_200">discover more</a>
+									<a href="../web/authLotteryServices" class="trans_200">discover more</a>
 								</div>
 							</div>
 						</div>
@@ -297,12 +291,13 @@
 </body>
 <script>
 	$(function(){
-		//initialize
-		// query the basic information of the page
-		//for language
+
+		//存储推广人员的Id，推广人员Id存储在session有效期24小时
+		var generalizePersonId = "${generalizePersonId!''}";
+		setCookie("generalizePersonId",generalizePersonId,24);
 		var languageType = getCookie("somoveLanguage") || "en";
 		$.ajax({
-			url:'/apiauthorization/base/authorization/v1/baseInfo/infoContent',
+			url:'${projectPath}/apiauthorization/base/authorization/v1/baseInfo/infoContent',
 			type:'get',
 			data:{"languageType":languageType},
 			dataType:"json",
@@ -324,71 +319,18 @@
 				var characteristicProject_html = "";
 				var characteristicProject_obj = data.characteristicProject;
 				var left = "";
-				var img = "";
-				var right = "";
-				img = '<div class="col-lg-4 d-flex flex-column align-items-center order-lg-2 order-1">'+
-						'<div class="features_image">'+
-						'<img src="../images/js.jpg" alt="">'+
+				$.each(characteristicProject_obj,function(index,data){
+					left += '<div class="card trans_200">'+
+						'<img class="card-img-top" src="'+(data.url || "")+'">'+
+						'<div class="card-body">'+
+						'<div class="card-title"><a href="blog_post.html">'+data.title+'</a></div>'+
+						'<div class="card-text">'+
+							data.content +
+						'</div>'+
 						'</div>'+
 						'</div>';
-				$.each(characteristicProject_obj,function(index,data){
-					if(index%2 == 0){
-						left +=
-								'<div class="features_item">'+
-								'<h2>'+data.title+'</h2>'+
-								'<p>'+data.content+'</p>'+
-								'</div>';
-					}
-					if(index%2 == 1){
-						right +=
-						'<div class="features_item">'+
-						'<h2>'+data.title+'</h2>'+
-						'<p>'+data.content+'</p>'+
-						'</div>';
-					}
 				})
-				left = '<div class="col-lg-4 text-lg-right features_col order-lg-1 order-2">'+ left + '</div>';
-				right = '<div class="col-lg-4 features_col order-lg-3 order-3">'+ right + '</div>';
-
-				characteristicProject_html = left + img + right;
-				characteristicProject.append(characteristicProject_html);
-				//资金分配
-				var allocationFunds = $(".div_allocationFunds");
-				var allocationFunds_html = "";
-				var allocationFunds_obj = data.allocationFunds;
-				var subscript = Math.ceil(allocationFunds_obj.length/2);
-				left = "",img = "",right = "";
-				img = '<div class="col-lg-4 d-flex flex-column align-items-center order-lg-2 order-1">'+
-					'<div class="features_image">'+
-					'<img src="../images/fp.jpg" alt="">'+
-					'</div>'+
-					'</div>';
-				$.each(allocationFunds_obj,function(index,data){
-					if(index%2 == 0){
-						left +=
-								'<div class="features_item">'+
-								'<h2>'+data.title+'</h2>'+
-								'<p>'+data.content+'</p>'+
-								'</div>';
-					}
-					if(index%2 == 1){
-						right +=
-								'<div class="features_item">'+
-								'<h2>'+data.title+'</h2>'+
-								'<p>'+data.content+'</p>'+
-								'</div>';
-					}
-				})
-				left = '<div class="col-lg-4 features_col order-lg-3 order-3">'+ left + '</div>';
-				right = '<div class="col-lg-4 features_col order-lg-3 order-3">'+ right + '</div>';
-				allocationFunds_html = img + left + right;
-				allocationFunds.append(allocationFunds_html);
-				//项目白皮书
-				var whiteBook = data.whiteBook;
-				$.each(whiteBook,function(index,data){
-					$(".div_white_book").find("h2").html(data.title);
-					$(".div_white_book").find("p").html(data.content);
-				})
+                characteristicProject.html(left);
 			}
 		})
 	})

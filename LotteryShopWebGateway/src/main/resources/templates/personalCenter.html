@@ -134,7 +134,19 @@ include("common.js.html"){}
 	}
 </style>
 <script>
-
+	$(function(){
+		//init gengeralize record
+		gengeralizeMemberInit();
+		/*$(document).ajaxSend(function(e, xhr, options) {
+			var dataStr = options.data;
+			if(dataStr){
+				dataStr = dataStr+"&access_token="+"${access_token!''}";
+			}else{
+				dataStr = "access_token="+"${access_token!''}";
+			}
+			options.data = dataStr;
+		});*/
+	})
 </script>
 <body class="body_top">
 
@@ -633,7 +645,7 @@ include("common.js.html"){}
 			<div class="card generalize">
 				<div class="wallet_left">
 					<div class="wallet_extract">
-						<img src="../images/person.jpg">
+						<img src="../api/base/v1/member/generalizeInit">
 					</div>
 					<div class="wallet_extract">
 						<p>推广说明：</p>
@@ -648,95 +660,7 @@ include("common.js.html"){}
 			<div class="card card-1 card-1_scroll generalizeRecord">
 				<div class="card-body">
 					<ul class="ul_personal_lottery">
-						<li>
-							<div>
-								<p><span class="span_title">张三</span></p>
-								<p>
-									<span>推广类型：三层推广</span>
-								</p>
-							</div>
-						</li>
-						<hr style="height: 1px; border: none; border-top: 1px dashed #ddd;" />
-						<li>
-							<div>
-								<p><span class="span_title">张三</span></p>
-								<p>
-									<span>推广类型：三层推广</span>
-								</p>
-							</div>
-						</li>
-						<hr style="height: 1px; border: none; border-top: 1px dashed #ddd;" />
-						<li>
-							<div>
-								<p><span class="span_title">张三</span></p>
-								<p>
-									<span>推广类型：三层推广</span>
-								</p>
-							</div>
-						</li>
-						<hr style="height: 1px; border: none; border-top: 1px dashed #ddd;" />
-						<li>
-							<div>
-								<p><span class="span_title">张三</span></p>
-								<p>
-									<span>推广类型：三层推广</span>
-								</p>
-							</div>
-						</li>
-						<hr style="height: 1px; border: none; border-top: 1px dashed #ddd;" />
-						<li>
-							<div>
-								<p><span class="span_title">张三</span></p>
-								<p>
-									<span>推广类型：三层推广</span>
-								</p>
-							</div>
-						</li>
-						<hr style="height: 1px; border: none; border-top: 1px dashed #ddd;" />
-						<li>
-							<div>
-								<p><span class="span_title">张三</span></p>
-								<p>
-									<span>推广类型：三层推广</span>
-								</p>
-							</div>
-						</li>
-						<hr style="height: 1px; border: none; border-top: 1px dashed #ddd;" />
-						<li>
-							<div>
-								<p><span class="span_title">张三</span></p>
-								<p>
-									<span>推广类型：三层推广</span>
-								</p>
-							</div>
-						</li>
-						<hr style="height: 1px; border: none; border-top: 1px dashed #ddd;" />
-						<li>
-							<div>
-								<p><span class="span_title">张三</span></p>
-								<p>
-									<span>推广类型：三层推广</span>
-								</p>
-							</div>
-						</li>
-						<hr style="height: 1px; border: none; border-top: 1px dashed #ddd;" />
-						<li>
-							<div>
-								<p><span class="span_title">张三</span></p>
-								<p>
-									<span>推广类型：三层推广</span>
-								</p>
-							</div>
-						</li>
-						<hr style="height: 1px; border: none; border-top: 1px dashed #ddd;" />
-						<li>
-							<div>
-								<p><span class="span_title">张三</span></p>
-								<p>
-									<span>推广类型：三层推广</span>
-								</p>
-							</div>
-						</li>
+
 
 					</ul>
 				</div>
@@ -826,11 +750,10 @@ include("common.js.html"){}
 					<div class="wallet_extract wallet_extract_wallet">
 						<%
 							if(has(loginUser)){
-								if(loginUser.bAddress != ''){
 						%>
 								<div class="wallet_address_self">
 									<p><span class="title_span_1">wallet address</span></p>
-									<p><span>${loginUser.bAddress!"error"}</span></p>
+									<p><span>${loginUser.PAddress!"error"}</span></p>
 									<input class="input_class_2 wallet_password_input" type="text" name="update_bAddress" placeholder="wallet address">
 									<div class="div_btn">
 										<a class="wallet_button button_display" href="#" onclick="update_confirm()">Update</a>
@@ -846,7 +769,6 @@ include("common.js.html"){}
 									</div>
 								</div>
 						<%
-								}
 							}
 						%>
 					</div>

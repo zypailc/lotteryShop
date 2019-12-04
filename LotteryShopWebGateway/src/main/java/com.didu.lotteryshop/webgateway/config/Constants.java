@@ -9,4 +9,13 @@ package com.didu.lotteryshop.webgateway.config;
 public class Constants {
     /** 登录成功token */
     public static final String SESSION_LOGIN_TOKEN = "session_login_token";
+
+    /** 跳转主页的地址 */
+    public static final String INDEX_URL = "authIndex";
+    public static final String INDEX = "index";
+
+
+    /** 跳转竞彩中心的地址 */
+    public static  final String PLAYTHELOTTERY_URL = "authPlayTheLottery";
+    public static  final String PLAYTHELOTTERY = "playTheLottery";
 }
