@@ -24,11 +24,11 @@ public class PayBonusLotteryATask {
     /** 每3分钟执行 */
     @Scheduled(cron = "0 0/3 * * * ?")//默认是fixedDelay 上一次执行完毕时间后执行下一轮
     private void configureTasks() {
-        //开始执行转账定时任务！
+        //开始执行发放奖金定时任务！
         logger.info("==============================☆☆ Start execution PayBonusLotteryA timing task! ☆☆==============================================");
         //发放奖金
         lotteryAPayBonusService.LotteryAPayBonus();
-        //执行转账定时任务结束！
+        //执行发放奖金定时任务结束！
         logger.info("==============================☆☆ End execution PayBonusLotteryA timing task!   ☆☆==============================================");
     }
 }
