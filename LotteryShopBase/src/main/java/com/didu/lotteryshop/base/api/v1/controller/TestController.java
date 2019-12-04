@@ -1,5 +1,6 @@
 package com.didu.lotteryshop.base.api.v1.controller;
 
+import com.didu.lotteryshop.base.controller.BaseBaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/v1/authorization/test")
-public class TestController {
+public class TestController extends BaseBaseController {
     /**
      * 测试json数据
      * @return
