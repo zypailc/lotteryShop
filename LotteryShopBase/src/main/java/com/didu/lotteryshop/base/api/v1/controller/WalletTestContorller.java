@@ -1,6 +1,6 @@
 package com.didu.lotteryshop.base.api.v1.controller;
 
-import com.didu.lotteryshop.base.service.form.impl.WalletTestService;
+import com.didu.lotteryshop.base.service.WalletTestService;
 import com.didu.lotteryshop.base.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

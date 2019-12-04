@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.base.service.form.impl;
+package com.didu.lotteryshop.base.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;

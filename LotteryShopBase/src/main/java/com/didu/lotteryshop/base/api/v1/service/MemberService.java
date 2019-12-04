@@ -37,8 +37,6 @@ public class MemberService extends BaseService {
     @Autowired
     private MailService mailServiceImp;
     @Autowired
-    private BaseService baseService;
-    @Autowired
     private EsLsbwalletServiceImpl esLsbwalletService;
     @Autowired
     private EsDlbwalletServiceImpl esDlbwalletService;
@@ -142,11 +140,6 @@ public class MemberService extends BaseService {
         member.setId(CodeUtil.getUuid());
         member.setSecretKey(secretKey);
         member.setCreateTime(new Date());
-        /*//判断用户是否有推荐用户 如果没有设定为初始用户
-        //if(member.getGeneralizeMemberType() == null ){
-            //用户怎是不设置推广层数
-            //member.setGeneralizeMemberType(Member.generalizeMemberType_1);
-        //}*/
         mailServiceImp.sendSimpleMail(member,"new password",password);
         //保存用户信息
         boolean b = memberServiceImp.insert(member);
