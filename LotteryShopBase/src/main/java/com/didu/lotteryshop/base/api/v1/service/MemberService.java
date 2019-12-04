@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.didu.lotteryshop.base.service.BaseBaseService;
 import com.didu.lotteryshop.base.service.MailService;
-import com.didu.lotteryshop.base.service.form.impl.MemberServiceImp;
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.EsEthwallet;
 import com.didu.lotteryshop.common.entity.Member;

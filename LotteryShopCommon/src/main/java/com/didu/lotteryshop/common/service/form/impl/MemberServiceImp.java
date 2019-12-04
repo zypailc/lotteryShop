@@ -1,8 +1,8 @@
-package com.didu.lotteryshop.base.service.form.impl;
+package com.didu.lotteryshop.common.service.form.impl;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.didu.lotteryshop.base.mapper.MemberMapper;
 import com.didu.lotteryshop.common.entity.Member;
+import com.didu.lotteryshop.common.mapper.MemberMapper;
 import org.springframework.stereotype.Service;
 
 

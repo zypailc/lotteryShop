@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.base.mapper;
+package com.didu.lotteryshop.common.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.didu.lotteryshop.common.entity.Member;
