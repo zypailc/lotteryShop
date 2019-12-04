@@ -56,6 +56,9 @@ public class LsImage extends Model<LsImage> {
     private String localhostUrl;
     @TableField("file_name")
     private String fileName;
+    /**
+     * 图片的二进制码
+     */
     @TableField("byte_data")
     private byte [] byteData;
 

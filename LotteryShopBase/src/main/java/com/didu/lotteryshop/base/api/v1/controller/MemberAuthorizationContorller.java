@@ -1,9 +1,16 @@
 package com.didu.lotteryshop.base.api.v1.controller;
 
-import com.didu.lotteryshop.base.api.v1.service.form.impl.MemberServiceImp;
+import com.didu.lotteryshop.base.api.v1.service.MemberService;
+import com.didu.lotteryshop.base.service.MailService;
+import com.didu.lotteryshop.base.service.form.impl.MemberServiceImp;
 import com.didu.lotteryshop.base.controller.BaseController;
+import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.enumeration.ResultCode;
+import com.didu.lotteryshop.common.service.form.impl.EsDlbaccountsServiceImpl;
+import com.didu.lotteryshop.common.service.form.impl.EsDlbwalletServiceImpl;
+import com.didu.lotteryshop.common.service.form.impl.EsLsbwalletServiceImpl;
+import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
 import com.didu.lotteryshop.common.utils.EmailUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import org.apache.ibatis.session.SqlSession;
@@ -22,9 +29,8 @@ public class MemberAuthorizationContorller extends BaseController {
 
 
     @Autowired
-    private MemberServiceImp memberService;
-    @Autowired
-    private SqlSession sqlSession;
+    private MemberService memberService;
+
 
     /**
      * 注册账号

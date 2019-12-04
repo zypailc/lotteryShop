@@ -1,6 +1,5 @@
-package com.didu.lotteryshop.base.api.v1.service.form.impl;
+package com.didu.lotteryshop.base.service;
 
-import com.didu.lotteryshop.base.api.v1.service.form.MailService;
 import com.didu.lotteryshop.common.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
@@ -11,10 +10,8 @@ import java.net.Socket;
 import java.util.Base64;
 
 @Service
-public class MailServiceImp implements MailService {
+public class MailService {
 
-    /*@Autowired
-    private JavaMailSender javaMailSender;*/
     @Autowired
     private MailProperties mailProperties;
 
@@ -31,7 +28,6 @@ public class MailServiceImp implements MailService {
     private PrintWriter printWriter;
 
 
-    @Override
     public void sendSimpleMail(Member member, String subject, String text) {
         try
         {

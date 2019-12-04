@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.base.api.v1.service.form;
+package com.didu.lotteryshop.base.service.form;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.didu.lotteryshop.common.entity.Member;

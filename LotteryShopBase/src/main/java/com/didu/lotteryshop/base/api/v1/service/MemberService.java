@@ -2,13 +2,15 @@ package com.didu.lotteryshop.base.api.v1.service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.didu.lotteryshop.base.api.v1.service.form.impl.MemberServiceImp;
+import com.didu.lotteryshop.base.service.MailService;
+import com.didu.lotteryshop.base.service.form.impl.MemberServiceImp;
 import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.EsEthwallet;
 import com.didu.lotteryshop.common.entity.Member;
-import com.didu.lotteryshop.common.service.form.impl.EsEthwalletServiceImpl;
+import com.didu.lotteryshop.common.service.form.impl.*;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
+import com.didu.lotteryshop.common.utils.CodeUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
@@ -32,8 +34,21 @@ public class MemberService extends BaseService {
     private MemberServiceImp memberServiceImp;
     @Autowired
     private EsEthwalletServiceImpl esEthwalletService;
+    @Autowired
+    private MailService mailServiceImp;
+    @Autowired
+    private BaseService baseService;
+    @Autowired
+    private EsLsbwalletServiceImpl esLsbwalletService;
+    @Autowired
+    private EsDlbwalletServiceImpl esDlbwalletService;
+    @Autowired
+    private EsDlbaccountsServiceImpl esDlbaccountsService;
+    @Autowired
+    private SysConfigServiceImpl sysConfigService;
 
     /**
+     * 绑定钱包
      * @param userId 用户Id
      * @param paymentCode
      * @param bAddress
@@ -103,6 +118,97 @@ public class MemberService extends BaseService {
         wrapper.eq("generalize_member_id",userId);
         List<Map<String,Object>> list = memberServiceImp.selectMaps(wrapper);
         return  list;
+    }
+
+    public ResultUtil register(Member member) {
+        //判断邮箱是否被注册
+        Wrapper wrapper = new EntityWrapper();
+        wrapper.eq("email",member.getEmail());
+        Member m = memberServiceImp.selectOne(wrapper);
+        if(m != null && m.getEmail() != null){
+            return ResultUtil.errorJson("The email address has been registered !");
+        }
+        //随机生成一个秘钥jsonObjectjsonObject
+        String secretKey = Constants.KEY_TOW;
+        //随机生成随机密码
+        String password = CodeUtil.getCode(18);
+        try {
+            //秘钥和密码加密生成暗文
+            String ciphertext = AesEncryptUtil.encrypt_code(password,secretKey);
+            member.setPassword(ciphertext);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        member.setId(CodeUtil.getUuid());
+        member.setSecretKey(secretKey);
+        member.setCreateTime(new Date());
+        /*//判断用户是否有推荐用户 如果没有设定为初始用户
+        //if(member.getGeneralizeMemberType() == null ){
+            //用户怎是不设置推广层数
+            //member.setGeneralizeMemberType(Member.generalizeMemberType_1);
+        //}*/
+        mailServiceImp.sendSimpleMail(member,"new password",password);
+        //保存用户信息
+        boolean b = memberServiceImp.insert(member);
+        if(b){
+            //生成平台币钱包
+            b = esLsbwalletService.initInsert(member.getId()) != null;
+            //生成待领币钱包
+            if(b)
+                b = esDlbwalletService.initInsert(member.getId()) != null;
+            //注册送代领币
+            if(b)
+                b = esDlbaccountsService.addInSuccess(member.getId(),
+                        EsDlbaccountsServiceImpl.DIC_TYPE_REGISTRATIONINCENTIVES,
+                        sysConfigService.getSysConfig().getRegisterDlb(),
+                        member.getId());
+            if(b)
+                return ResultUtil.successJson("Registered successfully , please log in !");
+        }
+        return ResultUtil.errorJson("Registered error , please operate again !");
+    }
+
+    /**
+     * 重置密码
+     * @param email
+     * @return
+     */
+    public ResultUtil forgotPassword(String email){
+        Member member = new Member();
+        member.setEmail(email);
+        //随机生成随机密码
+        String password = CodeUtil.getCode(18);
+        try {
+            //秘钥和密码加密生成暗文
+            String ciphertext = AesEncryptUtil.encrypt_code(password,Constants.KEY_TOW);
+            member.setPassword(ciphertext);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("email",email);
+        Wrapper wrapper = new EntityWrapper<Member>();
+        wrapper.allEq(map);
+        boolean b = memberServiceImp.update(member,wrapper);
+        if(b) {
+            mailServiceImp.sendSimpleMail(member, "new password", password);
+            return ResultUtil.successJson("Your new password has been sent to your email !");
+        }
+        return  ResultUtil.errorJson("error , please operate again !");
+    }
+
+    /**
+     * 修改头像
+     * @param member
+     * @return
+     */
+    public ResultUtil headPortrait(Member member){
+        boolean flag = memberServiceImp.updateById(member);
+        if(flag) {
+            return ResultUtil.successJson("modify successfully !");
+        }else {
+            return ResultUtil.successJson("fail to modify !");
+        }
     }
 
 }

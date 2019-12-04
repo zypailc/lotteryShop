@@ -1,8 +1,7 @@
-package com.didu.lotteryshop.base.api.v1.mapper;
+package com.didu.lotteryshop.base.mapper;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.didu.lotteryshop.common.entity.Member;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p>
@@ -14,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 public interface MemberMapper extends BaseMapper<Member> {
 
-    Member findByMemberName(String memberName);
+    //Member findByMemberName(String memberName);
 
 }
