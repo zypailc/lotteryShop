@@ -94,8 +94,7 @@ public class SysTaskServiceImpl extends ServiceImpl<SysTaskMapper, SysTask> impl
             SysTask sysTask = this.findLowerFirstConsumption();
             if (sysTask.getStatus() == 1) {
                 Member m = memberService.selectById(memberId);
-                Member pm = memberService.selectById(m.getGeneralizeMemberId());
-                bool = esDlbaccountsService.addInSuccess(pm.getId(), EsDlbaccountsServiceImpl.DIC_TYPE_LOWERFIRSTCONSUMPTION, sysTask.getDlb(), "-1");
+                bool = esDlbaccountsService.addInSuccess(m.getGeneralizeMemberId(), EsDlbaccountsServiceImpl.DIC_TYPE_LOWERFIRSTCONSUMPTION, sysTask.getDlb(), "-1");
             } else {
                 bool = true;
             }
