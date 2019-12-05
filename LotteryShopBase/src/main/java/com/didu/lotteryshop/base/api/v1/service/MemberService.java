@@ -40,10 +40,7 @@ public class MemberService extends BaseBaseService {
     @Autowired
     private EsDlbwalletServiceImpl esDlbwalletService;
     @Autowired
-    private EsDlbaccountsServiceImpl esDlbaccountsService;
-    @Autowired
-    private SysConfigServiceImpl sysConfigService;
-
+    private SysTaskServiceImpl sysTaskService;
     /**
      * 绑定钱包
      * @param userId 用户Id
@@ -150,10 +147,7 @@ public class MemberService extends BaseBaseService {
                 b = esDlbwalletService.initInsert(member.getId()) != null;
             //注册送代领币
             if(b)
-                b = esDlbaccountsService.addInSuccess(member.getId(),
-                        EsDlbaccountsServiceImpl.DIC_TYPE_REGISTRATIONINCENTIVES,
-                        sysConfigService.getSysConfig().getRegisterDlb(),
-                        member.getId());
+               b = sysTaskService.TaskRegister(member.getId());
             if(b)
                 return ResultUtil.successJson("Registered successfully , please log in !");
         }

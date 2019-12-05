@@ -34,6 +34,8 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
     private BaseService baseService;
     @Autowired
     private MemberServiceImpl memberService;
+    @Autowired
+    private SysTaskServiceImpl sysTaskService;
 
     /** dic_type 在sys_dic字段值*/
     public static String DIC_TYPE = "ethaccounts_dictype";
@@ -139,6 +141,10 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
                 if(status == STATUS_SUCCESS){
                     //成功，直接减余额
                     balance = esEthwalletService.updateBalance(amount,memberId,false);
+                    //第一次消费奖励
+                    sysTaskService.TaskFirstConsumption(memberId);
+                    //第一次消费直属上级奖励
+                    sysTaskService.TaskLowerFirstConsumption(memberId);
                 }else if(status == STATUS_BEINGPROCESSED){
                     //处理中，冻结金额
                     balance = esEthwalletService.updateAddFreeze(amount,memberId);
@@ -221,6 +227,10 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
                 if(balance == null) return bool;
                 balance =  esEthwalletService.updateSubtractFreeze(esEthaccounts.getAmount(),memberId,true);
                 if(balance == null) return bool;
+                //第一次消费奖励
+                sysTaskService.TaskFirstConsumption(memberId);
+                //第一次消费直属上级奖励
+                sysTaskService.TaskLowerFirstConsumption(memberId);
             }else if(status == STATUS_FAIL){
                 balance =  esEthwalletService.updateSubtractFreeze(esEthaccounts.getAmount(),memberId,false);
                 if(balance == null) return bool;
@@ -293,4 +303,24 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
         }
         return members;
     }
+
+    /**
+     * 判断会议是否是第一次消费
+     * @param memberId
+     * @return
+     */
+    public boolean isFirstConsumption(String memberId){
+        boolean bool = false;
+        Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
+        wrapper.eq("memberId",memberId)
+                .and().eq("type",TYPE_OUT)
+                .and().eq("status",STATUS_SUCCESS)
+                .and("dic_type <> ?",DIC_TYPE_DRAW);
+        int c =  super.selectCount(wrapper);
+        if(c == 0){
+            bool = true;
+        }
+        return bool;
+    }
+
 }

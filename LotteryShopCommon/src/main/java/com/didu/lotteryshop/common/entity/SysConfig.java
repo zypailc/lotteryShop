@@ -43,11 +43,6 @@ public class SysConfig extends Model<SysConfig> {
 	 */
 	@TableField("lsb_to_eth")
 	private BigDecimal lsbToEth;
-	/**
-	 * 注册送xx待领币
-	 */
-	@TableField("register_dlb")
-	private BigDecimal registerDlb;
 
 	public Integer getId() {
 		return id;
@@ -89,14 +84,6 @@ public class SysConfig extends Model<SysConfig> {
 		this.lsbToEth = lsbToEth;
 	}
 
-	public BigDecimal getRegisterDlb() {
-		return registerDlb;
-	}
-
-	public void setRegisterDlb(BigDecimal registerDlb) {
-		this.registerDlb = registerDlb;
-	}
-
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -110,7 +97,6 @@ public class SysConfig extends Model<SysConfig> {
 			", gasLimit=" + gasLimit +
 			", ethToLsb=" + ethToLsb +
 			", lsbToEth=" + lsbToEth +
-			", registerDlb=" + registerDlb +
 			"}";
 	}
 }
