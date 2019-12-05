@@ -6,12 +6,10 @@ import com.didu.lotteryshop.common.entity.LsImage;
 import com.didu.lotteryshop.common.mapper.LsImageMapper;
 import com.didu.lotteryshop.common.utils.FileUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
-import jnr.ffi.annotations.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +65,7 @@ public class LsImageService {
         byte [] imgByte = FileUtil.getFileByte(request);
         LsImage lsImage = new LsImage();
         lsImage.setId(Integer.parseInt(qRbackgroundId));
-        lsImage.setFileName("QR_Background");
+        //lsImage.setFileName("QR_Background");
         lsImage.setByteData(imgByte);
         int i = lsImageMapper.updateById(lsImage);
         if(i > 0){

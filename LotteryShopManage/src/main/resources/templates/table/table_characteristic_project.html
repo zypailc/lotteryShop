@@ -197,10 +197,12 @@
                     return "No sorting";
                 }
             },{
-                field:"fileName",
+                field:"imgId",
                 title:"icon",
                 formatter:function(value, row, index){
-                    return "<img src='../../file/fileImg?fileName="+(value || "")+"&type=head' style='width: 100px;height: 100px;'>";
+                    console.log(row);
+                    console.log(value);
+                    return "<img src='../../lsImage/getImg?id="+(value || "")+"'>";
                 }
             },{
                 field:"operation",

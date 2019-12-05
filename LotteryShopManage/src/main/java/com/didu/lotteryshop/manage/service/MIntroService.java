@@ -46,7 +46,7 @@ public class MIntroService {
             fild += " ,m_"+s+".title as title_" + s + " , m_"+s+".content as content_"+s;
             table += " left join intro_"+s+" m_" + s + " on (mi_.language_id = m_"+s+".id) ";
         }
-        sql = "select mi_.id,li_.file_name as fileName ,mi_.sort "+fild+" from m_intro mi_" +
+        sql = "select mi_.id,li_.file_name as fileName ,li_.id as imgId,mi_.sort "+fild+" from m_intro mi_" +
                 " left join ls_image li_ on (mi_.ls_image_id = li_.id) " + table + " where mi_.type = " + type;
         List<Map<String,Object>> mIntroList = sqlMapper.selectList(sql);
         return  mIntroList;

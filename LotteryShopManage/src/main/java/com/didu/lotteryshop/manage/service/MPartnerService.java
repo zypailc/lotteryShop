@@ -71,29 +71,23 @@ public class MPartnerService {
     }
 
     public Integer save(String linkAddress, HttpServletRequest request,Integer type){
-        List<Map<String, Object>> list = FileUtil.fileUpload(request, FileUtil.FILE_PATH_PARTNER);
-        if (list != null && list.size() > 0) {
-            for (Map<String,Object> map:list ) {
-                LsImage lsImage = new LsImage();
-                lsImage.setType(2);
-                lsImage.setUrl("../images/partner/"+map.get("fileName"));
-                lsImage.setLocalhostUrl(map.get("localhost").toString());
-                lsImage.setFileName(map.get("fileName").toString());
-                Integer i = lsImageMapper.insert(lsImage);
-                if(i < 1){
-                    return -1;
-                }
-                MPartner mPartner = new MPartner();
-                mPartner.setLinkAddress(linkAddress);
-                mPartner.setLsImageId(lsImage.getId().toString());
-                mPartner.setCreateTime(new Date());
-                mPartner.setType(type);
-                i = mPartnerMapper.insert(mPartner);
-                if(i < 1){
-                    return -1;
-                }
+        byte[] img = FileUtil.getFileByte(request);
+            LsImage lsImage = new LsImage();
+            lsImage.setType(2);
+            lsImage.setByteData(img);
+            Integer i = lsImageMapper.insert(lsImage);
+            if(i < 1){
+                return -1;
             }
-        }
+            MPartner mPartner = new MPartner();
+            mPartner.setLinkAddress(linkAddress);
+            mPartner.setLsImageId(lsImage.getId().toString());
+            mPartner.setCreateTime(new Date());
+            mPartner.setType(type);
+            i = mPartnerMapper.insert(mPartner);
+            if(i < 1){
+                return -1;
+            }
         return 1;
     }
 }

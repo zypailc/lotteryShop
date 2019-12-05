@@ -115,12 +115,19 @@ public class FileUtil {
         List<byte[]> list = new ArrayList<>();
         InputStream in = null;
         ByteArrayOutputStream bos = null;
+        String fileName = "";
         try {
             Collection<Part> parts = request.getParts();
             if (parts.size() > 0) {
                 for (Part part : parts) {
-                    byte[] buffer = part(part);
-                    list.add(buffer);
+                    String header = part.getHeader("content-disposition");
+                    if(header.indexOf("filename") != -1) {
+                        fileName = getFileName(header);
+                        if (fileName != null && !"".equals(fileName)) {
+                            byte[] buffer = part(part);
+                            list.add(buffer);
+                        }
+                    }
                 }
             }
         } catch (IOException e) {

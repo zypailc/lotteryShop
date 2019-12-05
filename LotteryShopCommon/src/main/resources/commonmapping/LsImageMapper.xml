@@ -6,8 +6,6 @@
     <resultMap id="BaseResultMap" type="com.didu.lotteryshop.common.entity.LsImage">
         <id column="id" property="id" />
         <result column="type" property="type" />
-        <result column="url" property="url" />
-        <result column="localhost_url" property="localhostUrl" />
         <result column="byte_data" property="byteData" />
     </resultMap>
 

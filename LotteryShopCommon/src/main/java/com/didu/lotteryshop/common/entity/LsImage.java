@@ -44,19 +44,6 @@ public class LsImage extends Model<LsImage> {
      */
     private Integer type;
     /**
-     * 图片地址
-     */
-    private String url;
-
-    /**
-     * 图片保存的本地地址
-     * @return
-     */
-    @TableField("localhost_url")
-    private String localhostUrl;
-    @TableField("file_name")
-    private String fileName;
-    /**
      * 图片的二进制码
      */
     @TableField("byte_data")
@@ -78,29 +65,6 @@ public class LsImage extends Model<LsImage> {
         this.type = type;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getLocalhostUrl() {
-        return localhostUrl;
-    }
-
-    public void setLocalhostUrl(String localhostUrl) {
-        this.localhostUrl = localhostUrl;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
 
     public byte[] getByteData() {
         return byteData;
@@ -120,9 +84,6 @@ public class LsImage extends Model<LsImage> {
         return "LsImage{" +
         ", id=" + id +
         ", type=" + type +
-        ", url=" + url +
-        ", localhostUrl=" + localhostUrl +
-        ", fileName=" + fileName +
         "}";
     }
 }

@@ -22,6 +22,8 @@ zuul:
   ignored-services: '*'
   #排除不规则的API
   ignoredPatterns: /**/api*/**
+  ignored-headers: '*'
+  add-host-header: true
   routes:
     #wallet-service: /ethwallet/**
     #base-service: /base/**
@@ -31,6 +33,119 @@ zuul:
     api-b:
       path: /ethwallet/**
       serviceId: allet-service
+  #sensitive-headers: "*"
+  #add-host-header: false
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #security&oauth2 配置
 security:

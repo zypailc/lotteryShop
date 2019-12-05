@@ -14,7 +14,7 @@
 
     <!-- java.util.List BaseResultMap-->
     <select id="findPartnerList" parameterType="java.lang.String" resultType="java.util.Map">
-        select mp_.id as id,mp_.link_address as linkAddress,li_.url as viewUrl,li_.localhost_url as localhostUrl,li_.file_name as fileName,sort
+        select mp_.id as id,mp_.link_address as linkAddress,li_.url as viewUrl,li_.localhost_url as localhostUrl,li_.file_name as fileName,li_.id as imgId,sort
         from m_partner mp_
         left join ls_image li_ on (mp_.ls_image_id = li_.id)
         where mp_.type = #{type}

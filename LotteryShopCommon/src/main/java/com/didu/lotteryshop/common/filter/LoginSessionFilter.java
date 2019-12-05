@@ -51,6 +51,19 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                 //登陆后记录的用户名
                 String user_name = (String) httpServletRequest.getSession().getAttribute(Constants.LOGIN_SESSION_KEY);
 
+                if(httpServletRequest.getRequestURI().indexOf("generalizeInit") > 0){
+                    System.out.println("xxxxx:"+httpServletRequest.getRequestURI().indexOf("generalizeInit"));
+                    String token = httpServletRequest.getSession().getAttribute("session_login_token") == null ? "":httpServletRequest.getSession().getAttribute("session_login_token").toString();
+                }
+                //证明是页面请求
+                String token = httpServletRequest.getSession().getAttribute("session_login_token") == null ? "":httpServletRequest.getSession().getAttribute("session_login_token").toString();
+                if(token == null || "".equals(token)) {
+                    String[] map =  httpServletRequest.getParameterMap().get("access_token");
+                    if(map != null) {
+                        httpServletRequest.getSession().setAttribute("session_login_token", map[0]);
+                    }
+                }
+
                 Map<String, Object> map = null;
                 LoginUser loginUser = null;
                 //判断用户 如果没有存在或者最新登陆的用户和登陆后记录的用户不匹配 重新查询用户的信息 存入session

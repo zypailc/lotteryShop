@@ -140,17 +140,14 @@
             $(".table_partner").bootstrapTable({
                 url: '../../mPartner/getExternalList',        // 表格数据来源
                 columns: [{
-                    field: 'fileName',
+                    field: 'imgId',
                     title: 'LOGO',
                     formatter: function (value, row, index){
-                        return "<img src='../../file/fileImg?fileName="+(value || "")+"&type=partner'>";
+                        return "<img src='../../lsImage/getImg?id="+(value || "")+"'>";
                     }
                 },{
                     field:'linkAddress',
                     title:'Link address'
-                }, {
-                    field:"localhostUrl",
-                    title:" Physical address"
                 },{
                     field:"sort",
                     title:"Sort",
