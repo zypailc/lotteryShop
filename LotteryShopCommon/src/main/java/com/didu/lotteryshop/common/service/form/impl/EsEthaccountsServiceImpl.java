@@ -3,11 +3,12 @@ package com.didu.lotteryshop.common.service.form.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.entity.EsEthaccounts;
-import com.didu.lotteryshop.common.entity.EsEthwallet;
+import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.mapper.EsEthaccountsMapper;
 import com.didu.lotteryshop.common.service.form.IEsEthaccountsService;
-import com.didu.lotteryshop.common.utils.ResultUtil;
+import com.github.abel533.sql.SqlMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -28,6 +30,10 @@ import java.util.List;
 public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, EsEthaccounts> implements IEsEthaccountsService {
     @Autowired
     private EsEthwalletServiceImpl esEthwalletService;
+    @Autowired
+    private BaseService baseService;
+    @Autowired
+    private MemberServiceImpl memberService;
 
     /** dic_type 在sys_dic字段值*/
     public static String DIC_TYPE = "ethaccounts_dictype";
@@ -235,5 +241,56 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
                 .and().eq("type",TYPE_OUT)
                 .and().eq("status",STATUS_BEINGPROCESSED);
         return super.selectList(wrapper);
+    }
+
+    /**
+     * 根据会员ID和天数查询消费总额
+     * @param memberId
+     * @param day
+     * @return
+     */
+    public BigDecimal findConsumeTotalByDay(String memberId,int day){
+        BigDecimal consumeTotal = BigDecimal.ZERO;
+        SqlMapper sqlMapper =  baseService.getSqlMapper();
+        String sql = "select sum(eea_.amount) as amountTotal  " +
+                    " from es_ethaccounts as eea_" +
+                    " where eea_.member_id='"+memberId+"' and eea_.type="+TYPE_OUT+" and eea_.status="+STATUS_SUCCESS+
+                    " and eea_.dic_type<>'"+DIC_TYPE_DRAW+"'" +
+                    " and  DATE_SUB(CURDATE(), INTERVAL "+day+" DAY) <= date(eea_.status_time)";
+        Map<String,Object> rMap = sqlMapper.selectOne(sql);
+        if(rMap != null && !rMap.isEmpty()){
+            consumeTotal = new BigDecimal(rMap.get("amountTotal").toString());
+        }
+        return consumeTotal;
+    }
+
+    /**
+     * 递归查询下级活跃用户
+     * @param memberId 会员ID
+     * @param consumeTotal 周期消费金额
+     * @param level 循环层级
+     * @param day 周期（天）
+     * @param maxMembers 最多活跃用户
+     * @param members 活跃用户
+     * @return
+     */
+    public int findActiveMembers(String memberId,BigDecimal consumeTotal,int level,int day,int maxMembers,int members){
+        List<Member> memberList = memberService.findLowerMembers(memberId);
+        if(memberList != null && memberList.size() > 0){
+            for(Member m : memberList){
+                if(consumeTotal.compareTo(this.findConsumeTotalByDay(m.getId(),day)) <= 0){
+                    members++;
+                    if(members >= maxMembers) return members;
+                }
+            }
+            if(level > 0){
+                level--;
+                for(Member m : memberList){
+                    members = this.findActiveMembers(m.getId(),consumeTotal,level,day,maxMembers,members);
+                    if(members >= maxMembers) return members;
+                }
+            }
+        }
+        return members;
     }
 }

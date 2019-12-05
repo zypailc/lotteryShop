@@ -30,7 +30,7 @@ public class MemberService extends BaseBaseService {
     @Autowired
     private OAuth2RestTemplate oAuth2RestTemplate;
     @Autowired
-    private MemberServiceImp memberServiceImp;
+    private MemberServiceImpl memberServiceImp;
     @Autowired
     private EsEthwalletServiceImpl esEthwalletService;
     @Autowired

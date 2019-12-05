@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -166,5 +167,15 @@ public class EsDlbwalletServiceImpl extends ServiceImpl<EsDlbwalletMapper, EsDlb
         esDlbwallet.setUpdateTime(new Date());
         boolean bool = super.updateById(esDlbwallet);
         return bool ? esDlbwallet.getBalance() : null;
+    }
+
+    /**
+     * 查询dlb余额 >= 10 的所有账户
+     * @return
+     */
+    public List<EsDlbwallet> findBalanceGtTen(){
+        Wrapper<EsDlbwallet> wrapper = new EntityWrapper<>();
+        wrapper.and("balance >= ?",10);
+        return super.selectList(wrapper);
     }
 }

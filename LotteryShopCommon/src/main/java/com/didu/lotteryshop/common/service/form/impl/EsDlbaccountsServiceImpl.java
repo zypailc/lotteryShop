@@ -34,6 +34,8 @@ public class EsDlbaccountsServiceImpl extends ServiceImpl<EsDlbaccountsMapper, E
     public static String DIC_TYPE_WINLOTTERYA_PM = "2";
     /** 注册奖金 */
     public static String DIC_TYPE_REGISTRATIONINCENTIVES = "3";
+    /** 提现(平台币) */
+    public static String DIC_TYPE_DRAW = "4";
 
     /** 类型：入账 */
     public static int TYPE_IN = 1;

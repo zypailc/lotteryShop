@@ -2,12 +2,11 @@ package com.didu.lotteryshop.lotterya.service.form.impl;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.common.entity.SysConfig;
+import com.didu.lotteryshop.common.service.form.impl.MemberServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
 import com.didu.lotteryshop.lotterya.entity.*;
 import com.didu.lotteryshop.lotterya.mapper.LotteryaPmDetailMapper;
-import com.didu.lotteryshop.lotterya.service.LotteryABaseService;
 import com.didu.lotteryshop.lotterya.service.form.ILotteryaPmDetailService;
-import com.github.abel533.sql.SqlMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -34,7 +32,7 @@ public class LotteryaPmDetailServiceImpl extends ServiceImpl<LotteryaPmDetailMap
     @Autowired
     private SysConfigServiceImpl sysConfigService;
     @Autowired
-    private LotteryABaseService lotteryABaseService;
+    private MemberServiceImpl memberService;
     /**
      * 新增中奖提成明细
      * @param memberId
@@ -110,7 +108,7 @@ public class LotteryaPmDetailServiceImpl extends ServiceImpl<LotteryaPmDetailMap
         BigDecimal  totalDlb = totalEther.multiply(sysConfig.getEthToLsb());
         if(LotteryaInfoPcList != null && LotteryaInfoPcList.size() > 0){
             for(LotteryaInfoPc laipc:LotteryaInfoPcList){
-                String upMemberId  = this.findLevelMemberId(lotteryaBuy.getMemberId(),laipc.getLevel());
+                String upMemberId  = memberService.findLevelMemberId(lotteryaBuy.getMemberId(),laipc.getLevel());
                 if(StringUtils.isBlank(upMemberId)) return true;
                 BigDecimal total = (totalDlb.divide(new BigDecimal("100")).multiply(laipc.getRatio())).setScale(4,BigDecimal.ROUND_DOWN);
                 bool = this.addDraw(upMemberId,lotteryaBuy.getLotteryaIssueId(),lotteryaBuy.getId(),total,laipc.getLevel(),laipc.getRatio());
@@ -138,7 +136,7 @@ public class LotteryaPmDetailServiceImpl extends ServiceImpl<LotteryaPmDetailMap
         BigDecimal  totalDlb = totalEther.multiply(sysConfig.getEthToLsb());
         if(LotteryaInfoPcList != null && LotteryaInfoPcList.size() > 0){
             for(LotteryaInfoPc laipc:LotteryaInfoPcList){
-                String upMemberId  = this.findLevelMemberId(lotteryaBuy.getMemberId(),laipc.getLevel());
+                String upMemberId  = memberService.findLevelMemberId(lotteryaBuy.getMemberId(),laipc.getLevel());
                 if(StringUtils.isBlank(upMemberId)) return true;
                 BigDecimal total = (totalDlb.divide(new BigDecimal("100")).multiply(laipc.getRatio())).setScale(4,BigDecimal.ROUND_DOWN);
                 bool = this.addBuy(upMemberId,lotteryaBuy.getLotteryaIssueId(),lotteryaBuy.getId(),total,laipc.getLevel(),laipc.getRatio());
@@ -146,27 +144,6 @@ public class LotteryaPmDetailServiceImpl extends ServiceImpl<LotteryaPmDetailMap
             }
         }
         return bool;
-    }
-
-    /**
-     * 递归查询上级会员ID
-     * @param memberId
-     * @param level
-     * @return
-     */
-    private String findLevelMemberId(String memberId,Integer level){
-        SqlMapper sqlMapper =  lotteryABaseService.getSqlMapper();
-        String sql = "select generalize_member_id as parentId from es_member where id = '"+memberId+"'";
-        Map<String,Object> mMap = sqlMapper.selectOne(sql);
-        if(mMap != null && !mMap.isEmpty()){
-            level--;
-            if(level == 0){
-                return mMap.get("parentId").toString();
-            }else{
-                return this.findLevelMemberId(mMap.get("parentId").toString(),level);
-            }
-        }
-        return null;
     }
 
 }

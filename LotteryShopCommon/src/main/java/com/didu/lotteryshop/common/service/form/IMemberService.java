@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * @author null123
  * @since 2019-10-23
  */
-public interface MemberService extends IService<Member>,UserDetailsService  {
+public interface IMemberService extends IService<Member>,UserDetailsService  {
 
 
 }
