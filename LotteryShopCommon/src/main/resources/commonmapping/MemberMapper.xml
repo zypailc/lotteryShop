@@ -3,7 +3,7 @@
 <mapper namespace="com.didu.lotteryshop.common.mapper.MemberMapper">
 
     <resultMap id="BaseResultMap" type="com.didu.lotteryshop.common.entity.Member">
-        <id column="id" property="id" javaType="VARCHAR"/>
+        <id column="id" property="id"/>
         <result column="member_name" property="memberName" />
         <result column="secret_key" property="secretKey" />
         <result column="payment_code" property="paymentCode" />
@@ -14,6 +14,15 @@
         <result column="generalize_member_type" property="generalizeMemberType" />
         <result column="head_portrait_url" property="headPortraitUrl" />
         <result column="create_time" property="createTime" />
-        <!--<collection property="roles" fetchType="eager" column="id" select="com.didu.lotteryshop.auth.mapper.RoleMapper.findByMemberId"></collection>-->
+        <collection property="roles" fetchType="eager" column="id" select="com.didu.lotteryshop.auth.mapper.RoleMapper.findByMemberId"></collection>
     </resultMap>
+
+    <sql id="normalItems">
+        id,member_name,email
+    </sql>
+
+    <select id="findByMemberName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from es_member where email = #{email}
+    </select>
+
 </mapper>

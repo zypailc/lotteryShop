@@ -57,7 +57,7 @@ eureka:
       defaultZone: http://localhost:8090/eureka/
 #mybatis 配置
 mybatis-plus:
-  mapper-locations: classpath*:mapping/*.xml
+  mapper-locations: classpath*:mapping/*.xml,classpath*:/commonmapping/*.xml
   type-aliases-package: com.didu.lotteryshop.common.entity
   #configuration:
     #map-underscore-to-camel-case: true  #开启驼峰命名,l_name -> lName

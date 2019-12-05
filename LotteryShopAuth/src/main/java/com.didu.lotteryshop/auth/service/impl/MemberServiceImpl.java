@@ -1,11 +1,11 @@
 package com.didu.lotteryshop.auth.service.impl;
 
-import com.didu.lotteryshop.auth.mapper.MemberMapper;
 import com.didu.lotteryshop.auth.service.MemberService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.entity.Permission;
 import com.didu.lotteryshop.common.entity.Role;
+import com.didu.lotteryshop.common.mapper.MemberMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
