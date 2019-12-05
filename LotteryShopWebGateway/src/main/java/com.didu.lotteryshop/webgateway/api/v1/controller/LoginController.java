@@ -2,11 +2,9 @@ package com.didu.lotteryshop.webgateway.api.v1.controller;
 
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.webgateway.config.Constants;
-import com.didu.lotteryshop.webgateway.controller.WebgatewayController;
+import com.didu.lotteryshop.webgateway.controller.WebgatewayBaseController;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.security.Principal;
 
 /**
@@ -25,7 +22,7 @@ import java.security.Principal;
  *
  */
 @Controller
-public class LoginController extends WebgatewayController {
+public class LoginController extends WebgatewayBaseController {
     @Autowired
     private RestTemplate restTemplate;
     /**

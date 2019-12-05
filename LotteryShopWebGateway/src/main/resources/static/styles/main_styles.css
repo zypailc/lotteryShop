@@ -1565,3 +1565,10 @@ section
 {
 	color: #28262d;
 }
+.lotteryItem{
+	margin: 0 auto;
+	text-align: center;
+}
+.item_lottery{
+	height: 200px;
+}

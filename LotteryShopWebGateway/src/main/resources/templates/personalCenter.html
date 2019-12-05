@@ -135,17 +135,7 @@ include("common.js.html"){}
 </style>
 <script>
 	$(function(){
-		//init gengeralize record
 		gengeralizeMemberInit();
-		/*$(document).ajaxSend(function(e, xhr, options) {
-			var dataStr = options.data;
-			if(dataStr){
-				dataStr = dataStr+"&access_token="+"${access_token!''}";
-			}else{
-				dataStr = "access_token="+"${access_token!''}";
-			}
-			options.data = dataStr;
-		});*/
 	})
 </script>
 <body class="body_top">
@@ -174,8 +164,8 @@ include("common.js.html"){}
 									<p class="p_wallet_module"><span>ETH:10ETH</span><span>gold:1000DB</span></p>-->
 									<ul class="ul_wallet_module">
 										<li class="li_wallet_module" data-class="wallet_eth">ETH <span>&nbsp;&nbsp;> </span></li>
-										<li class="li_wallet_module" data-class="wallet_flat">FLAT<span>&nbsp;&nbsp;> </span></li>
-										<li class="li_wallet_module li_wallet_module_right" data-class="wallet_bind">wallet<span>&nbsp;&nbsp;></span></li>
+										<li class="li_wallet_module" data-class="wallet_flat" data-localize="base.flat">Flat<span>&nbsp;&nbsp;> </span></li>
+										<li class="li_wallet_module li_wallet_module_right" data-class="wallet_bind" data-localize="base.wallet">Wallet<span>&nbsp;&nbsp;></span></li>
 									</ul>
 								</div>
 							</div>
@@ -183,16 +173,16 @@ include("common.js.html"){}
 					</div>
 					<div class="portfolio_categories button-group filters-button-group">
 						<ul class="personal_li">
-							<li class="portfolio_category draw_personal_lottery personal_center" data-filter=".none">personal center</li>
+							<li class="portfolio_category draw_personal_lottery personal_center" data-filter=".none" data-localize="base.personalCenter">personal center</li>
 							<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".walletETH">ETH</li>
-							<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".walletFLAT">FLAT</li>
-							<li class="portfolio_category portfolio_category_bottom" data-filter=".wallet">wallet</li>
+							<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".walletFLAT" data-localize="base.flat">Flat</li>
+							<li class="portfolio_category portfolio_category_bottom" data-filter=".wallet" data-localize="base.wallet">Wallet</li>
 							<hr>
-							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".web_design">lottery record</li>
+							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".web_design" data-localize="base.lotteryRecord">lottery record</li>
 							<hr>
-							<li class="portfolio_category draw_personal_lottery" data-filter=".generalize">generalize</li>
-							<li class="portfolio_category draw_personal_lottery" data-filter=".generalizeRecord">generalize record</li>
-							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".generalizeEarnings">generalize earnings</li>
+							<li class="portfolio_category draw_personal_lottery" data-filter=".generalize" data-localize="base.generalize">generalize</li>
+							<li class="portfolio_category draw_personal_lottery" data-filter=".generalizeRecord" data-localize="base.generalizeRecord">generalize record</li>
+							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".generalizePersonal" data-localize="base.generalizePersonnel">generalize personnel</li>
 						</ul>
 					</div>
 				</div>
@@ -656,8 +646,8 @@ include("common.js.html"){}
 					</div>
 				</div>
 			</div>
-			<!-- 推广记录 -->
-			<div class="card card-1 card-1_scroll generalizeRecord">
+			<!-- 推广人員 -->
+			<div class="card card-1 card-1_scroll generalizePersonal">
 				<div class="card-body">
 					<ul class="ul_personal_lottery">
 
@@ -666,7 +656,7 @@ include("common.js.html"){}
 				</div>
 			</div>
 			<!-- 推广收益 -->
-			<div class="card card-1 card-1_scroll generalizeEarnings">
+			<div class="card card-1 card-1_scroll generalizeRecord">
 				<div class="card-body">
 					<ul class="ul_personal_lottery">
 						<li>

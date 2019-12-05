@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 @Controller
-public class WebgatewayController extends BaseContorller {
+public class WebgatewayBaseController extends BaseContorller {
 
     @Autowired
     private WebGatewayConfig webGatewayConfig;

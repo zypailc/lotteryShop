@@ -72,8 +72,10 @@ zuul:
       path: /manage/**
       serviceId: manage-service
   #sensitiveHeaders: "*"
-  sensitive-headers: "*"
-  add-host-header: false
+  #sensitive-headers: "*"
+  #add-host-header: false
+  ignored-headers:  '*'
+  add-host-header: true
 
 #security&oauth2 配置
 security:

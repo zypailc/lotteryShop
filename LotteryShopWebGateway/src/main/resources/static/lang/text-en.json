@@ -1,9 +1,21 @@
 ﻿{
   "base": {
-    "PersonalCenter": "Personal Center",
+    "personalCenter": "Personal center",
     "Home": "Home",
-    "PlayTheLottery": "Play The Lottery",
+    "PlayTheLottery": "Play the lottery",
     "Login": "Login",
-    "Register": "Register"
+    "Register": "Register",
+    "boottomTitle": "@The project does not support mainland China for the time being",
+    "whiteBook": "WHITE BOOK",
+    "modernFeatures": "MODERN FEATURES",
+    "partnersAndAffiliates": "PARTNERS AND AFFILIATES",
+    "externalLinks": "EXTERNAL LINKS",
+    "flat": "Flat",
+    "wallet": "Wallet",
+    "lotteryRecord": "lottery record",
+    "generalize": "generalize",
+    "generalizeRecord": "generalize record",
+    "generalizePersonnel": "generalize personnel",
+    "lotteryList": "Play the lottery"
   }
 }

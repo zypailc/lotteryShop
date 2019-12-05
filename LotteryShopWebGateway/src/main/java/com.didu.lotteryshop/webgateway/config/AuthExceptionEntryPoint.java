@@ -1,13 +1,10 @@
 package com.didu.lotteryshop.webgateway.config;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
@@ -28,15 +25,17 @@ public class AuthExceptionEntryPoint implements AuthenticationEntryPoint {
         try {
              //System.out.print(request.getContextPath());
             //登录SESSION_token
-            String access_token =  (String) request.getSession().getAttribute(Constants.SESSION_LOGIN_TOKEN);
-
+            String access_token = "";
+            if(request.getSession().getAttribute(Constants.SESSION_LOGIN_TOKEN) instanceof String[]){
+                access_token = ((String[]) request.getSession().getAttribute(Constants.SESSION_LOGIN_TOKEN))[0].toString();
+            }else {
+                access_token = ((String) request.getSession().getAttribute(Constants.SESSION_LOGIN_TOKEN));
+            }
             //获取请求参数
             String redirectUrl = request.getRequestURI();
             Map<String,String> map = getAllRequestParam(request);
             String sessionId = request.getSession().getId();
             System.out.println(request.getRequestURI()+":>>>>>>>>>>>>>>>>>sessionId:"+sessionId+" access_token:"+access_token);
-            System.out.println("getMaxInactiveInterval:"+request.getSession().getMaxInactiveInterval());
-            System.out.println("isNew:"+request.getSession().isNew());
             //遍历键值对
             Set<Map.Entry<String,String>> entires=map.entrySet();  //键值对的集合,entries代表这个集合
             for(Map.Entry<String,String> entry:entires){  //entry代表每一个取到的键值对，相当于i
@@ -49,9 +48,6 @@ public class AuthExceptionEntryPoint implements AuthenticationEntryPoint {
                 }
             }
 
-            /*for (Cookie c:request.getCookies()) {
-                response.addCookie(c);
-            }*/
             if(response.getStatus()==500){
                 response.sendRedirect("/web/auth500");
             }else if(response.getStatus()==404){

@@ -42,19 +42,19 @@
                 <% if(has(whetherLogin) && whetherLogin){ %>
                 <div class="top_center_span">
                     <span class="span_personal">2019-09-26 00:00:00</span><br/>
-                    <span><a class="a_person" href="../web/personalCenter">${loginUser.memberName!"without"} ，<span data-localize="base.PersonalCenter"> Personal Center</span></a> </span>
+                    <span><a class="a_person" href="../web/personalCenter">${loginUser.memberName!"without"} ，<span data-localize="base.personalCenter"> Personal Center</span></a> </span>
                 </div>
                 <% }else{ %>
                 <div class="top_login_span">
 							<span>
                                 <% if(has(type) && type == 'register'){ %>
-                                    <a class="a_border" href="../web/authLogin" data-localize="base.Login">Login</a>
+                                    <a class="a_border" href="../web/authLogin" data-localize="base.login">Login</a>
                                 <% }else if(has(type) && type == 'login'){ %>
-                                    <a class="a_border" href="../web/authRegister" data-localize="base.Register">Register</a>
+                                    <a class="a_border" href="../web/authRegister" data-localize="base.register">Register</a>
                                 <% }else{ %>
-                                    <a class="a_border" href="../web/authLogin" data-localize="base.Login">Login</a>
+                                    <a class="a_border" href="../web/authLogin" data-localize="base.login">Login</a>
                                     <span> | </span>
-                                    <a class="a_border" href="../web/authRegister" data-localize="base.Register">Register</a>
+                                    <a class="a_border" href="../web/authRegister" data-localize="base.register">Register</a>
                                 <% } %>
 							</span>
                 </div>
@@ -90,8 +90,8 @@
         </div>
         <div class="top_div">
             <ul>
-                <li><a href="../web/authIndex" data-localize="base.Home">Home</a></li>
-                <li><a href="../web/authPlayTheLottery" data-localize="base.PlayTheLottery">Play The Lottery</a></li>
+                <li><a href="../web/authIndex" data-localize="base.home">Home</a></li>
+                <li><a href="../web/authPlayTheLottery" data-localize="base.playTheLottery">Play The Lottery</a></li>
             </ul>
         </div>
     </nav>
@@ -133,18 +133,18 @@
     <div class="menu menu_mm text-right">
         <div class="menu_close"><i class="far fa-times-circle trans_200"></i></div>
         <ul class="menu_mm">
-            <li><a href="../web/authIndex" data-localize="base.Home">Home</a></li>
-            <li><a href="../web/authPlayTheLottery" data-localize="base.PlayTheLottery">Play The Lottery</a></li>
+            <li><a href="../web/authIndex" data-localize="base.home">Home</a></li>
+            <li><a href="../web/authPlayTheLottery" data-localize="base.playTheLottery">Play The Lottery</a></li>
             <% if(has(whetherLogin) && whetherLogin){ %>
-            <li><a href="../web/personalCenter">${loginUser.memberName!"without"} , <span data-localize="base.PersonalCenter"> Personal Center</span></a></li>
+            <li><a href="../web/personalCenter">${loginUser.memberName!"without"} , <span data-localize="base.personalCenter"> Personal Center</span></a></li>
             <% } else { %>
                 <% if(has(type) && type == 'register'){ %>
-                    <li class="menu_mm"><a class="a_border" href="../web/authLogin" data-localize="base.Login">Login</a></li>
+                    <li class="menu_mm"><a class="a_border" href="../web/authLogin" data-localize="base.login">Login</a></li>
                 <% } else if(has(type) && type == 'login') { %>
-                    <li class="menu_mm"><a class="a_border" href="../web/authRegister" data-localize="base.Register">Register</a></li>
+                    <li class="menu_mm"><a class="a_border" href="../web/authRegister" data-localize="base.register">Register</a></li>
                 <% } else { %>
-                    <li class="menu_mm"><a class="a_border" href="../web/authLogin" data-localize="base.Login">Login</a></li>
-                    <li class="menu_mm"><a class="a_border" href="../web/authRegister" data-localize="base.Register">Register</a></li>
+                    <li class="menu_mm"><a class="a_border" href="../web/authLogin" data-localize="base.login">Login</a></li>
+                    <li class="menu_mm"><a class="a_border" href="../web/authRegister" data-localize="base.register">Register</a></li>
                 <% } %>
             <%  } %>
         </ul>

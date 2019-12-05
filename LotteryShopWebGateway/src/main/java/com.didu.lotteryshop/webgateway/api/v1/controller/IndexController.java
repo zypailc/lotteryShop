@@ -1,8 +1,7 @@
 package com.didu.lotteryshop.webgateway.api.v1.controller;
 
 import com.didu.lotteryshop.webgateway.config.Constants;
-import com.didu.lotteryshop.webgateway.controller.WebgatewayController;
-import org.apache.commons.lang.StringUtils;
+import com.didu.lotteryshop.webgateway.controller.WebgatewayBaseController;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping("")
-public class IndexController extends WebgatewayController {
+public class IndexController extends WebgatewayBaseController {
     @Value("${security.oauth2.client.client-id}")
     private String securityClientId;
     @Value("${security.oauth2.client.client-secret}")
