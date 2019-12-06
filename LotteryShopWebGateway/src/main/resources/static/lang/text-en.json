@@ -1,10 +1,10 @@
 ﻿{
   "base": {
     "personalCenter": "Personal center",
-    "Home": "Home",
-    "PlayTheLottery": "Play the lottery",
-    "Login": "Login",
-    "Register": "Register",
+    "home": "Home",
+    "playTheLottery": "Play the lottery",
+    "login": "Login",
+    "register": "Register",
     "boottomTitle": "@The project does not support mainland China for the time being",
     "whiteBook": "WHITE BOOK",
     "modernFeatures": "MODERN FEATURES",
@@ -16,6 +16,10 @@
     "generalize": "generalize",
     "generalizeRecord": "generalize record",
     "generalizePersonnel": "generalize personnel",
-    "lotteryList": "Play the lottery"
+    "lotteryList": "Play the lottery",
+    "start": "START",
+    "more": "MORE",
+    "toBeExpected": "To be Expected"
+
   }
 }

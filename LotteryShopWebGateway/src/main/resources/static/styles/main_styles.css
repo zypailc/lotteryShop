@@ -1572,3 +1572,14 @@ section
 .item_lottery{
 	height: 200px;
 }
+.item_content{
+	/*position: absolute;*/
+	top:40%;
+	text-align: center;
+}
+.item_title{
+	font-size: 25px;
+}
+.service_col{
+	top: 15px;
+}
