@@ -56,7 +56,7 @@ public class SysTaskServiceImpl extends ServiceImpl<SysTaskMapper, SysTask> impl
         boolean bool = false;
         SysTask sysTask = this.findRegister();
         if (sysTask.getStatus() == 1) {
-            bool = esDlbaccountsService.addInSuccess(memberId, EsDlbaccountsServiceImpl.DIC_TYPE_LOWERFIRSTCONSUMPTION, sysTask.getDlb(), "-1");
+            bool = esDlbaccountsService.addInSuccess(memberId, EsDlbaccountsServiceImpl.DIC_TYPE_REGISTER, sysTask.getDlb(), "-1");
         }else{
             bool = true;
         }
