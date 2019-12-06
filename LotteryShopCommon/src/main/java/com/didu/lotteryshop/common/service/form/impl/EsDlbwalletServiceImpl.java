@@ -49,7 +49,7 @@ public class EsDlbwalletServiceImpl extends ServiceImpl<EsDlbwalletMapper, EsDlb
     public EsDlbwallet findByMemberId(String memberId){
         if(StringUtils.isBlank(memberId)) return null;
         Wrapper<EsDlbwallet> wrapper = new EntityWrapper<>();
-        wrapper.eq("memberId",memberId);
+        wrapper.eq("member_id",memberId);
         return super.selectOne(wrapper);
     }
 
