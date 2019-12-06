@@ -41,9 +41,9 @@ $(function (){
 
     //昵称标签超出长度显示省略号
     var span_title = $(".span_title").html();
-    if (span_title.length > 15) {
+    if (span_title.length > 3) {
         //截取固定长度
-        var span_title = span_title.substring(0, 15);
+        var span_title = span_title.substring(0, 3);
         //为非隐藏<span>标签赋值--截取固定长度
         $(".span_title").text(span_title+"...");
     } else {

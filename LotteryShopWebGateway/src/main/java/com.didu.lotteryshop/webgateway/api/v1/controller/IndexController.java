@@ -1,5 +1,6 @@
 package com.didu.lotteryshop.webgateway.api.v1.controller;
 
+import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.webgateway.config.Constants;
 import com.didu.lotteryshop.webgateway.controller.WebgatewayBaseController;
 import org.apache.ibatis.annotations.Param;
@@ -132,6 +133,12 @@ public class IndexController extends WebgatewayBaseController {
     @RequestMapping("/web/personalCenter")
     public String personalCenter(Model model){
         model = getModel(model);
+        LoginUser loginUser = getLoginUser();
+        boolean pAddress = true;
+        if(loginUser.getPAddress() == null || "".equals(loginUser.getPAddress())){
+            pAddress = false;
+        }
+        model.addAttribute("pAddress",pAddress);
         return "personalCenter";
     }
 

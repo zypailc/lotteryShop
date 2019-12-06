@@ -19,7 +19,8 @@
     "lotteryList": "Play the lottery",
     "start": "START",
     "more": "MORE",
-    "toBeExpected": "To be Expected"
+    "toBeExpected": "To be expected",
+    "forgotPassword": "Forgot password"
 
   }
 }

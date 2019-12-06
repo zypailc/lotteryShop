@@ -51,7 +51,6 @@ $(function () {
 
     var uulanguage = (navigator.language || navigator.browserLanguage).toLowerCase();
     //判断浏览器的语言
-
     if (uulanguage.indexOf("en") > -1) {
         $("[data-localize]").localize("text", { pathPrefix: ctx + "/lang", language: "en" });
     } else if (uulanguage.indexOf("zh") > -1) {

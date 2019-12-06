@@ -173,12 +173,14 @@
     }
     $(function(){
         //初始化语言选择
-        var language_cookie = getCookie("somoveLanguage") || "en";
+        var language_navigator = (navigator.language || navigator.browserLanguage).toLowerCase();
+        var language_cookie = getCookie("somoveLanguage") || "";
+        if(language_cookie){
+            language_navigator = language_cookie;
+        }
         //$(".language_select_onchange").prop('value',language_cookie);
-        var imgHtml = "<img class='language_img' src='../images/flags/"+ language_cookie +".png'> ";
+        var imgHtml = "<img class='language_img' src='../images/flags/"+ language_navigator +".png'> ";
         $(".a_language_select_onchange").html(imgHtml);
-        //$("a[data_value="+language_cookie+"]").click();
-        //language_select_onchange(null,language_cookie);
     })
 
     function language_select_onchange(e,language_cookie){
