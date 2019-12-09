@@ -90,7 +90,12 @@ public class WalletContorller extends WalletBaseController {
             //参数错误！
             return ResultUtil.errorJson("Invalid parameter!");
         }
-        //TODO 需要判断钱包地址规则
+        if(!Web3jUtils.isETHValidAddress(formAddress)){
+            return  ResultUtil.errorJson("Invalid formAddress!");
+        }
+        if(!Web3jUtils.isETHValidAddress(toAddress)){
+            return  ResultUtil.errorJson("Invalid toAddress!");
+        }
         return walletService.transfer(walletFileName,payPassword,formAddress,toAddress,etherValue);
     }
 
