@@ -137,7 +137,7 @@ public class Web3jService extends LotteryABaseService {
             HttpEntity<String> strEntity = new HttpEntity<String>(str,headers);
             //查询钱包明细
             String reStr =   oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/findWalletDetail",strEntity,String.class);
-            ResultUtil result = super.getDecryptRequestToResultUtil(reStr);
+            ResultUtil result = super.getDecryptResponseToResultUtil(reStr);
             if(result != null){
                 if(result.getCode() == ResultCode.SUCCESS.getCode() && result.getExtend() != null){
                     JSONObject resultJObject = new JSONObject(result.getExtend().get(ResultUtil.DATA_KEY).toString());

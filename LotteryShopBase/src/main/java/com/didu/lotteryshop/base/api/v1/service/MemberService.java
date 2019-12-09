@@ -59,7 +59,7 @@ public class MemberService extends BaseBaseService {
         headers.setContentType(MediaType.valueOf("application/json;UTF-8"));
         HttpEntity<String> strEntity = new HttpEntity<String>(str,headers);
         String reStr =   oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/generate",strEntity,String.class);
-        ResultUtil result = super.getDecryptRequestToResultUtil(reStr); //解密
+        ResultUtil result = super.getDecryptResponseToResultUtil(reStr); //解密
         //保存
         if(result != null && result.getCode() == ResultUtil.ERROR_CODE){
             return ResultUtil.errorJson("error");

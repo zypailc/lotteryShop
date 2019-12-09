@@ -1,12 +1,17 @@
 package com.didu.lotteryshop.common.base.service;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.didu.lotteryshop.common.base.BaseStat;
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
+import net.sf.ezmorph.bean.MorphDynaBean;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 public class BaseService extends BaseStat {
@@ -45,20 +50,35 @@ public class BaseService extends BaseStat {
         return deStr;
     };
     /**
-     * 解密请求参数处理并转成成对象
+     * 解密响应参数处理并转成成对象
      * @param enStr 加密字符串
      * @return ResultUtil
      */
-    protected ResultUtil getDecryptRequestToResultUtil(String enStr){
+    protected ResultUtil getDecryptResponseToResultUtil(String enStr){
         ResultUtil resultUtil = null;
         if(StringUtils.isNotBlank(enStr)){
             //数据返回的数据可能有双引号，去除双引号
             enStr = enStr.replaceAll("\"","");
             String jsonStr = this.getDecryptRequest(enStr);
-            JSONObject jsonObject = JSONObject.fromObject(jsonStr);
-            resultUtil =(ResultUtil)JSONObject.toBean(jsonObject,ResultUtil.class);
+            resultUtil = this.getResponseToResultUtil(jsonStr);
         }
         return resultUtil;
-    };
+    }
+
+    /**
+     * 请求响应参数处理并转换成对象
+     * @param jsonStr
+     * @return
+     */
+    protected ResultUtil  getResponseToResultUtil(String jsonStr){
+        ResultUtil resultUtil = null;
+        if(StringUtils.isNotBlank(jsonStr)){
+            JSONObject jsonObject = JSONObject.fromObject(jsonStr);
+            resultUtil =(ResultUtil)JSONObject.toBean(jsonObject,ResultUtil.class);
+            resultUtil.setExtend( (Map<String, Object>)JSONUtils.parse(jsonObject.getString("extend")));
+        }
+        return resultUtil;
+    }
+
 
 }
