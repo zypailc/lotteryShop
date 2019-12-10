@@ -76,6 +76,8 @@ public class LotteryAService extends LotteryABaseService {
         rMap.put("buyPm",lotteryaInfo.getBuyPm());
         //中奖提成比例（单位%）
         rMap.put("drawPm",lotteryaInfo.getDrawPm());
+        //中奖金额1注1倍
+        rMap.put("total",lotteryaInfoService.calculateSingleBonus(lotteryaInfo));
         //修改合约彩票单价
         if(StringUtils.isNotBlank(lotteryaInfo.getContractAddress()) && lotteryaInfo.getPrice() != null)
         lotteryAContractService.updateLotteryAPrice(lotteryaInfo.getContractAddress(),lotteryaInfo.getPrice());
