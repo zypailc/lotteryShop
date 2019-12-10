@@ -2,6 +2,7 @@ package com.didu.lotteryshop.lotterya.service.form.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsEthaccountsServiceImpl;
 import com.didu.lotteryshop.lotterya.entity.LotteryaBuy;
@@ -148,6 +149,31 @@ public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, Lotte
             .and().eq("lotterya_issue_id",lotteryAIssueId)
             .and().eq("member_id",memberId);
         return super.selectCount(wrapper);
+    }
+
+    /**
+     * 分页查询购买数据
+     * @param currentPage
+     * @param pageSize
+     * @param lotteryaBuy
+     * @return
+     */
+    public Page<LotteryaBuy> getPageLotteryBuy(Integer currentPage, Integer pageSize,LotteryaBuy lotteryaBuy){
+        Wrapper<LotteryaBuy> wrapper = new EntityWrapper<>();
+        //子查询字段
+        // wrapper.setSqlSelect();
+        wrapper.and("transfer_status<>{0}","2");
+        if(lotteryaBuy != null){
+            if(lotteryaBuy.getLotteryaIssueId() != null)
+                wrapper.and().eq("lotterya_issue_id",lotteryaBuy.getLotteryaIssueId());
+            if(lotteryaBuy.getIsLuck() != null)
+                wrapper.and().eq("is_luck",lotteryaBuy.getIsLuck());
+            if(lotteryaBuy.getMemberId() != null )
+                wrapper.and().eq("member_id",lotteryaBuy.getMemberId());
+        }
+        wrapper.orderBy("createTime",false);
+        Page<LotteryaBuy> pageLB = new Page<>(currentPage,pageSize);
+        return super.selectPage(pageLB,wrapper);
     }
 
 }

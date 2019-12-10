@@ -69,7 +69,7 @@ public class LotteryAService extends LotteryABaseService {
         //合约地址
         rMap.put("contractAddress",lotteryaInfo.getContractAddress());
         //提成有效xx期数
-        rMap.put("pmVnum(",lotteryaInfo.getPmVnum());
+        rMap.put("pmVnum",lotteryaInfo.getPmVnum());
         //提成补签xx注数
         rMap.put("pmRnum",lotteryaInfo.getPmRnum());
         //购买提成比例（单位%）
@@ -81,6 +81,34 @@ public class LotteryAService extends LotteryABaseService {
         lotteryAContractService.updateLotteryAPrice(lotteryaInfo.getContractAddress(),lotteryaInfo.getPrice());
         return ResultUtil.successJson(rMap);
     }
+
+    /**
+     * 分页查询彩票期数表
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    public ResultUtil getLotteryIssue(int currentPage,int pageSize){
+        return ResultUtil.successJson(lotteryaIssueService.findPageLotteryaIssue(currentPage,pageSize));
+    }
+
+    /**
+     * 分页查询购买数据
+     * @param currentPage
+     * @param pageSize
+     * @param isOneself 是否只查询自己 0：否 ；1：是
+     * @param lotteryaBuy
+     * @return
+     */
+    public ResultUtil getLotteryBuy(Integer currentPage, Integer pageSize,Integer isOneself, LotteryaBuy lotteryaBuy){
+        if(isOneself != null && isOneself == 1 && super.getLoginUser() != null){
+            lotteryaBuy.setMemberId(super.getLoginUser().getId());
+        }else{
+            lotteryaBuy.setMemberId(null);
+        }
+        return ResultUtil.successJson(lotteryaBuyService.getPageLotteryBuy(currentPage,pageSize,lotteryaBuy));
+    }
+
 
     /**
      * eth购买彩票
