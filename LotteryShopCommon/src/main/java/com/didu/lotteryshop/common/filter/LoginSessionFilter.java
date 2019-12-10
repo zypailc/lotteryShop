@@ -52,7 +52,6 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                 String user_name = (String) httpServletRequest.getSession().getAttribute(Constants.LOGIN_SESSION_KEY);
 
                 if(httpServletRequest.getRequestURI().indexOf("generalizeInit") > 0){
-                    System.out.println("xxxxx:"+httpServletRequest.getRequestURI().indexOf("generalizeInit"));
                     String token = httpServletRequest.getSession().getAttribute("session_login_token") == null ? "":httpServletRequest.getSession().getAttribute("session_login_token").toString();
                 }
                 //证明是页面请求
@@ -108,12 +107,6 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                             loginUser.setPAddress(map.get("pAddress") != null ? map.get("pAddress").toString() : "");
                             loginUser.setBAddress(map.get("bAddress") != null ? map.get("bAddress").toString() : "");
                             loginUser.setPaymentCode(map.get("paymentCode") != null ? map.get("paymentCode").toString() : "");
-                            /*String walletName = "";
-                            try {
-                                walletName = map.get("walletName") != null && !"".equals(map.get("walletName")) ? AesEncryptUtil.decrypt(map.get("walletName").toString(), Constants.KEY_THREE) : "";
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }*/
                             loginUser.setWalletName(map.get("walletName") != null ? map.get("walletName").toString() : "");
                         }
                     }

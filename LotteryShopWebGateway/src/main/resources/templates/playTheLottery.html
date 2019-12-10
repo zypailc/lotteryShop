@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Lottery - Home</title>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="RanGO Project">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Lottery - Home</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="RanGO Project">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- 公共style -->
-<%
+	<%
 	include("common.css.html"){}
-%>
-<link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
-<link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
+	%>
+	<link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
+	<link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
 </head>
 <!-- 公共js -->
 <%
-	include("common.js.html"){}
+include("common.js.html"){}
 %>
 <script src="../js/custom.js"></script>
 <script>
@@ -28,7 +28,7 @@
 
 	<!-- 引入头部文件 -->
 	<%
-		include("index_top.html"){}
+	include("index_top.html"){}
 	%>
 
 	<div class="home">
@@ -44,31 +44,44 @@
 
 	<!-- 玩法列表 -->
 
-	<div class="container">
-		<div class="row lotteryItem">
-			<div class="col-lg-6 service_col">
-				<!-- Service Item -->
-				<div class="service_item item_lottery" style="background:url(../images/gallery_2.jpg)no-repeat center top;">
-					<div class="item_content">
-						<p class="item_title">3D</p>
-						<p><a href="../web/authLotteryServices" class="trans_200" data-localize="base.start">START</a></p>
+	<!-- 玩法列表 -->
+	<div class="services">
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
+					<div class="section_title">
+						<h1 data-localize="base.lotteryList">PLAY THE LOTTERY</h1>
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-6 service_col" >
-				<div class="service_item item_lottery" style="background:url(../images/gallery_2.jpg)no-repeat center top;">
-					<div class="item_content">
-						<p class="item_title" data-localize="base.more">MORE</p>
-						<p data-localize="base.toBeExpected">To be expected</p>
-					</div>
-				</div>
-			</div>
+		</div>
 
+
+		<div class="container">
+			<div class="row lotteryItem">
+				<div class="col-lg-6 service_col">
+					<!-- Service Item -->
+					<div class="service_item item_lottery" style="background:url(../images/gallery_2.jpg)no-repeat center top;">
+						<div class="item_content">
+							<p class="item_title">3D</p>
+							<p><a href="../web/authLotteryServices" class="trans_200" data-localize="base.start">START</a></p>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6 service_col" >
+					<div class="service_item item_lottery" style="background:url(../images/gallery_2.jpg)no-repeat center top;">
+						<div class="item_content">
+							<p class="item_title" data-localize="base.more">MORE</p>
+							<p data-localize="base.toBeExpected">To be expected</p>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<!-- 引入底部文件 -->
 	<%
-		include("bottom.html"){}
+	include("bottom.html"){}
 	%>
 
 </div>

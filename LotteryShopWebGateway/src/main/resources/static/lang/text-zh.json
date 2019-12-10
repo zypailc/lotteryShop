@@ -20,6 +20,10 @@
     "start": "開始",
     "more": "更多",
     "toBeExpected": "敬請期待",
-    "forgotPassword": "找回密碼"
+    "forgotPassword": "找回密碼",
+    "lotteryPlay": "競彩",
+    "rules": "規則",
+    "drawArchive": "記錄",
+    "logOut": "退出"
   }
 }

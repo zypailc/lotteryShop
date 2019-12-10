@@ -35,7 +35,6 @@ public class AuthExceptionEntryPoint implements AuthenticationEntryPoint {
             String redirectUrl = request.getRequestURI();
             Map<String,String> map = getAllRequestParam(request);
             String sessionId = request.getSession().getId();
-            System.out.println(request.getRequestURI()+":>>>>>>>>>>>>>>>>>sessionId:"+sessionId+" access_token:"+access_token);
             //遍历键值对
             Set<Map.Entry<String,String>> entires=map.entrySet();  //键值对的集合,entries代表这个集合
             for(Map.Entry<String,String> entry:entires){  //entry代表每一个取到的键值对，相当于i

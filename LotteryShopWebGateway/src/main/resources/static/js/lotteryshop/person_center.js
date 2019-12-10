@@ -124,7 +124,6 @@ function div_head_images(){
         url: "/api/base/v1/lsimage/imageType?type=1",
         dataType: "json",
         success:function (result){
-            console.log(result);
             $.each(result,function(index,data){
                 var div_image = '<div  class="head_img head_img_width">' +
                     '<img class="img_change" onclick="img_change(this)" src="/api/base/v1/lsimage/getImg?id='+data.id+'">' +
@@ -162,11 +161,10 @@ function create_confirm(){
         data:{"bAddress":bAddress,"paymentCode":paymentCode},
         dataType: "json",
         success:function (data){
-            console.log(data);
             if(data.code == '200'){//success
                 location.reload();
             }else {
-                layer.msg(data.msg)
+                layui_open(data.msg);
             }
         }
     })
@@ -174,7 +172,6 @@ function create_confirm(){
 // wallet update
 function update_confirm(){
     var bAddress = $("input[name=update_bAddress]").val() || "";
-    console.log("bAddress:"+bAddress);
     if(bAddress == ""){
         layer.msg("Please enter your wallet address !");
         return;

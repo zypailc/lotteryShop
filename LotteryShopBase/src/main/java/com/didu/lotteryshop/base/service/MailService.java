@@ -79,10 +79,12 @@ public class MailService {
             //注意这个空行是必须的，设置好了类型，需要空一行再起一行输入正文内容
             printWriter.println();
 
-            printWriter.println("Your account number is : " + member.getEmail() + "<br/>");
+            printWriter.println(text);
+
+            /*printWriter.println("Your account number is : " + member.getEmail() + "<br/>");
             printWriter.println("Your password is : "+ text);
 
-            printWriter.println();
+            printWriter.println();*/
             //结束邮件发送"."命令
             writeCommandStream(".");
             //关闭
@@ -126,12 +128,12 @@ public class MailService {
         {
             printWriter.println(command);
             printWriter.flush();
-            System.out.println("客户端命令行信息→" + command);
+            //System.out.println("客户端命令行信息→" + command);
         }
         char[] serviceResponse = new char[1024];
 
         bufferedReader.read(serviceResponse);
-        System.out.println("服务器响应→" + new String(serviceResponse));
+        //System.out.println("服务器响应→" + new String(serviceResponse));
     }
 
 }

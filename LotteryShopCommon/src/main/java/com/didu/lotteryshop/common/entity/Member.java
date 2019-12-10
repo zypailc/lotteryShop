@@ -40,7 +40,7 @@ public class Member{
     @TableField("generalize_member_id")
     private String generalizeMemberId;//推广人员Id
     @TableField("generalize_member_type")
-    private String generalizeMemberType;//推广类型: 1 初始用户 2 推广用户
+    private Integer generalizeMemberType;//推广層級
     @TableField("head_portrait_url")
     private String headPortraitUrl;//头像Url
     @TableField("create_time")

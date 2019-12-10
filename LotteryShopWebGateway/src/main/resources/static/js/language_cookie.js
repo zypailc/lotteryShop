@@ -46,6 +46,19 @@ function getCookie(name)//取cookies函数
         return null;
     } 
 }
+
+function getLanguage(){
+    var language_navigator = (navigator.language || navigator.browserLanguage).toLowerCase();
+    var language_cookie = getCookie("somoveLanguage") || "";
+    //中文瀏覽器取的語言簡寫是zh-cn錯誤
+    if(language_navigator.indexOf("zh") > -1){
+        language_navigator = "zh";
+    }
+    if(language_cookie){
+        language_navigator = language_cookie;
+    }
+    return language_navigator;
+}
 /*console.log("getCookie:"+getCookie(name));*/
 $(function () {
 

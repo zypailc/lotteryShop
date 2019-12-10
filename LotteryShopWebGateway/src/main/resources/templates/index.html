@@ -242,7 +242,7 @@
 		//存储推广人员的Id，推广人员Id存储在session有效期24小时
 		var generalizePersonId = "${generalizePersonId!''}";
 		setCookie("generalizePersonId",generalizePersonId,24);
-		var languageType = getCookie("somoveLanguage") || "en";
+		var languageType = getLanguage();//getCookie("somoveLanguage") || "en";
 		infoContentCharacteristic(languageType);
 		infoContentPartners();
 		infoContentExternal();
@@ -259,7 +259,7 @@ function infoContentCharacteristic(languageType){
 			var characteristicProject = $(".div_characteristicProject");
 			$.each(result,function(index,data){
 				left += '<div class="card trans_200">'+
-						'<img class="card-img-top" src="/api/base/v1/lsimage/getImg?id='+(data.imgId || "")+'">'+
+						'<img class="card-img-top" src="/apiauthorization/base/authorization/v1/lsimage/getImg?id='+(data.imgId || "")+'">'+
 						'<div class="card-body">'+
 						'<div class="card-title"><a href="blog_post.html">'+data.title+'</a></div>'+
 						'<div class="card-text">'+
@@ -281,7 +281,7 @@ function infoContentPartners(){
 			//充值途径
 			var partner_obj = $(".partners_list");
 			$.each(result,function(index,partners){
-				partner_obj.append("<img onclick='open_url(\""+partners.linkAddress+"\")' src='/api/base/v1/lsimage/getImg?id="+partners.imgId+"'>");
+				partner_obj.append("<img onclick='open_url(\""+partners.linkAddress+"\")' src='/apiauthorization/base/authorization/v1/lsimage/getImg?id="+partners.imgId+"'>");
 			})
 		}
 	})
@@ -295,7 +295,7 @@ function infoContentExternal(){
 			//合作伙伴
 			var external_obj = $(".external_list");
 			$.each(result,function(index,external){
-				external_obj.append("<img onclick='open_url(\""+external.linkAddress+"\")' src=/api/base/v1/lsimage/getImg?id="+external.imgId+">");
+				external_obj.append("<img onclick='open_url(\""+external.linkAddress+"\")' src=/apiauthorization/base/authorization/v1/lsimage/getImg?id="+external.imgId+">");
 			})
 		}
 	})

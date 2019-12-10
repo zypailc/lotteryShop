@@ -72,13 +72,6 @@
 
 
 	<script>
-		/*$(function(){
-			var token = $("meta[name='_csrf']").attr("content");
-			var header = $("meta[name='_csrf_header']").attr("content");
-			$(document).ajaxSend(function(e, xhr, options) {
-				xhr.setRequestHeader(header, token);
-			});
-		})*/
 
 		function register(){
 			var  data_array = $("#reply_form").serializeArray();
@@ -87,24 +80,26 @@
             var email = $("#reply_form_email").val() || "";
             //获取推广人员ID
 			var generalizePersonId = getCookie("generalizePersonId") || "";
-			console.log(data_array);
 			data_array.push({"name":"generalizeMemberId","value":generalizePersonId});
-			console.log(data_array);
-			//data_array.append("generalizeMemberId",generalizePersonId);
             if(!mail_reg.test(email)){
                 layer.msg("Please enter the correct email address !");
                 return;
             }
+			var index = layer.load(1);
 			$.ajax({
 					type: "get",
 					url: "/apiauthorization/base/authorization/v1/member/register",
 					data:data_array,
 					dataType: "json",
 					success:function (data){
+						layer.close(index);
 						if(data.code == '200'){//注册成功
-							window.location.href='../web/login';
+							layer.msg(data.extend.data);
+							set_Time_out('../web/login');
 						}
-						layer.msg(data.msg);
+						if(data.code == '500'){
+							layui_open(data.msg)
+						}
 					}
 			})
 		}

@@ -7,10 +7,13 @@ import com.didu.lotteryshop.base.service.MailService;
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.EsEthwallet;
 import com.didu.lotteryshop.common.entity.Member;
+import com.didu.lotteryshop.common.mapper.MemberMapper;
 import com.didu.lotteryshop.common.service.form.impl.*;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.CodeUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpEntity;
@@ -27,14 +30,18 @@ import java.util.Map;
 @Service
 public class MemberService extends BaseBaseService {
 
+    Logger log = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private OAuth2RestTemplate oAuth2RestTemplate;
     @Autowired
     private MemberServiceImpl memberServiceImp;
     @Autowired
+    private MemberMapper memberMapper;
+    @Autowired
     private EsEthwalletServiceImpl esEthwalletService;
     @Autowired
-    private MailService mailServiceImp;
+    private MailService mailService;
     @Autowired
     private EsLsbwalletServiceImpl esLsbwalletService;
     @Autowired
@@ -58,11 +65,17 @@ public class MemberService extends BaseBaseService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf("application/json;UTF-8"));
         HttpEntity<String> strEntity = new HttpEntity<String>(str,headers);
-        String reStr =   oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/generate",strEntity,String.class);
+        String reStr = "";
+        try{
+            reStr =   oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/generate",strEntity,String.class);
+        }catch (Exception e){
+            log.info("Wallet creation failed !");
+            e.printStackTrace();
+        }
         ResultUtil result = super.getDecryptResponseToResultUtil(reStr); //解密
         //保存
-        if(result != null && result.getCode() == ResultUtil.ERROR_CODE){
-            return ResultUtil.errorJson("error");
+        if(result != null && result.getCode() != ResultUtil.SUCCESS_CODE){
+            return ResultUtil.errorJson("Wallet creation failed !");
         }
         Member member = new Member();
         Map<String,Object> resultMap = (Map<String,Object>) result.getExtend().get(ResultUtil.DATA_KEY);
@@ -83,7 +96,7 @@ public class MemberService extends BaseBaseService {
         //初始化钱包
         EsEthwallet esEthwallet = esEthwalletService.initInsert(member.getId());
         if(esEthwallet == null){
-            return ResultUtil.errorJson("error");
+            return ResultUtil.errorJson("Failed to initialize wallet!");
         }
         return resultUtil;
     }
@@ -136,7 +149,16 @@ public class MemberService extends BaseBaseService {
         member.setId(CodeUtil.getUuid());
         member.setSecretKey(secretKey);
         member.setCreateTime(new Date());
-        mailServiceImp.sendSimpleMail(member,"new password",password);
+        //判斷是否有上級推薦
+        if(member.getGeneralizeMemberId() != null && !"".equals(member.getGeneralizeMemberId())){
+            //查詢上級基本用戶信息
+            Member memberUp = new Member();
+            memberUp = memberMapper.selectById(member.getGeneralizeMemberId());
+            member.setGeneralizeMemberId(memberUp.getGeneralizeMemberId() == null || "".equals(memberUp.getGeneralizeMemberId()) ? "":memberUp.getGeneralizeMemberId() + "," + memberUp.getId());
+            member.setGeneralizeMemberType(memberUp.getGeneralizeMemberType() == null ? 0:(memberUp.getGeneralizeMemberType()+1));
+        }
+        String emailStr = "Your account number is : " + member.getEmail() + "<br/>　Your password is : "+ password;
+        mailService.sendSimpleMail(member,"password",emailStr);
         //保存用户信息
         boolean b = memberServiceImp.insert(member);
         if(b){
@@ -177,7 +199,8 @@ public class MemberService extends BaseBaseService {
         wrapper.allEq(map);
         boolean b = memberServiceImp.update(member,wrapper);
         if(b) {
-            mailServiceImp.sendSimpleMail(member, "new password", password);
+            String emailStr = "Your account number is : " + member.getEmail() + "<br/>　Your password is : "+ password;
+            mailService.sendSimpleMail(member, "new password", emailStr);
             return ResultUtil.successJson("Your new password has been sent to your email !");
         }
         return  ResultUtil.errorJson("error , please operate again !");

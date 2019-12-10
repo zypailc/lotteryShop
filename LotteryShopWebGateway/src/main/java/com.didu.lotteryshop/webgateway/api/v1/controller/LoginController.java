@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +56,7 @@ public class LoginController extends WebgatewayBaseController {
      * @param request
      * @return
      */
+    @ResponseBody
     @RequestMapping("/loginOut")
     public ResultUtil loginOut(HttpServletRequest request){
         HttpSession session = request.getSession();
@@ -62,7 +64,8 @@ public class LoginController extends WebgatewayBaseController {
         if(StringUtils.isNotBlank(accessToken)){
             restTemplate.delete("http://auth-service/auth/api/exit?access_token="+accessToken);
             //清除Session
-            session.removeAttribute(Constants.SESSION_LOGIN_TOKEN);
+            session.removeAttribute(Constants.SESSION_LOGIN_TOKEN);//清除令牌
+            session.removeAttribute(com.didu.lotteryshop.common.config.Constants.LOGIN_USER);//清除用戶信息
         }
         return ResultUtil.successJson("Exit the success！");
     }

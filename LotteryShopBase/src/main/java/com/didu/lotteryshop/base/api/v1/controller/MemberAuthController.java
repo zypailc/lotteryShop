@@ -34,11 +34,11 @@ public class MemberAuthController extends BaseBaseController {
     public ResultUtil register(Member member){
         //判断昵称是否为空
         if(member.getMemberName() == null || "".equals(member.getMemberName())){
-            return ResultUtil.jsonObject("pet name cannot be empty !", ResultCode.FAILED.getCode());
+            return ResultUtil.errorJson("pet name cannot be empty !");
         }
         //验证邮箱格式
         if(!EmailUtil.verificationEmail(member.getEmail())){
-            return ResultUtil.jsonObject("Please enter the correct email address !", ResultCode.FAILED.getCode());
+            return ResultUtil.errorJson("Please enter the correct email address !");
         }
         return memberService.register(member);
     }
