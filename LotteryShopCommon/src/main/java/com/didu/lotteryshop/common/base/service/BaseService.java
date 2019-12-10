@@ -5,10 +5,11 @@ import com.didu.lotteryshop.common.base.BaseStat;
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
-import net.sf.ezmorph.bean.MorphDynaBean;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -31,7 +32,21 @@ public class BaseService extends BaseStat {
             }
         }
         return eRStr;
-    };
+    }
+
+    /**
+     * 获取加密请求HttpEntity
+     * @param map
+     * @return
+     */
+    public HttpEntity<String> getEncryptRequestHttpEntity(Map<String,Object> map){
+        String str = new org.springframework.boot.configurationprocessor.json.JSONObject(map).toString();
+        str = this.getEncryptRequest(str);//加密
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf("application/json;UTF-8"));
+        HttpEntity<String> strEntity = new HttpEntity<String>(str,headers);
+        return strEntity;
+    }
 
     /**
      * 解密请求参数处理

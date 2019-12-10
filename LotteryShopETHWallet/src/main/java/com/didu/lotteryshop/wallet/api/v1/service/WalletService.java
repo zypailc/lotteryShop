@@ -88,7 +88,7 @@ public class WalletService extends WalletBaseService {
         try {
             BigDecimal  ether = web3jService.getBalanceByEther(address);
             //钱包余额
-            reMap.put("ether",ether.toBigInteger());
+            reMap.put("ether",ether.toPlainString());
             return ResultUtil.successJson(reMap);
         } catch (IOException e) {
             e.printStackTrace();
