@@ -272,7 +272,7 @@ section
 	height: 54px;
 	width: 174px;
 	text-align: center;
-	border: solid 2px #452b78;
+	/*border: solid 2px #452b78;*/
 	background: transparent;
 }
 .button a
@@ -283,7 +283,8 @@ section
 	font-weight: 700;
 	line-height: 50px;
 	text-transform: uppercase;
-	color: #452b78;
+	/*color: #452b78;*/
+	color:#fff;
 }
 .prlx_parent
 {

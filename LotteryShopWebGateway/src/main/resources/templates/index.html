@@ -144,28 +144,162 @@
 				</div>
 			</div>
 		</div>
+		<style type="text/css">
+			.lottery_wrapper{
+				position: relative;
+				z-index: 1;
+				padding: 2rem 1rem;
+			}
+			.lottery_wrapper:before {
+				position: absolute;
+				z-index: -1;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				content: '';
+				border-radius: 5px;
+				background-image: url(../images/light.png);
+				background-repeat: no-repeat;
+				background-position: center bottom;
+				background-size: contain;
+			}
+			.lottery_content p{
+				color:#fff;
 
+			}
+			.eth{
+				font-size: 2.5rem;
+				font-weight: 700;
+				letter-spacing: 1px;
+				text-shadow: 0 0 9px #fff;
+			}
+			.lottery_content{
+				text-align: center;
+			}
+			.lottery_content .title{
+				font-size: 1.5rem;
+			}
+			.lottery_content .usd{
+				font-size:1.4rem;
+			}
+			.lottery_content .jackpot{
+				font-size:1.4rem;
+			}
+			.lottery_content .lottery_btn{
+				font-size:1.6rem;
+			}
+			.item_lottery{
+				height: 287px;
+			}
 
-		<div class="container">
-			<div class="row lotteryItem">
-				<div class="col-lg-6 service_col">
-					<!-- Service Item -->
-					<div class="service_item item_lottery" style="background:url(../images/gallery_2.jpg)no-repeat center top;">
-						<div class="item_content">
-							<p class="item_title">3D</p>
-							<p><a href="../web/authLotteryServices" class="trans_200" data-localize="base.start">START</a></p>
+			.lottery_btn1:hover,.lottery_btn2:hover,.lottery_btn3:hover{
+				background: #fff;
+			}
+			.lottery_btn1:hover a{
+				color: #725fd8;
+			}
+			.lottery_btn2:hover a{
+				color: #ff8b2c;
+			}
+
+		</style>
+
+		<!--<div class="container">-->
+			<!--<div class="row lotteryItem">-->
+				<!--<div class="col-lg-6 service_col">-->
+					<!--&lt;!&ndash; Service Item &ndash;&gt;-->
+					<!--<div class="service_item item_lottery lottery_wrapper" style="background-image: -webkit-gradient(linear,left bottom,left top,from(#725fd8),to(#513c9c));-->
+											<!--background-image:linear-gradient(to top,#725fd8,#513c9c);">-->
+						<!--<div class="lottery_content">-->
+							<!--<p class="title" style="border-bottom:1px solid rgba(255,255,255,.3)">BLOCK 3 </p>-->
+							<!--<p class="jackpot">Jackpot</p>-->
+							<!--<p class="eth">50 ETH</p>-->
+							<!--<p class="usd">$7,450</p>-->
+							<!--<p><a href="../web/authLotteryServices" class="lottery_btn" data-localize="base.start">START</a></p>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+				<!--<div class="col-lg-6 service_col" >-->
+					<!--&lt;!&ndash; Service Item &ndash;&gt;-->
+					<!--<div class="service_item item_lottery lottery_wrapper" style="background-image: -webkit-gradient(linear,left bottom,left top,from(#ff8b2c),to(#ffa23f));-->
+    								<!--background-image: linear-gradient(to top,#ff8b2c,#ffa23f);">-->
+						<!--<div class="lottery_content">-->
+							<!--<p class="title" style="border-bottom:1px solid rgba(255,255,255,.3)">INSTANT PRIZE</p>-->
+							<!--<p class="jackpot">Instant</p>-->
+							<!--<p class="eth">50 ETH</p>-->
+							<!--<p class="usd">$7,450</p>-->
+							<!--<p><a href="../web/authLotteryServices" class="lottery_btn trans_200" data-localize="base.start">START</a></p>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+				<!--<div class="col-lg-6 service_col" >-->
+					<!--<div class="service_item item_lottery lottery_wrapper" style="background-image: -webkit-gradient(linear,left bottom,left top,from(#ff8b2c),to(#ffa23f));-->
+    								<!--background-image: linear-gradient(to top,#ff8b2c,#ffa23f);">-->
+						<!--<div class="item_content">-->
+							<!--<p class="item_title" data-localize="base.more">MORE</p>-->
+							<!--<p data-localize="base.toBeExpected">To be expected</p>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+		<!--</div>-->
+
+		<div class="h_slider_container services_slider_container">
+			<div class="service_slider_outer">
+				<!-- Services Slider -->
+				<div class="owl-carousel  services_slider">
+					<!-- Services Slider Item-->
+					<div class="owl-item services_item">
+						<div class="services_item_inner " style="background-image: -webkit-gradient(linear,left bottom,left top,from(#725fd8),to(#513c9c));
+											background-image:linear-gradient(to top,#725fd8,#513c9c);">
+							<div class="service_item_content lottery_wrapper"  >
+								<div class="lottery_content">
+									<p class="title" style="border-bottom:1px solid rgba(255,255,255,.3)">BLOCK 3 </p>
+									<p class="jackpot">Jackpot</p>
+									<p class="eth">50 ETH</p>
+									<p class="usd">$7,450</p>
+								</div>
+								<div class="button service_item_button trans_200 lottery_btn1">
+									<a href="../web/authLotteryServices" class=" trans_200" data-localize="base.start">START</a>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="col-lg-6 service_col" >
-					<div class="service_item item_lottery" style="background:url(../images/gallery_2.jpg)no-repeat center top;">
-						<div class="item_content">
-							<p class="item_title" data-localize="base.more">MORE</p>
-							<p data-localize="base.toBeExpected">To be expected</p>
+					<!-- Services Slider Item-->
+					<div class="owl-item services_item">
+						<div class="services_item_inner " style="background-image: -webkit-gradient(linear,left bottom,left top,from(#ff8b2c),to(#ffa23f));
+    								background-image: linear-gradient(to top,#ff8b2c,#ffa23f);">
+							<div class="service_item_content lottery_wrapper"  >
+								<div class="lottery_content">
+									<p class="title" style="border-bottom:1px solid rgba(255,255,255,.3)">INSTANT PRIZE</p>
+									<p class="jackpot">Instant</p>
+									<p class="eth">50 ETH</p>
+									<p class="usd">$7,450</p>
+								</div>
+								<div class="button service_item_button trans_200 lottery_btn2">
+									<a href="../web/authLotteryServices" class="lottery_btn trans_200" data-localize="base.start">START</a>
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
+					<!-- Services Slider Item-->
+					<div class="owl-item services_item">
+						<div class="services_item_inner " style="background-image: -webkit-gradient(linear,left bottom,left top,from(#ddd),to(#ddd));
+    								background-image: linear-gradient(to top,#ddd,#ddd);">
+							<div class="service_item_content lottery_wrapper"  >
+								<div class="lottery_content">
+									<p class="title" data-localize="base.more" style="border-bottom:1px solid rgba(255,255,255,.3)">MORE</p>
+									<p class="jackpot" data-localize="base.toBeExpected">To be expected</p>
+								</div>
+								<!--<div class="button service_item_button trans_200">
+									<a href="../web/authLotteryServices" class="lottery_btn trans_200" data-localize="base.start">START</a>
+								</div>-->
+							</div>
+						</div>
+					</div>
 
+				</div>
 			</div>
 		</div>
 
@@ -242,7 +376,7 @@
 		//存储推广人员的Id，推广人员Id存储在session有效期24小时
 		var generalizePersonId = "${generalizePersonId!''}";
 		setCookie("generalizePersonId",generalizePersonId,24);
-		var languageType = getLanguage();//getCookie("somoveLanguage") || "en";
+		var languageType = getCookie("somoveLanguage") || "en";
 		infoContentCharacteristic(languageType);
 		infoContentPartners();
 		infoContentExternal();
@@ -259,7 +393,7 @@ function infoContentCharacteristic(languageType){
 			var characteristicProject = $(".div_characteristicProject");
 			$.each(result,function(index,data){
 				left += '<div class="card trans_200">'+
-						'<img class="card-img-top" src="/apiauthorization/base/authorization/v1/lsimage/getImg?id='+(data.imgId || "")+'">'+
+						'<img class="card-img-top" src="/api/base/v1/lsimage/getImg?id='+(data.imgId || "")+'">'+
 						'<div class="card-body">'+
 						'<div class="card-title"><a href="blog_post.html">'+data.title+'</a></div>'+
 						'<div class="card-text">'+
@@ -281,7 +415,7 @@ function infoContentPartners(){
 			//充值途径
 			var partner_obj = $(".partners_list");
 			$.each(result,function(index,partners){
-				partner_obj.append("<img onclick='open_url(\""+partners.linkAddress+"\")' src='/apiauthorization/base/authorization/v1/lsimage/getImg?id="+partners.imgId+"'>");
+				partner_obj.append("<img onclick='open_url(\""+partners.linkAddress+"\")' src='/api/base/v1/lsimage/getImg?id="+partners.imgId+"'>");
 			})
 		}
 	})
@@ -295,7 +429,7 @@ function infoContentExternal(){
 			//合作伙伴
 			var external_obj = $(".external_list");
 			$.each(result,function(index,external){
-				external_obj.append("<img onclick='open_url(\""+external.linkAddress+"\")' src=/apiauthorization/base/authorization/v1/lsimage/getImg?id="+external.imgId+">");
+				external_obj.append("<img onclick='open_url(\""+external.linkAddress+"\")' src=/api/base/v1/lsimage/getImg?id="+external.imgId+">");
 			})
 		}
 	})
