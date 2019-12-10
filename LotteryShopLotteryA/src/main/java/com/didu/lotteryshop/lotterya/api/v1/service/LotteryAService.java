@@ -97,16 +97,17 @@ public class LotteryAService extends LotteryABaseService {
      * @param currentPage
      * @param pageSize
      * @param isOneself 是否只查询自己 0：否 ；1：是
+     * @param mTransferStatus 状态格式 :'1','2'
      * @param lotteryaBuy
      * @return
      */
-    public ResultUtil getLotteryBuy(Integer currentPage, Integer pageSize,Integer isOneself, LotteryaBuy lotteryaBuy){
+    public ResultUtil getLotteryBuy(Integer currentPage, Integer pageSize,Integer isOneself,String mTransferStatus, LotteryaBuy lotteryaBuy){
         if(isOneself != null && isOneself == 1 && super.getLoginUser() != null){
             lotteryaBuy.setMemberId(super.getLoginUser().getId());
         }else{
             lotteryaBuy.setMemberId(null);
         }
-        return ResultUtil.successJson(lotteryaBuyService.getPageLotteryBuy(currentPage,pageSize,lotteryaBuy));
+        return ResultUtil.successJson(lotteryaBuyService.getPageLotteryBuy(currentPage,pageSize,mTransferStatus,lotteryaBuy));
     }
 
 

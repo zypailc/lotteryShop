@@ -49,15 +49,16 @@ public class AuthorizationController extends LotteryABaseController {
      * @param currentPage
      * @param pageSize
      * @param isOneself 是否只查询自己 0：否 ；1：是
+     * @param mTransferStatus 状态格式 :'1','2'
      * @param lotteryaBuy
      * @return
      */
     @RequestMapping("/getLotteryBuy")
     @ResponseBody
-    public ResultUtil getLotteryBuy(Integer currentPage, Integer pageSize,Integer isOneself, LotteryaBuy lotteryaBuy){
+    public ResultUtil getLotteryBuy(Integer currentPage, Integer pageSize,Integer isOneself,String mTransferStatus, LotteryaBuy lotteryaBuy){
         currentPage =  currentPage == null ? 1:currentPage;
         pageSize = pageSize == null ? 20 : pageSize;
-        return lotteryAService.getLotteryBuy(currentPage,pageSize,isOneself,lotteryaBuy);
+        return lotteryAService.getLotteryBuy(currentPage,pageSize,isOneself,mTransferStatus,lotteryaBuy);
     }
 
 }
