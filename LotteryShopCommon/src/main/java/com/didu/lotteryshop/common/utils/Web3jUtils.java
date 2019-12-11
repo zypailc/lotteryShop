@@ -68,7 +68,7 @@ public class Web3jUtils {
      */
     public static BigDecimal gasToEtherByBigDecimal(BigDecimal gasPrice,BigDecimal gasLimit){
         BigDecimal gas =  gasPrice.multiply(gasLimit);
-        return gas;
+        return Convert.fromWei(gas,Convert.Unit.ETHER);
     }
 
     /**
