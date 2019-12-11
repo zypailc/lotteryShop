@@ -173,7 +173,7 @@ public class LotteryAService extends LotteryABaseService {
                     bool = lotteryaPmDetailService.buyPM(lotteryaBuy,lotteryaInfo);
                 }
             }
-            return bool ? ResultUtil.errorJson("") :  ResultUtil.errorJson("Execution error, please contact administrator!");
+            return bool ? ResultUtil.successJson("Purchase succeeds!") :  ResultUtil.errorJson("Execution error, please contact administrator!");
         }
         //执行错误，请联系管理员！
         return ResultUtil.errorJson("Execution error, please contact administrator!");

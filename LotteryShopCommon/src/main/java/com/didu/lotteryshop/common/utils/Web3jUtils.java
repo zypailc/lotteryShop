@@ -46,7 +46,7 @@ public class Web3jUtils {
      * @return
      */
     public static BigDecimal etherToAllEtherByBigDecimal(BigDecimal etherValue,BigDecimal gasPrice,BigDecimal gasLimit){
-        BigDecimal gas =  gasPrice.multiply(gasLimit);
+        BigDecimal gas =  gasToEtherByBigDecimal(gasPrice,gasLimit);
         return gas.add(etherValue);
     }
 
@@ -95,5 +95,42 @@ public class Web3jUtils {
             return false;
         }
         return cleanInput.length() == ADDRESS_LENGTH_IN_HEX;
+    }
+
+    /**
+     * 事务返回状态判断（成功）
+     * @param status
+     * @return
+     */
+    public static boolean transactionReceiptStatusSuccess(String status){
+        boolean bool = false;
+        if("0x1".equals(status)){
+            bool = true;
+        }
+        return bool;
+    }
+    /**
+     * 事务返回状态判断（等待）
+     * @param status
+     * @return
+     */
+    public static boolean transactionReceiptStatusWait(String status){
+        boolean bool = false;
+        if(true){
+            bool = true;
+        }
+        return bool;
+    }
+    /**
+     * 事务返回状态判断（失败）
+     * @param status
+     * @return
+     */
+    public static boolean transactionReceiptStatusFail(String status){
+        boolean bool = false;
+        if(true){
+            bool = true;
+        }
+        return bool;
     }
 }

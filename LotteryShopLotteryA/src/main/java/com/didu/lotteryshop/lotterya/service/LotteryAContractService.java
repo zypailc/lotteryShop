@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tuples.generated.Tuple2;
+import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -140,9 +141,9 @@ public class LotteryAContractService extends LotteryABaseService {
                 upTotal = cBalance;
             }
             if(afBalance.compareTo(lotteryaInfo.getAdjustBonusDown()) >= 0 ){
-                upTotal.add(afBalance.divide(new BigDecimal("100")).multiply(lotteryaInfo.getAdjustBonusRatio()));
+                upTotal = upTotal.add(afBalance.divide(new BigDecimal("100")).multiply(lotteryaInfo.getAdjustBonusRatio()));
             }else{
-                upTotal.add(lotteryaInfo.getAdjustBonusUp());
+                upTotal = upTotal.add(lotteryaInfo.getAdjustBonusUp());
             }
             if(cTotal.compareTo(upTotal) > 0){
                 bool = true;
@@ -162,22 +163,30 @@ public class LotteryAContractService extends LotteryABaseService {
         LotteryAContractResultEntity lacre = new LotteryAContractResultEntity();
         try {
             LotteryAContract lotteryAContract  = web3jService.loadLoginMemberContract(lotteryaInfoService.findLotteryaInfo().getContractAddress());
-            TransactionReceipt transactionReceipt = lotteryAContract.BuyLottery(luckNum, BigInteger.valueOf(multipleNumber),amount.toBigInteger()).send();
+            TransactionReceipt transactionReceipt = lotteryAContract.BuyLottery(luckNum, BigInteger.valueOf(multipleNumber), Convert.toWei(amount.toPlainString(), Convert.Unit.ETHER).toBigInteger()).sendAsync().get();
             //事务哈希值
-           String transactionHash = transactionReceipt.getTransactionHash();
+            String transactionHash = transactionReceipt.getTransactionHash();
             lacre.setTransactionHash(transactionHash);
-            //状态 TODO 状态需要测试进行修改
             String status = transactionReceipt.getStatus();
-            lacre.setStatus(LotteryAContractResultEntity.STATUS_SUCCESS);
-            //购买A彩票成功
-            lacre.setMsg("Buy lottery A successfully!");
-            //购买A彩票失败
-            // lacre.setMsg("Failed to buy the lottery A!");
-            //燃气费
-            BigInteger gasUsed =  transactionReceipt.getGasUsed();
-            lacre.setGasUsed(Web3jUtils.bigIntegerToBigDecimal(gasUsed));
+            if(Web3jUtils.transactionReceiptStatusSuccess(status)){
+                lacre.setStatus(LotteryAContractResultEntity.STATUS_SUCCESS);
+                //购买A彩票成功
+                lacre.setMsg("Buy lottery A successfully!");
+                //燃气费
+                BigInteger gasUsed =  transactionReceipt.getGasUsed();
+                lacre.setGasUsed(Web3jUtils.bigIntegerToBigDecimal(gasUsed));
+            }else if(Web3jUtils.transactionReceiptStatusWait(status)){
+                lacre.setStatus(LotteryAContractResultEntity.STATUS_WAIT);
+                //等待交易确认
+                lacre.setMsg("Waiting for transaction confirmation!");
+            }else if(Web3jUtils.transactionReceiptStatusFail(status)){
+                lacre.setStatus(LotteryAContractResultEntity.STATUS_FAIL);
+                //购买A彩票失败
+                lacre.setMsg("Failed to buy the lottery A!");
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            lacre.setTransactionHash("");
             lacre.setStatus(LotteryAContractResultEntity.STATUS_FAIL);
             //购买A彩票失败
             lacre.setMsg("Failed to buy the lottery A!");
@@ -418,10 +427,8 @@ public class LotteryAContractService extends LotteryABaseService {
             cPrice = cPrice == null ? BigInteger.ZERO : cPrice;
             BigDecimal cbPrice =  Web3jUtils.bigIntegerToBigDecimal(cPrice);
             if(cbPrice.compareTo(price) != 0){
-               TransactionReceipt transactionReceipt = lotteryAContract.updatePrice(price.toBigInteger()).send();
-               //状态 TODO 状态需要测试进行修改
-               String status = transactionReceipt.getStatus();
-               if(true){
+               TransactionReceipt transactionReceipt = lotteryAContract.updatePrice(Convert.toWei(price.toPlainString(), Convert.Unit.ETHER).toBigInteger()).send();
+               if(Web3jUtils.transactionReceiptStatusSuccess(transactionReceipt.getStatus())){
                    bool = true;
                }
             }

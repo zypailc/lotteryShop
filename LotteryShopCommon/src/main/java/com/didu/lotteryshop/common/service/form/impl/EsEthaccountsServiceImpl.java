@@ -247,7 +247,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      */
     public List<EsEthaccounts> findOutBeingProcessed(String memberId){
         Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
-        wrapper.eq("memberId",memberId)
+        wrapper.eq("member_id",memberId)
                 .and().eq("type",TYPE_OUT)
                 .and().eq("status",STATUS_BEINGPROCESSED);
         return super.selectList(wrapper);
@@ -312,10 +312,10 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
     public boolean isFirstConsumption(String memberId){
         boolean bool = false;
         Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
-        wrapper.eq("memberId",memberId)
+        wrapper.eq("member_id",memberId)
                 .and().eq("type",TYPE_OUT)
                 .and().eq("status",STATUS_SUCCESS)
-                .and("dic_type <> ?",DIC_TYPE_DRAW);
+                .and("dic_type <> {0}",DIC_TYPE_DRAW);
         int c =  super.selectCount(wrapper);
         if(c == 0){
             bool = true;

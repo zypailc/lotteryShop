@@ -18,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
@@ -38,6 +39,9 @@ import java.util.Map;
  */
 @Service
 public class Web3jService extends LotteryABaseService {
+    /** 生成钱包文件地址*/
+    @Value("${ethwallet.filePath}")
+    private String walletFilePath;
     /** 主网络地址 */
     @Value("${ethwallet.web3j.url}")
     private String ethwalletWeb3jUrl;
@@ -97,7 +101,7 @@ public class Web3jService extends LotteryABaseService {
      */
     public LotteryAContract loadManagerContract(String contractAddress){
         LotteryAContract lotteryAContract = null;
-        if(StringUtils.isBlank(contractAddress) &&  StringUtils.isBlank(managerPrivateKey)){
+        if(StringUtils.isNotBlank(contractAddress) &&  StringUtils.isNotBlank(managerPrivateKey)){
             //部署管理员私钥
             Credentials credentials = Credentials.create(managerPrivateKey);
             lotteryAContract = LotteryAContract.load(contractAddress, web3j, credentials, gasProviderService.getStaticGasProvider());
@@ -126,26 +130,24 @@ public class Web3jService extends LotteryABaseService {
     public Credentials getLoginMemberCredentials(){
         try{
             LoginUser loginUser = super.getLoginUser();
-            Map<String,Object> map = new HashMap<>();
-            map.put("walletFileName",loginUser.getWalletName());
-            map.put("payPassword",loginUser.getPaymentCode());
-            JSONObject jObject = new JSONObject(map);
-            String str = jObject.toString();
-            str = super.getEncryptRequest(str);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.valueOf("application/json;UTF-8"));
-            HttpEntity<String> strEntity = new HttpEntity<String>(str,headers);
-            //查询钱包明细
-            String reStr =   oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/findWalletDetail",strEntity,String.class);
-            ResultUtil result = super.getDecryptResponseToResultUtil(reStr);
-            if(result != null){
-                if(result.getCode() == ResultCode.SUCCESS.getCode() && result.getExtend() != null){
-                    JSONObject resultJObject = new JSONObject(result.getExtend().get(ResultUtil.DATA_KEY).toString());
-                    if(resultJObject != null && !"".equals(resultJObject.get("ecKeyPair").toString())){
-                       return Credentials.create(resultJObject.get("ecKeyPair").toString());
-                    }
-                }
-            }
+            return WalletUtils.loadCredentials(loginUser.getPaymentCode(), walletFilePath+loginUser.getWalletName());
+
+// TODO 2019-12-11 lyl 注释，因返回钱包秘钥，直接用秘钥生成Credentials 无法进行操作。需要进一步研究。
+
+//            Map<String,Object> map = new HashMap<>();
+//            map.put("walletFileName",loginUser.getWalletName());
+//            map.put("payPassword",loginUser.getPaymentCode());
+//            //查询钱包明细
+//            String reStr =   oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/findWalletDetail",super.getEncryptRequestHttpEntity(map),String.class);
+//            ResultUtil result = super.getDecryptResponseToResultUtil(reStr);
+//            if(result != null){
+//                if(result.getCode() == ResultCode.SUCCESS.getCode() && result.getExtend() != null){
+//                    Map<String,Object> rMap = (Map<String,Object>) result.getExtend().get(ResultUtil.DATA_KEY);
+//                    if(rMap != null && !rMap.isEmpty()){
+//                       return Credentials.create(rMap.get("ecKeyPair").toString());
+//                    }
+//                }
+//            }
         }catch (Exception e){
             e.printStackTrace();
         }

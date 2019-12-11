@@ -115,19 +115,22 @@ public class WalletContorller extends WalletBaseController {
         return walletService.findTransactionStatus(transactionHashValue);
     }
 
-    /**
-     * 查询钱包明细
-     * @return
-     */
-    @PostMapping(value = "/findWalletDetail",consumes = "application/json")
-    @ResponseBody
-    @SecurityParameter
-    public ResultUtil findWalletDetail(@RequestBody FindWalletDetailEntity findWalletDetailEntity){
 
-        if(findWalletDetailEntity == null || StringUtils.isBlank(findWalletDetailEntity.getWalletFileName()) || StringUtils.isBlank(findWalletDetailEntity.getPayPassword())){
-            //参数错误
-            return ResultUtil.errorJson("Parameter error!");
-        }
-        return walletService.findWalletDetail(findWalletDetailEntity.getWalletFileName(),findWalletDetailEntity.getPayPassword());
-    }
+// TODO 2019-12-11 lyl 注释，因返回钱包秘钥，直接用秘钥生成Credentials 无法进行操作。需要进一步研究。
+
+//    /**
+//     * 查询钱包明细
+//     * @return
+//     */
+//    @PostMapping(value = "/findWalletDetail",consumes = "application/json")
+//    @ResponseBody
+//    @SecurityParameter
+//    public ResultUtil findWalletDetail(@RequestBody FindWalletDetailEntity findWalletDetailEntity){
+//
+//        if(findWalletDetailEntity == null || StringUtils.isBlank(findWalletDetailEntity.getWalletFileName()) || StringUtils.isBlank(findWalletDetailEntity.getPayPassword())){
+//            //参数错误
+//            return ResultUtil.errorJson("Parameter error!");
+//        }
+//        return walletService.findWalletDetail(findWalletDetailEntity.getWalletFileName(),findWalletDetailEntity.getPayPassword());
+//    }
 }

@@ -183,7 +183,7 @@ public class WalletService extends WalletBaseService {
             Credentials credentials = WalletUtils.loadCredentials(payPassword, walletFilePath+walletFileName);
             Map<String,Object> reMap = new HashMap<>();
             reMap.put("address",credentials.getAddress());
-            reMap.put("ecKeyPair",credentials.getEcKeyPair());
+            reMap.put("ecKeyPair",credentials.getEcKeyPair().getPrivateKey().toString());
             return ResultUtil.successJson(reMap);
         } catch (IOException e) {
             e.printStackTrace();

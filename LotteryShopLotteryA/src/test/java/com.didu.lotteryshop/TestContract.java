@@ -3,6 +3,7 @@ package com.didu.lotteryshop;
 import com.didu.lotteryshop.lotterya.contract.LotteryAContract;
 import org.junit.Test;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthAccounts;
@@ -28,8 +29,8 @@ public class TestContract {
             //查询所有账户余额
             fianAccountsBalance(web3j);
             //部署智能合约
-            String managerAddress = "0x7F7791EA2E5D52F80FaB5296ae640D52B8C443b4";
-            String managerPrivateKey = "0x47285e503895070463ef6b092a48576b2d72ee8dfde30c02d384db8ae5741354";
+            String managerAddress = "0xbA1e2307bdF9F74375789e9E49AE1Aa30F52a635";
+            String managerPrivateKey = "0x45acdf957f67eb1ed889631d58111c37e2bb9ec84f434d814d6cfa73a63b6007";
 
             //EthGetBalance ethGetBalance1 = web3j.ethGetBalance(managerAddress, DefaultBlockParameter.valueOf("latest")).send();
             //System.out.println("部署前账户余额："+bigIntegerToBigDecimal(ethGetBalance1.getBalance()));
@@ -52,7 +53,14 @@ public class TestContract {
            String contractAddress = lotteryAContractDeploy.getContractAddress();
             //String contractAddress = "0x3aad3fef3a4071360e39a6a76f83659baf935b3b";
             System.out.println("contractAddress:"+contractAddress);
-            LotteryAContract lotteryAContractLoad = LotteryAContract.load(contractAddress, web3j, credentials, defaultGasProvider);
+            //11618217269991821615218593357079731003858423955559408825389419986837277478149220225557283957473406432356002690773835466465284860131754276005873533539057535
+            //37870671883850778949080478822205071849234530571768223490210874449181176623464
+            //37870671883850778949080478822205071849234530571768223490210874449181176623464
+            //37870671883850778949080478822205071849234530571768223490210874449181176623464
+           // Credentials credentials1 = Credentials.create("37870671883850778949080478822205071849234530571768223490210874449181176623464");
+            //Credentials credentials2 = new Credentials();
+            Credentials credentials1 = Credentials.create("37870671883850778949080478822205071849234530571768223490210874449181176623464","11618217269991821615218593357079731003858423955559408825389419986837277478149220225557283957473406432356002690773835466465284860131754276005873533539057535");
+            LotteryAContract lotteryAContractLoad = LotteryAContract.load(contractAddress, web3j, credentials1, defaultGasProvider);
 
            String buyNum = randomLuckNum(3);
             BigInteger BuyValue = Convert.toWei("0.1", Convert.Unit.ETHER).toBigInteger();
