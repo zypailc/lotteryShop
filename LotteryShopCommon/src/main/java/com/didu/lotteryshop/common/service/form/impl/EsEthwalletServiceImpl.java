@@ -58,7 +58,7 @@ public class EsEthwalletServiceImpl extends ServiceImpl<EsEthwalletMapper, EsEth
     public EsEthwallet findByMemberId(String memberId){
         if(StringUtils.isBlank(memberId)) return null;
         Wrapper<EsEthwallet> wrapper = new EntityWrapper<>();
-        wrapper.eq("memberId",memberId);
+        wrapper.eq("member_id",memberId);
         return super.selectOne(wrapper);
     }
 
