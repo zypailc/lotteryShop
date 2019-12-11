@@ -8,6 +8,13 @@ server:
 spring:
   application:
     name: base-service
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    #序列化与反序列化禁止科学计数配置
+    serialization:
+      WRITE_BIGDECIMAL_AS_PLAIN: true
+      #USE_BIG_DECIMAL_FOR_FLOATS: true
   datasource:
     name: druidDataSource
     type: com.alibaba.druid.pool.DruidDataSource
