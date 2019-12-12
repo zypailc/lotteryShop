@@ -37,51 +37,65 @@
     }
     $(function(){
         //初始化语言选择
-        var language_cookie = getCookie("somoveLanguage");
-        $(".language_select_onchange").prop('value',language_cookie);
-        $(".language_select_onchange").change(function (){
-            var language_select = $(this).val() || "";
-            var language_select_1 = $(this).val() || "";
-            //获取浏览器的语言
-            var browserLanguage = navigator.language.toLowerCase();
-            var browserLanguage_array;
-            var langeage_zh = {ja:"日语",da:"丹麦语"};//中文繁体
-            var langeage_en = {ja:"Japanese",da:"Danish"};//英文
-            var language_ja = {ja:"日本語",da:"デンマーク語"};//日本
-            var language_da = {ja:"Japansk",da:"Dansk"};//丹麦
-            var name = "somoveLanguage";
-            var flag = true;
-            if(browserLanguage){
-                switch (browserLanguage) {
-                    case 'zh-cn':
-                        browserLanguage_array = language_ja;
-                        language_select = langeage_zh[language_select];
-                        break;
-                    case 'en':
-                        browserLanguage_array = language_ja;
-                        language_select = langeage_en[language_select];
-                        break;
-                    case 'ja':
-                        browserLanguage_array = language_ja;
-                        language_select = language_ja[language_select];
-                        break;
-                    case 'da':
-                        browserLanguage_array = language_da;
-                        language_select = language_da[language_select];
-                        break;
-                    default:
-                }
-            }
-            if((language_select_1 != 'zh' && language_select_1 != 'en')) {
-                $("iframe.goog-te-menu-frame").contents().find("table").find("span.text").each(function (i, data) {
-                    if ($(this).html() == language_select) {
-                        $(this).click();
-                    }
-                })
-            }else {
-                SetCookie(name, language_select_1);
-                location.reload();
-            }
-        });
+        var language_navigator = getLanguage();
+        //$(".language_select_onchange").prop('value',language_cookie);
+        var imgHtml = "<img class='language_img' src='../images/flags/"+ language_navigator +".png'> ";
+        $(".a_language_select_onchange").html(imgHtml);
     })
+
+    function language_select_onchange(e,language_cookie){
+        var language_select = "";
+        var language_select_1 = "";
+        if(e == null){
+            language_select = language_cookie;
+            language_select_1 = language_cookie;
+        }else {
+            language_select = $(e).attr("data_value") || "en";
+            language_select_1 = $(e).attr("data_value") || "en";
+        }
+        //获取浏览器的语言
+        imgHtml = "<img class='language_img' src='../images/flags/"+ language_select +".png'> ";
+        $(".a_language_select_onchange").html(imgHtml);
+        var browserLanguage = navigator.language.toLowerCase();
+        var browserLanguage_array;
+        var langeage_zh = {ja:"日语",da:"丹麦语"};//中文繁体
+        var langeage_en = {ja:"Japanese",da:"Danish"};//英文
+        var language_ja = {ja:"日本語",da:"デンマーク語"};//日本
+        var language_da = {ja:"Japansk",da:"Dansk"};//丹麦
+        var name = "somoveLanguage";
+        SetCookie(name, language_select_1);
+        var flag = true;
+        if(browserLanguage){
+            switch (browserLanguage) {
+                case 'zh-cn':
+                    browserLanguage_array = language_ja;
+                    language_select = langeage_zh[language_select];
+                    break;
+                case 'en':
+                    browserLanguage_array = language_ja;
+                    language_select = langeage_en[language_select];
+                    break;
+                case 'ja':
+                    browserLanguage_array = language_ja;
+                    language_select = language_ja[language_select];
+                    break;
+                case 'da':
+                    browserLanguage_array = language_da;
+                    language_select = language_da[language_select];
+                    break;
+                default:
+            }
+        }
+        if((language_select_1 != 'zh' && language_select_1 != 'en')) {
+            $("iframe.goog-te-menu-frame").contents().find("table").find("span.text").each(function (i, data) {
+                if ($(this).html() == language_select) {
+                    $(this).click();
+                }
+            })
+        }else {
+            //清除谷歌翻译插件存入的cookie值
+            delCookie("googtrans");
+            location.reload();
+        }
+    }
 </script>

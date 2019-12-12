@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +31,9 @@ public class BaseInfoContorller extends BaseBaseController {
     @ResponseBody
     @RequestMapping("/infoContentWhiteBook")
     public List<Map<String,Object>> infoContentWhiteBook(String languageType){
+        if(languageType == null || "".equals(languageType)){
+            return null;
+        }
         return baseInfoService.infoContentWhiteBook(languageType);
     }
 
@@ -40,6 +45,9 @@ public class BaseInfoContorller extends BaseBaseController {
     @ResponseBody
     @RequestMapping("/infoContentCharacteristic")
     public List<Map<String,Object>> infoContentCharacteristic(String languageType){
+        if(languageType == null || "".equals(languageType)){
+            return null;
+        }
         return  baseInfoService.infoContentCharacteristic(languageType);
     }
 
@@ -61,6 +69,37 @@ public class BaseInfoContorller extends BaseBaseController {
     @RequestMapping("/infoContentExternal")
     public List<Map<String,Object>> infoContentExternal(){
         return  baseInfoService.infoContentExternal();
+    }
+
+    /**
+     * 查詢玩法規則
+     * @param playType
+     * @param languageType
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/findPlayTypeRule")
+    public List<Map<String,Object>> findPlayTypeRule(String playType,String languageType){
+        if(playType == null || "".equals(playType)){
+            return null;
+        }
+        if(languageType == null || "".equals(languageType)){
+            return null;
+        }
+        return  baseInfoService.findPlayTypeRule(playType,languageType);
+    }
+
+    /**
+     * 獲取配置數據
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/findPlayConfig")
+    public Map<String,Object> findPlayConfig(){
+        Map<String,Object> map = new HashMap<>();
+        BigDecimal gas = baseInfoService.findPlayConfig();
+        map.put("gas",gas);
+        return map;
     }
 
 }

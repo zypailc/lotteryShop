@@ -108,8 +108,9 @@ public class IndexController extends WebgatewayBaseController {
      * @return
      */
     @RequestMapping("/web/authLotteryServices")
-    public String services(Model model){
+    public String services(Model model,String playType){
         model = getModel(model);
+        model.addAttribute("playType",playType);
         return "lotteryServices";
     }
 

@@ -74,10 +74,13 @@ $(function () {
     };
     if (getCookie(name) != "") {
         if (getCookie(name) == "zh") {
+            console.log("view:zh")
             $("[data-localize]").localize("text", { pathPrefix: ctx + "/lang", language: "zh" });
         }
         if (getCookie(name) == "en") {
+            console.log("view:en")
             $("[data-localize]").localize("text", { pathPrefix: ctx + "/lang", language: "en" });
         }       
     }
+    console.log("language:"+getCookie(name));
 });

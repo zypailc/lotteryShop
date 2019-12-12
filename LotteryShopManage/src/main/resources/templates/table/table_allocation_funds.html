@@ -83,7 +83,7 @@
                         </div>
                         <div class="file-loading">
                             <label class="lable_title">content_zh:</label>
-                            <textarea id="content_input_zh" style="width: 75%;border: solid 1px black;border-radius: 5px;"></textarea>
+                            <textarea id="content_input_zh" style="width: 75%;height:100px;border: solid 1px black;border-radius: 5px;"></textarea>
                         </div>
                         <div>
                             <label class="lable_title">title_en:</label>
@@ -91,7 +91,7 @@
                         </div>
                         <div class="file-loading">
                             <label class="lable_title">content_en:</label>
-                            <textarea id="content_input_en" style="width: 75%;border: solid 1px black;border-radius: 5px;"></textarea>
+                            <textarea id="content_input_en" style="width: 75%;height:100px;border: solid 1px black;border-radius: 5px;"></textarea>
                         </div>
                     </form>
                 </div>
@@ -114,7 +114,7 @@
                         &times;
                     </button>
                     <h4 class="modal-title" id="myModalLabel_1">
-                        add
+                        update
                     </h4>
                 </div>
                 <div class="modal-body">
@@ -128,7 +128,7 @@
                     </div>
                     <div class="file-loading">
                         <label class="lable_title">content_zh:</label>
-                        <textarea id="update_content_zh" style="width: 75%;border: solid 1px black;border-radius: 5px;"></textarea>
+                        <textarea id="update_content_zh" style="width: 75%;height:100px;border: solid 1px black;border-radius: 5px;"></textarea>
                     </div>
                     <div>
                         <label class="lable_title">title_en:</label>
@@ -136,7 +136,7 @@
                     </div>
                     <div class="file-loading">
                         <label class="lable_title">content_en:</label>
-                        <textarea id="update_content_en" style="width: 75%;border: solid 1px black;border-radius: 5px;"></textarea>
+                        <textarea id="update_content_en" style="width: 75%;height:100px;border: solid 1px black;border-radius: 5px;"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -168,6 +168,14 @@
             })
 
             columns_s.push({
+                field:'playType',
+                title:'playType',
+                formatter:function (value, row, index){
+                    if(value == '1'){
+                        return "玩法A"
+                    }
+                }
+            },{
                 field:'sort',
                 title:'sort',
                 formatter:function (value, row, index){
@@ -182,7 +190,7 @@
                 formatter: function (value, row, index){
                     return "<button class='btn' onclick='delete_parrner("+row.id+")'>delete" +
                         "</button> <button class='btn'data-toggle='modal' data-target='#add_partner'>add</button>" +
-                        " <button class='btn'data-toggle='modal' onclick='update_Id("+row.id+",\""+(row.title_zh || "")+"\",\""+ (row.content_zh || "") +"\",\""+(row.title_en || "")+"\",\""+ (row.content_en || "") +"\",\""+(row.sort || 0)+"\")' data-target='#update_sort'>updateSort</button>";
+                        " <button class='btn'data-toggle='modal' id='"+row.id+"' rowId='"+row.id+"' rowContentZh='"+row.content_zh+"' rowTitleZh='"+row.title_zh+"' rowTitleEn='"+row.title_en+"' rowContentEn='"+row.content_en+"' rowSort='"+row.sort+"'  onclick='update_Id("+row.id+")' data-target='#update_sort'>updateSort</button>";
                 }
             })
             $(".table_partner").bootstrapTable({
@@ -288,12 +296,13 @@
         }
 
         function update_Id(id,title_zh,content_zh,title_en,content_en,sort){
+            var row = $("#"+id);
             $("#sort").attr("dataId",id);
-            $("#update_title_zh").val(title_zh);
-            $("#update_content_zh").val(content_zh);
-            $("#update_title_en").val(title_en);
-            $("#update_content_en").val(content_en);
-            $("#sort").val(sort);
+            $("#update_title_zh").val(row.attr("rowtitlezh"));
+            $("#update_content_zh").val(row.attr("rowcontentzh"));
+            $("#update_title_en").val(row.attr("rowtitleen"));
+            $("#update_content_en").val(row.attr("rowcontenten"));
+            $("#sort").val(row.attr("rowsort"));
         }
 
     </script>

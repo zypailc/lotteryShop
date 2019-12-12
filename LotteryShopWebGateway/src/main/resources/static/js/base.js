@@ -29,7 +29,7 @@ function layui_open(conent){
         type: 1,
         shade: false,
         title: false,
-        content: "<p style='margin: 5px 20px'>"+conent+"</p>",
+        content: "<p style='margin: 5px 20px;text-align: center;'>"+conent+"</p>",
     });
 }
 

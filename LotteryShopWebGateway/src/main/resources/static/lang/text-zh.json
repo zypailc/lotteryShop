@@ -21,9 +21,18 @@
     "more": "更多",
     "toBeExpected": "敬請期待",
     "forgotPassword": "找回密碼",
-    "lotteryPlay": "競彩",
+    "lotteryPlay": "競猜",
     "rules": "規則",
     "drawArchive": "記錄",
-    "logOut": "退出"
+    "logOut": "退出",
+    "spendAFewBefore": "您選擇了",
+    "spendAFewLater": "倍",
+    "purchase": "購&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;買",
+    "fastSelect": "快速選擇",
+    "haploid": "單倍獎金 : ",
+    "usable": "可用金額 : ",
+    "expenditure": "支付金額 : ",
+    "bounty": "獎勵金額 : ",
+    "confirm": "確認"
   }
 }

@@ -21,10 +21,18 @@
     "more": "MORE",
     "toBeExpected": "To be expected",
     "forgotPassword": "Forgot password",
-    "lotteryPlay": "Lottery Play",
+    "lotteryPlay": "Guess",
     "rules": "Rules",
     "drawArchive": "Draw Archive",
-    "logOut": "Log out"
-
+    "logOut": "Log out",
+    "spendAFewBefore": "You select the",
+    "spendAFewLater": "Multiple",
+    "purchase": "&nbsp;purchase&nbsp;",
+    "fastSelect": "fast select",
+    "haploid": "Double bonus : ",
+    "usable": "Available Funds : ",
+    "expenditure": "Payment amount : ",
+    "bounty": "Amount of bonus : ",
+    "confirm": "confirm"
   }
 }

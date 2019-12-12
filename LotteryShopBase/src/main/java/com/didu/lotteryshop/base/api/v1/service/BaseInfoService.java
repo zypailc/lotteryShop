@@ -3,10 +3,14 @@ package com.didu.lotteryshop.base.api.v1.service;
 import com.didu.lotteryshop.base.service.BaseBaseService;
 import com.didu.lotteryshop.common.entity.MIntro;
 import com.didu.lotteryshop.common.entity.MPartner;
+import com.didu.lotteryshop.common.entity.SysConfig;
 import com.didu.lotteryshop.common.mapper.MIntroMapper;
+import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
+import com.didu.lotteryshop.common.utils.Web3jUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +21,9 @@ public class BaseInfoService extends BaseBaseService {
     @Autowired
     private MIntroMapper mIntroMapper;
 
+    @Autowired
+    private SysConfigServiceImpl sysConfigService;
+
 
     /**
      * 查询项目白皮书
@@ -24,7 +31,7 @@ public class BaseInfoService extends BaseBaseService {
      * @return
      */
     public List<Map<String,Object>> infoContentWhiteBook(String languageType){
-        return  findMintro(languageType,MIntro.TYPE_WHITE_BOOK);
+        return  findMintro(languageType,MIntro.TYPE_WHITE_BOOK,null);
     }
 
     /**
@@ -33,7 +40,7 @@ public class BaseInfoService extends BaseBaseService {
      * @return
      */
     public List<Map<String,Object>> infoContentCharacteristic(String languageType){
-        return  findMintro(languageType,MIntro.TYPE_CHARACTERISTIC_PROJECT);
+        return  findMintro(languageType,MIntro.TYPE_CHARACTERISTIC_PROJECT,null);
     }
 
     /**
@@ -53,6 +60,27 @@ public class BaseInfoService extends BaseBaseService {
     }
 
     /**
+     *
+     * @param playType
+     * @param languageType
+     * @return
+     */
+    public List<Map<String,Object>> findPlayTypeRule(String playType,String languageType){
+        return  findMintro(languageType,MIntro.TYPE_ALLOCATION_FUNDS,Integer.parseInt(playType));
+    }
+
+    /**
+     * 獲取最高燃氣費
+     * @return
+     */
+    public BigDecimal findPlayConfig(){
+        SysConfig sysConfig = sysConfigService.getSysConfig();
+        // 最高燃氣費
+        BigDecimal gas = Web3jUtils.gasToEtherByBigDecimal(sysConfig.getGasPrice(),sysConfig.getGasLimit());
+        return  gas;
+    }
+
+    /**
      * 查询或作伙伴或者充值途径
      * @param type
      * @return
@@ -68,12 +96,20 @@ public class BaseInfoService extends BaseBaseService {
      * @param type
      * @return
      */
-    private List<Map<String,Object>> findMintro(String languageType,Integer type){
+    private List<Map<String,Object>> findMintro(String languageType,Integer type,Integer playType){
         String sql = "select li_.id as imgId, i_"+languageType+".title as title,i_"+languageType+".content as content " +
                 " from m_intro mi_ " +
                 " left join ls_image li_ on (mi_.ls_image_id = li_.id)"+
-                " left join intro_"+languageType + " i_"+languageType + " on (mi_.language_id = i_"+languageType+".id) where mi_.type = ";
-        return getSqlMapper().selectList(sql + type);
+                " left join intro_"+languageType + " i_"+languageType + " on (mi_.language_id = i_"+languageType+".id) where 1=1 " ;
+        if(type != null){
+            sql +=" and mi_.type = " + type;
+        }
+        if(playType != null){
+            sql +=" and mi_.play_type = " + playType;
+        }
+        return getSqlMapper().selectList(sql);
     }
+
+
 
 }

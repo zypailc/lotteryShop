@@ -11,6 +11,8 @@
         <result column="sort" property="sort" />
         <result column="language_id" property="languageId" />
         <result column="create_time" property="createTime" />
+        <result column="ls_image_id" property="lsImageId" />
+        <result column="play_type" property="playType" />
     </resultMap>
 
 </mapper>

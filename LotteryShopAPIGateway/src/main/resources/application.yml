@@ -33,6 +33,9 @@ zuul:
     api-b:
       path: /ethwallet/**
       serviceId: allet-service
+    api-c:
+      path: /lotteryA/**
+      serviceId: lotterya-service
   #sensitive-headers: "*"
   #add-host-header: false
 

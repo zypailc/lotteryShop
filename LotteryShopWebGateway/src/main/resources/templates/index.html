@@ -205,46 +205,6 @@
 
 		</style>
 
-		<!--<div class="container">-->
-			<!--<div class="row lotteryItem">-->
-				<!--<div class="col-lg-6 service_col">-->
-					<!--&lt;!&ndash; Service Item &ndash;&gt;-->
-					<!--<div class="service_item item_lottery lottery_wrapper" style="background-image: -webkit-gradient(linear,left bottom,left top,from(#725fd8),to(#513c9c));-->
-											<!--background-image:linear-gradient(to top,#725fd8,#513c9c);">-->
-						<!--<div class="lottery_content">-->
-							<!--<p class="title" style="border-bottom:1px solid rgba(255,255,255,.3)">BLOCK 3 </p>-->
-							<!--<p class="jackpot">Jackpot</p>-->
-							<!--<p class="eth">50 ETH</p>-->
-							<!--<p class="usd">$7,450</p>-->
-							<!--<p><a href="../web/authLotteryServices" class="lottery_btn" data-localize="base.start">START</a></p>-->
-						<!--</div>-->
-					<!--</div>-->
-				<!--</div>-->
-				<!--<div class="col-lg-6 service_col" >-->
-					<!--&lt;!&ndash; Service Item &ndash;&gt;-->
-					<!--<div class="service_item item_lottery lottery_wrapper" style="background-image: -webkit-gradient(linear,left bottom,left top,from(#ff8b2c),to(#ffa23f));-->
-    								<!--background-image: linear-gradient(to top,#ff8b2c,#ffa23f);">-->
-						<!--<div class="lottery_content">-->
-							<!--<p class="title" style="border-bottom:1px solid rgba(255,255,255,.3)">INSTANT PRIZE</p>-->
-							<!--<p class="jackpot">Instant</p>-->
-							<!--<p class="eth">50 ETH</p>-->
-							<!--<p class="usd">$7,450</p>-->
-							<!--<p><a href="../web/authLotteryServices" class="lottery_btn trans_200" data-localize="base.start">START</a></p>-->
-						<!--</div>-->
-					<!--</div>-->
-				<!--</div>-->
-				<!--<div class="col-lg-6 service_col" >-->
-					<!--<div class="service_item item_lottery lottery_wrapper" style="background-image: -webkit-gradient(linear,left bottom,left top,from(#ff8b2c),to(#ffa23f));-->
-    								<!--background-image: linear-gradient(to top,#ff8b2c,#ffa23f);">-->
-						<!--<div class="item_content">-->
-							<!--<p class="item_title" data-localize="base.more">MORE</p>-->
-							<!--<p data-localize="base.toBeExpected">To be expected</p>-->
-						<!--</div>-->
-					<!--</div>-->
-				<!--</div>-->
-			<!--</div>-->
-		<!--</div>-->
-
 		<div class="h_slider_container services_slider_container">
 			<div class="service_slider_outer">
 				<!-- Services Slider -->
@@ -261,7 +221,7 @@
 									<p class="usd">$7,450</p>
 								</div>
 								<div class="button service_item_button trans_200 lottery_btn1">
-									<a href="../web/authLotteryServices" class=" trans_200" data-localize="base.start">START</a>
+									<a href="../web/authLotteryServices?playType=1"  class=" trans_200" data-localize="base.start">START</a>
 								</div>
 							</div>
 						</div>
@@ -303,23 +263,7 @@
 			</div>
 		</div>
 
-		<!--<div class="h_slider_container services_slider_container">
-			<div class="service_slider_outer">
-				&lt;!&ndash; Services Slider &ndash;&gt;
-				<div class="owl-carousel  services_slider">
-					&lt;!&ndash; Services Slider Item&ndash;&gt;
-					<div class="owl-item services_item">
-						<div class="services_item_inner">
-							<div class="service_item_content">
-								<div class="button service_item_button trans_200">
-									<a href="../web/authLotteryServices" class="trans_200">discover more</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>-->
+
 	</div>
 
 	<div class="features">
@@ -376,7 +320,7 @@
 		//存储推广人员的Id，推广人员Id存储在session有效期24小时
 		var generalizePersonId = "${generalizePersonId!''}";
 		setCookie("generalizePersonId",generalizePersonId,24);
-		var languageType = getCookie("somoveLanguage") || "en";
+		var languageType = getLanguage();
 		infoContentCharacteristic(languageType);
 		infoContentPartners();
 		infoContentExternal();
@@ -393,7 +337,7 @@ function infoContentCharacteristic(languageType){
 			var characteristicProject = $(".div_characteristicProject");
 			$.each(result,function(index,data){
 				left += '<div class="card trans_200">'+
-						'<img class="card-img-top" src="/api/base/v1/lsimage/getImg?id='+(data.imgId || "")+'">'+
+						'<img class="card-img-top" src="/apiauthorization/base/authorization/v1/lsimage/getImg?id='+(data.imgId || "")+'">'+
 						'<div class="card-body">'+
 						'<div class="card-title"><a href="blog_post.html">'+data.title+'</a></div>'+
 						'<div class="card-text">'+
@@ -415,7 +359,7 @@ function infoContentPartners(){
 			//充值途径
 			var partner_obj = $(".partners_list");
 			$.each(result,function(index,partners){
-				partner_obj.append("<img onclick='open_url(\""+partners.linkAddress+"\")' src='/api/base/v1/lsimage/getImg?id="+partners.imgId+"'>");
+				partner_obj.append("<img onclick='open_url(\""+partners.linkAddress+"\")' src='/apiauthorization/base/authorization/v1/lsimage/getImg?id="+partners.imgId+"'>");
 			})
 		}
 	})
@@ -429,7 +373,7 @@ function infoContentExternal(){
 			//合作伙伴
 			var external_obj = $(".external_list");
 			$.each(result,function(index,external){
-				external_obj.append("<img onclick='open_url(\""+external.linkAddress+"\")' src=/api/base/v1/lsimage/getImg?id="+external.imgId+">");
+				external_obj.append("<img onclick='open_url(\""+external.linkAddress+"\")' src=/apiauthorization/base/authorization/v1/lsimage/getImg?id="+external.imgId+">");
 			})
 		}
 	})

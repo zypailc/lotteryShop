@@ -187,6 +187,30 @@
 		margin-right: 5px;
 		margin-left: 5px;
 	}
+	.model_purchase_left{
+		width: 100% !important;
+		display: inline-block;
+	}
+	.model_purchase_right{
+		width: 100% !important;
+		display: inline-block;
+	}
+	.lottery_play_div_element{
+		width: 35px!important;
+		height: 35px!important;
+		border-radius: 35px!important;
+	}
+	.span_element{
+		font-size: 17px!important;
+	}
+	.lottery_play_div_element_1{
+		width: 35px!important;
+		height: 35px!important;
+		border-radius: 35px!important;
+	}
+	.lottery_play_div_select{
+		margin-left: 0px !important;
+	}
 }
 
 /************

@@ -36,9 +36,6 @@ include("common.js.html"){}
 			viewH =$(this).height(),//可见高度
 			contentH =$(this).get(0).scrollHeight,//内容高度
 			scrollTop =$(this).scrollTop();//滚动高度
-			console.log("viewH:"+viewH);
-			console.log("contentH:"+contentH);
-			console.log("scrollTop:"+scrollTop);
 			if(scrollTop/(contentH -viewH) >= 0.95){ //当滚动到距离底部5%时
 				var li = '<hr><li class="draw_archive_info" data-id="'+contentH+'" style="top: 0px;"> '+
 						'<div class="item-link item-content draw-archive-item"> '+
@@ -53,12 +50,158 @@ include("common.js.html"){}
 
 		$(".lottery_play_div_element").click(function(){
 			var div_up = $(this).parent();
-			div_up.find(".lottery_play_div_element").removeClass("lottery_play_div_element_select");
-			$(this).addClass("lottery_play_div_element_select");
 			var dataNumber = div_up.attr("data-number");
+			div_up.find(".lottery_play_div_element").removeClass("lottery_play_div_element_select"+"_"+(parseInt(dataNumber) - 1));
+			$(this).addClass("lottery_play_div_element_select"+"_"+(parseInt(dataNumber) - 1));
 			$(".lottery_play_"+dataNumber).html($(this).find("span").html());
+
 		});
+
+		$("#fast_select_random").click(function(){
+			var number_1 = Math.floor(Math.random()*10);
+			var number_2 = Math.floor(Math.random()*10);
+			var number_3 = Math.floor(Math.random()*10);
+			$(".lottery_play_div_element_0").find("span[data_html="+number_1+"]").click();
+			$(".lottery_play_div_element_1").find("span[data_html="+number_2+"]").click();
+			$(".lottery_play_div_element_2").find("span[data_html="+number_3+"]").click();
+			calculateCost();
+		});
+
+		$("#button_purchase").click(function(){
+			var availableBalance = $(".money_self").html() || 0;
+			var incurExpense = $("") || 0;
+			if(availableBalance > incurExpense){
+				layui_open("Account balance is insufficient, please recharge first !");
+			}else {
+				var number_1 = $(".lottery_play_1").find("span").html() || 0;
+				var number_2 = $(".lottery_play_2").find("span").html() || 0;
+				var number_3 = $(".lottery_play_3").find("span").html() || 0;
+				var multiple = $(".input_number").val() || 0;
+				layer.open({
+					type: 1,
+					title:"支付密碼",
+					closeBtn: 0, //不显示关闭按钮
+					anim: 2,
+					shadeClose: true, //开启遮罩关闭
+					data:{"number_1":number_1,"number_2":number_2,"number_3":number_3,"multiple":multiple},
+					content: $("#playPassword").html()
+				});
+			}
+		});
+
+
+
+		//init
+		findRule();
+		getLotteryConfig();
 	})
+
+	function paymentCodeConfirm(){
+		var number_1 = $(".lottery_play_1").html() || "";
+		var number_2 = $(".lottery_play_2").html() || "";
+		var number_3 = $(".lottery_play_3").html() || "";
+		var payPasswod = "";
+		$(".paymentCode").each(function(index,data){
+			var paymentCode_1 = $(data).val() || "";
+			if(paymentCode_1){
+				payPasswod = paymentCode_1;
+			}
+		});
+
+		var luckNum = number_1 +　number_2 + number_3;
+		var multipleNumber = $(".input_number").val() || "";
+		$.ajax({
+			url:'${projectPath}/api/lotteryA/v1/lotteryA/ethBuyLottery',
+			type:'get',
+			data:{"payPasswod":payPasswod,"luckNum":luckNum,"multipleNumber":multipleNumber},
+			dataType:"json",
+			success:function (result) {
+				if(result.code == 200){
+					layer.msg(result.msg);
+				}else {
+					layui_open(result.msg);
+				}
+			}
+		})
+
+	}
+	function calculateCost(){
+		var gas = $(".money_expenditure").attr("gas") || 0;
+		var multiple = $(".input_number").val() || 0;
+		var price = $(".money_haploid").html() || 0;
+		var doubledMoney = $(".money_haploid").attr("doubledMoney") || 0;
+		var total = parseFloat(multiple) * parseFloat(price) + parseFloat(gas);
+		var tatalStr = price + " * " + multiple +  " + 燃氣費(最高≈0.0946) = " +　parseFloat(total.toFixed(6));
+		$(".money_expenditure").html(tatalStr)
+		$(".money_bounty").html(multiple * doubledMoney);
+	}
+
+	function getLotteryConfig(){
+		$.ajax({
+			url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryInfo',
+			type:'get',
+			dataType:"json",
+			success:function (result) {
+				if(result.code){
+					var info = result.extend.data;
+					$(".money_haploid").html(parseFloat(info.price));
+					$(".money_haploid").attr("doubledMoney",info.total);
+					$(".money_bounty").html(info.total);
+					$(".number_of_periods").html(info.issueNum);
+					$(".lottery_service_time").attr("endTime",info.endTime);
+					countDown();
+					getGas(parseFloat(info.price));
+				}
+			}
+		})
+		$.ajax({
+			url:'${projectPath}/api/base/v1/ethWallet/findEthWallet',
+			type:'get',
+			dataType:"json",
+			success:function (result) {
+				var info = result.extend.data;
+				$(".money_self").html(info.balance);
+			}
+		})
+	}
+
+	function getGas(price){
+		$.ajax({
+			url:'${projectPath}/apiauthorization/base/authorization/v1/baseInfo/findPlayConfig',
+			type:'get',
+			dataType:"json",
+			success:function (result) {
+				var gas = result.gas;
+				$(".money_expenditure").attr("gas",gas)
+				var total = parseFloat(gas) + parseFloat(price);
+				total = parseFloat(total.toFixed(6))
+				$(".money_expenditure").html( price+ " * 1 + 燃氣費(最高≈"+gas+") = " + total);
+			}
+		})
+	}
+
+	function countDown(){
+		var today=new Date(),//当前时间
+				h=today.getHours(),
+				m=today.getMinutes(),
+				s=today.getSeconds();
+		var stopTime=new Date($(".lottery_service_time").attr("endTime")),//结束时间
+				stopH=stopTime.getHours(),
+				stopM=stopTime.getMinutes(),
+				stopS=stopTime.getSeconds();
+		var shenyu=stopTime.getTime()-today.getTime(),//倒计时毫秒数
+				shengyuD=parseInt(shenyu/(60*60*24*1000)),//转换为天
+				D=parseInt(shenyu)-parseInt(shengyuD*60*60*24*1000),//除去天的毫秒数
+				shengyuH=parseInt(D/(60*60*1000)),//除去天的毫秒数转换成小时
+				H=D-shengyuH*60*60*1000,//除去天、小时的毫秒数
+				shengyuM=parseInt(H/(60*1000)),//除去天的毫秒数转换成分钟
+				M=H-shengyuM*60*1000;//除去天、小时、分的毫秒数
+		S=parseInt((shenyu-shengyuD*60*60*24*1000-shengyuH*60*60*1000-shengyuM*60*1000)/1000)//除去天、小时、分的毫秒数转化为秒
+		$(".time_hour").html(shengyuH);
+		$(".time_minute").html(shengyuM);
+		$(".time_second").html(S);
+		setTimeout(countDown,500);
+	}
 	function numner_add_or_aubtract(number){
 		var old_number = $(".input_number").val() || '1';
 		old_number = old_number.replace(/[^0-9]/ig,"");
@@ -68,7 +211,26 @@ include("common.js.html"){}
 		}else {
 			new_number = new_number + number;
 		}
+		if(new_number > 100){
+			new_number = 100;
+		}
 		$(".input_number").val(new_number);
+		calculateCost();
+	}
+	function findRule(){
+		var playType = '${playType}' || "";
+		var languageType = getLanguage();
+		$.ajax({
+			url:'${projectPath}/apiauthorization/base/authorization/v1/baseInfo/findPlayTypeRule',
+			type:'get',
+			data:{"playType":playType,"languageType":languageType},
+			dataType:"json",
+			success:function (result) {
+				$.each(result,function(index,data){
+					$("#rules_content").html(data.content);
+				})
+			}
+		})
 	}
 </script>
 <style>
@@ -83,62 +245,143 @@ include("common.js.html"){}
 	.draw_archive_info{cursor: pointer;}
 	.lottery_play_div{
 		padding: 5px 15px;
+		background: #f8f8f8;
+		margin-left: 20px;
+		margin-right: 20px;
+		margin-bottom: 10px;
 	}
 	.lottery_play_div_1{
 		padding: 5px 15px;
 		text-align: center;
-		border: solid 1px #f1f1f1;;
+		/*border: solid 1px #9f88be;*/
 		margin: 5px;
 	}
 	.lottery_play_div_element{
 		width: 50px;
 		height:50px;
-		border: solid 2px #c6c8ca;
 		border-radius: 50px;
 		text-align: center;
 		margin: 3px;
 		display: inline-block;
 		cursor: pointer;
 	}
-	.lottery_play_div_element_1{
+	.lottery_play_div_element_border_0{
+		border: solid 2px red;
+		background: red;
+	}
+	.lottery_play_div_element_border_1{
+		border: solid 2px green;
+		background: green;
+	}
+	.lottery_play_div_element_border_2{
+		border: solid 2px blue;
+		background: blue;
+	}
+	.lottery_play_div_element_3{
 		width: 50px;
 		height:50px;
-		border: solid 2px #c6c8ca;
 		border-radius: 50px;
+		text-align: center;
+		display: inline-block;
+		padding-bottom: 5px;
+		margin-top: 30px;
+		margin-left: 15px;
+	}
+	.lottery_play_div_element_4{
+		width: 30px;
+		height:30px;
+		border-radius: 30px;
 		text-align: center;
 		margin: 3px;
 		display: inline-block;
+		padding-bottom: 5px;
 	}
 	.span_element{
 		font-size: 25px;
 		color: black;
 	}
-	.lottery_play_div_element:hover{
-		background: #9f88be;
-		border: solid 2px #9f88be;
+	.span_element_1{
+		font-size: 15px;
+		color: black;
 	}
-	.lottery_play_div_element:checked{
-		background: #9f88be;
-		border: solid 2px #9f88be;
+	.lottery_play_div_element_0:hover{
+		background: white;
+		border: solid 2px red;
 	}
-	.lottery_play_div_element_select{
-		background: #9f88be;
-		border: solid 2px #9f88be;
+	.lottery_play_div_element_0:checked{
+		background: white;
+		border: solid 2px red;
+	}
+	.lottery_play_div_element_1:hover{
+		background: white;
+		border: solid 2px green;
+	}
+	.lottery_play_div_element_1:checked{
+		background: white;
+		border: solid 2px green;
+	}
+	.lottery_play_div_element_2:hover{
+		background: white;
+		border: solid 2px blue;
+	}
+	.lottery_play_div_element_2:checked{
+		background: white;
+		border: solid 2px blue;
+	}
+	.lottery_play_div_element_select_0{
+		background: white;
+		border: solid 2px red;
+	}
+	.lottery_play_div_element_select_1{
+		background: white;
+		border: solid 2px green;
+	}
+	.lottery_play_div_element_select_2{
+		background: white;
+		border: solid 2px blue;
+	}
+	.lottery_play_div_Multiple{
+		border-radius: 5px;
+		border: 0;
+		width: 100px;
 	}
 	.model_purchase{
 		text-align: center;
-		border-top: double 1px #9f88be;
-		border-bottom: double 1px #9f88be;
-		width: 80%;
+		margin-left: 20px;
+		background: #f8f9fa;
+		margin-right: 20px;
+		padding-bottom: 10px;
+		height: 150px;
 	}
+	.model_purchase_record{
+		text-align: left;
+		margin-left: 20px;
+	}
+	.model_purchase_1{
+		margin: 10px 20px;
+		background: #f8f9fa;
+		padding-bottom: 25px;
+		border-radius: 5px;
+		text-align: center;
+	}
+
 	.title_purchase{
 		display: initial;
 	}
 	.button_purchase{
-		display: initial;
+		/*display: inline-block;*/
+		width: 180px;
 	}
-	.lottery_play_div_element_input{
+	.lottery_play_div_select{
 		display: inline-block;
+		margin-left: 30px;
+		margin-top: 10px;
+	}
+	.lottery_play_div_element_money{
+		/*display: inline-block;*/
+		float: left;
+		margin-top: 10px;
+		margin-left: 30px;
 	}
 	.input_number{
 		width: 50px;
@@ -157,15 +400,70 @@ include("common.js.html"){}
 		text-align: center;
 		cursor: pointer;
 		top: 10px;
+
 	}
 	.model_purchase_button span{
 		font-size: 25px;
-		border: solid 1px;
+		border: solid 1px #9f88be;
 		border-radius: 5px;
 		padding: 5px 20px;
 		margin-top: 10px;
+		background: #9f88be;
+		color: white;
 	}
-
+	.model_purchase_button span:hover{
+		color: #322445;
+	}
+	.font_color{
+		color: black;
+	}
+	.lottery_service_title{
+		font-size: 24px;
+		color: black;
+	}
+	.lottery_service_time{
+		text-align: center;
+		margin-right: 20px;
+		margin-left: 20px;
+		font-size: 30px;
+		margin-bottom: 5px;
+	}
+	.lottery_service_time .em_periods{
+		float: right;
+	}
+	.model_purchase_left{
+		width: 78%;
+		display: inline-block;
+	}
+	.purchase{
+		width: 100%;
+	}
+	.model_money{
+		display: inline-block;
+		text-align: left;
+	}
+	.model_money p{
+		color: black;
+	}
+	.lottery_play_div_money{
+		padding-left: 10px;
+	}
+	.bounty_title{
+		font-size: 25px;
+		color: red !important;
+		font-weight: 600;
+	}
+	.em_time{
+		background: #f1f1f1;
+		padding: 5px 15px;
+		border-radius: 5px;
+		width: 60px;
+		height: 50px;
+	}
+	.confirm{
+		margin: 0 auto !important;
+		text-align: center;
+	}
 </style>
 <body class="body_top" data-spy="scroll" data-target=".services_item_inner">
 
@@ -200,128 +498,174 @@ include("common.js.html"){}
 
 		<div class="product-grid">
 			<!-- play -->
-			<div class="lottery_item lotteryPlay">
+			<div class="lottery_item lotteryPlay ">
 				<div class="service_item_content">
 					<div class="service_item_title">
-						<h2 data-localize="base.lotteryPlay">Lottery Play</h2>
+						<p class="lottery_service_title"> <span data-localize="base.lotteryPlay">Guess</span> <span class="number_of_periods">20191210</span> <span>期</span></p>
+						<p class="lottery_service_time"><em class="em_time time_hour">00</em> : <em  class="em_time time_minute">00</em> : <em  class="em_time time_second">00</em></p>
 					</div>
 					<div class="lottery_play_div">
 						<div class="lottery_play_div_1" data-number="1">
-							<div class="lottery_play_div_element">
-								<span class="span_element">0</span>
+							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0 lottery_play_div_element_select_0">
+								<span class="span_element" data_html="0">0</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">1</span>
+							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
+								<span class="span_element" data_html="1">1</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">2</span>
+							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
+								<span class="span_element" data_html="2">2</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">3</span>
+							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
+								<span class="span_element" data_html="3">3</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">4</span>
+							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
+								<span class="span_element" data_html="4">4</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">5</span>
+							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
+								<span class="span_element" data_html="5">5</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">6</span>
+							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
+								<span class="span_element" data_html="6">6</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">7</span>
+							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
+								<span class="span_element" data_html="7">7</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">8</span>
+							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
+								<span class="span_element" data_html="8">8</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">9</span>
+							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
+								<span class="span_element" data_html="9">9</span>
 							</div>
 						</div>
 						<div class="lottery_play_div_1" data-number="2" >
-							<div class="lottery_play_div_element">
-								<span class="span_element">0</span>
+							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1 lottery_play_div_element_select_1">
+								<span class="span_element" data_html="0">0</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">1</span>
+							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
+								<span class="span_element" data_html="1">1</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">2</span>
+							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
+								<span class="span_element" data_html="2">2</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">3</span>
+							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
+								<span class="span_element" data_html="3">3</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">4</span>
+							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
+								<span class="span_element" data_html="4">4</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">5</span>
+							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
+								<span class="span_element" data_html="5">5</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">6</span>
+							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
+								<span class="span_element" data_html="6">6</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">7</span>
+							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
+								<span class="span_element" data_html="7">7</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">8</span>
+							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
+								<span class="span_element" data_html="8">8</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">9</span>
+							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
+								<span class="span_element" data_html="9">9</span>
 							</div>
 						</div>
 						<div class="lottery_play_div_1" data-number="3">
-							<div class="lottery_play_div_element">
-								<span class="span_element">0</span>
+							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2 lottery_play_div_element_select_2">
+								<span class="span_element" data_html="0">0</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">1</span>
+							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
+								<span class="span_element" data_html="1">1</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">2</span>
+							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
+								<span class="span_element" data_html="2">2</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">3</span>
+							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
+								<span class="span_element" data_html="3">3</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">4</span>
+							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
+								<span class="span_element" data_html="4">4</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">5</span>
+							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
+								<span class="span_element" data_html="5">5</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">6</span>
+							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
+								<span class="span_element" data_html="6">6</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">7</span>
+							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
+								<span class="span_element" data_html="7">7</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">8</span>
+							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
+								<span class="span_element" data_html="8">8</span>
 							</div>
-							<div class="lottery_play_div_element">
-								<span class="span_element">9</span>
+							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
+								<span class="span_element" data_html="9">9</span>
 							</div>
 						</div>
 					</div>
-					<div>
+					<div class="purchase">
 						<div class="model_purchase">
-							<div class="lottery_play_div_element_1">
-								<span class="span_element lottery_play_1">0</span>
+							<div class="lottery_play_div_select">
+								<div class="lottery_play_div_element_3 lottery_play_div_element_border_0 ">
+									<span class="span_element lottery_play_1">0</span>
+								</div>
+								<div class="lottery_play_div_element_3 lottery_play_div_element_border_1">
+									<span class="span_element lottery_play_2 ">0</span>
+								</div>
+								<div class="lottery_play_div_element_3 lottery_play_div_element_border_2">
+									<span class="span_element lottery_play_3 ">0</span>
+								</div>
 							</div>
-							<div class="lottery_play_div_element_1">
-								<span class="span_element lottery_play_2">0</span>
-							</div>
-							<div class="lottery_play_div_element_1">
-								<span class="span_element lottery_play_3">0</span>
-							</div>
-							<div class="lottery_play_div_element_input">
-								<span>您選擇了</span>
+							<div class="lottery_play_div_select">
+								<!--<span class="font_color" data-localize="base.spendAFewBefore">You select the</span>-->
 								<a onclick="numner_add_or_aubtract(-1)" class="a_button">-</a><input value="1" class="input_number" onchange="numner_add_or_aubtract(0)"><a onclick="numner_add_or_aubtract(1)"  class="a_button">+</a>
-								<span>注</span>
+								<span class="font_color" data-localize="base.spendAFewLater">Bet</span>
 							</div>
 						</div>
-						<div class="model_purchase_button">
-							<div class="button_purchase"><span>購買</span></div>
+						<div class="model_purchase_1">
+							<div class="lottery_play_div_select lottery_play_div_money">
+								<div class="model_money">
+									<p class="money_portion"><span data-localize="base.haploid">Double bonus : </span><span class="money_haploid">0</span> ETH</p>
+									<p class="money_portion"><span data-localize="base.usable">Available Funds : </span><span class="money_self">0</span> ETH</p>
+									<p class="money_portion"><span data-localize="base.expenditure">Payment amount : </span><span class="money_expenditure">0 * 1 + 燃氣費(最高≈0) = 0</span> ETH</p>
+									<p class="money_portion bounty_title"><span data-localize="base.bounty">Amount of bonus : </span><span class="money_bounty">0</span> ETH</p>
+								</div>
+								<div class="lottery_play_div_select model_purchase_button">
+									<div class="button_purchase" id="fast_select_random"><span data-localize="base.fastSelect">fast select</span></div>
+									<div class="button_purchase" disabled="disabled" id="button_purchase"><span data-localize="base.purchase">purchase</span></div>
+								</div>
+							</div>
+						</div>
+						<div class="model_purchase_1">
+							<div class="model_purchase_left">
+								<div class="model_purchase_record">
+									<div class="lottery_play_div_element_4 lottery_play_div_element_border_0">
+										<span class="span_element_1">0</span>
+									</div>
+									<div class="lottery_play_div_element_4 lottery_play_div_element_border_1">
+										<span class="span_element_1">0</span>
+									</div>
+									<div class="lottery_play_div_element_4 lottery_play_div_element_border_2">
+										<span class="span_element_1">0</span>
+									</div>
+									<div class="lottery_play_div_element_4 lottery_play_div_Multiple">
+										<span class="span_element_1">100<span data-localize="base.spendAFewLater">Bet</span></span>
+									</div>
+								</div>
+								<div class="model_purchase_record">
+									<div class="lottery_play_div_element_4 lottery_play_div_element_border_0">
+										<span class="span_element_1">0</span>
+									</div>
+									<div class="lottery_play_div_element_4 lottery_play_div_element_border_1">
+										<span class="span_element_1">0</span>
+									</div>
+									<div class="lottery_play_div_element_4 lottery_play_div_element_border_2">
+										<span class="span_element_1">0</span>
+									</div>
+									<div class="lottery_play_div_element_4 lottery_play_div_Multiple">
+										<span class="span_element_1">5<span data-localize="base.spendAFewLater">Bet</span></span>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -333,53 +677,9 @@ include("common.js.html"){}
 						<h2 data-localize="base.rules">Rules</h2>
 					</div>
 				</div>
-				<p class="rules_participation_content">To participate in the lottery, you need to choose 4 numbers from 1 to 20 in your lottery ticket, or select the magic wand icon to allow the random number generator to choose the numbers for you. The number of tickets that you can buy is almost unlimited. However, using automated software tools for buying tickets or filling them out is prohibited.</p>
-				<p>
-					<b data-locale="rules_tickets_purchase">Ticket Purchase</b>
-				</p>
-				<p data-locale="rules_tickets_purchase_content">As of the date of lottery launch, the price of one ticket is approximately USD $2 based on the average exchange rate to Ethereum on the day of ticket purchase. The ticket price may be changed in the future.</p>
-				<p data-locale="rules_tickets_purchase_content2">Players pay for tickets in Ethereum using their cryptocurrency wallets. This ensures that all payments are safe. Players also have to pay for gas (a transaction fee for using the Ethereum network). The average amount of gas the player will have to pay for buying one lottery ticket using Ethereum is about GAS 170,000. The transactional costs of transferring lottery winnings are covered by the organizers. Once purchased, tickets cannot be exchanged or returned.</p>
-				<p>
-					<b data-locale="rules_distributions_funds">Distribution of Funds</b>
-				</p>
-				<p data-locale="rules_distributions_funds_content">Funds collected from ticket sales for each drawing are distributed as follows: 70% goes to the Prize Pool for the current drawing; 15% is used to cover advertising, marketing and legal expenses; 10% is paid in commissions to the holders of FLOT tokens; 5% are used to cover technical expenses (gas) for transferring lottery winnings.</p>
-				<p>
-					<b data-locale="jackpot">Jackpot</b>
-				</p>
-				<p class="rules_jackpot_content">33% of the Prize Pool (Category 4) are always rolled over to the jackpot pool for the following drawing. The jackpot built up over the previous drawings is divided between the owners of the tickets with 4 matching numbers. If there are no such tickets, the current jackpot is rolled over to the jackpot for the following drawing.</p>
-				<p class="rules_jackpot_content2">The 4x20 Fire Lotto lottery has a minimum guaranteed Jackpot of USD 2000 in terms of the average exchange rate to Ethereum as of the current date. If the Jackpot won is less than the minimum guaranteed jackpot, the Reserve Fund will be used to compensate the difference. After that, all the funds intended to build up the jackpot for the following drawings will be first used to replenish the Reserve Fund. Initially, the Reserve Fund is funded from the amount of money collected for the Jackpot as well as funds contributed by the organizers.</p>
-				<p class="">
-					<b data-locale="rules_prize_pool">Prize Pool</b>
-				</p>
-				<p data-locale="rules_prize_pool_content">The Prize Pool for each drawing is calculated based on 70% of the ticket sales for that drawing. It is distributed according to the following chart depending on how many numbers are matched.</p>
-				<table>
-					<thead>
-					<tr>
-						<th><p data-locale="rules_guessed_numbers">Numbers Matched</p></th>
-						<th><p data-locale="prize_pool_distribution">Prize Pool Distribution</p></th>
-					</tr>
-					</thead>
-					<tbody id="distributionTable"><tr><td><p>4</p></td><td><p>33%</p></td></tr><tr><td><p>3</p></td><td><p>33%</p></td></tr><tr><td><p>2</p></td><td><p>34%</p></td></tr></tbody>
-				</table>
-				<p class="rules_prize_pool_content2">In Categories 2, 3, the sum is divided by the number of winners in the category. If there are no winners, the sum is rolled over to the Jackpot pool for the next drawing.</p>
-				<p class="rules_prize_pool_content3">This means that the amount of winnings for matching 2, 3 numbers is calculated by the equation:</p>
-				<p id="prizePoolForumla">Ticket sales for one drawing * 0.70 * 0.33 (0.34) / number of category winners</p>
-				<p>
-					<b data-locale="rules_frequency">Frequency</b>
-				</p>
-				<p data-locale="rules_frequency_content">Drawings are held every 24 hours. The time of the current drawing is indicated on the lottery ticket. Ticket sales end 1 hour before the drawing. After that time, any tickets purchased will be played in the following drawing.</p>
-				<p>
-					<b data-locale="rules_pay_winnings">Payment of winnings</b>
-				</p>
-				<p data-locale="rules_pay_winnings_content">After the drawing, the system automatically transfers the winnings in Ethereum to the cryptocurrency wallets that were used to purchase the winning tickets. Transaction fees (gas) will be paid at the expense of the lottery. It can take 30 minutes to several hours for the funds to be transferred to the winning cryptocurrency wallets.</p>
-				<p>
-					<b data-locale="rules_tax">Taxes</b>
-				</p>
-				<p data-locale="rules_tax_content">Fire Lotto does not act as a tax agent. The responsibility to pay taxes lies with the owner of the cryptocurrency wallet to which the winnings were transferred.</p>
-				<p>
-					<b data-locale="rules_agreement">Agreement</b>
-				</p>
-				<p data-locale="rules_agreement_content" class="">By participating in the lottery, you agree to the lottery rules. By purchasing the lottery tickets, you guarantee that you are 18 years of age and/or you have reached the minimum age for legally participating in the lottery in your country of residence.</p>
+				<div id="rules_content">
+
+				</div>
 			</div>
 			<!-- 开奖记录 -->
 			<div class="lottery_item drawArchive">
@@ -453,6 +753,16 @@ include("common.js.html"){}
 	include("bottom.html"){}
 	%>
 
+</div>
+<div id="playPassword" style="display: none;">
+	<div style="margin: 30px;">
+		<div>
+			<input type="password" class="paymentCode" placeholder="payment code">
+		</div>
+		<div class="model_purchase_button">
+			<div class="button_purchase confirm" onclick="paymentCodeConfirm()"><span data-localize="base.confirm">confirm</span></div>
+		</div>
+	</div>
 </div>
 </body>
 </html>

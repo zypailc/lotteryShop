@@ -65,6 +65,8 @@ public class MIntro extends Model<MIntro> {
 	private Integer languageId;
 	@TableField("ls_image_id")
 	private Integer lsImageId;
+	@TableField("play_type")
+	private Integer playType;
 
 
 	public Integer getId() {
@@ -129,6 +131,14 @@ public class MIntro extends Model<MIntro> {
 
 	public void setLsImageId(Integer lsImageId) {
 		this.lsImageId = lsImageId;
+	}
+
+	public Integer getPlayType() {
+		return playType;
+	}
+
+	public void setPlayType(Integer playType) {
+		this.playType = playType;
 	}
 
 	@Override

@@ -32,7 +32,7 @@ public class LotteryAController extends LotteryABaseController {
     @ResponseBody
     public ResultUtil ethBuyLottery(String luckNum,Integer multipleNumber,String payPasswod){
         if(StringUtils.isBlank(luckNum) || multipleNumber == null || StringUtils.isBlank(payPasswod) ||
-           luckNum.length() != 3 || !NumberValidationUtil.isNumeric(luckNum) || multipleNumber <= 0 || multipleNumber > 100
+           luckNum.length() != 3 || !NumberValidationUtil.isNumeric(luckNum) || multipleNumber <= 0 || multipleNumber >= 100
         ){
             //参数错误
             return ResultUtil.errorJson("Parameter error!");

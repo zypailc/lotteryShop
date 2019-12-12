@@ -23,7 +23,7 @@ public class Constants {
     /** 全局头像地址配置**/
     public static final  String HEAD_PORTRAIT_URL = "../images/head/tx_01.jpg";
     /** 支付密码加密密钥*/
-    public static final  String KEY_TOW = "b13828b542d244bf9b08e5c2caf95df8";
+    public static final  String KEY_TOW = "b13828b542d244bf";
     /** 钱包名称加密密钥*/
     public static final  String KEY_THREE = "9d949958cccd454a";
     /** 静态资源的文件名*/
