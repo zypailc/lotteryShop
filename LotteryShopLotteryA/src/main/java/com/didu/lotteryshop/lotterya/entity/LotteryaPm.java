@@ -30,8 +30,8 @@ public class LotteryaPm extends Model<LotteryaPm> {
     /**
      * 会员ID
      */
-	@TableField("membe_id")
-	private String membeId;
+	@TableField("member_id")
+	private String memberId;
     /**
      * A彩票期数ID
      */
@@ -69,12 +69,12 @@ public class LotteryaPm extends Model<LotteryaPm> {
 		this.id = id;
 	}
 
-	public String getMembeId() {
-		return membeId;
+	public String getMemberId() {
+		return memberId;
 	}
 
-	public void setMembeId(String membeId) {
-		this.membeId = membeId;
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
 	}
 
 	public Integer getLotteryaIssueId() {
@@ -134,7 +134,7 @@ public class LotteryaPm extends Model<LotteryaPm> {
 	public String toString() {
 		return "LotteryaPm{" +
 			", id=" + id +
-			", membeId=" + membeId +
+			", memberId=" + memberId +
 			", lotteryaIssueId=" + lotteryaIssueId +
 			", total=" + total +
 			", status=" + status +

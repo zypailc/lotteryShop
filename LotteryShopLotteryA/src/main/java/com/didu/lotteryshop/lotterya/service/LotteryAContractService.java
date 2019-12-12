@@ -208,9 +208,8 @@ public class LotteryAContractService extends LotteryABaseService {
                 randomStr += random.nextInt(10);
             }
             TransactionReceipt transactionReceipt =  lotteryAContract.DrawLottery(new BigInteger(randomStr)).send();
-            //状态 TODO 状态需要测试进行修改
             String status = transactionReceipt.getStatus();
-            if(true){
+            if(Web3jUtils.transactionReceiptStatusSuccess(status)){
                 lunckNumber = lotteryAContract.ShowLuckNum().send();
             }
         } catch (Exception e) {
@@ -319,8 +318,8 @@ public class LotteryAContractService extends LotteryABaseService {
                     try {
                         TransactionReceipt transactionReceipt = lotteryAContract.PayBonus(BigInteger.valueOf(cycleIndex)).send();
                         String status = transactionReceipt.getStatus();
-                        //状态 TODO 状态需要测试进行修改
-                        if(true){
+                        //状态 ,状态需要测试进行修改
+                        if(Web3jUtils.transactionReceiptStatusSuccess(status)){
                             List<LotteryAContract.PayBonusIsExecuteEventEventResponse>  pList =  lotteryAContract.getPayBonusIsExecuteEventEvents(transactionReceipt);
                             if(pList != null && pList.size() > 0){
                                 LotteryAContract.PayBonusIsExecuteEventEventResponse pb = pList.get(0);
@@ -352,12 +351,18 @@ public class LotteryAContractService extends LotteryABaseService {
                    if(sList != null && sList.size() > 0){
                        for(String s:sList){
                            TransactionReceipt transactionReceipt = lotteryAContract.resetBuyMapping(s).send();
-                           //状态 TODO 状态需要测试进行修改
+                           //状态 状态需要测试进行修改
                            String status = transactionReceipt.getStatus();
+                           if(!Web3jUtils.transactionReceiptStatusSuccess(status)){
+                               return false;
+                           }
                        }
                        TransactionReceipt transactionReceipt = lotteryAContract.resetData().send();
-                       //状态 TODO 状态需要测试进行修改
+                       //状态 状态需要测试进行修改
                        String status = transactionReceipt.getStatus();
+                       if(!Web3jUtils.transactionReceiptStatusSuccess(status)){
+                           return false;
+                       }
                    }
                 }catch (Exception e){
                     logger.error("Method 'getBuyLuckNumber OR resetBuyMapping OR ' Error:"+e.getMessage());

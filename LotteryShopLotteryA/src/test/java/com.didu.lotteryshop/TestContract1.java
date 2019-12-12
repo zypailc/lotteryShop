@@ -29,10 +29,16 @@ public class TestContract1 {
             Web3j web3j = Web3j.build(new HttpService("http://127.0.0.1:8545/"));
             //查询所有账户余额
             fianAccountsBalance(web3j);
-            String outPerKey = "0x148f995ac00ed7793ec42fd48f0e6a915ae71b7795937d4d0446b88afd223f9f";
-            String outAddress = "0x0FED6905839e17a9ea2E509991138209f53E13bB";
+            String outPerKey = "0x45acdf957f67eb1ed889631d58111c37e2bb9ec84f434d814d6cfa73a63b6007";
+            String outAddress = "0xbA1e2307bdF9F74375789e9E49AE1Aa30F52a635";
             //管理员账号
-            String toAddress = "0x3fF8eEC1b063E09Eeb8d4e13d2dbD5728325FDFB";
+            //String toAddress = "0x3fF8eEC1b063E09Eeb8d4e13d2dbD5728325FDFB";
+            //CHJ1
+           // String toAddress = "0x5ab04ba376756bd3d24cb3a433a4d59f0d2565a2";
+            //CHJ2
+            String toAddress = "0xb7d818d2fd6aa70a960a6bf00653c52cda7d9bf0";
+            //1CHJ
+            //String toAddress = "0x62fe3dd9d1ba47d9e0816bf68d224cc0677df4b5";
             EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(outAddress, DefaultBlockParameterName.LATEST).send();
             BigInteger nonce = ethGetTransactionCount.getTransactionCount();
             RawTransaction rawTransaction  = RawTransaction.createEtherTransaction(

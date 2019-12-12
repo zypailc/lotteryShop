@@ -66,7 +66,7 @@ public class LotteryaPmServiceImpl extends ServiceImpl<LotteryaPmMapper, Lottery
      */
 	public LotteryaPm add(String memberId, Integer lotteryAIssueId, BigDecimal total, Integer type){
         LotteryaPm lotteryaPm = new LotteryaPm();
-        lotteryaPm.setMembeId(memberId);
+        lotteryaPm.setMemberId(memberId);
         lotteryaPm.setLotteryaIssueId(lotteryAIssueId);
         lotteryaPm.setTotal(total);
         lotteryaPm.setStatus("0");
@@ -181,7 +181,7 @@ public class LotteryaPmServiceImpl extends ServiceImpl<LotteryaPmMapper, Lottery
                 LotteryaIssue lotteryaIssue = lotteryaIssueService.selectById(lapm.getLotteryaIssueId());
                 if(nowLotteryaIssue.getIssueNum() - lotteryaIssue.getIssueNum() <= lotteryaInfo.getPmVnum()){
                     //有效提成数据
-                  int cnt =  lotteryaBuyService.getBuyCount(lapm.getMembeId(),upLotteryaIssue.getId());
+                  int cnt =  lotteryaBuyService.getBuyCount(lapm.getMemberId(),upLotteryaIssue.getId());
                   if(cnt >= lotteryaInfo.getPmRnum()){
                       //领取提成
                       lapm.setStatus("1");
@@ -190,7 +190,7 @@ public class LotteryaPmServiceImpl extends ServiceImpl<LotteryaPmMapper, Lottery
                       if(bool){
                           //增加待领币
                           String dicType = lapm.getType() == 1 ? EsDlbaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA_PM : EsDlbaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA_PM;
-                          bool = esDlbaccountsService.addInSuccess(lapm.getMembeId(),dicType,lapm.getTotal(),lapm.getId().toString());
+                          bool = esDlbaccountsService.addInSuccess(lapm.getMemberId(),dicType,lapm.getTotal(),lapm.getId().toString());
                       }
                       if(!bool) return bool;
                   }

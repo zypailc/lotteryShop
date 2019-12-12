@@ -129,7 +129,7 @@ public class LotteryaPmDetailServiceImpl extends ServiceImpl<LotteryaPmDetailMap
         boolean bool = false;
         List<LotteryaInfoPc> LotteryaInfoPcList = lotteryaInfoPcService.findBuy(lotteryaInfo.getId());
         BigDecimal totalEther = lotteryaBuy.getTotal();
-        //购买提成 2%
+        //购买提成 5%
         totalEther = totalEther.divide(new BigDecimal("100")).multiply(lotteryaInfo.getBuyPm());
         SysConfig sysConfig = sysConfigService.getSysConfig();
         //转换为平台币

@@ -5,7 +5,7 @@
 	<!-- 通用查询映射结果 -->
 	<resultMap id="BaseResultMap" type="com.didu.lotteryshop.lotterya.entity.LotteryaPm">
 		<id column="id" property="id" />
-		<result column="membe_id" property="membeId" />
+		<result column="member_id" property="memberId" />
 		<result column="lotterya_issue_id" property="lotteryaIssueId" />
 		<result column="total" property="total" />
 		<result column="status" property="status" />
