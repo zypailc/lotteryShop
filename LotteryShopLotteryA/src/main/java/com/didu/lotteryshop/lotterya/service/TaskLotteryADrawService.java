@@ -56,13 +56,13 @@ public class TaskLotteryADrawService extends LotteryABaseService{
             logger.info("==============================☆☆ DrawLotteryA: End off  BuyLotteryA ☆☆==============================================");
             //定时10分钟
             logger.info("==============================☆☆ DrawLotteryA: Start sleep Time 10 minutes ☆☆==============================================");
-//            try {
-//                Thread.sleep(1000*60*10);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//                logger.error(" DrawLotteryA: Start sleep Time 10 minutes <> error:"+e.getMessage());
-//                return;
-//            }
+            try {
+                Thread.sleep(1000*60*10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                logger.error(" DrawLotteryA: Start sleep Time 10 minutes <> error:"+e.getMessage());
+                return;
+            }
             logger.info("==============================☆☆ DrawLotteryA: End sleep Time 10 minutes ☆☆==============================================");
             //开奖
             logger.info("==============================☆☆ DrawLotteryA: Start draw LotteryA ☆☆==============================================");
