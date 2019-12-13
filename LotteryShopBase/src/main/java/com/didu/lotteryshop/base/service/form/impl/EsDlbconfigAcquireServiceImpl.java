@@ -36,7 +36,7 @@ public class EsDlbconfigAcquireServiceImpl extends ServiceImpl<EsDlbconfigAcquir
      */
     public EsDlbconfigAcquire findEsDlbconfigAcquireByActiveMembers(int activeMembers){
         Wrapper<EsDlbconfigAcquire> wrapper = new EntityWrapper<>();
-        wrapper.and("active_num <=?",activeMembers);
+        wrapper.and("active_num <= {0}",activeMembers);
         wrapper.orderBy("active_num",false);
         wrapper.last("limit 1");
         return super.selectOne(wrapper);
