@@ -99,9 +99,15 @@ public class Web3jService extends WalletBaseService {
         //是否确认状态，0为确认，1已确认
         reMap.put(TRANSACTION_STATUS,0);
         if (transactionReceipt.getTransactionReceipt().isPresent()) {
-            reMap.put(TRANSACTION_STATUS,1);
-            //实际确认产生的gas费用
-            reMap.put(TRANSACTION_CASUSED,Web3jUtils.bigIntegerToBigDecimal(transactionReceipt.getTransactionReceipt().get().getGasUsed()).toPlainString());
+            //状态，需要实际数据，修改状态
+            String status = transactionReceipt.getTransactionReceipt().get().getStatus();
+            if(Web3jUtils.transactionReceiptStatusSuccess(status)){
+                reMap.put(TRANSACTION_STATUS,1);
+                //实际确认产生的gas费用
+                reMap.put(TRANSACTION_CASUSED,Web3jUtils.bigIntegerToBigDecimal(gasProviderService.getGasPrice().multiply(transactionReceipt.getTransactionReceipt().get().getGasUsed())).toPlainString());
+            }else if(Web3jUtils.transactionReceiptStatusFail(status)){
+                reMap.put(TRANSACTION_STATUS,2);
+            }
         }
         return reMap;
     }

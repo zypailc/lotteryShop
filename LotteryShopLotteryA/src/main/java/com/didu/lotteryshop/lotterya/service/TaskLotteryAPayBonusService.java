@@ -28,7 +28,7 @@ public class TaskLotteryAPayBonusService {
         LotteryaIssue lotteryaIssue = lotteryaIssueService.findCurrentPeriodLotteryaIssue();
         if(lotteryaIssue.getBonusStatus().equals("0") && lotteryaIssue.getBonusGrant().equals("1")){
             boolean bool = false;
-            //step 1：发放奖金。
+            //step 1：发放奖金、中奖数据、中奖提成、清除合约数据
             logger.info("==============================☆☆ PayBonusLotteryA: Start payBonus ☆☆==============================================");
             bool = lotteryAContractService.payBonus(lotteryaIssue);
             if(!bool){
@@ -45,6 +45,7 @@ public class TaskLotteryAPayBonusService {
                 return;
             }
             logger.info("==============================☆☆ PayBonusLotteryA: End payPushMoney  ☆☆==============================================");
+            //step 3:生成下期彩票彩票数据
             logger.info("==============================☆☆ PayBonusLotteryA: Start createNext  ☆☆==============================================");
             bool = lotteryaIssueService.createNext();
             if(!bool){

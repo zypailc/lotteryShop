@@ -2,10 +2,13 @@ package com.didu.lotteryshop;
 
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
+import com.didu.lotteryshop.common.utils.Web3jUtils;
 import com.didu.lotteryshop.lotterya.contract.LotteryAContract;
 import org.junit.Test;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tuples.generated.Tuple2;
 import org.web3j.tx.gas.DefaultGasProvider;
@@ -52,8 +55,11 @@ public class TestContract2 {
           LotteryAContract lotteryAContract = LotteryAContract.load(contractAddress,web3j,credentials,defaultGasProvider);
           String luckNum = lotteryAContract.ShowLuckNum().send();
           System.out.println(luckNum);
-          List<String> list = this.getBuyLuckNumber(lotteryAContract);
-          List<Map<String,String>> xx =   this.getBuyMapping(lotteryAContract,"123");
+          List<String> buyLuckNumberList = this.getBuyLuckNumber(lotteryAContract);
+          List<Map<String,String>> buyMappingList =   this.getBuyMapping(lotteryAContract,"456");
+
+          EthGetBalance ethGetBalancel2 = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameter.valueOf("latest")).send();
+           System.out.println("CHJ1余额："+Web3jUtils.bigIntegerToBigDecimal(ethGetBalancel2.getBalance()).toPlainString());
 
       } catch (Exception e) {
           e.printStackTrace();

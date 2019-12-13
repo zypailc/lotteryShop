@@ -1,5 +1,6 @@
 package com.didu.lotteryshop.lotterya.service;
 
+import com.didu.lotteryshop.common.service.GasProviderService;
 import com.didu.lotteryshop.common.utils.Web3jUtils;
 import com.didu.lotteryshop.lotterya.contract.LotteryAContract;
 import com.didu.lotteryshop.lotterya.entity.LotteryAContractResultEntity;
@@ -40,6 +41,8 @@ public class LotteryAContractService extends LotteryABaseService {
     private LotteryaIssueServiceImpl lotteryaIssueService;
     @Autowired
     private LotteryaBuyServiceImpl lotteryaBuyService;
+    @Autowired
+    private GasProviderService gasProviderService;
 
     /**
      * 是否能购买彩票
@@ -174,7 +177,7 @@ public class LotteryAContractService extends LotteryABaseService {
                 lacre.setMsg("Buy lottery A successfully!");
                 //燃气费
                 BigInteger gasUsed =  transactionReceipt.getGasUsed();
-                lacre.setGasUsed(Web3jUtils.bigIntegerToBigDecimal(gasUsed));
+                lacre.setGasUsed(Web3jUtils.bigIntegerToBigDecimal( gasProviderService.getGasPrice().multiply(gasUsed)));
             }else if(Web3jUtils.transactionReceiptStatusWait(status)){
                 lacre.setStatus(LotteryAContractResultEntity.STATUS_WAIT);
                 //等待交易确认
