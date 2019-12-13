@@ -45,7 +45,14 @@ public class TaskLotteryAPayBonusService {
                 return;
             }
             logger.info("==============================☆☆ PayBonusLotteryA: End payPushMoney  ☆☆==============================================");
-
+            logger.info("==============================☆☆ PayBonusLotteryA: Start createNext  ☆☆==============================================");
+            bool = lotteryaIssueService.createNext();
+            if(!bool){
+                //错误，重新生成下一期数据错误
+                logger.error(" PayBonusLotteryA: Start createNext --> error:Regenerating the next data error!");
+                return;
+            }
+            logger.info("==============================☆☆ PayBonusLotteryA: End createNext  ☆☆==============================================");
             logger.info("==============================☆☆ PayBonusLotteryA: End payBonus ☆☆==============================================");
         }else{
             //A彩票 没有奖金可发

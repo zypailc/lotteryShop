@@ -26,7 +26,8 @@ public class DrawLotteryATask {
     //@Scheduled(fixedRate=5000) // fixedRate:上一次开始执行时间点之后5秒再执行
     //@Scheduled(fixedDelay = 5000) //fixedDelay:上一次执行完毕时间点之后5秒再执行
     /** 每5分钟执行 */
-    @Scheduled(cron = "0 0/5 * * * ?") //默认是fixedDelay 上一次执行完毕时间后执行下一轮
+   // @Scheduled(cron = "0 0/5 * * * ?") //默认是fixedDelay 上一次执行完毕时间后执行下一轮
+    @Scheduled(cron = "0 0/1 * * * ?") //默认是fixedDelay 上一次执行完毕时间后执行下一轮
     private void configureTasks() {
         logger.info("==============================☆☆ Start execution DrawLotteryA timing task! ☆☆==============================================");
         taskLotteryADrawService.lotteryADraw();

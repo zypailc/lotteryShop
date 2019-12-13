@@ -347,6 +347,7 @@ public class LotteryAContractService extends LotteryABaseService {
             //清除合约数据
             if(bool){
                 try {
+                    //删除购买彩票组
                    List<String> sList = this.getBuyLuckNumber();
                    if(sList != null && sList.size() > 0){
                        for(String s:sList){
@@ -357,33 +358,20 @@ public class LotteryAContractService extends LotteryABaseService {
                                return false;
                            }
                        }
-                       TransactionReceipt transactionReceipt = lotteryAContract.resetData().send();
-                       //状态 状态需要测试进行修改
-                       String status = transactionReceipt.getStatus();
-                       if(!Web3jUtils.transactionReceiptStatusSuccess(status)){
-                           return false;
-                       }
                    }
+                    //删除购买记录；删除中奖者；幸运号码职重置为“”
+                    TransactionReceipt transactionReceipt = lotteryAContract.resetData().send();
+                    //状态 状态需要测试进行修改
+                    String status = transactionReceipt.getStatus();
+                    if(!Web3jUtils.transactionReceiptStatusSuccess(status)){
+                        return false;
+                    }
                 }catch (Exception e){
                     logger.error("Method 'getBuyLuckNumber OR resetBuyMapping OR ' Error:"+e.getMessage());
                     e.printStackTrace();
                     bool = false;
                     return bool;
                 }
-            }
-            //重新生成下一期
-            if(bool) {
-                LotteryaIssue newLotteryaIssue = new LotteryaIssue();
-                newLotteryaIssue.setStartTime(DateUtils.addMinutes(lotteryaIssue.getEndTime(),lotteryaInfo.getIntervalDate().intValue()));
-                newLotteryaIssue.setEndTime(DateUtils.addMinutes(newLotteryaIssue.getStartTime(),lotteryaInfo.getPeriodDate().intValue()));
-                newLotteryaIssue.setIssueNum(lotteryaIssue.getIssueNum()+1);
-                newLotteryaIssue.setCreateTime(new Date());
-                newLotteryaIssue.setBuyStatus("0");
-                newLotteryaIssue.setBsTime(new Date());
-                newLotteryaIssue.setBuyStatus("0");
-                newLotteryaIssue.setBonusStatusTime(new Date());
-                newLotteryaIssue.setBonusGrant("0");
-                bool = lotteryaIssueService.insert(newLotteryaIssue);
             }
         }
         return bool;

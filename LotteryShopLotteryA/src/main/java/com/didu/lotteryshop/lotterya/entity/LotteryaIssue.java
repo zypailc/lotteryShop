@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -25,6 +27,7 @@ public class LotteryaIssue extends Model<LotteryaIssue> {
     /**
      * 主键ID
      */
+	@TableId(value="id", type= IdType.AUTO)
 	private Integer id;
     /**
      * 开启时间

@@ -9,6 +9,7 @@ import com.didu.lotteryshop.lotterya.entity.LotteryaIssue;
 import com.didu.lotteryshop.lotterya.entity.LotteryaPm;
 import com.didu.lotteryshop.lotterya.mapper.LotteryaPmMapper;
 import com.didu.lotteryshop.lotterya.service.form.ILotteryaPmService;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -173,7 +174,7 @@ public class LotteryaPmServiceImpl extends ServiceImpl<LotteryaPmMapper, Lottery
         //本期
         LotteryaIssue nowLotteryaIssue = lotteryaIssueService.findCurrentPeriodLotteryaIssue();
         //上期
-        LotteryaIssue upLotteryaIssue = lotteryaIssueService.findUpLotteryaIssue();
+        //LotteryaIssue upLotteryaIssue = lotteryaIssueService.findUpLotteryaIssue();
         LotteryaInfo lotteryaInfo =  lotteryaInfoService.findLotteryaInfo();
         if(lotteryaPmList != null && lotteryaPmList.size() > 0){
             for(LotteryaPm lapm : lotteryaPmList){
@@ -181,8 +182,8 @@ public class LotteryaPmServiceImpl extends ServiceImpl<LotteryaPmMapper, Lottery
                 LotteryaIssue lotteryaIssue = lotteryaIssueService.selectById(lapm.getLotteryaIssueId());
                 if(nowLotteryaIssue.getIssueNum() - lotteryaIssue.getIssueNum() <= lotteryaInfo.getPmVnum()){
                     //有效提成数据
-                  int cnt =  lotteryaBuyService.getBuyCount(lapm.getMemberId(),upLotteryaIssue.getId());
-                  if(cnt >= lotteryaInfo.getPmRnum()){
+                  int cnt =  lotteryaBuyService.getBuyCount(lapm.getMemberId(),nowLotteryaIssue.getId());
+                  if((cnt >= 1 && lapm.getLotteryaIssueId() == nowLotteryaIssue.getId()) || (cnt >= lotteryaInfo.getPmRnum())){
                       //领取提成
                       lapm.setStatus("1");
                       lapm.setStatusTime(new Date());
@@ -202,6 +203,7 @@ public class LotteryaPmServiceImpl extends ServiceImpl<LotteryaPmMapper, Lottery
                     if(!bool) return bool;
                 }
             }
+            bool = true;
         }else{
             bool = true;
         }
