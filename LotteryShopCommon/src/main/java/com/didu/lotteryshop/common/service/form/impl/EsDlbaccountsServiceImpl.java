@@ -179,7 +179,7 @@ public class EsDlbaccountsServiceImpl extends ServiceImpl<EsDlbaccountsMapper, E
         boolean bool = false;
         if(StringUtils.isBlank(dicTypeValue) || StringUtils.isBlank(operId)) return bool;
         Wrapper<EsDlbaccounts> wrapper = new EntityWrapper<>();
-        wrapper.eq("memberId",memberId).and().eq("dicType",dicTypeValue).and().eq("operId",operId);
+        wrapper.eq("member_id",memberId).and().eq("dic_type",dicTypeValue).and().eq("oper_id",operId);
         EsDlbaccounts  esDlbaccounts = super.selectOne(wrapper);
         if(esDlbaccounts != null &&  esDlbaccounts.getStatus() != STATUS_FAIL && esDlbaccounts.getStatus() != STATUS_SUCCESS){
             esDlbaccounts.setStatus(status);

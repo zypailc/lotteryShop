@@ -214,7 +214,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
         boolean bool = false;
         if(StringUtils.isBlank(dicTypeValue) || StringUtils.isBlank(operId)) return bool;
         Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
-        wrapper.eq("memberId",memberId).and().eq("dicType",dicTypeValue).and().eq("operId",operId);
+        wrapper.eq("member_id",memberId).and().eq("dic_type",dicTypeValue).and().eq("oper_id",operId);
         EsEthaccounts  esEthaccounts = super.selectOne(wrapper);
         gasFee = gasFee == null ? BigDecimal.ZERO : gasFee;
         if(esEthaccounts != null &&  esEthaccounts.getStatus() != STATUS_FAIL && esEthaccounts.getStatus() != STATUS_SUCCESS){
