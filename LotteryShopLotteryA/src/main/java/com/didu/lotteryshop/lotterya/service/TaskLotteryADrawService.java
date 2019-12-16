@@ -41,7 +41,9 @@ public class TaskLotteryADrawService extends LotteryABaseService{
         BigDecimal intervalDate = lotteryaInfo.getIntervalDate();
         //彩票结束时间加开奖间隔时间
         Date endAndIntervalDate = DateUtils.addMinutes(endTime,intervalDate.intValue());
-        if(nowDate.after(endTime) && nowDate.before(endAndIntervalDate) && lotteryaIssue.getBuyStatus().equals("0")){
+        //延迟10分钟后开奖
+        Date delayEndTime = DateUtils.addMinutes(endTime,10);
+        if(nowDate.after(delayEndTime) && nowDate.before(endAndIntervalDate) && lotteryaIssue.getBuyStatus().equals("0")){
             boolean bool = false;
             //关闭彩票购买功能
             logger.info("==============================☆☆ DrawLotteryA: Start off  BuyLotteryA ☆☆==============================================");
@@ -54,16 +56,17 @@ public class TaskLotteryADrawService extends LotteryABaseService{
                 return;
             }
             logger.info("==============================☆☆ DrawLotteryA: End off  BuyLotteryA ☆☆==============================================");
-            //定时10分钟
-            logger.info("==============================☆☆ DrawLotteryA: Start sleep Time 10 minutes ☆☆==============================================");
-            try {
-                Thread.sleep(1000*60*10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                logger.error(" DrawLotteryA: Start sleep Time 10 minutes <> error:"+e.getMessage());
-                return;
-            }
-            logger.info("==============================☆☆ DrawLotteryA: End sleep Time 10 minutes ☆☆==============================================");
+             //2019-12-16 lyl 注释，因线程沉睡，会卡在线程上，不会执行其他定时任务（交易未确认的数据），故调整为在开奖结束时间加10分钟进行开奖
+//            //定时10分钟
+//            logger.info("==============================☆☆ DrawLotteryA: Start sleep Time 10 minutes ☆☆==============================================");
+//            try {
+//                Thread.sleep(1000*60*10);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//                logger.error(" DrawLotteryA: Start sleep Time 10 minutes <> error:"+e.getMessage());
+//                return;
+//            }
+//            logger.info("==============================☆☆ DrawLotteryA: End sleep Time 10 minutes ☆☆==============================================");
             //开奖
             logger.info("==============================☆☆ DrawLotteryA: Start draw LotteryA ☆☆==============================================");
             //开奖中奖号码

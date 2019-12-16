@@ -66,22 +66,22 @@ public class TestContract {
             BigInteger BuyValue = Convert.toWei("0.1", Convert.Unit.ETHER).toBigInteger();
             TransactionReceipt transactionReceipt = lotteryAContractLoad.BuyLottery(buyNum,BigInteger.valueOf(1), BuyValue).sendAsync().get();
             System.out.println("xxxxxxxx+++:"+transactionReceipt.getStatus());
-            List<LotteryAContract.BuyLotteryEventEventResponse> buyLotteryEventResponse =  lotteryAContractLoad.getBuyLotteryEventEvents(transactionReceipt);
-            if(buyLotteryEventResponse != null && buyLotteryEventResponse.size() > 0){
-                LotteryAContract.BuyLotteryEventEventResponse buyLotteryEventResponse1 = buyLotteryEventResponse.get(0);
-                System.out.println(
-                        "[address:"+buyLotteryEventResponse1.buyer
-                        +";lunckNum:"+buyLotteryEventResponse1.buyLuckNumber
-                        +",money:"+bigIntegerToBigDecimal(buyLotteryEventResponse1.money)
-                        +",multipleNumber:"+buyLotteryEventResponse1.multipleNumber+"]");
-            }
-            List<LotteryAContract.ContractBalanceOutEventEventResponse> buyContractBalanceOutEventEventResponse =  lotteryAContractLoad.getContractBalanceOutEventEvents(transactionReceipt);
-            if(buyContractBalanceOutEventEventResponse != null && buyContractBalanceOutEventEventResponse.size() > 0){
-                LotteryAContract.ContractBalanceOutEventEventResponse buyContractBalanceOut = buyContractBalanceOutEventEventResponse.get(0);
-                System.out.println(
-                        "[address:"+buyContractBalanceOut.winner
-                        +",money:"+bigIntegerToBigDecimal(buyContractBalanceOut.money) +"]");
-            }
+//            List<LotteryAContract.BuyLotteryEventEventResponse> buyLotteryEventResponse =  lotteryAContractLoad.getBuyLotteryEventEvents(transactionReceipt);
+//            if(buyLotteryEventResponse != null && buyLotteryEventResponse.size() > 0){
+//                LotteryAContract.BuyLotteryEventEventResponse buyLotteryEventResponse1 = buyLotteryEventResponse.get(0);
+//                System.out.println(
+//                        "[address:"+buyLotteryEventResponse1.buyer
+//                        +";lunckNum:"+buyLotteryEventResponse1.buyLuckNumber
+//                        +",money:"+bigIntegerToBigDecimal(buyLotteryEventResponse1.money)
+//                        +",multipleNumber:"+buyLotteryEventResponse1.multipleNumber+"]");
+//            }
+//            List<LotteryAContract.ContractBalanceOutEventEventResponse> buyContractBalanceOutEventEventResponse =  lotteryAContractLoad.getContractBalanceOutEventEvents(transactionReceipt);
+//            if(buyContractBalanceOutEventEventResponse != null && buyContractBalanceOutEventEventResponse.size() > 0){
+//                LotteryAContract.ContractBalanceOutEventEventResponse buyContractBalanceOut = buyContractBalanceOutEventEventResponse.get(0);
+//                System.out.println(
+//                        "[address:"+buyContractBalanceOut.winner
+//                        +",money:"+bigIntegerToBigDecimal(buyContractBalanceOut.money) +"]");
+//            }
 
             //查询合约账户余额
             findContractBalance(lotteryAContractDeploy);

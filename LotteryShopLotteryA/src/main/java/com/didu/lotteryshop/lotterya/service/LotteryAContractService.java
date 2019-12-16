@@ -119,8 +119,8 @@ public class LotteryAContractService extends LotteryABaseService {
     public boolean isBuyMultipleNumber(Integer lotteryaIssueId,String luckNum,Integer multipleNumber){
         boolean bool = false;
         String sql = " select sum(multiple_num) as allMultipleNum " +
-                    " from lotterya_buy " +
-                    " where lotterya_issue_id="+lotteryaIssueId+" and transfer_status in('0','1') and luck_num='"+luckNum+"'";
+                " from lotterya_buy " +
+                " where lotterya_issue_id="+lotteryaIssueId+" and transfer_status in('0','1') and luck_num='"+luckNum+"'";
         Map<String, Object> mMap =  super.getSqlMapper().selectOne(sql);
         if(mMap != null && !mMap.isEmpty()){
             //获取幸运号码总倍数
@@ -214,6 +214,8 @@ public class LotteryAContractService extends LotteryABaseService {
             String status = transactionReceipt.getStatus();
             if(Web3jUtils.transactionReceiptStatusSuccess(status)){
                 lunckNumber = lotteryAContract.ShowLuckNum().send();
+                //开奖燃气费
+                logger.info("drawLotterA gasFee:"+Web3jUtils.bigIntegerToBigDecimal(gasProviderService.getGasPrice().multiply(transactionReceipt.getGasUsed())));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -247,8 +249,8 @@ public class LotteryAContractService extends LotteryABaseService {
                                     " from lotterya_buy as lab_ " +
                                     " left join es_member as em_ on(lab_.member_id = em_.id) " +
                                     " where lab_.lotterya_issue_id ="+lotteryaIssueId+
-                                        " and lab_.multiple_num="+Integer.valueOf(lm.get("multipleNumber"))+
-                                         " and lab_.transfer_status='1' and lab_.luck_num='"+luckNum+"' and em_.p_address='"+lm.get("ethAddress")+"' " +
+                                    " and lab_.multiple_num="+Integer.valueOf(lm.get("multipleNumber"))+
+                                    " and lab_.transfer_status='1' and lab_.luck_num='"+luckNum+"' and em_.p_address='"+lm.get("ethAddress")+"' " +
                                     " limit 1";
                             Map<String, Object>  jrMap =  super.getSqlMapper().selectOne(sql);
                             if(jrMap == null || jrMap.isEmpty() || jrMap.get("id") == null || "".equals(jrMap.get("id").toString())){
@@ -315,6 +317,7 @@ public class LotteryAContractService extends LotteryABaseService {
             boolean isLuckMmber = lotteryaIssue.getLuckTotal().compareTo(BigDecimal.ZERO) > 0;
             //要有中奖者，才进行发放
             if(isLuckMmber){
+                BigInteger gasUseds = BigInteger.ZERO;
                 boolean forBool = true;
                 Integer cycleIndex = 1;
                 do{
@@ -323,6 +326,7 @@ public class LotteryAContractService extends LotteryABaseService {
                         String status = transactionReceipt.getStatus();
                         //状态 ,状态需要测试进行修改
                         if(Web3jUtils.transactionReceiptStatusSuccess(status)){
+                            gasUseds = gasUseds.add(transactionReceipt.getGasUsed());
                             List<LotteryAContract.PayBonusIsExecuteEventEventResponse>  pList =  lotteryAContract.getPayBonusIsExecuteEventEvents(transactionReceipt);
                             if(pList != null && pList.size() > 0){
                                 LotteryAContract.PayBonusIsExecuteEventEventResponse pb = pList.get(0);
@@ -339,7 +343,10 @@ public class LotteryAContractService extends LotteryABaseService {
                     }
                     cycleIndex++;
                 }while (forBool);
+                //发放奖金燃气费
+                logger.info("PayBonus gasFee:"+Web3jUtils.bigIntegerToBigDecimal(gasProviderService.getGasPrice().multiply(gasUseds)));
             }
+
             lotteryaIssue.setBonusStatus("1");
             lotteryaIssue.setBonusStatusTime(new Date());
             bool = lotteryaIssueService.updateAllColumnById(lotteryaIssue);
@@ -349,22 +356,28 @@ public class LotteryAContractService extends LotteryABaseService {
             }
             //清除合约数据
             if(bool){
+                BigInteger gasUseds = BigInteger.ZERO;
                 try {
-                   List<String> sList = this.getBuyLuckNumber();
-                   if(sList != null && sList.size() > 0){
-                       for(String s:sList){
-                           TransactionReceipt transactionReceipt = lotteryAContract.resetBuyMapping(s).send();
-                           //状态 状态需要测试进行修改
-                           String status = transactionReceipt.getStatus();
-                           if(!Web3jUtils.transactionReceiptStatusSuccess(status)){
-                               return false;
-                           }
-                       }
-                   }
+                    //删除购买彩票组
+                    List<String> sList = this.getBuyLuckNumber();
+                    if(sList != null && sList.size() > 0){
+                        for(String s:sList){
+                            TransactionReceipt transactionReceipt = lotteryAContract.resetBuyMapping(s).send();
+                            //状态 状态需要测试进行修改
+                            String status = transactionReceipt.getStatus();
+                            gasUseds = gasUseds.add(transactionReceipt.getGasUsed());
+                            if(!Web3jUtils.transactionReceiptStatusSuccess(status)){
+                                return false;
+                            }
+                        }
+                    }
                     //删除购买记录；删除中奖者；幸运号码职重置为“”
                     TransactionReceipt transactionReceipt = lotteryAContract.resetData().send();
                     //状态 状态需要测试进行修改
                     String status = transactionReceipt.getStatus();
+                    gasUseds = gasUseds.add(transactionReceipt.getGasUsed());
+                    //重置合约数据燃气费
+                    logger.info("ResetContractData gasFee:"+Web3jUtils.bigIntegerToBigDecimal(gasUseds.multiply(gasProviderService.getGasPrice())));
                     if(!Web3jUtils.transactionReceiptStatusSuccess(status)){
                         return false;
                     }
@@ -422,10 +435,12 @@ public class LotteryAContractService extends LotteryABaseService {
             cPrice = cPrice == null ? BigInteger.ZERO : cPrice;
             BigDecimal cbPrice =  Web3jUtils.bigIntegerToBigDecimal(cPrice);
             if(cbPrice.compareTo(price) != 0){
-               TransactionReceipt transactionReceipt = lotteryAContract.updatePrice(Convert.toWei(price.toPlainString(), Convert.Unit.ETHER).toBigInteger()).send();
-               if(Web3jUtils.transactionReceiptStatusSuccess(transactionReceipt.getStatus())){
-                   bool = true;
-               }
+                TransactionReceipt transactionReceipt = lotteryAContract.updatePrice(Convert.toWei(price.toPlainString(), Convert.Unit.ETHER).toBigInteger()).send();
+                if(Web3jUtils.transactionReceiptStatusSuccess(transactionReceipt.getStatus())){
+                    bool = true;
+                    //增加修改合约单价，产生的燃气费；
+                    logger.info("Update contractPrice gasFee:"+Web3jUtils.bigIntegerToBigDecimal(gasProviderService.getGasPrice().multiply(transactionReceipt.getGasUsed())));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

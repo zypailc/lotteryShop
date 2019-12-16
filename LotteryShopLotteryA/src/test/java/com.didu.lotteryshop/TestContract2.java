@@ -9,9 +9,11 @@ import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tuples.generated.Tuple2;
 import org.web3j.tx.gas.DefaultGasProvider;
+import org.web3j.utils.Convert;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -20,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 public class TestContract2 {
+   public static BigInteger gasPrice = new BigInteger("22000000000");
+
     @Test
   public void test(){
     try{
@@ -35,29 +39,62 @@ public class TestContract2 {
           Web3j web3j = Web3j.build(new HttpService("http://127.0.0.1:8545/"));
           Credentials credentials = Credentials.create("3E5E0BC6DA93639AA9FA5C1E36091E552404F20A5D6F410788FA8B5CCBFF8E7F");
           DefaultGasProvider defaultGasProvider = new DefaultGasProvider();
+          EthGetBalance ethGetBalancel1 = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameter.valueOf("latest")).send();
+          System.out.println("部署前余额："+Web3jUtils.bigIntegerToBigDecimal(ethGetBalancel1.getBalance()).toPlainString());
           LotteryAContract lotteryAContract = LotteryAContract.deploy(web3j,credentials,defaultGasProvider,"0x9c3b669D55C411c5d70d87ce2bA44Cf8476141CA").send();
           String  contractAddress = lotteryAContract.getContractAddress();
+          BigInteger gasUsed = lotteryAContract.getTransactionReceipt().get().getGasUsed();
          // contractAddress = "0x4678ce017543f99801dd0f67c1a67e7c4792086d";
-          System.out.println(contractAddress);
-
+          System.out.println("contractAddress:"+contractAddress);
+          System.out.println("gasFee:"+Web3jUtils.bigIntegerToBigDecimal(gasPrice.multiply(gasUsed)));
+          EthGetBalance ethGetBalancel2 = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameter.valueOf("latest")).send();
+          System.out.println("部署后余额："+Web3jUtils.bigIntegerToBigDecimal(ethGetBalancel2.getBalance()).toPlainString());
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
+  }
+@Test
+  public void test3(){
+      try {
+          Web3j web3j = Web3j.build(new HttpService("http://127.0.0.1:8545/"));
+          Credentials credentials = Credentials.create("3E5E0BC6DA93639AA9FA5C1E36091E552404F20A5D6F410788FA8B5CCBFF8E7F");
+          String contractAddress = "0xd46c4b75ac051c90231ffa5bccfe9f390397149d";
+          DefaultGasProvider defaultGasProvider = new DefaultGasProvider();
+          LotteryAContract lotteryAContract = LotteryAContract.load(contractAddress,web3j,credentials,defaultGasProvider);
+          TransactionReceipt transactionReceipt = lotteryAContract.ContractBalanceIn(Convert.toWei("200", Convert.Unit.ETHER).toBigInteger()).send();
+          BigInteger gasUsed = transactionReceipt.getGasUsed();
+          System.out.println("充值合约gasFee:"+Web3jUtils.bigIntegerToBigDecimal(gasPrice.multiply(gasUsed)));
+          System.out.println("合约余额："+Web3jUtils.bigIntegerToBigDecimal(lotteryAContract.ShowContractBalance().send()));
       } catch (Exception e) {
           e.printStackTrace();
       }
   }
 
   @Test
-  public void showContractData(){
+      public void showContractData(){
       try {
+          //19.95225054
           Web3j web3j = Web3j.build(new HttpService("http://127.0.0.1:8545/"));
           Credentials credentials = Credentials.create("3E5E0BC6DA93639AA9FA5C1E36091E552404F20A5D6F410788FA8B5CCBFF8E7F");
-          String contractAddress = "0x4678ce017543f99801dd0f67c1a67e7c4792086d";
+          String contractAddress = "0xd46c4b75ac051c90231ffa5bccfe9f390397149d";
           DefaultGasProvider defaultGasProvider = new DefaultGasProvider();
           LotteryAContract lotteryAContract = LotteryAContract.load(contractAddress,web3j,credentials,defaultGasProvider);
           String luckNum = lotteryAContract.ShowLuckNum().send();
           System.out.println(luckNum);
           List<String> buyLuckNumberList = this.getBuyLuckNumber(lotteryAContract);
-          List<Map<String,String>> buyMappingList =   this.getBuyMapping(lotteryAContract,"456");
-
+          String buyLuckNumberStr = "";
+          for(String buyLuckNum : buyLuckNumberList){
+            if("".equals(buyLuckNumberStr))
+                buyLuckNumberStr += buyLuckNum;
+              buyLuckNumberStr += ","+buyLuckNum;
+          }
+          System.out.println("buyLuckNumberList["+buyLuckNumberList+"]");
+          List<Map<String,String>> buyMappingList =   this.getBuyMapping(lotteryAContract,"123");
+          for(Map<String,String> bm : buyMappingList){
+              for(Map.Entry<String, String> m : bm.entrySet()){
+                System.out.println("key:"+m.getKey()+";value:"+m.getValue());
+              }
+          }
           EthGetBalance ethGetBalancel2 = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameter.valueOf("latest")).send();
            System.out.println("CHJ1余额："+Web3jUtils.bigIntegerToBigDecimal(ethGetBalancel2.getBalance()).toPlainString());
 
@@ -65,6 +102,7 @@ public class TestContract2 {
           e.printStackTrace();
       }
   }
+
 
     /**
      * 获取购买者数据
