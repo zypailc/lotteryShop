@@ -175,7 +175,7 @@ public class EsDlbwalletServiceImpl extends ServiceImpl<EsDlbwalletMapper, EsDlb
      */
     public List<EsDlbwallet> findBalanceGtTen(){
         Wrapper<EsDlbwallet> wrapper = new EntityWrapper<>();
-        wrapper.and("balance >= ?",10);
+        wrapper.and("balance >= {0}",10);
         return super.selectList(wrapper);
     }
 }

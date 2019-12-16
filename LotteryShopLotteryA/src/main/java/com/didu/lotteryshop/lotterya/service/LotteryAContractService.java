@@ -1,5 +1,6 @@
 package com.didu.lotteryshop.lotterya.service;
 
+import com.didu.lotteryshop.common.service.GasProviderService;
 import com.didu.lotteryshop.common.utils.Web3jUtils;
 import com.didu.lotteryshop.lotterya.contract.LotteryAContract;
 import com.didu.lotteryshop.lotterya.entity.LotteryAContractResultEntity;
@@ -40,6 +41,8 @@ public class LotteryAContractService extends LotteryABaseService {
     private LotteryaIssueServiceImpl lotteryaIssueService;
     @Autowired
     private LotteryaBuyServiceImpl lotteryaBuyService;
+    @Autowired
+    private GasProviderService gasProviderService;
 
     /**
      * 是否能购买彩票
@@ -174,7 +177,7 @@ public class LotteryAContractService extends LotteryABaseService {
                 lacre.setMsg("Buy lottery A successfully!");
                 //燃气费
                 BigInteger gasUsed =  transactionReceipt.getGasUsed();
-                lacre.setGasUsed(Web3jUtils.bigIntegerToBigDecimal(gasUsed));
+                lacre.setGasUsed(Web3jUtils.bigIntegerToBigDecimal( gasProviderService.getGasPrice().multiply(gasUsed)));
             }else if(Web3jUtils.transactionReceiptStatusWait(status)){
                 lacre.setStatus(LotteryAContractResultEntity.STATUS_WAIT);
                 //等待交易确认
@@ -357,13 +360,14 @@ public class LotteryAContractService extends LotteryABaseService {
                                return false;
                            }
                        }
-                       TransactionReceipt transactionReceipt = lotteryAContract.resetData().send();
-                       //状态 状态需要测试进行修改
-                       String status = transactionReceipt.getStatus();
-                       if(!Web3jUtils.transactionReceiptStatusSuccess(status)){
-                           return false;
-                       }
                    }
+                    //删除购买记录；删除中奖者；幸运号码职重置为“”
+                    TransactionReceipt transactionReceipt = lotteryAContract.resetData().send();
+                    //状态 状态需要测试进行修改
+                    String status = transactionReceipt.getStatus();
+                    if(!Web3jUtils.transactionReceiptStatusSuccess(status)){
+                        return false;
+                    }
                 }catch (Exception e){
                     logger.error("Method 'getBuyLuckNumber OR resetBuyMapping OR ' Error:"+e.getMessage());
                     e.printStackTrace();
@@ -371,21 +375,7 @@ public class LotteryAContractService extends LotteryABaseService {
                     return bool;
                 }
             }
-            //重新生成下一期
-        if(bool) {
-            LotteryaIssue newLotteryaIssue = new LotteryaIssue();
-            newLotteryaIssue.setStartTime(DateUtils.addMinutes(lotteryaIssue.getEndTime(),lotteryaInfo.getIntervalDate().intValue()));
-            newLotteryaIssue.setEndTime(DateUtils.addMinutes(newLotteryaIssue.getStartTime(),lotteryaInfo.getPeriodDate().intValue()));
-            newLotteryaIssue.setIssueNum(lotteryaIssue.getIssueNum()+1);
-            newLotteryaIssue.setCreateTime(new Date());
-            newLotteryaIssue.setBuyStatus("0");
-            newLotteryaIssue.setBsTime(new Date());
-            newLotteryaIssue.setBuyStatus("0");
-            newLotteryaIssue.setBonusStatusTime(new Date());
-            newLotteryaIssue.setBonusGrant("0");
-            bool = lotteryaIssueService.insert(newLotteryaIssue);
         }
-    }
         return bool;
     }
     /**

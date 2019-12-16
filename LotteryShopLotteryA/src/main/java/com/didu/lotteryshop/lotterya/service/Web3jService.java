@@ -244,7 +244,7 @@ public class Web3jService extends LotteryABaseService {
                 if(Web3jUtils.transactionReceiptStatusSuccess(status)){
                     reMap.put(TRANSACTION_STATUS,1);
                     //实际确认产生的gas费用
-                    reMap.put(TRANSACTION_GASUSED,Web3jUtils.bigIntegerToBigDecimal(transactionReceipt.getTransactionReceipt().get().getGasUsed()).toPlainString());
+                    reMap.put(TRANSACTION_GASUSED,Web3jUtils.bigIntegerToBigDecimal(gasProviderService.getGasPrice().multiply(transactionReceipt.getTransactionReceipt().get().getGasUsed())).toPlainString());
                 }else if(Web3jUtils.transactionReceiptStatusFail(status)){
                     reMap.put(TRANSACTION_STATUS,2);
                 }
