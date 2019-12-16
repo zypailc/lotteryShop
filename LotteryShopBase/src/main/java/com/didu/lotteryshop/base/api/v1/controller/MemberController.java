@@ -5,8 +5,7 @@ import com.didu.lotteryshop.base.config.BaseConfig;
 import com.didu.lotteryshop.base.controller.BaseBaseController;
 import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.entity.LsImage;
-import com.didu.lotteryshop.common.entity.Member;
-import com.didu.lotteryshop.common.mapper.LsImageMapper;
+import com.didu.lotteryshop.common.service.form.impl.LsImageServiceImpl;
 import com.didu.lotteryshop.common.utils.FileUtil;
 import com.didu.lotteryshop.common.utils.QRCodeUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
@@ -28,13 +27,13 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/v1/member")
-public class MemberContorller extends BaseBaseController {
+public class MemberController extends BaseBaseController {
 
 
     @Autowired
     private MemberService memberService;
     @Autowired
-    private LsImageMapper lsImageMapper;
+    private LsImageServiceImpl lsImageService;
     @Autowired
     private BaseConfig baseConfig;
     /**
@@ -46,12 +45,6 @@ public class MemberContorller extends BaseBaseController {
     @ResponseBody
     @RequestMapping("/bindWallet")
     public ResultUtil bindWallet(String paymentCode,String bAddress){
-        //获取用户信息
-        LoginUser loginUser= getLoginUser();
-        String userId = loginUser.getId();
-        if(userId == null || "".equals(userId)){
-            return ResultUtil.errorJson("Bind failed. Please try again!");
-        }
         if(paymentCode == null || "".equals(paymentCode)){
             return ResultUtil.errorJson("Please enter your password!");
         }
@@ -61,7 +54,7 @@ public class MemberContorller extends BaseBaseController {
         if(!VerifyETHAddressUtil.isETHValidAddress(bAddress)){
             return ResultUtil.errorJson("Please fill in your wallet address correctly!");
         }
-        return memberService.bindWallet(userId,paymentCode,bAddress);
+        return memberService.bindWallet(paymentCode,bAddress);
     }
 
     /**
@@ -72,18 +65,14 @@ public class MemberContorller extends BaseBaseController {
     @ResponseBody
     @RequestMapping("/updateBindWallet")
     public ResultUtil updateBindWallet(String bAddress){
-        //获取用户信息
-        LoginUser loginUser= getLoginUser();
         if(bAddress == null || "".equals(bAddress)){
             return ResultUtil.errorJson("Please enter your wallet address !");
         }
         if(!VerifyETHAddressUtil.isETHValidAddress(bAddress)){
             return ResultUtil.errorJson("Please fill in your wallet address correctly !");
         }
-        Member member = new Member();
-        member.setId(loginUser.getId());
-        member.setBAddress(bAddress);
-        return memberService.modifyMember(member);
+
+        return memberService.modifyBAddress(bAddress);
     }
 
     /**
@@ -100,7 +89,7 @@ public class MemberContorller extends BaseBaseController {
         FileInputStream inputStream = null;
         try {
             BufferedImage image = QRCodeUtil.createImage_1(QR, "", true);
-            LsImage lsImage = lsImageMapper.selectById(baseConfig.getQRBackgroundId());
+            LsImage lsImage = lsImageService.selectById(baseConfig.getQRBackgroundId());
             QRUrl = baseConfig.getImgTemporaryUrl() + System.currentTimeMillis()+".png";
             QRCodeUtil.mergeImage_p(ImageIO.read(new ByteArrayInputStream(lsImage.getByteData())),image,QRUrl);
             File file = new File(QRUrl);
@@ -128,8 +117,7 @@ public class MemberContorller extends BaseBaseController {
     @ResponseBody
     @RequestMapping("/findGeneralizeMemberList")
     public List<Map<String,Object>> findGeneralizeMemberList(){
-        LoginUser loginUser = getLoginUser();
-        return memberService.findGeneralizeMemberList(loginUser.getId());
+        return memberService.findGeneralizeMemberList();
     }
 
 }

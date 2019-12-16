@@ -1,33 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Lottery - Home</title>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="RanGO Project">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- 公共style -->
-<%
-	include("common.css.html"){}
-%>
+	<!-- commonality  meta and title -->
+	<%
+		include("common/common.meta.html"){}
+	%>
+	<!-- commonality style -->
+	<%
+		include("common/common.css.html"){}
+	%>
 <link rel="stylesheet" type="text/css" href="../styles/main_styles.css">
 <link rel="stylesheet" type="text/css" href="../styles/responsive.css">
 <link rel="stylesheet" type="text/css" href="../styles/blog_styles.css">
 <link rel="stylesheet" type="text/css" href="../styles/blog_responsive.css">
 <link rel="stylesheet" type="text/css" href="../plugins/colorbox/colorbox.css">
 </head>
-<!-- 公共js -->
-<%
-	include("common.js.html"){}
-%>
+<!-- commonality js -->
+	<%
+		include("common/common.js.html"){}
+	%>
 <script src="../js/custom.js"></script>
 <body class="body_top">
 
 <div class="super_container">
 
-	<!-- 引入头部文件 -->
+	<!-- commonality head -->
 	<%
-		include("index_top.html"){}
+		include("common/index_top.html"){}
 	%>
 	<!-- Home -->
 
@@ -92,13 +91,13 @@
 			
 	</div>
 
-	<!-- 白皮书 -->
+	<!-- white book -->
 	<div class="icon_boxes">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-4">
 					<div class="icon_box_title">
-						<h1 data-localize="base.whiteBook">White book</h1>
+						<h1 class="whiteBook">White book</h1>
 					</div>
 				</div>
 				<div class="col-lg-8 icon_box_col">
@@ -110,7 +109,7 @@
 			</div>
 		</div>
 	</div>
-	<!-- 项目特点 -->
+	<!-- project specialty -->
 	<div class="features">
 		<div class="container">
 			<div class="row">
@@ -133,7 +132,7 @@
 		</div>
 	</div>
 
-	<!-- 玩法列表 -->
+	<!-- play List -->
 	<div class="services">
 		<div class="container">
 			<div class="row">
@@ -266,6 +265,7 @@
 
 	</div>
 
+	<!-- partner -->
 	<div class="features">
 		<div class="container">
 			<div class="row">
@@ -287,7 +287,7 @@
 		</div>
 	</div>
 
-	<!-- 充值途徑 -->
+	<!-- Top-up way -->
 	<div class="features">
 		<div class="container">
 			<div class="row">
@@ -305,11 +305,11 @@
 			</div>
 		</div>
 	</div>
-	<!-- 分隔线 -->
+	<!-- hr -->
 	<hr>
-	<!-- 引入底部文件 -->
+	<!-- commonality Footer -->
 	<%
-		include("bottom.html"){}
+		include("common/bottom.html"){}
 	%>
 
 </div>
@@ -321,10 +321,28 @@
 		var generalizePersonId = "${generalizePersonId!''}";
 		setCookie("generalizePersonId",generalizePersonId,24);
 		var languageType = getLanguage();
+		infoContentWhiteBook(languageType);
 		infoContentCharacteristic(languageType);
 		infoContentPartners();
 		infoContentExternal();
 })
+
+function infoContentWhiteBook(languageType){
+	$.ajax({
+		url:'${projectPath}/apiauthorization/base/authorization/v1/baseInfo/infoContentWhiteBook',
+		type:'get',
+		data:{"languageType":languageType},
+		dataType:"json",
+		success:function (result) {
+			if(result.length > 0){
+				var info = result[0]
+				$(".whiteBook").html(info.title);
+				$(".div_white_book").html(info.content);
+			}
+
+		}
+	})
+}
 
 function infoContentCharacteristic(languageType){
 	$.ajax({
@@ -359,7 +377,7 @@ function infoContentPartners(){
 			//充值途径
 			var partner_obj = $(".partners_list");
 			$.each(result,function(index,partners){
-				partner_obj.append("<img onclick='open_url(\""+partners.linkAddress+"\")' src='/apiauthorization/base/authorization/v1/lsimage/getImg?id="+partners.imgId+"'>");
+				partner_obj.append("<img style='cursor: pointer;' onclick='open_url(\""+partners.linkAddress+"\")' src='/apiauthorization/base/authorization/v1/lsimage/getImg?id="+partners.imgId+"'>");
 			})
 		}
 	})
@@ -373,7 +391,7 @@ function infoContentExternal(){
 			//合作伙伴
 			var external_obj = $(".external_list");
 			$.each(result,function(index,external){
-				external_obj.append("<img onclick='open_url(\""+external.linkAddress+"\")' src=/apiauthorization/base/authorization/v1/lsimage/getImg?id="+external.imgId+">");
+				external_obj.append("<img style='cursor: pointer;' onclick='open_url(\""+external.linkAddress+"\")' src=/apiauthorization/base/authorization/v1/lsimage/getImg?id="+external.imgId+">");
 			})
 		}
 	})

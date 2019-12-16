@@ -39,8 +39,10 @@ public class Member{
     private String email;//电子邮箱
     @TableField("generalize_member_id")
     private String generalizeMemberId;//推广人员Id
-    @TableField("generalize_member_type")
-    private Integer generalizeMemberType;//推广層級
+    @TableField("generalize_member_ids")
+    private String generalizeMemberIds;//推广人员的所有上级Id
+    @TableField("generalize_member_level")
+    private Integer generalizeMemberLevel;//推广層級
     @TableField("head_portrait_url")
     private String headPortraitUrl;//头像Url
     @TableField("create_time")

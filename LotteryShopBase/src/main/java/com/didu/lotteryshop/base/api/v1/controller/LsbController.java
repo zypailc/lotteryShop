@@ -1,36 +1,31 @@
 package com.didu.lotteryshop.base.api.v1.controller;
 
-import com.didu.lotteryshop.base.api.v1.service.EthWalletService;
+import com.didu.lotteryshop.base.api.v1.service.LsbWalletService;
 import com.didu.lotteryshop.base.controller.BaseBaseController;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-/**
- * eth钱包Controller
- * @author CHJ
- * @date 2019-12-10
- */
 @Controller
-@RequestMapping("/v1/ethWallet")
-public class EthWalletController extends BaseBaseController {
+@RequestMapping("/v1/lsbWallet")
+public class LsbController extends BaseBaseController {
+
     @Autowired
-    private EthWalletService ethWalletService;
+    private LsbWalletService lsbWalletService;
+
     /**
-     * 查询ETH钱包
+     * 查询平台币
      * @return
      */
-    @RequestMapping("/findEthWallet")
-    @ResponseBody
-    public ResultUtil findEthwallet(){
-        return ethWalletService.findEthwallet();
+    @RequestMapping("/findLsbWallet")
+    public ResultUtil findLsbWallet(){
+        return lsbWalletService.findLsbWallet();
     }
 
     /**
-     * 查詢Eth流水記錄
+     * 查詢Dlb流水記錄
      * @param currentPage
      * @param pageSize
      * @param startTime
@@ -39,11 +34,11 @@ public class EthWalletController extends BaseBaseController {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/findEthRecord")
+    @RequestMapping("/findLsbRecord")
     public ResultUtil findEthRecord(Integer currentPage,Integer pageSize,String startTime,String endTime,String status){
         currentPage =  currentPage == null ? 1:currentPage;
         pageSize = pageSize == null ? 20 : pageSize;
-        return ethWalletService.findEthRecord(currentPage,pageSize,startTime,endTime,status);
+        return lsbWalletService.findLsbWalletRecord(currentPage,pageSize,startTime,endTime,status);
     }
 
 }

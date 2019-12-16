@@ -2,7 +2,9 @@ package com.didu.lotteryshop.common.service.form.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.didu.lotteryshop.common.entity.EsDlbaccounts;
 import com.didu.lotteryshop.common.entity.EsLsbaccounts;
 import com.didu.lotteryshop.common.mapper.EsLsbaccountsMapper;
 import com.didu.lotteryshop.common.service.form.IEsLsbaccountsService;
@@ -189,5 +191,36 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
             bool = super.updateById(esLsbaccounts);
         }
         return bool;
+    }
+
+
+    /**
+     * 查询平台币流水记录
+     * @param memberId
+     * @param currentPage
+     * @param pageSize
+     * @param startTime
+     * @param endTime
+     * @param status
+     * @return
+     */
+    public Page<EsLsbaccounts> findLsbRecordPagination(String memberId,Integer currentPage,Integer pageSize,String startTime,String endTime,String status) {
+        Wrapper<EsLsbaccounts> wrapper = new EntityWrapper<EsLsbaccounts>();
+        wrapper.where("1=1");
+        if(startTime != null && !"".equals(startTime)){
+            wrapper.and(" status_time < {0}",startTime);
+        }
+        if(endTime != null && !"".equals(endTime)){
+            wrapper.and("  status_time < {0}",endTime);
+        }
+        if(memberId != null && !"".equals(memberId)){
+            wrapper.and("member_id = {0}",memberId);
+        }
+        if(status != null && !"".equals(status)){
+            wrapper.in("status",status);
+        }
+        wrapper.orderBy("create_time",false);
+        Page<EsLsbaccounts> pageLsbRecord = new Page<EsLsbaccounts>(currentPage,pageSize);
+        return super.selectPage(pageLsbRecord,wrapper);
     }
 }

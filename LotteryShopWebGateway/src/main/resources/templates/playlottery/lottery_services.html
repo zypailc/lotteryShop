@@ -1,29 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Lottery - Home</title>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="description" content="RanGO Project">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- 头部引用 -->
-
-	<!-- 公共style -->
+	<!-- commonality  meta and title -->
 	<%
-	include("common.css.html"){}
+		include("../common/common.meta.html"){}
+	%>
+	<!-- commonality style -->
+	<%
+	include("../common/common.css.html"){}
 	%>
 	<link rel="stylesheet" type="text/css" href="../styles/portfolio_styles1.css">
 	<link rel="stylesheet" type="text/css" href="../styles/portfolio_responsive1.css">
 	<link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
 	<link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
+	<link rel="stylesheet" type="text/css" href="../styles/lottery_service.css">
 </head>
-<!-- 公共js -->
+<!-- commonality js -->
 <%
-include("common.js.html"){}
+include("../common/common.js.html"){}
 %>
 <script src="../js/portfolio_custom.js"></script>
 <script>
-
+	var lay_play_code;
 	$(function(){
 		//返回页面
 		$(".back").click(function(){
@@ -47,6 +45,21 @@ include("common.js.html"){}
 				$(".ul_draw_archive").append(li);
 			}
 		});
+		var loginUser = '${loginUser!}';
+		$(".ul_self_record").scroll(function(){
+			var viewH = $(this).height();
+			var contentH = $(this).get(0).scrollHeight;
+			var scrollTop =$(this).scrollTop();
+			if(scrollTop/(contentH-viewH) >= 0.95){
+				var lotteryIssueNum = $(".number_of_periods").attr("issueNumId");
+				if(loginUser){
+					findLotteryRecord(1,"0,1,2","lottery_self_record",false,lotteryIssueNum)
+				}else{
+					findLotteryRecord(1,"0,1,2","lottery_self_record",true,lotteryIssueNum);
+				}
+			}
+		});
+
 
 		$(".lottery_play_div_element").click(function(){
 			var div_up = $(this).parent();
@@ -54,9 +67,7 @@ include("common.js.html"){}
 			div_up.find(".lottery_play_div_element").removeClass("lottery_play_div_element_select"+"_"+(parseInt(dataNumber) - 1));
 			$(this).addClass("lottery_play_div_element_select"+"_"+(parseInt(dataNumber) - 1));
 			$(".lottery_play_"+dataNumber).html($(this).find("span").html());
-
 		});
-
 		$("#fast_select_random").click(function(){
 			var number_1 = Math.floor(Math.random()*10);
 			var number_2 = Math.floor(Math.random()*10);
@@ -70,30 +81,30 @@ include("common.js.html"){}
 		$("#button_purchase").click(function(){
 			var availableBalance = $(".money_self").html() || 0;
 			var incurExpense = $("") || 0;
-			if(availableBalance > incurExpense){
+			if(!loginUser){
+				layer.msg("please log in !");
+			} else if(availableBalance < incurExpense){
 				layui_open("Account balance is insufficient, please recharge first !");
-			}else {
+			} else {
 				var number_1 = $(".lottery_play_1").find("span").html() || 0;
 				var number_2 = $(".lottery_play_2").find("span").html() || 0;
 				var number_3 = $(".lottery_play_3").find("span").html() || 0;
 				var multiple = $(".input_number").val() || 0;
-				layer.open({
-					type: 1,
-					title:"支付密碼",
-					closeBtn: 0, //不显示关闭按钮
-					anim: 2,
-					shadeClose: true, //开启遮罩关闭
-					data:{"number_1":number_1,"number_2":number_2,"number_3":number_3,"multiple":multiple},
-					content: $("#playPassword").html()
-				});
+				lay_play_code = layer.open({
+						type: 1,
+						title:"支付密碼",
+						closeBtn: 0, //不显示关闭按钮
+						anim: 2,
+						shadeClose: true, //开启遮罩关闭
+						data:{"number_1":number_1,"number_2":number_2,"number_3":number_3,"multiple":multiple},
+						content: $("#playPassword").html()
+					});
 			}
 		});
-
-
-
 		//init
 		findRule();
 		getLotteryConfig();
+		findLotteryIssue("the_lottery_record_id");
 	})
 
 	function paymentCodeConfirm(){
@@ -107,7 +118,10 @@ include("common.js.html"){}
 				payPasswod = paymentCode_1;
 			}
 		});
-
+		if(payPasswod == null || payPasswod == ''){
+			layui_open("Please enter your password !");
+			return;
+		}
 		var luckNum = number_1 +　number_2 + number_3;
 		var multipleNumber = $(".input_number").val() || "";
 		$.ajax({
@@ -117,6 +131,7 @@ include("common.js.html"){}
 			dataType:"json",
 			success:function (result) {
 				if(result.code == 200){
+					layer.close(lay_play_code);
 					layer.msg(result.msg);
 				}else {
 					layui_open(result.msg);
@@ -128,7 +143,7 @@ include("common.js.html"){}
 	function calculateCost(){
 		var gas = $(".money_expenditure").attr("gas") || 0;
 		var multiple = $(".input_number").val() || 0;
-		var price = $(".money_haploid").html() || 0;
+		var price = $(".money_haploid").attr("price") || 0;
 		var doubledMoney = $(".money_haploid").attr("doubledMoney") || 0;
 		var total = parseFloat(multiple) * parseFloat(price) + parseFloat(gas);
 		var tatalStr = price + " * " + multiple +  " + 燃氣費(最高≈0.0946) = " +　parseFloat(total.toFixed(6));
@@ -142,15 +157,31 @@ include("common.js.html"){}
 			type:'get',
 			dataType:"json",
 			success:function (result) {
+				var language = getLanguage();
 				if(result.code){
 					var info = result.extend.data;
-					$(".money_haploid").html(parseFloat(info.price));
+					if(language = 'en'){
+						$(".lottery_title").html(info.entitle)
+					}
+					if(language = 'zh'){
+						$(".lottery_title").html(info.zhtitle)
+					}
+					$(".number_of_periods").html(info.issueNum)
+					$(".number_of_periods").attr("issueNumId",info.issueNumId);
+					$(".money_haploid").html(parseFloat(info.total));
+					$(".money_haploid").attr("price",parseFloat(info.price));
 					$(".money_haploid").attr("doubledMoney",info.total);
 					$(".money_bounty").html(info.total);
 					$(".number_of_periods").html(info.issueNum);
 					$(".lottery_service_time").attr("endTime",info.endTime);
 					countDown();
 					getGas(parseFloat(info.price));
+					var loginUser = '${loginUser!}';
+					if(loginUser){
+						findLotteryRecord(1,"0,1,2","lottery_self_record",false,info.issueNumId)
+					}else{
+						findLotteryRecord(1,"0,1,2","lottery_self_record",true,info.issueNumId);
+					}
 				}
 			}
 		})
@@ -174,7 +205,7 @@ include("common.js.html"){}
 				var gas = result.gas;
 				$(".money_expenditure").attr("gas",gas)
 				var total = parseFloat(gas) + parseFloat(price);
-				total = parseFloat(total.toFixed(6))
+				total = parseFloat(total.toFixed(6));
 				$(".money_expenditure").html( price+ " * 1 + 燃氣費(最高≈"+gas+") = " + total);
 			}
 		})
@@ -232,246 +263,137 @@ include("common.js.html"){}
 			}
 		})
 	}
+	function findLotteryRecord(isOneself,mTransferStatus,dataId,flag,lotteryaIssueId){
+		var dataObj = $("#"+dataId);
+		var currentPage = dataObj.attr("currentPage") || 1;
+		var pageSize = dataObj.attr("pageSize") || 20;
+		var isFind = dataObj.attr("isFind") || 'true';
+		var ul = dataObj.find("ul");
+		if(flag){
+			ul.html("");
+			ul.append("<li>No More !</li>")
+			return ;
+		}
+		if(isFind == 'true'){
+			$.ajax({
+					url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryBuy',
+					type:'get',
+					data:{"currentPage":currentPage,"pageSize":pageSize,"mTransferStatus":mTransferStatus,"lotteryaIssueId":lotteryaIssueId},
+					dataType:"json",
+					success:function (result) {
+						var data = result.extend.data;
+						var doubledMoney = $(".money_haploid").attr("doubledMoney");
+						var flag_1 = false;
+						if(data.records.length < 1){
+							dataObj.attr("isFind",'false');
+							flag_1 = true;
+						}else {
+							$.each(data.records, function (index, dataInfo) {
+								var luckNum = dataInfo.luckNum.split("");
+								var li = '<li>' +
+										'<div class="model_purchase_record">' +
+										'<div class="lottery_play_div_element_4 lottery_play_div_element_border_0">' +
+										'<span class="span_element_1">' + luckNum[0] + '</span>' +
+										'</div>' +
+										'<div class="lottery_play_div_element_4 lottery_play_div_element_border_1">' +
+										'<span class="span_element_1">' + luckNum[1] + '</span>' +
+										'</div>' +
+										'<div class="lottery_play_div_element_4 lottery_play_div_element_border_2">' +
+										'<span class="span_element_1">' + luckNum[2] + '</span>' +
+										'</div>' +
+										'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
+										'<span class="span_element_1">5<span data-localize="base.spendAFewLater">Bet</span></span>' +
+										'</div>' +
+										'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
+										'<span class="span_element_1">' + (parseFloat(doubledMoney) * parseFloat(dataInfo.multipleNum)) + ' ETH</span>' +
+										'</div>' +
+										'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
+										'<span class="span_element_1">' + dataInfo.createTime + '</span>' +
+										'</div>' +
+										'</div>' +
+										'</li>';
+								if (ul.html()) {
+									ul.append("<hr>" + li);
+								} else {
+									ul.append(li);
+								}
+							})
+							if(data.records.length < pageSize){
+								flag_1 = true;
+							}
+						}
+						if(flag_1){
+							var noMore = ul.find("li[dataTag=noMore]");
+							if(!noMore.html()){
+								ul.append("<li dataTag='noMore'>No More</li>");
+							}
+						}
+					}
+			})
+		}
+		dataObj.attr("currentPage",parseInt(currentPage) + 1);
+		dataObj.attr("pageSize",pageSize);
+	}
+	function findLotteryIssue(dataId,flag){
+		console.log(dataId)
+		var dataObj = $("#"+dataId);
+		var currentPage = dataObj.attr("currentPage") || 1;
+		var pageSize = dataObj.attr("pageSize") || 20;
+		var ul = dataObj.find("ul");
+		$.ajax({
+			url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryIssue',
+			type:'get',
+			data:{"currentPage":currentPage,"pageSize":pageSize},
+			dataType:"json",
+			success:function (result) {
+				console.log(result);
+				console.log(result.extend.data.records);
+				var dataInfo = result.extend.data.records;
+				$.each(dataInfo,function(index,data){
+					console.log(data);
+					var luckNum = data.luckNum.split("");
+					var li = '<li>' +
+							'<div>#'+data.issueNum+'</div>'+
+							'<div>'+
+							'<div class="model_purchase_record">' +
+							'<div class="lottery_play_div_element_4 lottery_play_div_element_border_0">' +
+							'<span class="span_element_1">' + luckNum[0] + '</span>' +
+							'</div>' +
+							'<div class="lottery_play_div_element_4 lottery_play_div_element_border_1">' +
+							'<span class="span_element_1">' + luckNum[1] + '</span>' +
+							'</div>' +
+							'<div class="lottery_play_div_element_4 lottery_play_div_element_border_2">' +
+							'<span class="span_element_1">' + luckNum[2] + '</span>' +
+							'</div>' +
+							'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
+							'<span class="span_element_1">' + data.luckTotal + ' ETH</span>' +
+							'</div>' +
+							'<div class="lottery_play_div_element_4 lottery_play_div_time">' +
+							'<span class="span_element_1">' + data.startTime + " ~ " + data.endTime + '</span>' +
+							'</div>' +
+							'</div>' +
+							'</div>'+
+							'</li>';
+					if(index != 0){
+						ul.append("<hr>"+li);
+					}else {
+						ul.append(li);
+					}
+
+				})
+			}
+		})
+		dataObj.attr("currentPage",parseInt(currentPage) + 1);
+		dataObj.attr("pageSize",pageSize);
+	}
 </script>
-<style>
-	.span_right{
-		margin-right: 30px;
-	}
-	.ul_draw_archive{
-		text-align: left;
-		height: 475px;
-		overflow: auto;
-	}
-	.draw_archive_info{cursor: pointer;}
-	.lottery_play_div{
-		padding: 5px 15px;
-		background: #f8f8f8;
-		margin-left: 20px;
-		margin-right: 20px;
-		margin-bottom: 10px;
-	}
-	.lottery_play_div_1{
-		padding: 5px 15px;
-		text-align: center;
-		/*border: solid 1px #9f88be;*/
-		margin: 5px;
-	}
-	.lottery_play_div_element{
-		width: 50px;
-		height:50px;
-		border-radius: 50px;
-		text-align: center;
-		margin: 3px;
-		display: inline-block;
-		cursor: pointer;
-	}
-	.lottery_play_div_element_border_0{
-		border: solid 2px red;
-		background: red;
-	}
-	.lottery_play_div_element_border_1{
-		border: solid 2px green;
-		background: green;
-	}
-	.lottery_play_div_element_border_2{
-		border: solid 2px blue;
-		background: blue;
-	}
-	.lottery_play_div_element_3{
-		width: 50px;
-		height:50px;
-		border-radius: 50px;
-		text-align: center;
-		display: inline-block;
-		padding-bottom: 5px;
-		margin-top: 30px;
-		margin-left: 15px;
-	}
-	.lottery_play_div_element_4{
-		width: 30px;
-		height:30px;
-		border-radius: 30px;
-		text-align: center;
-		margin: 3px;
-		display: inline-block;
-		padding-bottom: 5px;
-	}
-	.span_element{
-		font-size: 25px;
-		color: black;
-	}
-	.span_element_1{
-		font-size: 15px;
-		color: black;
-	}
-	.lottery_play_div_element_0:hover{
-		background: white;
-		border: solid 2px red;
-	}
-	.lottery_play_div_element_0:checked{
-		background: white;
-		border: solid 2px red;
-	}
-	.lottery_play_div_element_1:hover{
-		background: white;
-		border: solid 2px green;
-	}
-	.lottery_play_div_element_1:checked{
-		background: white;
-		border: solid 2px green;
-	}
-	.lottery_play_div_element_2:hover{
-		background: white;
-		border: solid 2px blue;
-	}
-	.lottery_play_div_element_2:checked{
-		background: white;
-		border: solid 2px blue;
-	}
-	.lottery_play_div_element_select_0{
-		background: white;
-		border: solid 2px red;
-	}
-	.lottery_play_div_element_select_1{
-		background: white;
-		border: solid 2px green;
-	}
-	.lottery_play_div_element_select_2{
-		background: white;
-		border: solid 2px blue;
-	}
-	.lottery_play_div_Multiple{
-		border-radius: 5px;
-		border: 0;
-		width: 100px;
-	}
-	.model_purchase{
-		text-align: center;
-		margin-left: 20px;
-		background: #f8f9fa;
-		margin-right: 20px;
-		padding-bottom: 10px;
-		height: 150px;
-	}
-	.model_purchase_record{
-		text-align: left;
-		margin-left: 20px;
-	}
-	.model_purchase_1{
-		margin: 10px 20px;
-		background: #f8f9fa;
-		padding-bottom: 25px;
-		border-radius: 5px;
-		text-align: center;
-	}
-
-	.title_purchase{
-		display: initial;
-	}
-	.button_purchase{
-		/*display: inline-block;*/
-		width: 180px;
-	}
-	.lottery_play_div_select{
-		display: inline-block;
-		margin-left: 30px;
-		margin-top: 10px;
-	}
-	.lottery_play_div_element_money{
-		/*display: inline-block;*/
-		float: left;
-		margin-top: 10px;
-		margin-left: 30px;
-	}
-	.input_number{
-		width: 50px;
-		height: 32px;
-		text-align: center;
-	}
-	.a_button{
-		border: solid 1px #999;
-		height: 32px;
-		display: inline-block;
-		width: 15px;
-		border-radius: 2px;
-		cursor: pointer;
-	}
-	.model_purchase_button{
-		text-align: center;
-		cursor: pointer;
-		top: 10px;
-
-	}
-	.model_purchase_button span{
-		font-size: 25px;
-		border: solid 1px #9f88be;
-		border-radius: 5px;
-		padding: 5px 20px;
-		margin-top: 10px;
-		background: #9f88be;
-		color: white;
-	}
-	.model_purchase_button span:hover{
-		color: #322445;
-	}
-	.font_color{
-		color: black;
-	}
-	.lottery_service_title{
-		font-size: 24px;
-		color: black;
-	}
-	.lottery_service_time{
-		text-align: center;
-		margin-right: 20px;
-		margin-left: 20px;
-		font-size: 30px;
-		margin-bottom: 5px;
-	}
-	.lottery_service_time .em_periods{
-		float: right;
-	}
-	.model_purchase_left{
-		width: 78%;
-		display: inline-block;
-	}
-	.purchase{
-		width: 100%;
-	}
-	.model_money{
-		display: inline-block;
-		text-align: left;
-	}
-	.model_money p{
-		color: black;
-	}
-	.lottery_play_div_money{
-		padding-left: 10px;
-	}
-	.bounty_title{
-		font-size: 25px;
-		color: red !important;
-		font-weight: 600;
-	}
-	.em_time{
-		background: #f1f1f1;
-		padding: 5px 15px;
-		border-radius: 5px;
-		width: 60px;
-		height: 50px;
-	}
-	.confirm{
-		margin: 0 auto !important;
-		text-align: center;
-	}
-</style>
 <body class="body_top" data-spy="scroll" data-target=".services_item_inner">
 
 <div class="super_container">
 
-	<!-- 引入头部文件 -->
+	<!-- commonality head -->
 	<%
-		include("/top.html"){}
+		include("../common/top.html"){}
 	%>
 	<div class="home">
 		<div class="home_title">
@@ -484,7 +406,7 @@ include("common.js.html"){}
 		</div>
 	</div>
 
-	<!-- 玩法列表 -->
+	<!-- play list -->
 
 	<div class="services">
 
@@ -501,7 +423,7 @@ include("common.js.html"){}
 			<div class="lottery_item lotteryPlay ">
 				<div class="service_item_content">
 					<div class="service_item_title">
-						<p class="lottery_service_title"> <span data-localize="base.lotteryPlay">Guess</span> <span class="number_of_periods">20191210</span> <span>期</span></p>
+						<p class="lottery_service_title"> <span class="lottery_title"></span> <span class="number_of_periods"></span></p>
 						<p class="lottery_service_time"><em class="em_time time_hour">00</em> : <em  class="em_time time_minute">00</em> : <em  class="em_time time_second">00</em></p>
 					</div>
 					<div class="lottery_play_div">
@@ -635,42 +557,15 @@ include("common.js.html"){}
 								</div>
 							</div>
 						</div>
-						<div class="model_purchase_1">
-							<div class="model_purchase_left">
-								<div class="model_purchase_record">
-									<div class="lottery_play_div_element_4 lottery_play_div_element_border_0">
-										<span class="span_element_1">0</span>
-									</div>
-									<div class="lottery_play_div_element_4 lottery_play_div_element_border_1">
-										<span class="span_element_1">0</span>
-									</div>
-									<div class="lottery_play_div_element_4 lottery_play_div_element_border_2">
-										<span class="span_element_1">0</span>
-									</div>
-									<div class="lottery_play_div_element_4 lottery_play_div_Multiple">
-										<span class="span_element_1">100<span data-localize="base.spendAFewLater">Bet</span></span>
-									</div>
-								</div>
-								<div class="model_purchase_record">
-									<div class="lottery_play_div_element_4 lottery_play_div_element_border_0">
-										<span class="span_element_1">0</span>
-									</div>
-									<div class="lottery_play_div_element_4 lottery_play_div_element_border_1">
-										<span class="span_element_1">0</span>
-									</div>
-									<div class="lottery_play_div_element_4 lottery_play_div_element_border_2">
-										<span class="span_element_1">0</span>
-									</div>
-									<div class="lottery_play_div_element_4 lottery_play_div_Multiple">
-										<span class="span_element_1">5<span data-localize="base.spendAFewLater">Bet</span></span>
-									</div>
-								</div>
+						<div class="model_purchase_1 ul_self_record services_item_inner-1">
+							<div class="model_purchase_left" id="lottery_self_record">
+								<ul class=""></ul>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-- 规则 -->
+			<!-- rule -->
 			<div class="lottery_item rules">
 				<div class="service_item_content">
 					<div class="service_item_title">
@@ -681,79 +576,22 @@ include("common.js.html"){}
 
 				</div>
 			</div>
-			<!-- 开奖记录 -->
+			<!-- Lottery record -->
 			<div class="lottery_item drawArchive">
-				<div class="service_item_content">
+				<div id="the_lottery_record_id" class="service_item_content">
 					<div class="service_item_title">
 						<h2 data-localize="base.drawArchive">Draw archive</h2>
 					</div>
-						<ul class="ul_draw_archive services_item_inner-1">
-							<li class="draw_archive_info" data-id="76" style="top: 0px;">
-								<div class="item-link item-content draw-archive-item">
-									<div>#76</div>
-									<div><span class="span_right">2018.03.08 08:00</span><span>100ETH</span></div>
-									<div><p>2 3 5 7 8 4</p></div>
-								</div>
-							</li>
-							<hr>
-							<li class="draw_archive_info" data-id="76" style="top: 0px;">
-								<div class="item-link item-content draw-archive-item">
-									<div>#76</div>
-									<div><span class="span_right">2018.03.08 08:00</span><span>100ETH</span></div>
-									<div><p>2 3 5 7 8 4</p></div>
-								</div>
-							</li>
-							<hr>
-							<li class="draw_archive_info" data-id="76" style="top: 0px;">
-								<div class="item-link item-content draw-archive-item">
-									<div>#76</div>
-									<div><span class="span_right">2018.03.08 08:00</span><span>100ETH</span></div>
-									<div><p>2 3 5 7 8 4</p></div>
-								</div>
-							</li>
-							<hr>
-							<li class="draw_archive_info" data-id="76" style="top: 0px;">
-								<div class="item-link item-content draw-archive-item">
-									<div>#76</div>
-									<div><span class="span_right">2018.03.08 08:00</span><span>100ETH</span></div>
-									<div><p>2 3 5 7 8 4</p></div>
-								</div>
-							</li>
-							<hr>
-							<li class="draw_archive_info" data-id="76" style="top: 0px;">
-								<div class="item-link item-content draw-archive-item">
-									<div>#76</div>
-									<div><span class="span_right">2018.03.08 08:00</span><span>100ETH</span></div>
-									<div><p>2 3 5 7 8 4</p></div>
-								</div>
-							</li>
-							<hr>
-							<li class="draw_archive_info" data-id="76" style="top: 0px;">
-								<div class="item-link item-content draw-archive-item">
-									<div>#76</div>
-									<div><span class="span_right">2018.03.08 08:00</span><span>100ETH</span></div>
-									<div><p>2 3 5 7 8 4</p></div>
-								</div>
-							</li>
-							<hr>
-							<li class="draw_archive_info" data-id="76" style="top: 0px;">
-								<div class="item-link item-content draw-archive-item">
-									<div>#76</div>
-									<div><span class="span_right">2018.03.08 08:00</span><span>100ETH</span></div>
-									<div><p>2 3 5 7 8 4</p></div>
-								</div>
-							</li>
+						<ul class="ul_draw_archive services_item_inner-1" id="lottery_record">
 						</ul>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- 引入底部文件 -->
+	<!-- commonality fotter -->
 	<%
-	include("bottom.html"){}
+	include("../common/bottom.html"){}
 	%>
-
-</div>
 <div id="playPassword" style="display: none;">
 	<div style="margin: 30px;">
 		<div>
@@ -763,6 +601,8 @@ include("common.js.html"){}
 			<div class="button_purchase confirm" onclick="paymentCodeConfirm()"><span data-localize="base.confirm">confirm</span></div>
 		</div>
 	</div>
+</div>
+
 </div>
 </body>
 </html>

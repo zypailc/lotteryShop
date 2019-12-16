@@ -62,6 +62,8 @@ public class LotteryAService extends LotteryABaseService {
         rMap.put("price",lotteryaInfo.getPrice().toPlainString());
         //当前期数
         rMap.put("issueNum",lotteryaIssue.getIssueNum());
+        //當前期數id
+        rMap.put("issueNumId",lotteryaIssue.getId());
         //购买状态，0：开启，1：关闭
         rMap.put("buyStatus",lotteryaIssue.getBuyStatus());
         //开奖时间

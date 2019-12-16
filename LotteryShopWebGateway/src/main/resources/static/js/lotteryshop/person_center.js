@@ -5,7 +5,7 @@ $(function (){
     //初始化方法
     var li = $(".wallet_li");
     li.click();
-    $(".card-1_scroll").scroll(function(){
+   /* $(".card-1_scroll").scroll(function(){
         var $this =$(this),
             viewH =$(this).height(),//可见高度
             contentH =$(this).get(0).scrollHeight,//内容高度
@@ -25,7 +25,15 @@ $(function (){
                 '</li>';
             $(".ul_personal_lottery").append(li);
         }
-    });
+    });*/
+   $(".walletETH").scroll(function(){
+       var viewH = $(this).height();
+       var contentH = $(this).get(0).scrollHeight;
+       var scrollTop =$(this).scrollTop();
+       if(scrollTop/(contentH -viewH) >= 0.95){
+           findWalletRecord(false,'walletETH','/api/base/v1/ethWallet/findEthRecord')
+       }
+   });
 
     //初始化头像列表
     div_head_images();
@@ -53,7 +61,10 @@ $(function (){
     //屏幕分辨率小于991的初始化方法
     $(".personal_phone").click(function(){
         var type = $(this).attr("data-file") || "";
-        if(type){
+        if(type == 'generalize'){
+            $(location).prop('href','../web/personalGeneralizePhone');
+        }
+        if(type == 'lottery_record'){
             $(location).prop('href','../web/personalPhoneType?'+"type="+type);
         }
     });
@@ -190,24 +201,114 @@ function update_confirm(){
 }
 
 //init gengeralize record
-function gengeralizeMemberInit(){
+function gengeralizeMemberInit(classProperty){
+    var gengeralizeMember = $("."+classProperty);
+    var currentPage = gengeralizeMember.attr("currentPage") || 1;
+    var pageSize = gengeralizeMember.attr("pageSize") || 20;
+    var isFind = gengeralizeMember.attr("isFind") || 'true';
+    var ul = gengeralizeMember.find("ul");
     $.ajax({
         url: '/api/base/v1/member/findGeneralizeMemberList',
         type: 'post',
         dataType: "json",
         success: function (list) {
-            var  ul = $(".ul_personal_lottery");
-            $.each(list,function(index,data){
-                var li = '<li>'+
-                    '<div>'+
-                    '<p><span class="span_title">'+data.memberName+'</span></p>'+
-                    '<p>'+
-                    '<span>'+data.email+'</span>'+
-                    '</p>'+
-                    '</div>'+
-                    '</li>';
-                ul.append(li);
-            })
+            isFind = gengeralizeMember.attr("isFind") || 'true';
+            if(isFind == 'true') {
+                if (list.length < pageSize) {
+                    gengeralizeMember.attr("isFind", 'false')
+                }
+                $.each(list, function (index, data) {
+                    var li = '<li>' +
+                        '<div>' +
+                        '<p><span class="span_title">' + data.memberName + '</span></p>' +
+                        '<p>' +
+                        '<span>' + data.email + '</span>' +
+                        '</p>' +
+                        '</div>' +
+                        '</li>';
+                    if (index != 0) {
+                        ul.append("<hr class='hrEth'>" + li);
+                    } else {
+                        ul.append(li);
+                    }
+                })
+                gengeralizeMember.attr("currentPage", (parseInt(currentPage) + 1));
+                gengeralizeMember.attr("pageSize", pageSize);
+                if (list.length < pageSize) {
+                    ul.append("<hr class='hrEth'>" + "<li class='li_eth_come' dataTag='noMore'>No More</li>")
+                }
+            }
         }
     })
+}
+
+//init ETH record
+function findETHWallet(classProperty,url){
+    $.ajax({
+        url:url,
+        type: 'post',
+        dataType: "json",
+        success: function (result) {
+            console.log(result)
+        }
+    })
+}
+function findWalletRecord(flag,classProperty,url){
+    var walletETH = $("."+classProperty);
+    var currentPage = walletETH.attr("currentPage") || 1;
+    var pageSize = walletETH.attr("pageSize") || 20;
+    var isFind = walletETH.attr("isFind") || 'true';
+    var ul = walletETH.find("ul");
+    if(flag){
+        ul.html("");
+    }
+    if(isFind == 'true') {
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: {"currentPage": currentPage, "pageSize": pageSize, "start": '1,2'},
+            dataType: "json",
+            success: function (result) {
+                var dataInfo = result.extend.data;
+                var record = dataInfo.records;
+                isFind = walletETH.attr("isFind") || 'true';
+                if(isFind == 'true') {
+                    if(record.length < pageSize){
+                        walletETH.attr("isFind",'false')
+                    }
+                    $.each(record, function (index, data) {
+                        var li = '<li>';
+                        if (data.type == '0') {
+                            li = "<li class='li_come'>";
+                        }
+                        if (data.type == '1') {
+                            li = "<li class='li_comeInto'>";
+                        }
+                        li +=
+                            '<div>' +
+                            '<p><span>' + data.statusTime + '</span></p>' +
+                            '<p>' +
+                            '<span class="span_right" >' + data.amount + '</span>' +
+                            '<span class="span_right" >' + data.balance + '</span>';
+                        if(classProperty == 'walletETH'){
+                            li += '<span>' + data.gasFee + '</span>';
+                        }
+                        li +=    '</p>' +
+                            '</div>' +
+                            '</li>';
+                        if (flag && index == 0) {
+                            ul.append(li);
+                        } else {
+                            ul.append("<hr class='hrEth'>" + li);
+                        }
+                    });
+                    walletETH.attr("currentPage", (parseInt(currentPage) + 1));
+                    walletETH.attr("pageSize", pageSize);
+                    if (record.length < pageSize) {
+                        ul.append("<hr class='hrEth'>" + "<li class='li_eth_come' dataTag='noMore'>No More</li>")
+                    }
+                }
+            }
+        })
+    }
 }

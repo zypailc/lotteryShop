@@ -17,7 +17,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/authorization/v1/baseInfo")
-public class BaseInfoContorller extends BaseBaseController {
+public class BaseInfoController extends BaseBaseController {
 
 
     @Autowired

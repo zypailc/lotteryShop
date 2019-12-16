@@ -31,7 +31,7 @@ public class AuthorizationController extends LotteryABaseController {
     }
 
     /**
-     * 分页查询
+     * 查詢彩票期數
      * @param currentPage 当前页
      * @param pageSize 分页总条数
      * @return
@@ -49,7 +49,7 @@ public class AuthorizationController extends LotteryABaseController {
      * @param currentPage
      * @param pageSize
      * @param isOneself 是否只查询自己 0：否 ；1：是
-     * @param mTransferStatus 状态格式 :'1','2'
+     * @param mTransferStatus 状态格式 :1,2
      * @param lotteryaBuy
      * @return
      */

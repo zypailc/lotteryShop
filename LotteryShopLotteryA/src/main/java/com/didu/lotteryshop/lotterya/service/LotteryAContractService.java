@@ -372,20 +372,20 @@ public class LotteryAContractService extends LotteryABaseService {
                 }
             }
             //重新生成下一期
-            if(bool) {
-                LotteryaIssue newLotteryaIssue = new LotteryaIssue();
-                newLotteryaIssue.setStartTime(DateUtils.addMinutes(lotteryaIssue.getEndTime(),lotteryaInfo.getIntervalDate().intValue()));
-                newLotteryaIssue.setEndTime(DateUtils.addMinutes(newLotteryaIssue.getStartTime(),lotteryaInfo.getPeriodDate().intValue()));
-                newLotteryaIssue.setIssueNum(lotteryaIssue.getIssueNum()+1);
-                newLotteryaIssue.setCreateTime(new Date());
-                newLotteryaIssue.setBuyStatus("0");
-                newLotteryaIssue.setBsTime(new Date());
-                newLotteryaIssue.setBuyStatus("0");
-                newLotteryaIssue.setBonusStatusTime(new Date());
-                newLotteryaIssue.setBonusGrant("0");
-                bool = lotteryaIssueService.insert(newLotteryaIssue);
-            }
+        if(bool) {
+            LotteryaIssue newLotteryaIssue = new LotteryaIssue();
+            newLotteryaIssue.setStartTime(DateUtils.addMinutes(lotteryaIssue.getEndTime(),lotteryaInfo.getIntervalDate().intValue()));
+            newLotteryaIssue.setEndTime(DateUtils.addMinutes(newLotteryaIssue.getStartTime(),lotteryaInfo.getPeriodDate().intValue()));
+            newLotteryaIssue.setIssueNum(lotteryaIssue.getIssueNum()+1);
+            newLotteryaIssue.setCreateTime(new Date());
+            newLotteryaIssue.setBuyStatus("0");
+            newLotteryaIssue.setBsTime(new Date());
+            newLotteryaIssue.setBuyStatus("0");
+            newLotteryaIssue.setBonusStatusTime(new Date());
+            newLotteryaIssue.setBonusGrant("0");
+            bool = lotteryaIssueService.insert(newLotteryaIssue);
         }
+    }
         return bool;
     }
     /**

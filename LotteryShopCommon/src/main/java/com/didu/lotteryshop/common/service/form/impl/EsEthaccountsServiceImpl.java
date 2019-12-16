@@ -2,6 +2,7 @@ package com.didu.lotteryshop.common.service.form.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.entity.EsEthaccounts;
@@ -305,7 +306,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
     }
 
     /**
-     * 判断会议是否是第一次消费
+     * 判断会員是否是第一次消费
      * @param memberId
      * @return
      */
@@ -321,6 +322,36 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
             bool = true;
         }
         return bool;
+    }
+
+    /**
+     * 根據用戶Id查詢用戶的流水記錄
+     * @param memberId
+     * @param currentPage
+     * @param pageSize
+     * @param startTime 创建开始时间
+     * @param endTime 创建结束时间
+     * @param status  状态 1,2
+     * @return
+     */
+    public Page<EsEthaccounts> findEthRecordPagination(String memberId,Integer currentPage,Integer pageSize,String startTime,String endTime,String status){
+        Wrapper<EsEthaccounts> wrapper = new EntityWrapper<EsEthaccounts>();
+        wrapper.where("1=1");
+        if(startTime != null && !"".equals(startTime)){
+            wrapper.and(" status_time < {0}",startTime);
+        }
+        if(endTime != null && !"".equals(endTime)){
+            wrapper.and("  status_time < {0}",endTime);
+        }
+        if(memberId != null && !"".equals(memberId)){
+            wrapper.and("member_id = {0}",memberId);
+        }
+        if(status != null && !"".equals(status)){
+            wrapper.in("status",status);
+        }
+        wrapper.orderBy("create_time",false);
+        Page<EsEthaccounts> pageEthRecord = new Page<EsEthaccounts>(currentPage,pageSize);
+        return super.selectPage(pageEthRecord,wrapper);
     }
 
 }

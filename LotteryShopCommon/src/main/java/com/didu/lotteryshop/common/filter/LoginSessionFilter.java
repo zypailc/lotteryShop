@@ -2,6 +2,7 @@ package com.didu.lotteryshop.common.filter;
 
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.LoginUser;
+import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.github.abel533.sql.SqlMapper;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -98,6 +99,14 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                         List<Map<String, Object>> list = sqlMapper.selectList(sql);
                         if (list != null && list.size() > 0) {
                             map = list.get(0);
+                            String WalletName = "";
+                            String paymentCode = "";
+                            try {
+                                WalletName = AesEncryptUtil.decrypt(map.get("walletName") != null ? map.get("walletName").toString() : "", Constants.KEY_THREE);
+                                paymentCode = AesEncryptUtil.decrypt(map.get("paymentCode") != null ? map.get("paymentCode").toString() : "", Constants.KEY_TOW);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             httpServletRequest.getSession().setAttribute(Constants.LOGIN_SESSION_UPDATE_KEY, map.get("createTime") != null ? map.get("createTime").toString() : "");
                             loginUser = new LoginUser();
                             loginUser.setId(map.get("id") != null ? map.get("id").toString() : "");
@@ -106,8 +115,8 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                             loginUser.setHeadPortraitUrl((map.get("headPortraitUrl") != null && !"".equals(map.get("headPortraitUrl"))) ? map.get("headPortraitUrl").toString() : Constants.HEAD_PORTRAIT_URL);
                             loginUser.setPAddress(map.get("pAddress") != null ? map.get("pAddress").toString() : "");
                             loginUser.setBAddress(map.get("bAddress") != null ? map.get("bAddress").toString() : "");
-                            loginUser.setPaymentCode(map.get("paymentCode") != null ? map.get("paymentCode").toString() : "");
-                            loginUser.setWalletName(map.get("walletName") != null ? map.get("walletName").toString() : "");
+                            loginUser.setPaymentCode(paymentCode);
+                            loginUser.setWalletName(WalletName);
                         }
                     }
                     if (loginUser != null) {

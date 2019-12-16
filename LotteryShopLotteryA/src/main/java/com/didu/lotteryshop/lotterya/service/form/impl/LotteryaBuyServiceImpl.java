@@ -155,7 +155,7 @@ public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, Lotte
      * 分页查询购买数据
      * @param currentPage
      * @param pageSize
-     * @param mTransferStatus 状态格式 :'1','2'
+     * @param mTransferStatus 状态格式 :1,2
      * @param lotteryaBuy
      * @return
      */
@@ -165,7 +165,7 @@ public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, Lotte
         // wrapper.setSqlSelect();
         wrapper.and().and("1=1");
         if(StringUtils.isNotBlank(mTransferStatus)){
-            wrapper.and().and("transfer_status in({0})",mTransferStatus);
+            wrapper.in("transfer_status",mTransferStatus);
         }
         if(lotteryaBuy != null){
             if(lotteryaBuy.getLotteryaIssueId() != null)

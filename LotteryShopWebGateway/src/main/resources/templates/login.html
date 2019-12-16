@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>RanGO - Contact</title>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="description" content="RanGO Project">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- 公共style -->
-<%
-	include("common.css.html"){}
-%>
+	<!-- commonality  meta and title -->
+	<%
+		include("common/common.meta.html"){}
+	%>
+	<!-- commonality style -->
+	<%
+		include("common/common.css.html"){}
+	%>
 <link rel="stylesheet" type="text/css" href="../styles/contact_styles.css">
 <link rel="stylesheet" type="text/css" href="../styles/contact_responsive.css">
 </head>
-<!-- 公共js -->
-<%
-	include("common.js.html"){}
-%>
-<script src="../js/contact_custom.js"></script>
-<style>
+	<!-- commonality js -->
+	<%
+		include("common/common.js.html"){}
+	%>
+<script type="text/javascript" src="../js/contact_custom.js"></script>
+<style type="text/css">
 	.button_parent_div{text-align: center;}
 	.button_margin{margin-left: 30px;margin-right: 30px;}
 	.a_color{color: #452b78;}
@@ -28,8 +27,9 @@
 
 <div class="super_container">
 
+	<!-- commonality head -->
 	<%
-		include("index_top.html"){}
+		include("common/index_top.html"){}
 	%>
 
 	<!-- Contact -->
@@ -73,10 +73,9 @@
 		</div>
 	</div>
 
-	<!-- Footer -->
-
+	<!-- commonality Footer -->
 	<%
-		include("bottom.html"){}
+		include("common/bottom.html"){}
 	%>
 
 </div>

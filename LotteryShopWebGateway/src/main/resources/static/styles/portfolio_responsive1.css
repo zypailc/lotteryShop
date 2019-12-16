@@ -211,6 +211,12 @@
 	.lottery_play_div_select{
 		margin-left: 0px !important;
 	}
+	.model_purchase_record{
+		text-align: center !important;
+	}
+	.lottery_play_div_Multiple{
+		width: 100% !important;
+	}
 }
 
 /************

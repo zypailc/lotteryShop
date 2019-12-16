@@ -65,11 +65,6 @@ public class LoginUser {
     }
 
     public String getWalletName() {
-        try {
-            WalletName = AesEncryptUtil.decrypt(WalletName, Constants.KEY_THREE);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return WalletName;
     }
 
@@ -78,11 +73,6 @@ public class LoginUser {
     }
 
     public String getPaymentCode() {
-        try {
-            paymentCode = AesEncryptUtil.decrypt(paymentCode, Constants.KEY_TOW);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         return paymentCode;
     }
 

@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Lottery - Home</title>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="description" content="RanGO Project">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- 公共style -->
+	<!-- commonality  meta and title -->
 	<%
-	include("common.css.html"){}
+		include("../common/common.meta.html"){}
+	%>
+	<!-- commonality style -->
+	<%
+		include("../common/common.css.html"){}
 	%>
 	<link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
 	<link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
 </head>
-<!-- 公共js -->
-<%
-include("common.js.html"){}
-%>
+<!-- commonality js -->
+	<%
+		include("../common/common.js.html"){}
+	%>
 <script src="../js/custom.js"></script>
 <script>
 
@@ -26,9 +25,9 @@ include("common.js.html"){}
 
 <div class="super_container">
 
-	<!-- 引入头部文件 -->
+	<!-- commonality head -->
 	<%
-	include("index_top.html"){}
+		include("../common/index_top.html"){}
 	%>
 
 	<div class="home">
@@ -42,7 +41,7 @@ include("common.js.html"){}
 		</div>
 	</div>
 
-	<!-- 玩法列表 -->
+	<!-- play list -->
 		<div class="services">
 			<div class="container">
 				<div class="row">
@@ -173,9 +172,9 @@ include("common.js.html"){}
 			</div>
 		</div>
 	</div>
-	<!-- 引入底部文件 -->
+	<!-- commonality fotter -->
 	<%
-	include("bottom.html"){}
+	include("../common/bottom.html"){}
 	%>
 
 </body>

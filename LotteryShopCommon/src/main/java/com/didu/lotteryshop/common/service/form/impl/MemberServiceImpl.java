@@ -10,6 +10,7 @@ import com.github.abel533.sql.SqlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,9 @@ import java.util.Map;
 public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> {
     @Autowired
     private BaseService baseService;
+
+
+
     /**
      * 递归查询上级会员ID
      * @param memberId
@@ -49,4 +53,15 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> {
         wrapper.eq("generalize_member_id",memberId);
         return super.selectList(wrapper);
     }
+
+    /**
+     * 修改用戶信息
+     * @param member
+     * @return
+     */
+    public boolean updateMember(Member member){
+        member.setCreateTime(new Date());
+        return  updateById(member);
+    }
+
 }

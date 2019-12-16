@@ -1,0 +1,244 @@
+.span_right{
+    margin-right: 30px;
+}
+.ul_draw_archive{
+    text-align: left;
+    height: 475px;
+    overflow: auto;
+}
+.draw_archive_info{cursor: pointer;}
+.lottery_play_div{
+    padding: 5px 15px;
+    background: #f8f8f8;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+.lottery_play_div_1{
+    padding: 5px 15px;
+    text-align: center;
+    /*border: solid 1px #9f88be;*/
+    margin: 5px;
+}
+.lottery_play_div_element{
+    width: 50px;
+    height:50px;
+    border-radius: 50px;
+    text-align: center;
+    margin: 3px;
+    display: inline-block;
+    cursor: pointer;
+}
+.lottery_play_div_element_border_0{
+    border: solid 2px red;
+    background: red;
+}
+.lottery_play_div_element_border_1{
+    border: solid 2px green;
+    background: green;
+}
+.lottery_play_div_element_border_2{
+    border: solid 2px blue;
+    background: blue;
+}
+.lottery_play_div_element_3{
+    width: 50px;
+    height:50px;
+    border-radius: 50px;
+    text-align: center;
+    display: inline-block;
+    padding-bottom: 5px;
+    margin-top: 30px;
+    margin-left: 15px;
+}
+.lottery_play_div_element_4{
+    width: 30px;
+    height:30px;
+    border-radius: 30px;
+    text-align: center;
+    margin: 3px;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+.span_element{
+    font-size: 25px;
+    color: black;
+}
+.span_element_1{
+    font-size: 15px;
+    color: black;
+}
+.lottery_play_div_element_0:hover{
+    background: white;
+    border: solid 2px red;
+}
+.lottery_play_div_element_0:checked{
+    background: white;
+    border: solid 2px red;
+}
+.lottery_play_div_element_1:hover{
+    background: white;
+    border: solid 2px green;
+}
+.lottery_play_div_element_1:checked{
+    background: white;
+    border: solid 2px green;
+}
+.lottery_play_div_element_2:hover{
+    background: white;
+    border: solid 2px blue;
+}
+.lottery_play_div_element_2:checked{
+    background: white;
+    border: solid 2px blue;
+}
+.lottery_play_div_element_select_0{
+    background: white;
+    border: solid 2px red;
+}
+.lottery_play_div_element_select_1{
+    background: white;
+    border: solid 2px green;
+}
+.lottery_play_div_element_select_2{
+    background: white;
+    border: solid 2px blue;
+}
+.lottery_play_div_Multiple{
+    border-radius: 5px;
+    border: 0;
+    width: 150px;
+}
+.lottery_play_div_time{
+    border-radius: 5px;
+    border: 0;
+    width: 300px;
+}
+.model_purchase{
+    text-align: center;
+    margin-left: 20px;
+    background: #f8f9fa;
+    margin-right: 20px;
+    padding-bottom: 10px;
+    height: 150px;
+}
+.model_purchase_record{
+    text-align: left;
+    margin-left: 20px;
+}
+.model_purchase_1{
+    margin: 10px 20px;
+    background: #f8f9fa;
+    padding-bottom: 25px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.title_purchase{
+    display: initial;
+}
+.button_purchase{
+    /*display: inline-block;*/
+    width: 180px;
+}
+.lottery_play_div_select{
+    display: inline-block;
+    margin-left: 30px;
+    margin-top: 10px;
+}
+.lottery_play_div_element_money{
+    /*display: inline-block;*/
+    float: left;
+    margin-top: 10px;
+    margin-left: 30px;
+}
+.input_number{
+    width: 50px;
+    height: 32px;
+    text-align: center;
+}
+.a_button{
+    border: solid 1px #999;
+    height: 32px;
+    display: inline-block;
+    width: 15px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.model_purchase_button{
+    text-align: center;
+    cursor: pointer;
+    top: 10px;
+
+}
+.model_purchase_button span{
+    font-size: 25px;
+    border: solid 1px #9f88be;
+    border-radius: 5px;
+    padding: 5px 20px;
+    margin-top: 10px;
+    background: #9f88be;
+    color: white;
+}
+.model_purchase_button span:hover{
+    color: #322445;
+}
+.font_color{
+    color: black;
+}
+.lottery_service_title{
+    font-size: 24px;
+    color: black;
+}
+.lottery_service_time{
+    text-align: center;
+    margin-right: 20px;
+    margin-left: 20px;
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+.lottery_service_time .em_periods{
+    float: right;
+}
+.model_purchase_left{
+    /*width: 78%;
+    display: inline-block;*/
+    padding-top: 15px;
+}
+.purchase{
+    width: 100%;
+}
+.model_money{
+    display: inline-block;
+    text-align: left;
+}
+.model_money p{
+    color: black;
+}
+.lottery_play_div_money{
+    padding-left: 10px;
+}
+.bounty_title{
+    font-size: 25px;
+    color: red !important;
+    font-weight: 600;
+}
+.em_time{
+    background: #f1f1f1;
+    padding: 5px 15px;
+    border-radius: 5px;
+    width: 60px;
+    height: 50px;
+}
+.confirm{
+    margin: 0 auto !important;
+    text-align: center;
+}
+.model_purchase_record_top{
+    border-top: solid 1px wheat;
+}
+.ul_self_record{
+    text-align: left;
+    height: 200px;
+    overflow: auto;
+}

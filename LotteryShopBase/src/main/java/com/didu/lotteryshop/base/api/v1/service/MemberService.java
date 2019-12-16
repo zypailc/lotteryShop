@@ -6,8 +6,8 @@ import com.didu.lotteryshop.base.service.BaseBaseService;
 import com.didu.lotteryshop.base.service.MailService;
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.EsEthwallet;
+import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.entity.Member;
-import com.didu.lotteryshop.common.mapper.MemberMapper;
 import com.didu.lotteryshop.common.service.form.impl.*;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.CodeUtil;
@@ -15,10 +15,6 @@ import com.didu.lotteryshop.common.utils.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 
@@ -37,8 +33,6 @@ public class MemberService extends BaseBaseService {
     @Autowired
     private MemberServiceImpl memberServiceImp;
     @Autowired
-    private MemberMapper memberMapper;
-    @Autowired
     private EsEthwalletServiceImpl esEthwalletService;
     @Autowired
     private MailService mailService;
@@ -50,83 +44,91 @@ public class MemberService extends BaseBaseService {
     private SysTaskServiceImpl sysTaskService;
     /**
      * 绑定钱包
-     * @param userId 用户Id
      * @param paymentCode
      * @param bAddress
      * @return
      */
-    public ResultUtil bindWallet(String userId, String paymentCode, String bAddress){
+    public ResultUtil bindWallet(String paymentCode, String bAddress){
+        LoginUser loginUser = super.getLoginUser();
         Map<String,Object> map = new HashMap<String,Object>();
-        map.put("userId",userId);
+        map.put("userId",loginUser.getId());
         map.put("paymentCode",paymentCode);
         map.put("bAddress",bAddress);
-        String str = new JSONObject(map).toString();
-        str = super.getEncryptRequest(str);//加密
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf("application/json;UTF-8"));
-        HttpEntity<String> strEntity = new HttpEntity<String>(str,headers);
         String reStr = "";
-        try{
-            reStr =   oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/generate",strEntity,String.class);
-        }catch (Exception e){
-            log.info("Wallet creation failed !");
-            e.printStackTrace();
-        }
-        ResultUtil result = super.getDecryptResponseToResultUtil(reStr); //解密
-        //保存
-        if(result != null && result.getCode() != ResultUtil.SUCCESS_CODE){
-            return ResultUtil.errorJson("Wallet creation failed !");
-        }
-        Member member = new Member();
-        Map<String,Object> resultMap = (Map<String,Object>) result.getExtend().get(ResultUtil.DATA_KEY);
-        member.setId(userId);
-        member.setPAddress(resultMap.get("address").toString());
-        member.setBAddress(bAddress);
+        ResultUtil result = null;
+        Map<String, Object> resultMap = null;
         String WallName = "";
-        try{
-            WallName = AesEncryptUtil.encrypt(resultMap.get("fileName").toString(), Constants.KEY_THREE);//钱包文件加密
-            paymentCode = AesEncryptUtil.encrypt(paymentCode, Constants.KEY_TOW);//加密支付密码
+        boolean b = false;
+        try {
+            reStr = oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/generate", super.getEncryptRequestHttpEntity(map), String.class);
+            if (reStr == null || "".equals(reStr)) {
+                return ResultUtil.errorJson("Wallet creation failed !");
+            }
+            result = super.getDecryptResponseToResultUtil(reStr); //解密
+            //判斷是否成功
+            if (result != null && result.getCode() != ResultUtil.SUCCESS_CODE) {
+                return ResultUtil.errorJson("Wallet creation failed !");
+            }
+            resultMap = (Map<String, Object>) result.getExtend().get(ResultUtil.DATA_KEY);
+            if (resultMap != null) {
+                WallName = AesEncryptUtil.encrypt(resultMap.get("fileName") == null ? "":resultMap.get("fileName").toString(), Constants.KEY_THREE);//钱包文件加密
+                paymentCode = AesEncryptUtil.encrypt(paymentCode, Constants.KEY_TOW);//加密支付密码
+                Member member = new Member();
+                member.setId(loginUser.getId());
+                member.setPAddress(resultMap.get("address").toString());
+                member.setBAddress(bAddress);
+                member.setWalletName(WallName);
+                member.setPaymentCode(paymentCode);
+                b = memberServiceImp.updateMember(member);
+                if(!b){
+                    return ResultUtil.errorJson("Failed to initialize wallet!");
+                }
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
-        member.setWalletName(WallName);
-        member.setPaymentCode(paymentCode);
-        ResultUtil resultUtil = modifyMember(member);
-
         //初始化钱包
-        EsEthwallet esEthwallet = esEthwalletService.initInsert(member.getId());
-        if(esEthwallet == null){
+        EsEthwallet esEthwallet = esEthwalletService.initInsert(loginUser.getId());
+        if (esEthwallet == null) {
             return ResultUtil.errorJson("Failed to initialize wallet!");
         }
-        return resultUtil;
+        return ResultUtil.successJson("successfully !");
     }
 
     /**
-     * 修改用户
-     * @param member
+     * 修改用戶信息
+     * @param bAddress
      * @return
      */
-    public ResultUtil modifyMember(Member member){
-        member.setCreateTime(new Date());
-        boolean b = memberServiceImp.updateById(member);
+    public ResultUtil modifyBAddress(String bAddress){
+        LoginUser loginUser = getLoginUser();
+        Member member = new Member();
+        member.setId(loginUser.getId());
+        member.setBAddress(bAddress);
+        boolean b = memberServiceImp.updateMember(member);
         if(b){
-            return ResultUtil.successJson("success");
+            return ResultUtil.successJson("modify successfully !");
         }
-        return ResultUtil.errorJson("error");
+        return ResultUtil.successJson("fail to modify !");
     }
 
     /**
      * 查找推广用户
-     * @param userId
      * @return
      */
-    public List<Map<String,Object>> findGeneralizeMemberList(String userId){
+    public List<Map<String,Object>> findGeneralizeMemberList(){
+        LoginUser loginUser = getLoginUser();
         Wrapper wrapper = new EntityWrapper();
-        wrapper.eq("generalize_member_id",userId);
+        wrapper.eq("generalize_member_id",loginUser.getId());
         List<Map<String,Object>> list = memberServiceImp.selectMaps(wrapper);
         return  list;
     }
 
+    /**
+     * 注冊用戶
+     * @param member
+     * @return
+     */
     public ResultUtil register(Member member) {
         //判断邮箱是否被注册
         Wrapper wrapper = new EntityWrapper();
@@ -153,9 +155,10 @@ public class MemberService extends BaseBaseService {
         if(member.getGeneralizeMemberId() != null && !"".equals(member.getGeneralizeMemberId())){
             //查詢上級基本用戶信息
             Member memberUp = new Member();
-            memberUp = memberMapper.selectById(member.getGeneralizeMemberId());
-            member.setGeneralizeMemberId(memberUp.getGeneralizeMemberId() == null || "".equals(memberUp.getGeneralizeMemberId()) ? "":memberUp.getGeneralizeMemberId() + "," + memberUp.getId());
-            member.setGeneralizeMemberType(memberUp.getGeneralizeMemberType() == null ? 0:(memberUp.getGeneralizeMemberType()+1));
+            memberUp = memberServiceImp.selectById(member.getGeneralizeMemberId());
+            member.setGeneralizeMemberId(memberUp.getGeneralizeMemberId());
+            member.setGeneralizeMemberIds(memberUp.getGeneralizeMemberId() == null || "".equals(memberUp.getGeneralizeMemberId()) ? "":memberUp.getGeneralizeMemberId() + "," + memberUp.getId());
+            member.setGeneralizeMemberLevel(memberUp.getGeneralizeMemberLevel() == null ? 0:(memberUp.getGeneralizeMemberLevel()+1));
         }
         String emailStr = "Your account number is : " + member.getEmail() + "<br/>　Your password is : "+ password;
         mailService.sendSimpleMail(member,"password",emailStr);

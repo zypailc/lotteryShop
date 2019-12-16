@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/wallet")
-public class WalletTestContorller extends BaseBaseController {
+public class WalletTestController extends BaseBaseController {
     @Autowired
     private WalletTestService walletTestService;
 

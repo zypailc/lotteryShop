@@ -17,5 +17,5 @@ public class Constants {
 
     /** 跳转竞彩中心的地址 */
     public static  final String PLAYTHELOTTERY_URL = "authPlayTheLottery";
-    public static  final String PLAYTHELOTTERY = "playTheLottery";
+    public static  final String PLAYTHELOTTERY = "play_the_lottery";
 }

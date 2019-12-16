@@ -33,6 +33,7 @@
     "usable": "Available Funds : ",
     "expenditure": "Payment amount : ",
     "bounty": "Amount of bonus : ",
-    "confirm": "confirm"
+    "confirm": "confirm",
+    "putMoney": "PM"
   }
 }

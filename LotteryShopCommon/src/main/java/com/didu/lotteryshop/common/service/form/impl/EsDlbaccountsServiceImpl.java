@@ -2,16 +2,20 @@ package com.didu.lotteryshop.common.service.form.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.common.entity.EsDlbaccounts;
+import com.didu.lotteryshop.common.entity.EsEthaccounts;
 import com.didu.lotteryshop.common.mapper.EsDlbaccountsMapper;
 import com.didu.lotteryshop.common.service.form.IEsDlbaccountsService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -196,5 +200,35 @@ public class EsDlbaccountsServiceImpl extends ServiceImpl<EsDlbaccountsMapper, E
             bool = super.updateById(esDlbaccounts);
         }
         return bool;
+    }
+
+    /**
+     * 查询代领币流水记录
+     * @param memberId
+     * @param currentPage
+     * @param pageSize
+     * @param startTime
+     * @param endTime
+     * @param status
+     * @return
+     */
+    public Page<EsDlbaccounts> findDlbRecordPagination(String memberId,Integer currentPage,Integer pageSize,String startTime,String endTime,String status) {
+        Wrapper<EsDlbaccounts> wrapper = new EntityWrapper<EsDlbaccounts>();
+        wrapper.where("1=1");
+        if(startTime != null && !"".equals(startTime)){
+            wrapper.and(" status_time < {0}",startTime);
+        }
+        if(endTime != null && !"".equals(endTime)){
+            wrapper.and("  status_time < {0}",endTime);
+        }
+        if(memberId != null && !"".equals(memberId)){
+            wrapper.and("member_id = {0}",memberId);
+        }
+        if(status != null && !"".equals(status)){
+            wrapper.in("status",status);
+        }
+        wrapper.orderBy("create_time",false);
+        Page<EsDlbaccounts> pageDlbRecord = new Page<EsDlbaccounts>(currentPage,pageSize);
+        return super.selectPage(pageDlbRecord,wrapper);
     }
 }

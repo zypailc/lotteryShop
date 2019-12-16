@@ -69,7 +69,12 @@ public class AuthExceptionEntryPoint implements AuthenticationEntryPoint {
                     //response.setHeader("X-XSRF-TOKEN",access_token);
                     //response.setHeader("access_token",access_token);
                 }else{
-                    response.sendRedirect("/web/authLogin?rdirectUrl="+redirectUrl);
+                    if("/".equals(redirectUrl)){
+                        response.sendRedirect("/web/authIndex");
+                    }else {
+                        response.sendRedirect("/web/authLogin?rdirectUrl="+redirectUrl);
+                    }
+
                 }
             }
         } catch (Exception e) {

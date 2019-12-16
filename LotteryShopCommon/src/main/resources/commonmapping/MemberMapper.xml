@@ -11,7 +11,8 @@
         <result column="email" property="email" />
 
         <result column="generalize_member_id" property="generalizeMemberId" />
-        <result column="generalize_member_type" property="generalizeMemberType" />
+        <result column="generalize_member_ids" property="generalizeMemberIds" />
+        <result column="generalize_member_level" property="generalizeMemberLevel" />
         <result column="head_portrait_url" property="headPortraitUrl" />
         <result column="create_time" property="createTime" />
         <collection property="roles" fetchType="eager" column="id" select="com.didu.lotteryshop.auth.mapper.RoleMapper.findByMemberId"></collection>

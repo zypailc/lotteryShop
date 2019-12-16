@@ -33,7 +33,7 @@ public class IndexController extends WebgatewayBaseController {
     @RequestMapping("/web/auth500")
     public String Error500(Model model){
         model = getModel(model);
-        return "500";
+        return "error/500";
     }
     /**
      * 404错误页面
@@ -43,7 +43,7 @@ public class IndexController extends WebgatewayBaseController {
     @RequestMapping("/web/auth404")
     public String Error404(Model model){
         model = getModel(model);
-        return "404";
+        return "error/404";
     }
     /**
      * 主页
@@ -99,7 +99,7 @@ public class IndexController extends WebgatewayBaseController {
     @RequestMapping("/web/"+ Constants.PLAYTHELOTTERY_URL)
     public String playTheLottery(Model model){
         model = getModel(model);
-        return Constants.PLAYTHELOTTERY;
+        return "playlottery/"+Constants.PLAYTHELOTTERY;
     }
 
     /**
@@ -111,7 +111,7 @@ public class IndexController extends WebgatewayBaseController {
     public String services(Model model,String playType){
         model = getModel(model);
         model.addAttribute("playType",playType);
-        return "lotteryServices";
+        return "playlottery/lottery_services";
     }
 
 
@@ -123,7 +123,7 @@ public class IndexController extends WebgatewayBaseController {
     @RequestMapping("/web/authForgotPassword")
     public String forgotPassword(Model model){
         model = getModel(model);
-        return  "forgotPassword";
+        return  "forgot_password";
     }
 
     /**
@@ -140,7 +140,7 @@ public class IndexController extends WebgatewayBaseController {
             pAddress = false;
         }
         model.addAttribute("pAddress",pAddress);
-        return "personalCenter";
+        return "personal/personal_center";
     }
 
 
@@ -153,7 +153,7 @@ public class IndexController extends WebgatewayBaseController {
     @RequestMapping("/web/personalPhoneType")
     public String phoneType(Model model, @Param(value = "type") String type){
         model = getModel(model);
-        return type+"_phone";
+        return "personal/record/"+type+"_phone";
     }
 
     /**
@@ -167,7 +167,7 @@ public class IndexController extends WebgatewayBaseController {
         model = getModel(model);
         model.addAttribute("type",type);
         //eth和平台币展示记录
-        return "wallet_base";
+        return "personal/wallet/phone/wallet_base";
     }
 
     /**
@@ -180,7 +180,18 @@ public class IndexController extends WebgatewayBaseController {
     public String walletWallet(Model model,@Param(value = "type")String type){
         model = getModel(model);
         model.addAttribute("type",type);
-        return "wallet_bind";
+        return "personal/wallet/phone/wallet_bind";
+    }
+
+    /**
+     * 推广主頁
+     * @param model
+     * @return
+     */
+    @RequestMapping("/web/personalGeneralizePhone")
+    public String generalizePhone(Model model){
+        model = getModel(model);
+        return "personal/generalize/generalize_phone";
     }
 
     /**
@@ -191,7 +202,7 @@ public class IndexController extends WebgatewayBaseController {
     @RequestMapping("/web/personalGeneralizeRecord")
     public String generalizeRecord(Model model){
         model = getModel(model);
-        return "generalize_record";
+        return "personal/generalize/generalize_record";
     }
 
     /**
@@ -202,7 +213,7 @@ public class IndexController extends WebgatewayBaseController {
     @RequestMapping("/person/generalizeEarnings")
     public String generalizeEarnings(Model model){
         model = getModel(model);
-        return "generalize_earnings";
+        return "generalize/generalize_earnings";
     }
 
 }

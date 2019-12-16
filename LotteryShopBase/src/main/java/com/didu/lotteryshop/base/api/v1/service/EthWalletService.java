@@ -1,8 +1,10 @@
 package com.didu.lotteryshop.base.api.v1.service;
 
 import com.didu.lotteryshop.base.service.BaseBaseService;
+import com.didu.lotteryshop.common.entity.EsEthaccounts;
 import com.didu.lotteryshop.common.entity.EsEthwallet;
 import com.didu.lotteryshop.common.entity.LoginUser;
+import com.didu.lotteryshop.common.service.form.impl.EsDlbaccountsServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsEthaccountsServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsEthwalletServiceImpl;
 import com.didu.lotteryshop.common.utils.ResultUtil;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -65,4 +68,20 @@ public class EthWalletService extends BaseBaseService {
        }
        return ResultUtil.successJson(esEthwallet) ;
    }
+
+    /**
+     * 查詢ETH流水記錄
+     * @param currentPage
+     * @param pageSize
+     * @param startTime
+     * @param endTime
+     * @param status
+     * @return
+     */
+   public ResultUtil findEthRecord(Integer currentPage,Integer pageSize,String startTime,String endTime,String status){
+        LoginUser loginUser = getLoginUser();
+        return  ResultUtil.successJson(esEthaccountsService.findEthRecordPagination(loginUser.getId(),currentPage,pageSize,startTime,endTime,status));
+   }
+
+
 }

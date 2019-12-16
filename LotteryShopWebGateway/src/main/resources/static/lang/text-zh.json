@@ -33,6 +33,7 @@
     "usable": "可用金額 : ",
     "expenditure": "支付金額 : ",
     "bounty": "獎勵金額 : ",
-    "confirm": "確認"
+    "confirm": "確認",
+    "putMoney": "代領幣"
   }
 }
