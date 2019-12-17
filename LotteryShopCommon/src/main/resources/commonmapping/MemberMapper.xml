@@ -15,6 +15,7 @@
         <result column="generalize_member_level" property="generalizeMemberLevel" />
         <result column="head_portrait_url" property="headPortraitUrl" />
         <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
         <collection property="roles" fetchType="eager" column="id" select="com.didu.lotteryshop.auth.mapper.RoleMapper.findByMemberId"></collection>
     </resultMap>
 
