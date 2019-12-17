@@ -5,11 +5,10 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.didu.lotteryshop.base.service.BaseBaseService;
 import com.didu.lotteryshop.base.service.MailService;
 import com.didu.lotteryshop.common.config.Constants;
-import com.didu.lotteryshop.common.entity.EsEthwallet;
-import com.didu.lotteryshop.common.entity.LoginUser;
-import com.didu.lotteryshop.common.entity.Member;
+import com.didu.lotteryshop.common.entity.*;
 import com.didu.lotteryshop.common.service.form.impl.*;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
+import com.didu.lotteryshop.common.utils.BigDecimalUtil;
 import com.didu.lotteryshop.common.utils.CodeUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import org.slf4j.Logger;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +42,9 @@ public class MemberService extends BaseBaseService {
     private EsDlbwalletServiceImpl esDlbwalletService;
     @Autowired
     private SysTaskServiceImpl sysTaskService;
+    @Autowired
+    private SysConfigServiceImpl sysConfigService;
+
     /**
      * 绑定钱包
      * @param paymentCode
@@ -151,14 +154,17 @@ public class MemberService extends BaseBaseService {
         member.setId(CodeUtil.getUuid());
         member.setSecretKey(secretKey);
         member.setCreateTime(new Date());
+        member.setUpdateTime(new Date());
         //判斷是否有上級推薦
         if(member.getGeneralizeMemberId() != null && !"".equals(member.getGeneralizeMemberId())){
             //查詢上級基本用戶信息
             Member memberUp = new Member();
             memberUp = memberServiceImp.selectById(member.getGeneralizeMemberId());
-            member.setGeneralizeMemberId(memberUp.getGeneralizeMemberId());
-            member.setGeneralizeMemberIds(memberUp.getGeneralizeMemberId() == null || "".equals(memberUp.getGeneralizeMemberId()) ? "":memberUp.getGeneralizeMemberId() + "," + memberUp.getId());
-            member.setGeneralizeMemberLevel(memberUp.getGeneralizeMemberLevel() == null ? 0:(memberUp.getGeneralizeMemberLevel()+1));
+            if(memberUp != null){
+                member.setGeneralizeMemberId(memberUp.getGeneralizeMemberId());
+                member.setGeneralizeMemberIds(memberUp.getGeneralizeMemberId() == null || "".equals(memberUp.getGeneralizeMemberId()) ? "":memberUp.getGeneralizeMemberId() + "," + memberUp.getId());
+                member.setGeneralizeMemberLevel(memberUp.getGeneralizeMemberLevel() == null ? 0:(memberUp.getGeneralizeMemberLevel()+1));
+            }
         }
         String emailStr = "Your account number is : " + member.getEmail() + "<br/>　Your password is : "+ password;
         mailService.sendSimpleMail(member,"password",emailStr);
@@ -187,6 +193,7 @@ public class MemberService extends BaseBaseService {
     public ResultUtil forgotPassword(String email){
         Member member = new Member();
         member.setEmail(email);
+        member.setUpdateTime(new Date());
         //随机生成随机密码
         String password = CodeUtil.getCode(18);
         try {
@@ -221,6 +228,39 @@ public class MemberService extends BaseBaseService {
         }else {
             return ResultUtil.successJson("fail to modify !");
         }
+    }
+
+    /**
+     * 查询用户总资产
+     * @param exchangeRate
+     * @return
+     */
+    public ResultUtil findWalletTotal(String exchangeRate){
+        if(exchangeRate != null && "".equals(exchangeRate)){
+            return null;
+        }
+        Map<String,Object> map = new HashMap<>();
+        LoginUser loginUser = getLoginUser();
+        EsEthwallet ethwallet = esEthwalletService.findByMemberId(loginUser.getId());// eth
+        EsDlbwallet dlbwallet = esDlbwalletService.findByMemberId(loginUser.getId());// dlb
+        EsLsbwallet lsbwallet = esLsbwalletService.findByMemberId(loginUser.getId());// lsb
+        SysConfig sysConfig = sysConfigService.getSysConfig();
+        BigDecimal exchangeRateBig = new BigDecimal(exchangeRate).stripTrailingZeros();
+        map.put("eth", BigDecimalUtil.bigDecimalToPrecision(ethwallet.getTotal()));
+        map.put("ethToUsd",BigDecimalUtil.bigDecimalToPrecision(exchangeRateBig.multiply(ethwallet.getTotal())));
+        map.put("dlb",dlbwallet.getTotal().stripTrailingZeros());
+        BigDecimal dlbToEtb = dlbwallet.getTotal().divide(sysConfig.getLsbToEth(),BigDecimalUtil.BIGDECIMAL_PRECISION,BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros();
+        map.put("dlb",dlbwallet.getTotal().stripTrailingZeros());//代领币
+        map.put("dlbToEtb",dlbToEtb);
+        map.put("dlbToUsd",BigDecimalUtil.bigDecimalToPrecision(dlbToEtb.multiply(exchangeRateBig)));
+        BigDecimal lsbToEth = lsbwallet.getTotal().divide(sysConfig.getLsbToEth(),BigDecimalUtil.BIGDECIMAL_PRECISION,BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros();
+        map.put("lsb",lsbwallet.getTotal().stripTrailingZeros());//平台币
+        map.put("lsbToEth",lsbToEth.stripTrailingZeros());
+        map.put("lsbToUsd",BigDecimalUtil.bigDecimalToPrecision(lsbToEth.multiply(exchangeRateBig)));
+        BigDecimal ethTotal = ethwallet.getTotal().add(dlbToEtb).add(lsbToEth);
+        map.put("ethTotal",BigDecimalUtil.bigDecimalToPrecision(ethTotal));
+        map.put("ethTotalToUsd",BigDecimalUtil.bigDecimalToPrecision(ethTotal.multiply(exchangeRateBig)));
+        return ResultUtil.successJson(map);
     }
 
 }

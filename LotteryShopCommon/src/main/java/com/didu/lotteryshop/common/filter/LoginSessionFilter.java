@@ -83,17 +83,17 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                     }else {
                         memberName = user_name;//如果请求的是静态资源 用户名取的是session里面的用户
                     }
-                    String sql_date = "select date_format(create_time,'%Y-%m-%d %H:%i:%s') as createTime from es_member where email = '" + memberName + "'";
+                    String sql_date = "select date_format(update_time,'%Y-%m-%d %H:%i:%s') as updateTime from es_member where email = '" + memberName + "'";
                     List<Map<String, Object>> list_1 = sqlMapper.selectList(sql_date);
                     String update_date = "";
                     String update_date_old = (String) httpServletRequest.getSession().getAttribute(Constants.LOGIN_SESSION_UPDATE_KEY);
                     if(list_1 != null && list_1.size() > 0){
-                        update_date = list_1.get(0).get("createTime").toString();
+                        update_date = list_1.get(0).get("updateTime").toString();
                     }
                     if(update_date_old == null || ( update_date_old != null  && !update_date_old.equals(update_date))){
                         //step 3 查询数据库，存入用户
                         String sql = "select id,member_name as memberName,email,head_portrait_url as headPortraitUrl,p_address as pAddress,b_address as bAddress,wallet_name as walletName " +
-                                " ,date_format(create_time,'%Y-%m-%d %H:%i:%s') as createTime ,payment_code as paymentCode" +
+                                " ,date_format(create_time,'%Y-%m-%d %H:%i:%s') as createTime ,date_format(update_time,'%Y-%m-%d %H:%i:%s') as updateTime ,payment_code as paymentCode" +
                                 " from es_member where email = '" + memberName + "'";
                         //存入用户修改时间
                         List<Map<String, Object>> list = sqlMapper.selectList(sql);
@@ -107,7 +107,7 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            httpServletRequest.getSession().setAttribute(Constants.LOGIN_SESSION_UPDATE_KEY, map.get("createTime") != null ? map.get("createTime").toString() : "");
+                            httpServletRequest.getSession().setAttribute(Constants.LOGIN_SESSION_UPDATE_KEY, map.get("updateTime") != null ? map.get("updateTime").toString() : "");
                             loginUser = new LoginUser();
                             loginUser.setId(map.get("id") != null ? map.get("id").toString() : "");
                             loginUser.setEmail(map.get("email") != null ? map.get("email").toString() : "");

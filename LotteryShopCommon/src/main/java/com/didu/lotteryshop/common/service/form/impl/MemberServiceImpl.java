@@ -60,7 +60,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> {
      * @return
      */
     public boolean updateMember(Member member){
-        member.setCreateTime(new Date());
+        member.setUpdateTime(new Date());
         return  updateById(member);
     }
 

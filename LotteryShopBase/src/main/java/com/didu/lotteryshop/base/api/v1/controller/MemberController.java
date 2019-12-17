@@ -120,4 +120,14 @@ public class MemberController extends BaseBaseController {
         return memberService.findGeneralizeMemberList();
     }
 
+    /**
+     * 查询钱包总账
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/findWalletTotal")
+    public ResultUtil findWalletTotal(String exchangeRate){
+        return memberService.findWalletTotal(exchangeRate);
+    }
+
 }

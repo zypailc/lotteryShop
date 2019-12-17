@@ -18,16 +18,6 @@ import java.util.Set;
 @TableName("es_member")
 public class Member{
 
-    /**
-     * 推广类型: 1 初始用户
-     */
-    public static final String generalizeMemberType_1 = "1";
-
-    /**
-     * 推广类型: 2 推广用户
-     */
-    public static final  String generalizeMemberType_2 = "2";
-
     private String id;
     @TableField("member_name")
     private String memberName;//昵称
@@ -53,6 +43,8 @@ public class Member{
     private String bAddress;//绑定钱包地址
     @TableField("wallet_name")
     private String walletName;//钱包名称
+    @TableField("update_time")
+    private Date updateTime;//用户信息更新时间
 
     @TableField(exist = false)
     private Set<Role> roles;//角色
