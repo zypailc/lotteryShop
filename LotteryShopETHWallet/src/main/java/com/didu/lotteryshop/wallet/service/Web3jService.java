@@ -96,7 +96,7 @@ public class Web3jService extends WalletBaseService {
     public Map<String,Object> findTransactionStatus(String transactionHashValue) throws IOException{
         Map<String,Object> reMap = new HashMap<>();
         EthGetTransactionReceipt transactionReceipt =  web3j.ethGetTransactionReceipt(transactionHashValue).send();
-        //是否确认状态，0为确认，1已确认
+        //是否确认状态，0未确认，1已确认，2失败
         reMap.put(TRANSACTION_STATUS,0);
         if (transactionReceipt.getTransactionReceipt().isPresent()) {
             //状态，需要实际数据，修改状态

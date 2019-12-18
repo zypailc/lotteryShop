@@ -120,7 +120,7 @@ public class WalletService extends WalletBaseService {
                 String transactionHashValue = web3jService.transfer(credentials,toAddress,etherValue);
                 //转账事务hash值，可用来查看交易是否被确认
                 reMap.put("transactionHashValue",transactionHashValue);
-                //交易确认状态，0-未确认；1-已确认
+                //交易确认状态，0-未确认；1-已确认，2-失败
                 reMap.put("transactionStatus",0);
                 Map<String,Object> sMap = web3jService.findTransactionStatus(transactionHashValue);
                 if(sMap != null && sMap.isEmpty()){
@@ -128,6 +128,9 @@ public class WalletService extends WalletBaseService {
                         reMap.put("transactionStatus",1);
                         //实际产生得到燃气费
                         reMap.put("transactionCasUsed",sMap.get(Web3jService.TRANSACTION_CASUSED));
+                    }
+                    if(sMap.get(Web3jService.TRANSACTION_STATUS).equals("2")){
+                        reMap.put("transactionStatus",2);
                     }
                 }
                 return ResultUtil.successJson(reMap);
@@ -153,7 +156,7 @@ public class WalletService extends WalletBaseService {
         //转账事务哈希码
         reMap.put("transactionHashValue",transactionHashValue);
         try {
-            //交易确认状态，0-未确认；1-已确认
+            //交易确认状态，0-未确认；1-已确认，2-失败
             reMap.put("transactionStatus",0);
             Map<String,Object> sMap = web3jService.findTransactionStatus(transactionHashValue);
             if(sMap != null && sMap.isEmpty()){
@@ -161,6 +164,9 @@ public class WalletService extends WalletBaseService {
                     reMap.put("transactionStatus",1);
                     //实际产生得到燃气费
                     reMap.put("transactionCasUsed",sMap.get(Web3jService.TRANSACTION_CASUSED));
+                }
+                if(sMap.get(Web3jService.TRANSACTION_STATUS).equals("2")){
+                    reMap.put("transactionStatus",2);
                 }
             }
             return ResultUtil.successJson(reMap);

@@ -4,8 +4,9 @@ import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.common.utils.Web3jUtils;
 import com.didu.lotteryshop.wallet.annotation.SecurityParameter;
 import com.didu.lotteryshop.wallet.api.v1.RequestEntity.FindBalanceEntity;
-import com.didu.lotteryshop.wallet.api.v1.RequestEntity.FindWalletDetailEntity;
+import com.didu.lotteryshop.wallet.api.v1.RequestEntity.FindTransactionStatusEntity;
 import com.didu.lotteryshop.wallet.api.v1.RequestEntity.GenerateWalletEntity;
+import com.didu.lotteryshop.wallet.api.v1.RequestEntity.TransferEntity;
 import com.didu.lotteryshop.wallet.api.v1.service.WalletService;
 import com.didu.lotteryshop.wallet.controller.WalletBaseController;
 import org.apache.commons.lang3.StringUtils;
@@ -74,45 +75,40 @@ public class WalletContorller extends WalletBaseController {
 
      /**
      *  转账
-     * @param walletFileName 钱包名字
-     * @param payPassword 支付密码
-     * @param formAddress 出账地址
-     * @param toAddress  入账地址
-     * @param etherValue etherValue
      * @return
      */
-    @RequestMapping(value = "/transfer")
+    @PostMapping(value = "/transfer",consumes = "application/json")
     @ResponseBody
     @SecurityParameter
-    public ResultUtil transfer(String walletFileName, String payPassword, String formAddress, String toAddress, String etherValue){
-        if(StringUtils.isBlank(walletFileName) || StringUtils.isBlank(payPassword) || StringUtils.isBlank(formAddress)
-                || StringUtils.isBlank(toAddress) || StringUtils.isBlank(etherValue)){
+    public ResultUtil transfer(@RequestBody TransferEntity transferEntity){
+        if(transferEntity == null || StringUtils.isBlank(transferEntity.getWalletFileName())
+                || StringUtils.isBlank(transferEntity.getPayPassword()) || StringUtils.isBlank(transferEntity.getFormAddress())
+                || StringUtils.isBlank(transferEntity.getToAddress()) || StringUtils.isBlank(transferEntity.getEtherValue())){
             //参数错误！
             return ResultUtil.errorJson("Invalid parameter!");
         }
-        if(!Web3jUtils.isETHValidAddress(formAddress)){
+        if(!Web3jUtils.isETHValidAddress(transferEntity.getFormAddress())){
             return  ResultUtil.errorJson("Invalid formAddress!");
         }
-        if(!Web3jUtils.isETHValidAddress(toAddress)){
+        if(!Web3jUtils.isETHValidAddress(transferEntity.getToAddress())){
             return  ResultUtil.errorJson("Invalid toAddress!");
         }
-        return walletService.transfer(walletFileName,payPassword,formAddress,toAddress,etherValue);
+        return walletService.transfer(transferEntity.getWalletFileName(),transferEntity.getPayPassword(),transferEntity.getFormAddress(),transferEntity.getToAddress(),transferEntity.getEtherValue());
     }
 
     /**
      * 查询交易状态
-     * @param transactionHashValue 转账事务哈希码
      * @return
      */
-    @RequestMapping(value = "/findTransactionStatus")
+    @PostMapping(value = "/findTransactionStatus",consumes = "application/json")
     @ResponseBody
     @SecurityParameter
-    public ResultUtil findTransactionStatus(String transactionHashValue){
-        if(StringUtils.isBlank(transactionHashValue)){
+    public ResultUtil findTransactionStatus(@RequestBody FindTransactionStatusEntity findTransactionStatusEntity){
+        if(StringUtils.isBlank(findTransactionStatusEntity.getTransactionHashValue())){
             //transactionHashValue 参数不能为空
             return ResultUtil.errorJson("The transactionHashValue cannot be empty!");
         }
-        return walletService.findTransactionStatus(transactionHashValue);
+        return walletService.findTransactionStatus(findTransactionStatusEntity.getTransactionHashValue());
     }
 
 
