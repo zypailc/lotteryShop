@@ -45,6 +45,8 @@ public class Member{
     private String walletName;//钱包名称
     @TableField("update_time")
     private Date updateTime;//用户信息更新时间
+    @TableField("generalize_type")
+    private Integer generalizeType;//推广类型，0：散户：1：推广商
 
     @TableField(exist = false)
     private Set<Role> roles;//角色

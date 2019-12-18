@@ -5,10 +5,7 @@ import com.didu.lotteryshop.base.entity.EsDlbconfigAcquire;
 import com.didu.lotteryshop.base.service.form.impl.EsDlbconfigAcquireServiceImpl;
 import com.didu.lotteryshop.base.service.form.impl.EsDlbconfigServiceImpl;
 import com.didu.lotteryshop.common.entity.EsDlbwallet;
-import com.didu.lotteryshop.common.service.form.impl.EsDlbaccountsServiceImpl;
-import com.didu.lotteryshop.common.service.form.impl.EsDlbwalletServiceImpl;
-import com.didu.lotteryshop.common.service.form.impl.EsEthaccountsServiceImpl;
-import com.didu.lotteryshop.common.service.form.impl.EsLsbaccountsServiceImpl;
+import com.didu.lotteryshop.common.service.form.impl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,8 @@ public class TaskDlbCalculateService {
     private EsDlbconfigAcquireServiceImpl esDlbconfigAcquireService;
     @Autowired
     private EsLsbaccountsServiceImpl esLsbaccountsService;
+    @Autowired
+    private MemberServiceImpl memberService;
 
     /**
      * 提取待领币为平台币
@@ -56,7 +55,8 @@ public class TaskDlbCalculateService {
                 //满足第一条件（周期内消费达到）
                 if(consumeTotal.compareTo(esDlbconfig.getConsumeTotal()) >= 0){
                     //下级活跃人数
-                    int activeMembers = esEthaccountsService.findActiveMembers(edw.getMemberId(),esDlbconfig.getConsumeTotal(),esDlbconfig.getcLevel(),esDlbconfig.getCycleDay(),maxActiveMembers,0);
+                    //int activeMembers = esEthaccountsService.findActiveMembers(edw.getMemberId(),esDlbconfig.getConsumeTotal(),esDlbconfig.getcLevel(),esDlbconfig.getCycleDay(),maxActiveMembers,0);
+                    int activeMembers = memberService.findActiveMembers(edw.getMemberId(),esDlbconfig.getConsumeTotal(),esDlbconfig.getcLevel(),esDlbconfig.getCycleDay());
                     EsDlbconfigAcquire esDlbconfigAcquire = esDlbconfigAcquireService.findEsDlbconfigAcquireByActiveMembers(activeMembers);
                     if(esDlbconfigAcquire != null && esDlbconfigAcquire.getRatio() != null && esDlbconfigAcquire.getRatio().compareTo(BigDecimal.ZERO) > 0){
                         BigDecimal total = edw.getBalance().divide(new BigDecimal("100")).multiply(esDlbconfigAcquire.getRatio()).setScale(4,BigDecimal.ROUND_DOWN);

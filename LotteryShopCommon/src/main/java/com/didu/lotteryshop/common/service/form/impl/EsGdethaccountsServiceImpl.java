@@ -4,12 +4,9 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.didu.lotteryshop.common.base.service.BaseService;
-import com.didu.lotteryshop.common.entity.EsEthaccounts;
-import com.didu.lotteryshop.common.entity.Member;
-import com.didu.lotteryshop.common.mapper.EsEthaccountsMapper;
-import com.didu.lotteryshop.common.service.form.IEsEthaccountsService;
-import com.github.abel533.sql.SqlMapper;
+import com.didu.lotteryshop.common.entity.EsGdethaccounts;
+import com.didu.lotteryshop.common.mapper.EsGdethaccountsMapper;
+import com.didu.lotteryshop.common.service.form.IEsGdethaccountsService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,47 +14,25 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
- * eth账目流水记录 服务实现类
+ * 推广分成eth账目流水记录 服务实现类
  * </p>
  *
  * @author ${author}
- * @since 2019-11-11
+ * @since 2019-12-17
  */
 @Service
-public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, EsEthaccounts> implements IEsEthaccountsService {
+public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMapper, EsGdethaccounts> implements IEsGdethaccountsService {
     @Autowired
-    private EsEthwalletServiceImpl esEthwalletService;
-    @Autowired
-    private BaseService baseService;
-    @Autowired
-    private MemberServiceImpl memberService;
-    @Autowired
-    private SysTaskServiceImpl sysTaskService;
-
+    private EsGdethwalletServiceImpl esGdethwalletService;
     /** dic_type 在sys_dic字段值*/
-    public static String DIC_TYPE = "ethaccounts_dictype";
-    /** 充值 */
-    public static String DIC_TYPE_IN = "1";
-    /** 提现 */
-    public static String DIC_TYPE_DRAW = "2";
-    /** 购买A彩票 */
-    public static String DIC_TYPE_BUYLOTTERYA = "3";
-    /** 购买B彩票 */
-    public static String DIC_TYPE_BUYLOTTERYB = "4";
-    /** 赢得A彩票*/
-    public static String DIC_TYPE_WINLOTTERYA = "5";
-    /** 赢得B彩票*/
-    public static String DIC_TYPE_WINLOTTERYB = "6";
-    /** 平台手续费 */
-    public static String DIC_TYPE_PLATFEE = "7";
-    /** 推广结算账款 **/
-    public static String DIC_TYPE_GSA = "8";
-
-
+    public static String DIC_TYPE = "gdethaccounts_dictype";
+    /** A彩票推广分成 */
+    public static String DIC_TYPE_GENERALIZELOTTERYA = "1";
+    /** 结算账款 */
+    public static String DIC_TYPE_SA = "2";
 
     /** 类型：入账 */
     public static int TYPE_IN = 1;
@@ -78,7 +53,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * @param operId  操作业务表主键ID
      * @return
      */
-    public boolean addInSuccess(String memberId,String dicTypeValue,BigDecimal total,String operId){
+    public boolean addInSuccess(String memberId, String dicTypeValue, BigDecimal total, String operId){
         return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_SUCCESS,operId,BigDecimal.ZERO);
     }
     /**
@@ -138,35 +113,31 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
             BigDecimal amount = total.add(gasFee);
             //进账
             if(type == TYPE_IN && status == STATUS_SUCCESS){
-                balance = esEthwalletService.updateBalance(amount,memberId,true);
-            //出账
+                balance = esGdethwalletService.updateBalance(amount,memberId,true);
+                //出账
             }else if(type == TYPE_OUT){
                 if(status == STATUS_SUCCESS){
                     //成功，直接减余额
-                    balance = esEthwalletService.updateBalance(amount,memberId,false);
-                    //第一次消费奖励
-                    sysTaskService.TaskFirstConsumption(memberId);
-                    //第一次消费直属上级奖励
-                    sysTaskService.TaskLowerFirstConsumption(memberId);
+                    balance = esGdethwalletService.updateBalance(amount,memberId,false);
                 }else if(status == STATUS_BEINGPROCESSED){
                     //处理中，冻结金额
-                    balance = esEthwalletService.updateAddFreeze(amount,memberId);
+                    balance = esGdethwalletService.updateAddFreeze(amount,memberId);
                 }
             }
             //balance是null时，以上方法执行失败，请认真查看。
             if(balance == null) return bool;
-            EsEthaccounts esEthaccounts = new EsEthaccounts();
-            esEthaccounts.setMemberId(memberId);
-            esEthaccounts.setDicType(dicTypeValue);
-            esEthaccounts.setType(type);
-            esEthaccounts.setAmount(total);
-            esEthaccounts.setBalance(balance);
-            esEthaccounts.setStatus(status);
-            esEthaccounts.setStatusTime(new Date());
-            esEthaccounts.setCreateTime(new Date());
-            esEthaccounts.setOperId(operId);
-            esEthaccounts.setGasFee(gasFee);
-            bool = super.insert(esEthaccounts);
+            EsGdethaccounts esGdethaccounts = new EsGdethaccounts();
+            esGdethaccounts.setMemberId(memberId);
+            esGdethaccounts.setDicType(dicTypeValue);
+            esGdethaccounts.setType(type);
+            esGdethaccounts.setAmount(total);
+            esGdethaccounts.setBalance(balance);
+            esGdethaccounts.setStatus(status);
+            esGdethaccounts.setStatusTime(new Date());
+            esGdethaccounts.setCreateTime(new Date());
+            esGdethaccounts.setOperId(operId);
+            esGdethaccounts.setGasFee(gasFee);
+            bool = super.insert(esGdethaccounts);
         }
         return bool;
     }
@@ -216,30 +187,26 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
     private  boolean update(String memberId,String dicTypeValue,String operId,int status,BigDecimal gasFee){
         boolean bool = false;
         if(StringUtils.isBlank(dicTypeValue) || StringUtils.isBlank(operId)) return bool;
-        Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
+        Wrapper<EsGdethaccounts> wrapper = new EntityWrapper<>();
         wrapper.eq("member_id",memberId).and().eq("dic_type",dicTypeValue).and().eq("oper_id",operId);
-        EsEthaccounts  esEthaccounts = super.selectOne(wrapper);
+        EsGdethaccounts  esGdethaccounts = super.selectOne(wrapper);
         gasFee = gasFee == null ? BigDecimal.ZERO : gasFee;
-        if(esEthaccounts != null &&  esEthaccounts.getStatus() != STATUS_FAIL && esEthaccounts.getStatus() != STATUS_SUCCESS){
-            esEthaccounts.setStatus(status);
-            esEthaccounts.setStatusTime(new Date());
-            esEthaccounts.setGasFee(gasFee);
+        if(esGdethaccounts != null &&  esGdethaccounts.getStatus() != STATUS_FAIL && esGdethaccounts.getStatus() != STATUS_SUCCESS){
+            esGdethaccounts.setStatus(status);
+            esGdethaccounts.setStatusTime(new Date());
+            esGdethaccounts.setGasFee(gasFee);
             BigDecimal balance = null;
             if(status == STATUS_SUCCESS){
-                balance = esEthwalletService.updateBalance(gasFee,memberId,false);
+                balance = esGdethwalletService.updateBalance(gasFee,memberId,false);
                 if(balance == null) return bool;
-                balance =  esEthwalletService.updateSubtractFreeze(esEthaccounts.getAmount(),memberId,true);
+                balance =  esGdethwalletService.updateSubtractFreeze(esGdethaccounts.getAmount(),memberId,true);
                 if(balance == null) return bool;
-                //第一次消费奖励
-                sysTaskService.TaskFirstConsumption(memberId);
-                //第一次消费直属上级奖励
-                sysTaskService.TaskLowerFirstConsumption(memberId);
             }else if(status == STATUS_FAIL){
-                balance =  esEthwalletService.updateSubtractFreeze(esEthaccounts.getAmount(),memberId,false);
+                balance =  esGdethwalletService.updateSubtractFreeze(esGdethaccounts.getAmount(),memberId,false);
                 if(balance == null) return bool;
             }
-            esEthaccounts.setBalance(balance);
-          bool = super.updateById(esEthaccounts);
+            esGdethaccounts.setBalance(balance);
+            bool = super.updateById(esGdethaccounts);
         }
         return bool;
     }
@@ -248,85 +215,13 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * 查询出账账单未处理成功的数据；
      * @return
      */
-    public List<EsEthaccounts> findOutBeingProcessed(String memberId){
-        Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
+    public List<EsGdethaccounts> findOutBeingProcessed(String memberId){
+        Wrapper<EsGdethaccounts> wrapper = new EntityWrapper<>();
         wrapper.eq("member_id",memberId)
                 .and().eq("type",TYPE_OUT)
                 .and().eq("status",STATUS_BEINGPROCESSED);
         return super.selectList(wrapper);
     }
-
-    /**
-     * 根据会员ID和天数查询消费总额
-     * @param memberId
-     * @param day
-     * @return
-     */
-    public BigDecimal findConsumeTotalByDay(String memberId,int day){
-        BigDecimal consumeTotal = BigDecimal.ZERO;
-        SqlMapper sqlMapper =  baseService.getSqlMapper();
-        String sql = "select sum(eea_.amount) as amountTotal  " +
-                    " from es_ethaccounts as eea_" +
-                    " where eea_.member_id='"+memberId+"' and eea_.type="+TYPE_OUT+" and eea_.status="+STATUS_SUCCESS+
-                    " and eea_.dic_type<>'"+DIC_TYPE_DRAW+"'" +
-                    " and  DATE_SUB(CURDATE(), INTERVAL "+day+" DAY) <= date(eea_.status_time)";
-        Map<String,Object> rMap = sqlMapper.selectOne(sql);
-        if(rMap != null && !rMap.isEmpty()){
-            consumeTotal = new BigDecimal(rMap.get("amountTotal").toString());
-        }
-        return consumeTotal;
-    }
-
-    /**
-     * 递归查询下级活跃用户
-     * @param memberId 会员ID
-     * @param consumeTotal 周期消费金额
-     * @param level 循环层级
-     * @param day 周期（天）
-     * @param maxMembers 最多活跃用户
-     * @param members 活跃用户
-     * @return
-     */
-    //2019-12-17 lyl 注释，改方法调整到MemberServiceImpl类中
-//    public int findActiveMembers(String memberId,BigDecimal consumeTotal,int level,int day,int maxMembers,int members){
-//        List<Member> memberList = memberService.findLowerMembers(memberId);
-//        if(memberList != null && memberList.size() > 0){
-//            for(Member m : memberList){
-//                if(consumeTotal.compareTo(this.findConsumeTotalByDay(m.getId(),day)) <= 0){
-//                    members++;
-//                    if(members >= maxMembers) return members;
-//                }
-//            }
-//            if(level > 0){
-//                level--;
-//                for(Member m : memberList){
-//                    members = this.findActiveMembers(m.getId(),consumeTotal,level,day,maxMembers,members);
-//                    if(members >= maxMembers) return members;
-//                }
-//            }
-//        }
-//        return members;
-//    }
-
-    /**
-     * 判断会員是否是第一次消费
-     * @param memberId
-     * @return
-     */
-    public boolean isFirstConsumption(String memberId){
-        boolean bool = false;
-        Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
-        wrapper.eq("member_id",memberId)
-                .and().eq("type",TYPE_OUT)
-                .and().eq("status",STATUS_SUCCESS)
-                .and("dic_type <> {0}",DIC_TYPE_DRAW);
-        int c =  super.selectCount(wrapper);
-        if(c == 0){
-            bool = true;
-        }
-        return bool;
-    }
-
     /**
      * 根據用戶Id查詢用戶的流水記錄
      * @param memberId
@@ -337,8 +232,8 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * @param status  状态 1,2
      * @return
      */
-    public Page<EsEthaccounts> findEthRecordPagination(String memberId,Integer currentPage,Integer pageSize,String startTime,String endTime,String status){
-        Wrapper<EsEthaccounts> wrapper = new EntityWrapper<EsEthaccounts>();
+    public Page<EsGdethaccounts> findEthRecordPagination(String memberId, Integer currentPage, Integer pageSize, String startTime, String endTime, String status){
+        Wrapper<EsGdethaccounts> wrapper = new EntityWrapper<EsGdethaccounts>();
         wrapper.where("1=1");
         if(startTime != null && !"".equals(startTime)){
             wrapper.and(" status_time < {0}",startTime);
@@ -353,8 +248,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
             wrapper.in("status",status);
         }
         wrapper.orderBy("create_time",false);
-        Page<EsEthaccounts> pageEthRecord = new Page<EsEthaccounts>(currentPage,pageSize);
+        Page<EsGdethaccounts> pageEthRecord = new Page<EsGdethaccounts>(currentPage,pageSize);
         return super.selectPage(pageEthRecord,wrapper);
     }
-
 }

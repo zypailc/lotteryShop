@@ -1,6 +1,7 @@
 package com.didu.lotteryshop.lotterya.service;
 
 import com.didu.lotteryshop.lotterya.entity.LotteryaIssue;
+import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaDiServiceImpl;
 import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaIssueServiceImpl;
 import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaPmServiceImpl;
 import org.slf4j.Logger;
@@ -21,6 +22,8 @@ public class TaskLotteryAPayBonusService {
     private LotteryAContractService lotteryAContractService;
     @Autowired
     private LotteryaPmServiceImpl lotteryaPmService;
+    @Autowired
+    private LotteryaDiServiceImpl lotteryaDiService;
     /**
      * A彩票发放奖金
      */
@@ -45,7 +48,16 @@ public class TaskLotteryAPayBonusService {
                 return;
             }
             logger.info("==============================☆☆ PayBonusLotteryA: End payPushMoney  ☆☆==============================================");
-            //step 3:生成下期彩票彩票数据
+           //step 3:核算一级推广商分成。
+            logger.info("==============================☆☆ PayBonusLotteryA: Start generalizeDividedInto  ☆☆==============================================");
+            bool =  lotteryaDiService.generalizeDividedInto(lotteryaIssue.getId());
+            if(!bool){
+                //错误，推广分成错误
+                logger.error(" PayBonusLotteryA: Start generalizeDividedInto --> error:Generalization sharing error!");
+                return;
+            }
+            logger.info("==============================☆☆ PayBonusLotteryA: End generalizeDividedInto  ☆☆==============================================");
+            //step 4:生成下期彩票彩票数据
             logger.info("==============================☆☆ PayBonusLotteryA: Start createNext  ☆☆==============================================");
             bool = lotteryaIssueService.createNext();
             if(!bool){

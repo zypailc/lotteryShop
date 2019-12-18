@@ -2,6 +2,7 @@ package com.didu.lotteryshop;
 
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +18,9 @@ public class MainTest {
     @Test
     public void testx(){
         String str = "092111";
-        System.out.println(this.isNumeric(str));
+       // System.out.println(this.isNumeric(str));
+        BigDecimal x = BigDecimal.ZERO;
+        System.out.println(x.divide(new BigDecimal("100")));
     }
 
 }

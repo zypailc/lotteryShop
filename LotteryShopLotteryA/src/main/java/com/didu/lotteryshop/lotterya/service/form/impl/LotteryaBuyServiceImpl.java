@@ -8,7 +8,9 @@ import com.didu.lotteryshop.common.service.form.impl.EsEthaccountsServiceImpl;
 import com.didu.lotteryshop.lotterya.entity.LotteryaBuy;
 import com.didu.lotteryshop.lotterya.entity.LotteryaInfo;
 import com.didu.lotteryshop.lotterya.mapper.LotteryaBuyMapper;
+import com.didu.lotteryshop.lotterya.service.LotteryABaseService;
 import com.didu.lotteryshop.lotterya.service.form.ILotteryaBuyService;
+import com.github.abel533.sql.SqlMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -33,6 +36,9 @@ public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, Lotte
     private EsEthaccountsServiceImpl esEthaccountsService;
     @Autowired
     private LotteryaInfoServiceImpl lotteryaInfoService;
+    @Autowired
+    private LotteryABaseService lotteryABaseService;
+
     /** 等待确认 */
     public static final String TRANSFER_STATUS_WAIT = "0";
     /** 已经确认 */
@@ -178,6 +184,31 @@ public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, Lotte
         wrapper.orderBy("createTime",false);
         Page<LotteryaBuy> pageLB = new Page<>(currentPage,pageSize);
         return super.selectPage(pageLB,wrapper);
+    }
+
+    /**
+     * 推广账户，核算自己和下级（无限层级）A彩票消费情况
+     * 明细：total：购买总金额
+     *       counts：购买总注数
+     *       luckCounts：中奖总注数
+     *       luckTotal：中奖总金额
+     * @param lotteryaIssueId
+     * @param memberId
+     * @return
+     */
+    public Map<String,Object> calculateLowerLevelBuyTotal(Integer lotteryaIssueId,String memberId){
+        if(lotteryaIssueId == null || StringUtils.isBlank(memberId)) return null;
+        String sql = "select " +
+                        " sum(lab_.total) as total," + //购买总金额
+                        " count(lab_.id) as counts," + //购买总注数
+                        " sum(case when  lab_.is_luck='1' then 1 else 0 end)  as luckCounts," + //中奖总注数
+                        " sum(lab_.luck_total) as luckTotal " + //中奖总金额
+                    " from lotterya_buy lab_ " +
+                    " left join es_member em_ on(lab_.member_id = em_.id) " +
+                    " where lab_.lotterya_issue_id="+lotteryaIssueId+" and lab_.transfer_status='1' " +
+                         " and (em_.generalize_member_ids like '%"+memberId+"%' or lab_.member_id='"+memberId+"')";
+        SqlMapper sqlMapper = lotteryABaseService.getSqlMapper();
+        return sqlMapper.selectOne(sql);
     }
 
 }

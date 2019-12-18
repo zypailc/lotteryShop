@@ -155,6 +155,7 @@ public class MemberService extends BaseBaseService {
         member.setSecretKey(secretKey);
         member.setCreateTime(new Date());
         member.setUpdateTime(new Date());
+        member.setGeneralizeType(0);
         //判斷是否有上級推薦
         if(member.getGeneralizeMemberId() != null && !"".equals(member.getGeneralizeMemberId())){
             //查詢上級基本用戶信息

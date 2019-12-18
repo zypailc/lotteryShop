@@ -10,6 +10,7 @@ import com.github.abel533.sql.SqlMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,42 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> {
     @Autowired
     private BaseService baseService;
 
+    /**
+     * 查询会员下级活跃用户
+     * @param memberId 会员ID
+     * @param consumeTotal 周期消费金额
+     * @param level 层级，如果为null，则不限制层级
+     * @param day 周期（天）
+     * @return
+     */
+    public int findActiveMembers(String memberId, BigDecimal consumeTotal, Integer level, int day){
+        int cnts = 0;
+        if(level != null){
+            Member member = super.selectById(memberId);
+            level += member.getGeneralizeMemberLevel();
+        }
+        String sql = " select count(1) as cnts from(" +
+                            " select" +
+                                 " sum(eea_.amount) as amountTotal " +
+                            " from es_ethaccounts as eea_ " +
+                            " left join es_member em_ on(eea_.member_id = em_.id )" +
+                            " where  em_.generalize_member_ids like '%"+memberId+"%'";
+                if(level != null) {
+                         sql += " and em_.generalize_member_level <= " + level;
+                }
+                         sql += " and eea_.type = "+EsEthaccountsServiceImpl.TYPE_OUT+
+                                " and eea_.status = "+EsEthaccountsServiceImpl.STATUS_SUCCESS+
+                                " and eea_.dic_type<>'"+EsEthaccountsServiceImpl.DIC_TYPE_DRAW+"' " +
+                                " and  DATE_SUB(CURDATE(), INTERVAL "+day+" DAY) <= date(eea_.status_time)" +
+                            " GROUP BY eea_.member_id " +
+                        ")as t where t.amountTotal >= "+consumeTotal;
+        SqlMapper sqlMapper =  baseService.getSqlMapper();
+        Map<String,Object> mMap = sqlMapper.selectOne(sql);
+        if(mMap != null && !mMap.isEmpty()){
+            return Integer.valueOf(mMap.get("cnts").toString()) ;
+        }
+        return cnts;
+    }
 
 
     /**
@@ -62,6 +99,16 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> {
     public boolean updateMember(Member member){
         member.setUpdateTime(new Date());
         return  updateById(member);
+    }
+
+    /**
+     * 查询推广商会员
+     * @return
+     */
+    public List<Member> findGeneralizeMembers(){
+        Wrapper<Member> wrapper = new EntityWrapper<>();
+        wrapper.eq("generalize_type",1);
+        return super.selectList(wrapper);
     }
 
 }
