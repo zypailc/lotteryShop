@@ -38,6 +38,8 @@ public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, Lotte
     private LotteryaInfoServiceImpl lotteryaInfoService;
     @Autowired
     private LotteryABaseService lotteryABaseService;
+    @Autowired
+    private LotteryaBuyMapper lotteryaBuyMapper;
 
     /** 等待确认 */
     public static final String TRANSFER_STATUS_WAIT = "0";
@@ -168,7 +170,7 @@ public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, Lotte
     public Page<LotteryaBuy> getPageLotteryBuy(Integer currentPage, Integer pageSize,String mTransferStatus,LotteryaBuy lotteryaBuy){
         Wrapper<LotteryaBuy> wrapper = new EntityWrapper<>();
         //子查询字段
-        // wrapper.setSqlSelect();
+        wrapper.setSqlSelect();
         wrapper.and().and("1=1");
         if(StringUtils.isNotBlank(mTransferStatus)){
             wrapper.in("transfer_status",mTransferStatus);
@@ -185,6 +187,20 @@ public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, Lotte
         Page<LotteryaBuy> pageLB = new Page<>(currentPage,pageSize);
         return super.selectPage(pageLB,wrapper);
     }
+
+    /**
+     * 分页查询购买数据
+     * @param currentPage
+     * @param pageSize
+     * @param mTransferStatus 状态格式 :1,2
+     * @param lotteryaBuy
+     * @return
+     */
+    public List<Map<String,Object>> getPageLotteryBuyAll(Integer currentPage, Integer pageSize,String mTransferStatus,LotteryaBuy lotteryaBuy){
+        currentPage = (currentPage - 1) * pageSize;
+        return lotteryaBuyMapper.getPageLotteryBuyAll(currentPage,pageSize,mTransferStatus,lotteryaBuy);
+    }
+
 
     /**
      * 推广账户，核算自己和下级（无限层级）A彩票消费情况

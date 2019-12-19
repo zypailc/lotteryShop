@@ -247,21 +247,51 @@ public class MemberService extends BaseBaseService {
         EsLsbwallet lsbwallet = esLsbwalletService.findByMemberId(loginUser.getId());// lsb
         SysConfig sysConfig = sysConfigService.getSysConfig();
         BigDecimal exchangeRateBig = new BigDecimal(exchangeRate).stripTrailingZeros();
-        map.put("eth", BigDecimalUtil.bigDecimalToPrecision(ethwallet.getTotal()));
-        map.put("ethToUsd",BigDecimalUtil.bigDecimalToPrecision(exchangeRateBig.multiply(ethwallet.getTotal())));
-        map.put("dlb",dlbwallet.getTotal().stripTrailingZeros());
-        BigDecimal dlbToEtb = dlbwallet.getTotal().divide(sysConfig.getLsbToEth(),BigDecimalUtil.BIGDECIMAL_PRECISION,BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros();
-        map.put("dlb",dlbwallet.getTotal().stripTrailingZeros());//代领币
-        map.put("dlbToEtb",dlbToEtb);
-        map.put("dlbToUsd",BigDecimalUtil.bigDecimalToPrecision(dlbToEtb.multiply(exchangeRateBig)));
-        BigDecimal lsbToEth = lsbwallet.getTotal().divide(sysConfig.getLsbToEth(),BigDecimalUtil.BIGDECIMAL_PRECISION,BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros();
-        map.put("lsb",lsbwallet.getTotal().stripTrailingZeros());//平台币
-        map.put("lsbToEth",lsbToEth.stripTrailingZeros());
-        map.put("lsbToUsd",BigDecimalUtil.bigDecimalToPrecision(lsbToEth.multiply(exchangeRateBig)));
-        BigDecimal ethTotal = ethwallet.getTotal().add(dlbToEtb).add(lsbToEth);
+
+        map.put("eth", BigDecimalUtil.bigDecimalToPrecision(ethwallet == null ? new BigDecimal("0") : ethwallet.getTotal()));
+        map.put("ethToUsd",BigDecimalUtil.bigDecimalToPrecision(exchangeRateBig.multiply(ethwallet == null ? new BigDecimal("0") : ethwallet.getTotal())));
+
+        BigDecimal dlbToEtb = dlbwallet == null ? new BigDecimal("0") : dlbwallet.getTotal().divide(sysConfig.getLsbToEth(),BigDecimalUtil.BIGDECIMAL_PRECISION,BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros();
+        map.put("dlb",dlbwallet == null ? 0 : dlbwallet.getTotal().stripTrailingZeros());//代领币
+        map.put("dlbToEtb",dlbwallet == null ? 0 : dlbToEtb);
+        map.put("dlbToUsd",dlbwallet == null ? 0 : BigDecimalUtil.bigDecimalToPrecision(dlbToEtb.multiply(exchangeRateBig)));
+
+        BigDecimal lsbToEth = lsbwallet == null ? new BigDecimal("0") : lsbwallet.getTotal().divide(sysConfig.getLsbToEth(),BigDecimalUtil.BIGDECIMAL_PRECISION,BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros();
+        map.put("lsb",lsbwallet == null ? 0 : lsbwallet.getTotal().stripTrailingZeros());//平台币
+        map.put("lsbToEth",lsbwallet == null ? 0 : lsbToEth.stripTrailingZeros());
+        map.put("lsbToUsd",lsbwallet == null ? 0 : BigDecimalUtil.bigDecimalToPrecision(lsbToEth.multiply(exchangeRateBig)));
+        BigDecimal ethTotal = (ethwallet == null ? new BigDecimal("0") : ethwallet.getTotal()).add(dlbToEtb).add(lsbToEth);
         map.put("ethTotal",BigDecimalUtil.bigDecimalToPrecision(ethTotal));
         map.put("ethTotalToUsd",BigDecimalUtil.bigDecimalToPrecision(ethTotal.multiply(exchangeRateBig)));
         return ResultUtil.successJson(map);
+    }
+
+    /**
+     * 查询购买记录
+     * @param startTime
+     * @param endTime
+     * @param type ; type = 1 查询A玩法 type = -1 查询所有
+     * @return
+     */
+    public ResultUtil findLotterPurchaseResord(Integer currentPage,Integer pageSize,String startTime,String endTime,String type){
+        LoginUser loginUser = getLoginUser();
+        //可能会有多种玩法 把所有玩法的购买记录拼接在一起 （字段类型：彩票类型(loteryType)，期数(issueNum)，时间(startTime,endTime)，开奖号(luckNum)，自选号(selfLuckNum),中奖金额(luckNum),是否中奖(isLuck)）
+        String sql = " select 1 as lotteryType , li_.issue_num as issueNum, DATE_FORMAT(li_.start_time,'%Y-%m-%d %H:%i:%s') as startTime, DATE_FORMAT(li_.end_time,'%Y-%m-%d %H:%i:%s') as endTime,"+
+                " li_.luck_num as luckNum,lb_.luck_num as selfLuckNum ,lb_.luck_total as luckTotal,lb_.is_luck as isLuck,lb_.create_time as createTime "+
+                " from lotterya_buy lb_ "+
+                " left join lotterya_issue li_ on (lb_.lotterya_issue_id = li_.id) "; // A 玩法
+        //这里可使用拼接查询其他彩票购买记录
+        sql += " where lb_.member_id = '"+loginUser.getId()+"' ";
+        if (startTime != null && !"".equals(startTime)) {
+            sql += " and DATE_FORMAT(lb_.create_time,'%Y-%m-%d') >= '"+startTime+"'";
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            sql += " and DATE_FORMAT(lb_.create_time,'%Y-%m-%d') <= '"+endTime+"'";
+        }
+        sql += " ORDER BY createTime DESC ";
+        sql += " limit " + ((currentPage - 1) * pageSize)+ "," +pageSize;
+        List<Map<String,Object>> list = getSqlMapper().selectList(sql);
+        return ResultUtil.successJson(list);
     }
 
 }

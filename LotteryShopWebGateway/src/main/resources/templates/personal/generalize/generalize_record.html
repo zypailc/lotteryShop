@@ -3,21 +3,21 @@
 <head>
     <!-- commonality  meta and title -->
     <%
-        include("../../common/common.meta.html"){}
+    include("../../common/common.meta.html"){}
     %>
     <!-- commonality style -->
     <%
-        include("../../common/common.css.html"){}
+    include("../../common/common.css.html"){}
     %>
     <link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
     <link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
     <link rel="stylesheet" type="text/css" href="../styles/portfolio_styles.css">
     <link rel="stylesheet" type="text/css" href="../styles/portfolio_responsive.css">
 </head>
-    <!-- commonality js -->
-    <%
-        include("../../common/common.js.html"){}
-    %>
+<!-- commonality js -->
+<%
+include("../../common/common.js.html"){}
+%>
 <script src="../js/portfolio_custom.js"></script>
 <script src="../js/lotteryshop/person_center.js"></script>
 <script>
@@ -32,18 +32,13 @@
                 contentH =$(this).get(0).scrollHeight,//内容高度
                 scrollTop =$(this).scrollTop();//滚动高度
             if(scrollTop/(contentH - viewH) >= 0.95){ //当滚动到距离底部5%时
-                gengeralizeMemberInit('generalizePersonal');
+                gengeralizeMemberInit(false,'generalizePersonal');
             }
         });
 
-        gengeralizeMemberInit('generalizePersonal');
-
+        gengeralizeMemberInit(true,'generalizePersonal');
 
     })
-    /*function getHeigh(){
-        var window_height = document.documentElement.clientHeight;
-        $(".base_head").height(window_height-90);
-    }*/
 
 </script>
 <style>
@@ -51,6 +46,7 @@
         margin: 5px;
         border-radius: 5px;
         background: #f8f9fa;
+        padding: 5px;
     }
     .base_head{
         padding-top: 90px;
@@ -78,7 +74,13 @@
 
     <div class="base_head card-1 card-1_scroll generalizePersonal">
         <ul class="ul_personal_generalizePersonal">
-
+            <li>
+                <div>
+                    <p><span class="span_title generalizePersonalRecordNikeName"></span></p>
+                    <p><span class="generalizePersonalRecordEmail"></span></p>
+                </div>
+                <hr class="hrEth">
+            </li>
         </ul>
     </div>
 

@@ -39,6 +39,10 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8090/eureka/
+#mybatispluse
+mybatis-plus:
+  mapper-locations: classpath:mapping/*.xml,classpath*:/commonmapping/*.xml
+  type-aliases-package: com.didu.lotteryshop
 #security&oauth2 配置
 security:
   oauth2:

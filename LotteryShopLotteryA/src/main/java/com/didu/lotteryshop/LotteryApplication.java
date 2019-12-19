@@ -18,9 +18,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @SpringBootApplication
 @EnableEurekaClient
 @ComponentScan("com")
+@MapperScan("com.didu.lotteryshop.*.mapper*")
 @EnableOAuth2Client
 @EnableResourceServer
-@MapperScan("com.didu.lotteryshop.*.mapper*")
+
 public class LotteryApplication extends SpringBootServletInitializer {
 
     @Override

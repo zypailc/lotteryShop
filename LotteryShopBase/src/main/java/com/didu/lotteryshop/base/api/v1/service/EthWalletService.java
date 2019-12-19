@@ -7,6 +7,7 @@ import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.service.form.impl.EsDlbaccountsServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsEthaccountsServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsEthwalletServiceImpl;
+import com.didu.lotteryshop.common.utils.BigDecimalUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
@@ -59,6 +60,7 @@ public class EthWalletService extends BaseBaseService {
                             boolean bool = esEthaccountsService.addInSuccess(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_IN,amount,"-1");
                             if(bool)
                                 esEthwallet = esEthwalletService.findByMemberId(loginUser.getId());
+
                       }
                    }
                }
@@ -66,6 +68,18 @@ public class EthWalletService extends BaseBaseService {
                e.printStackTrace();
            }
        }
+       //精度设置
+       if(esEthwallet == null){
+           esEthwallet = new EsEthwallet();
+           esEthwallet.setTotal(new BigDecimal("0"));
+           esEthwallet.setBalance(new BigDecimal("0"));
+           esEthwallet.setFreeze(new BigDecimal("0"));
+       }else {
+           esEthwallet.setTotal(BigDecimalUtil.bigDecimalToPrecision( esEthwallet.getTotal()));
+           esEthwallet.setBalance(BigDecimalUtil.bigDecimalToPrecision(esEthwallet.getBalance()));
+           esEthwallet.setFreeze(BigDecimalUtil.bigDecimalToPrecision(esEthwallet.getFreeze()));
+       }
+
        return ResultUtil.successJson(esEthwallet) ;
    }
 

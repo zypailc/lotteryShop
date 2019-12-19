@@ -3,7 +3,7 @@
 <head>
 	<!-- commonality  meta and title -->
 	<%
-		include("../common/common.meta.html"){}
+	include("../common/common.meta.html"){}
 	%>
 	<!-- commonality style -->
 	<%
@@ -31,18 +31,11 @@ include("../common/common.js.html"){}
 		li.click();
 		$(".ul_draw_archive").scroll(function(){
 			var $this =$(this),
-			viewH =$(this).height(),//可见高度
-			contentH =$(this).get(0).scrollHeight,//内容高度
-			scrollTop =$(this).scrollTop();//滚动高度
+					viewH =$(this).height(),//可见高度
+					contentH =$(this).get(0).scrollHeight,//内容高度
+					scrollTop =$(this).scrollTop();//滚动高度
 			if(scrollTop/(contentH -viewH) >= 0.95){ //当滚动到距离底部5%时
-				var li = '<hr><li class="draw_archive_info" data-id="'+contentH+'" style="top: 0px;"> '+
-						'<div class="item-link item-content draw-archive-item"> '+
-						'<div>#'+contentH+'</div> '+
-						'<div><span class="span_right">2018.03.08 08:00</span><span>100ETH</span></div> '+
-						'<div><p>2 3 5 7 8 4</p></div> '+
-						'</div> '+
-						'</li> ';
-				$(".ul_draw_archive").append(li);
+				findLotteryIssue("the_lottery_record_id",false);
 			}
 		});
 		var loginUser = '${loginUser!}';
@@ -91,20 +84,20 @@ include("../common/common.js.html"){}
 				var number_3 = $(".lottery_play_3").find("span").html() || 0;
 				var multiple = $(".input_number").val() || 0;
 				lay_play_code = layer.open({
-						type: 1,
-						title:"支付密碼",
-						closeBtn: 0, //不显示关闭按钮
-						anim: 2,
-						shadeClose: true, //开启遮罩关闭
-						data:{"number_1":number_1,"number_2":number_2,"number_3":number_3,"multiple":multiple},
-						content: $("#playPassword").html()
-					});
+					type: 1,
+					title:"支付密碼",
+					closeBtn: 0, //不显示关闭按钮
+					anim: 2,
+					shadeClose: true, //开启遮罩关闭
+					data:{"number_1":number_1,"number_2":number_2,"number_3":number_3,"multiple":multiple},
+					content: $("#playPassword").html()
+				});
 			}
 		});
 		//init
 		findRule();
 		getLotteryConfig();
-		findLotteryIssue("the_lottery_record_id");
+		findLotteryIssue("the_lottery_record_id",true);
 	})
 
 	function paymentCodeConfirm(){
@@ -276,115 +269,179 @@ include("../common/common.js.html"){}
 		}
 		if(isFind == 'true'){
 			$.ajax({
-					url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryBuy',
-					type:'get',
-					data:{"currentPage":currentPage,"pageSize":pageSize,"mTransferStatus":mTransferStatus,"lotteryaIssueId":lotteryaIssueId},
-					dataType:"json",
-					success:function (result) {
-						var data = result.extend.data;
-						var doubledMoney = $(".money_haploid").attr("doubledMoney");
-						var flag_1 = false;
-						if(data.records.length < 1){
-							dataObj.attr("isFind",'false');
+				url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryBuy',
+				type:'get',
+				data:{"currentPage":currentPage,"pageSize":pageSize,"mTransferStatus":mTransferStatus,"lotteryaIssueId":lotteryaIssueId},
+				dataType:"json",
+				success:function (result) {
+					var data = result.extend.data;
+					var doubledMoney = $(".money_haploid").attr("doubledMoney");
+					var flag_1 = false;
+					if(data.records.length < 1){
+						dataObj.attr("isFind",'false');
+						flag_1 = true;
+					}else {
+						$.each(data.records, function (index, dataInfo) {
+							var luckNum = dataInfo.luckNum.split("");
+							var li = '<li>' +
+									'<div class="model_purchase_record">' +
+									'<div class="lottery_play_div_element_4 lottery_play_div_element_border_0">' +
+									'<span class="span_element_1">' + luckNum[0] + '</span>' +
+									'</div>' +
+									'<div class="lottery_play_div_element_4 lottery_play_div_element_border_1">' +
+									'<span class="span_element_1">' + luckNum[1] + '</span>' +
+									'</div>' +
+									'<div class="lottery_play_div_element_4 lottery_play_div_element_border_2">' +
+									'<span class="span_element_1">' + luckNum[2] + '</span>' +
+									'</div>' +
+									'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
+									'<span class="span_element_1">5<span data-localize="base.spendAFewLater">Bet</span></span>' +
+									'</div>' +
+									'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
+									'<span class="span_element_1">' + (parseFloat(doubledMoney) * parseFloat(dataInfo.multipleNum)) + ' ETH</span>' +
+									'</div>' +
+									'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
+									'<span class="span_element_1">' + dataInfo.createTime + '</span>' +
+									'</div>' +
+									'</div>' +
+									'</li>';
+							if (ul.html()) {
+								ul.append("<hr>" + li);
+							} else {
+								ul.append(li);
+							}
+						})
+						if(data.records.length < pageSize){
 							flag_1 = true;
-						}else {
-							$.each(data.records, function (index, dataInfo) {
-								var luckNum = dataInfo.luckNum.split("");
-								var li = '<li>' +
-										'<div class="model_purchase_record">' +
-										'<div class="lottery_play_div_element_4 lottery_play_div_element_border_0">' +
-										'<span class="span_element_1">' + luckNum[0] + '</span>' +
-										'</div>' +
-										'<div class="lottery_play_div_element_4 lottery_play_div_element_border_1">' +
-										'<span class="span_element_1">' + luckNum[1] + '</span>' +
-										'</div>' +
-										'<div class="lottery_play_div_element_4 lottery_play_div_element_border_2">' +
-										'<span class="span_element_1">' + luckNum[2] + '</span>' +
-										'</div>' +
-										'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
-										'<span class="span_element_1">5<span data-localize="base.spendAFewLater">Bet</span></span>' +
-										'</div>' +
-										'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
-										'<span class="span_element_1">' + (parseFloat(doubledMoney) * parseFloat(dataInfo.multipleNum)) + ' ETH</span>' +
-										'</div>' +
-										'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
-										'<span class="span_element_1">' + dataInfo.createTime + '</span>' +
-										'</div>' +
-										'</div>' +
-										'</li>';
-								if (ul.html()) {
-									ul.append("<hr>" + li);
-								} else {
-									ul.append(li);
-								}
-							})
-							if(data.records.length < pageSize){
-								flag_1 = true;
-							}
-						}
-						if(flag_1){
-							var noMore = ul.find("li[dataTag=noMore]");
-							if(!noMore.html()){
-								ul.append("<li dataTag='noMore'>No More</li>");
-							}
 						}
 					}
+					if(flag_1){
+						var noMore = ul.find("li[dataTag=noMore]");
+						if(!noMore.html()){
+							ul.append("<li dataTag='noMore'>No More</li>");
+						}
+					}
+				}
 			})
 		}
 		dataObj.attr("currentPage",parseInt(currentPage) + 1);
 		dataObj.attr("pageSize",pageSize);
 	}
 	function findLotteryIssue(dataId,flag){
-		console.log(dataId)
 		var dataObj = $("#"+dataId);
 		var currentPage = dataObj.attr("currentPage") || 1;
 		var pageSize = dataObj.attr("pageSize") || 20;
+		var isFind = dataObj.attr("pageSize") || "true";
 		var ul = dataObj.find("ul");
+		var li = dataObj.find("ul").find("li:first-child");
+		if(flag){
+			ul.html("");
+		}
 		$.ajax({
 			url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryIssue',
 			type:'get',
 			data:{"currentPage":currentPage,"pageSize":pageSize},
 			dataType:"json",
 			success:function (result) {
-				console.log(result);
-				console.log(result.extend.data.records);
 				var dataInfo = result.extend.data.records;
-				$.each(dataInfo,function(index,data){
-					console.log(data);
-					var luckNum = data.luckNum.split("");
-					var li = '<li>' +
-							'<div>#'+data.issueNum+'</div>'+
-							'<div>'+
-							'<div class="model_purchase_record">' +
-							'<div class="lottery_play_div_element_4 lottery_play_div_element_border_0">' +
-							'<span class="span_element_1">' + luckNum[0] + '</span>' +
-							'</div>' +
-							'<div class="lottery_play_div_element_4 lottery_play_div_element_border_1">' +
-							'<span class="span_element_1">' + luckNum[1] + '</span>' +
-							'</div>' +
-							'<div class="lottery_play_div_element_4 lottery_play_div_element_border_2">' +
-							'<span class="span_element_1">' + luckNum[2] + '</span>' +
-							'</div>' +
-							'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
-							'<span class="span_element_1">' + data.luckTotal + ' ETH</span>' +
-							'</div>' +
-							'<div class="lottery_play_div_element_4 lottery_play_div_time">' +
-							'<span class="span_element_1">' + data.startTime + " ~ " + data.endTime + '</span>' +
-							'</div>' +
-							'</div>' +
-							'</div>'+
-							'</li>';
-					if(index != 0){
-						ul.append("<hr>"+li);
-					}else {
-						ul.append(li);
+				isFind = dataObj.attr("isFind") || 'true';
+				if(isFind == 'true') {
+					if (dataInfo.length < pageSize) {
+						dataObj.attr("isFind", 'false')
 					}
-
-				})
+					$.each(dataInfo, function (index, data) {
+						var luckNum = data.luckNum.split("");
+						var new_li;
+						if(flag && index == 0){
+							new_li = li.clone();
+						}else {
+							new_li = dataObj.find("ul").find("li:first-child").clone();
+						}
+						new_li.find(".lotteryIssue").html("#"+data.issueNum);
+						new_li.find(".luckNum_1").html(luckNum[0]);
+						new_li.find(".luckNum_2").html(luckNum[1]);
+						new_li.find(".luckNum_3").html(luckNum[2]);
+						new_li.find(".luckTotal").html(data.luckTotal+"ETH");
+						new_li.find(".lotteryTime").html(data.startTime + " ~ " + data.endTime);
+						ul.append(new_li);
+					})
+					if (dataInfo.length < pageSize) {
+						ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+					}
+				}
 			}
 		})
 		dataObj.attr("currentPage",parseInt(currentPage) + 1);
 		dataObj.attr("pageSize",pageSize);
+	}
+	function getLotteryDetail(e){
+		var li = $(e);
+		var issue = li.find(".lotteryIssue").html().replace("#","");
+		var layer_open_lottery = $(".lottery_winning_record_head");
+		layer_open_lottery.find(".issue").html(li.find(".lotteryIssue").html());
+		layer_open_lottery.find(".luckNum").html(li.find(".luckNum_1").html()+ " " + li.find(".luckNum_2").html() + " " + li.find(".luckNum_3").html());
+		layer_open_lottery.find(".time").html(li.find(".lotteryTime").html());
+		findWinningRecord(true,'lottery_winning_record_ul',issue);
+
+
+	}
+	function findWinningRecord(flag,classProperty,issue){
+		var dataObj = $("."+classProperty);
+		var currentPage = dataObj.attr("currentPage") || 1;
+		var pageSize = dataObj.attr("pageSize") || 20;
+		var isFind = dataObj.attr("pageSize") || "true";
+		issue = dataObj.attr("issus") || issue;
+		var ul = dataObj;
+		var li = dataObj.find("li:first-child");
+		if(flag){
+			issue = issue;
+			ul.html("");
+		}
+		$.ajax({
+			url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryBuy',
+			type:'get',
+			data:{"currentPage":currentPage,"pageSize":pageSize,"lotteryaBuy.lotteryaIssueId":issue,"type":2},
+			dataType:"json",
+			success:function (result) {
+				var dataInfo = result.extend.data;
+				isFind = dataObj.attr("isFind") || 'true';
+				if(isFind == 'true') {
+					if (dataInfo.length < pageSize) {
+						dataObj.attr("isFind", 'false')
+					}
+					$.each(dataInfo, function (index, data) {
+						var new_li;
+						if(flag && index == 0){
+							new_li = li.clone();
+						}else {
+							new_li = dataObj.find("li:first-child").clone();
+						}
+						new_li.find(".memberName").html(data.memberName);
+						new_li.find(".email").html(data.email);
+						new_li.find(".luckNum").html(data.luckTotal + " ETH");
+						new_li.find(".multiples").html(data.multipleNum + " Multiples");
+						ul.append(new_li);
+					})
+					if (dataInfo.length < pageSize) {
+						ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+					}
+				}
+				open_lottery_issue_record();
+			}
+		})
+		dataObj.attr("currentPage",parseInt(currentPage) + 1);
+		dataObj.attr("pageSize",pageSize);
+	}
+	function open_lottery_issue_record(){
+		layer.open({
+			type: 1,
+			title: false,
+			closeBtn: 0,
+			shadeClose: true,
+			scrollbar:false,
+			area:  ['auto','auto'],            //宽高自适应
+			content: $(".lottery_winning_record").html()
+		});
 	}
 </script>
 <body class="body_top" data-spy="scroll" data-target=".services_item_inner">
@@ -393,7 +450,7 @@ include("../common/common.js.html"){}
 
 	<!-- commonality head -->
 	<%
-		include("../common/top.html"){}
+	include("../common/top.html"){}
 	%>
 	<div class="home">
 		<div class="home_title">
@@ -582,26 +639,66 @@ include("../common/common.js.html"){}
 					<div class="service_item_title">
 						<h2 data-localize="base.drawArchive">Draw archive</h2>
 					</div>
-						<ul class="ul_draw_archive services_item_inner-1" id="lottery_record">
-						</ul>
+					<ul class="ul_draw_archive services_item_inner-1" id="lottery_record">
+						<li class="lotteryRecord" onclick="getLotteryDetail(this)">
+							<div class="lotteryIssue">#0</div>
+							<div>
+								<div class="model_purchase_record">
+									<div class="lottery_play_div_element_4 lottery_play_div_element_border_0">
+										<span class="span_element_1 luckNum_1">0</span>
+									</div>
+									<div class="lottery_play_div_element_4 lottery_play_div_element_border_1">
+										<span class="span_element_1 luckNum_2">0</span>
+									</div>
+									<div class="lottery_play_div_element_4 lottery_play_div_element_border_2">
+										<span class="span_element_1 luckNum_3">0</span>
+									</div>
+									<div class="lottery_play_div_element_4 lottery_play_div_Multiple">
+										<span class="span_element_1 luckTotal">0 ETH</span>
+									</div>
+									<div class="lottery_play_div_element_4 lottery_play_div_time">
+										<span class="span_element_1 lotteryTime">00-00-00 00:00:00 ~ 00-00-00 00:00:00</span>
+									</div>
+								</div>
+							</div>
+							<hr>
+						</li>
+					</ul>
 				</div>
 			</div>
+		</div>
+	</div>
+	<div class="lottery_winning_record" style="display: none;">
+		<div class="layer_open_lottery_issue services_item_inner-1">
+			<div class="lottery_winning_record_head">
+				<p class="p_content_center issue">#5</p>
+				<p class="p_content_center luckNum"> 1 2 3</p>
+				<p class="p_content_center time">00-00-00 00:00:00 ~ 00-00-00 00:00:00</p>
+			</div>
+			<ul class="lottery_winning_record_ul">
+				<li>
+					<p><span class="memberName">on</span> </p>
+					<p><span class="email">on@xx.xx</span></p>
+					<P><span class="luckNum"> 0ETH</span> <span class="multiples"> 0 Multiples </span> </P>
+					<hr>
+				</li>
+			</ul>
 		</div>
 	</div>
 	<!-- commonality fotter -->
 	<%
 	include("../common/bottom.html"){}
 	%>
-<div id="playPassword" style="display: none;">
-	<div style="margin: 30px;">
-		<div>
-			<input type="password" class="paymentCode" placeholder="payment code">
-		</div>
-		<div class="model_purchase_button">
-			<div class="button_purchase confirm" onclick="paymentCodeConfirm()"><span data-localize="base.confirm">confirm</span></div>
+	<div id="playPassword" style="display: none;">
+		<div style="margin: 30px;">
+			<div>
+				<input type="password" class="paymentCode" placeholder="payment code">
+			</div>
+			<div class="model_purchase_button">
+				<div class="button_purchase confirm" onclick="paymentCodeConfirm()"><span data-localize="base.confirm">confirm</span></div>
+			</div>
 		</div>
 	</div>
-</div>
 
 </div>
 </body>

@@ -3,11 +3,11 @@
 <head>
     <!-- commonality  meta and title -->
     <%
-        include("../../../common/common.meta.html"){}
+    include("../../common/common.meta.html"){}
     %>
     <!-- commonality style -->
     <%
-    include("../../../common/common.css.html"){}
+    include("../../common/common.css.html"){}
     %>
     <link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
     <link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
@@ -16,212 +16,77 @@
 </head>
 <!-- commonality js -->
 <%
-include("../../../common/common.js.html"){}
+include("../../common/common.js.html"){}
 %>
 <script src="../js/portfolio_custom.js"></script>
+<script src="../js/lotteryshop/person_center.js"></script>
 <script>
     $(function(){
         $(".back").click(function(){
             history.back();
         });
+        //var window_height = document.documentElement.clientHeight;
+        $(".generalizePersonal").scroll(function(){
+            var $this =$(this),
+                viewH =$(this).height() - 90,//可见高度
+                contentH =$(this).get(0).scrollHeight,//内容高度
+                scrollTop =$(this).scrollTop();//滚动高度
+            if(scrollTop/(contentH - viewH) >= 0.95){ //当滚动到距离底部5%时
+                gengeralizeMemberInit(false,'generalizePersonal');
+            }
+        });
+
+        gengeralizeMemberInit(true,'generalizePersonal');
+
     })
+
 </script>
 <style>
-
+    li{
+        margin: 5px;
+        border-radius: 5px;
+        background: #f8f9fa;
+        padding: 5px;
+    }
     .base_head{
-        padding-top: 50px;
+        padding-top: 90px;
+        overflow: auto;
     }
-    .wallet_head{
-        padding: 10px;
-        /*border-radius: 5px;*/
-        background: #322445;
-        position: fixed;
+    .span_title{
+        font-size: 15px;
+        color: #909090;
+    }
+    .ul_personal_generalizePersonal{
         width: 100%;
-        border-top: solid 10px white;
-        z-index:1;
+        text-align: left;
     }
-    .record{
-        padding: 10px;
-        padding-top: 150px;
-    }
-    .ul_personal_lottery li{
-        margin-bottom: 5px;
-        background: aliceblue;
-    }
-    .wallet_type{
-
-    }
-
 </style>
 <body class="body_top">
 
 <div class="super_container">
 
-    <!-- commonality head -->
+    <!-- 引入头部文件 -->
     <%
-    include("../../../common/top.html"){}
+    include("../../common/top.html"){}
     %>
     <!-- Home -->
 
 
-    <div class="base_head">
-        <div class="wallet_head">
-            <p><span class="wallet_span_title">Net assets</span></p>
-            <p><span class="wallet_span_total">10ETH  ≈ 1000$</span></p>
-            <div class="wallet_type">
-                <ul>
-                    <% if(has(type) &&  type == 'wallet_eth'){ %>
-                        <li>Flat t : 10000</li>
-                    <% } else if(has(type) &&  type == 'wallet_flat'){ %>
-                        <li>ETH : 10</li>
-                    <% }%>
-                </ul>
-            </div>
-        </div>
-        <div class="record">
-            <ul class="ul_personal_lottery">
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <p><span>2018.01.01 00:00:00</span></p>
-                        <p>
-                            <span class="span_left">extract：1000</span>
-                            <span>residue ：323</span>
-                        </p>
-                    </div>
-                </li>
-            </ul>
-        </div>
+    <div class="base_head card-1 card-1_scroll generalizePersonal">
+        <ul class="ul_personal_generalizePersonal">
+            <li>
+                <div>
+                    <p><span class="span_title generalizePersonalRecordNikeName"></span></p>
+                    <p><span class="generalizePersonalRecordEmail"></span></p>
+                </div>
+                <hr class="hrEth">
+            </li>
+        </ul>
     </div>
 
-    <!-- commonality fotter -->
+    <!-- commonality footer -->
     <%
-    include("../../../common/bottom.html"){}
+    include("../../common/bottom.html"){}
     %>
 
 </div>

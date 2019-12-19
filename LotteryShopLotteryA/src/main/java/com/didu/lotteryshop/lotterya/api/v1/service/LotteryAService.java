@@ -105,11 +105,14 @@ public class LotteryAService extends LotteryABaseService {
      * @param lotteryaBuy
      * @return
      */
-    public ResultUtil getLotteryBuy(Integer currentPage, Integer pageSize,Integer isOneself,String mTransferStatus, LotteryaBuy lotteryaBuy){
+    public ResultUtil getLotteryBuy(Integer currentPage, Integer pageSize,Integer isOneself,String mTransferStatus, LotteryaBuy lotteryaBuy,Integer type){
         if(isOneself != null && isOneself == 1 && super.getLoginUser() != null){
             lotteryaBuy.setMemberId(super.getLoginUser().getId());
         }else{
             lotteryaBuy.setMemberId(null);
+        }
+        if(type == 2){
+            return ResultUtil.successJson(lotteryaBuyService.getPageLotteryBuyAll(currentPage,pageSize,mTransferStatus,lotteryaBuy));
         }
         return ResultUtil.successJson(lotteryaBuyService.getPageLotteryBuy(currentPage,pageSize,mTransferStatus,lotteryaBuy));
     }

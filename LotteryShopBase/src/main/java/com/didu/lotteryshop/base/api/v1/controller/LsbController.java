@@ -19,6 +19,7 @@ public class LsbController extends BaseBaseController {
      * 查询平台币
      * @return
      */
+    @ResponseBody
     @RequestMapping("/findLsbWallet")
     public ResultUtil findLsbWallet(){
         return lsbWalletService.findLsbWallet();

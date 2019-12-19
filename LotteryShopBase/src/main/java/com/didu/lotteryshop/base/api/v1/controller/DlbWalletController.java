@@ -19,6 +19,7 @@ public class DlbWalletController extends BaseBaseController {
      * 查询代领币钱包
      * @return
      */
+    @ResponseBody
     @RequestMapping("/findDlbWallet")
     public ResultUtil findDlbWallet(){
         return dlbWalletService.findDlbWallet();

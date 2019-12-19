@@ -130,4 +130,19 @@ public class MemberController extends BaseBaseController {
         return memberService.findWalletTotal(exchangeRate);
     }
 
+    /**
+     * 查询购买记录
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @param type 类型
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/findLotterPurchaseResord")
+    public ResultUtil findLotterPurchaseResord(Integer currentPage,Integer pageSize,String startTime,String endTime,String type){
+        currentPage =  currentPage == null ? 1:currentPage;
+        pageSize = pageSize == null ? 20 : pageSize;
+        return memberService.findLotterPurchaseResord(currentPage,pageSize,startTime,endTime,type);
+    }
+
 }

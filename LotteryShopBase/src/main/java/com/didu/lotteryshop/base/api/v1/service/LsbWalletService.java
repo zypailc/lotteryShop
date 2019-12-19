@@ -1,12 +1,18 @@
 package com.didu.lotteryshop.base.api.v1.service;
 
 import com.didu.lotteryshop.base.service.BaseBaseService;
+import com.didu.lotteryshop.common.config.Constants;
+import com.didu.lotteryshop.common.entity.EsLsbwallet;
 import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.service.form.impl.EsLsbaccountsServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsLsbwalletServiceImpl;
+import com.didu.lotteryshop.common.utils.BigDecimalUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class LsbWalletService extends BaseBaseService {
@@ -22,7 +28,19 @@ public class LsbWalletService extends BaseBaseService {
      */
     public ResultUtil findLsbWallet(){
         LoginUser loginUser = getLoginUser();
-        return ResultUtil.successJson(esLsbwalletService.findByMemberId(loginUser.getId()));
+        EsLsbwallet lsbwallet = esLsbwalletService.findByMemberId(loginUser.getId());
+        //设置精度
+        if(lsbwallet == null){
+            lsbwallet = new EsLsbwallet();
+            lsbwallet.setTotal(new BigDecimal("0"));
+            lsbwallet.setBalance(new BigDecimal("0"));
+            lsbwallet.setFreeze(new BigDecimal("0"));
+        }else {
+            lsbwallet.setTotal(BigDecimalUtil.bigDecimalToPrecision(lsbwallet.getTotal()));
+            lsbwallet.setBalance(BigDecimalUtil.bigDecimalToPrecision(lsbwallet.getBalance()));
+            lsbwallet.setFreeze(BigDecimalUtil.bigDecimalToPrecision(lsbwallet.getFreeze()));
+        }
+        return ResultUtil.successJson(lsbwallet);
     }
 
     /**

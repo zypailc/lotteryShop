@@ -1,89 +1,11 @@
-$(function (){
-
-
-
-    //初始化方法
-    var li = $(".wallet_li");
-    li.click();
-   /* $(".card-1_scroll").scroll(function(){
-        var $this =$(this),
-            viewH =$(this).height(),//可见高度
-            contentH =$(this).get(0).scrollHeight,//内容高度
-            scrollTop =$(this).scrollTop();//滚动高度
-        if(scrollTop/(contentH -viewH) >= 0.95){ //当滚动到距离底部5%时
-            var li = '<hr style="height: 1px; border: none; border-top: 1px dashed #ddd;" />'+
-                '<li>'+
-                '<div>'+
-                '<p><span>Lottery type</span><span>#'+contentH+'</span></p>'+
-                '<p>'+
-                '<span>2018.01.01 00:00:00</span>'+
-                '<span>2 4 6 3 2 7</span>'+
-                '<span>2 5 6 0 2 8</span>'+
-                '<span>3ETH</span>'+
-                '</p>'+
-                '</div>'+
-                '</li>';
-            $(".ul_personal_lottery").append(li);
-        }
-    });*/
-   $(".walletETH").scroll(function(){
-       var viewH = $(this).height();
-       var contentH = $(this).get(0).scrollHeight;
-       var scrollTop =$(this).scrollTop();
-       if(scrollTop/(contentH -viewH) >= 0.95){
-           findWalletRecord(false,'walletETH','/api/base/v1/ethWallet/findEthRecord')
-       }
-   });
-
-    //初始化头像列表
-    div_head_images();
-
-    $(".li_wallet_module").click(function(){
-        var type = $(this).attr("data-class") || "";
-        if(type == 'wallet_bind'){
-            $(location).prop('href','../web/personalWalletBind?'+"type="+type);
-        }else{
-            $(location).prop('href','../web/personalWalletBase?'+"type="+type);
-        }
+$(function(){
+    $(".search_lottery_record").click(function(){
+        findLotteryRecord(true,"lottery_record");
     });
-
-    //昵称标签超出长度显示省略号
-    var span_title = $(".span_title").html();
-    if (span_title.length > 3) {
-        //截取固定长度
-        var span_title = span_title.substring(0, 3);
-        //为非隐藏<span>标签赋值--截取固定长度
-        $(".span_title").text(span_title+"...");
-    } else {
-        $(".span_title").text(span_title);
-    }
-
-    //屏幕分辨率小于991的初始化方法
-    $(".personal_phone").click(function(){
-        var type = $(this).attr("data-file") || "";
-        if(type == 'generalize'){
-            $(location).prop('href','../web/personalGeneralizePhone');
-        }
-        if(type == 'lottery_record'){
-            $(location).prop('href','../web/personalPhoneType?'+"type="+type);
-        }
-    });
-
-    // layer Time initialization
-    layui.use('laydate', function(){
-        var laydate = layui.laydate;
-        laydate.render({
-            elem: '#startDate'
-        });
-    });
-    layui.use('laydate', function(){
-        var laydate = layui.laydate;
-        laydate.render({
-            elem: '#endDate'
-        });
+    $(".search_lottery_record_phone").click(function(){
+        findLotteryRecord(true,"lottery_record_phone");
     });
 })
-
 // head portrait layer
 var img_head_layer;
 function changePicture(){
@@ -201,12 +123,20 @@ function update_confirm(){
 }
 
 //init gengeralize record
-function gengeralizeMemberInit(classProperty){
+function gengeralizeMemberInit(flag,classProperty){
     var gengeralizeMember = $("."+classProperty);
     var currentPage = gengeralizeMember.attr("currentPage") || 1;
     var pageSize = gengeralizeMember.attr("pageSize") || 20;
     var isFind = gengeralizeMember.attr("isFind") || 'true';
     var ul = gengeralizeMember.find("ul");
+    var li = $("."+classProperty).find("ul").find("li:first-child");
+    if(flag){
+        ul.html("");
+        gengeralizeMember.attr("currentPage","1");
+        gengeralizeMember.attr("isFind","true");
+        isFind = "true";
+        currentPage = 1;
+    }
     $.ajax({
         url: '/api/base/v1/member/findGeneralizeMemberList',
         type: 'post',
@@ -218,24 +148,20 @@ function gengeralizeMemberInit(classProperty){
                     gengeralizeMember.attr("isFind", 'false')
                 }
                 $.each(list, function (index, data) {
-                    var li = '<li>' +
-                        '<div>' +
-                        '<p><span class="span_title">' + data.memberName + '</span></p>' +
-                        '<p>' +
-                        '<span>' + data.email + '</span>' +
-                        '</p>' +
-                        '</div>' +
-                        '</li>';
-                    if (index != 0) {
-                        ul.append("<hr class='hrEth'>" + li);
-                    } else {
-                        ul.append(li);
+                    var new_li;
+                    if(flag && index == 0){
+                        new_li = li.clone();
+                    }else {
+                        new_li = $("."+classProperty).find("ul").find("li:first-child").clone();
                     }
+                    new_li.find(".generalizePersonalRecordNikeName").html(data.memberName);
+                    new_li.find(".generalizePersonalRecordEmail").html(data.email);
+                    ul.append(new_li);
                 })
                 gengeralizeMember.attr("currentPage", (parseInt(currentPage) + 1));
                 gengeralizeMember.attr("pageSize", pageSize);
                 if (list.length < pageSize) {
-                    ul.append("<hr class='hrEth'>" + "<li class='li_eth_come' dataTag='noMore'>No More</li>")
+                    ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
                 }
             }
         }
@@ -249,7 +175,22 @@ function findETHWallet(classProperty,url){
         type: 'post',
         dataType: "json",
         success: function (result) {
-            console.log(result)
+            if(result.code == 200) {
+                var dataInfo = result.extend.data;
+                var ethHead;
+                if(classProperty == 'walletETH'){
+                    ethHead = $(".eth_record");
+                }
+                if(classProperty == 'walletPutMoney'){
+                    ethHead = $(".wallet_head");
+                }
+                if(classProperty == 'walletFLAT'){
+                    ethHead = $(".lsb_record");
+                }
+                ethHead.find(".wallet_span_total").html(dataInfo.total);
+                ethHead.find(".balance").html(dataInfo.balance);
+                ethHead.find(".freeze").html(dataInfo.freeze);
+            }
         }
     })
 }
@@ -259,8 +200,13 @@ function findWalletRecord(flag,classProperty,url){
     var pageSize = walletETH.attr("pageSize") || 20;
     var isFind = walletETH.attr("isFind") || 'true';
     var ul = walletETH.find("ul");
+    var li = $("."+classProperty).find("ul").find("li:first-child");
     if(flag){
         ul.html("");
+        walletETH.attr("currentPage","1")
+        walletETH.attr("isFind","true");
+        isFind = "true";
+        currentPage = 1;
     }
     if(isFind == 'true') {
         $.ajax({
@@ -273,42 +219,132 @@ function findWalletRecord(flag,classProperty,url){
                 var record = dataInfo.records;
                 isFind = walletETH.attr("isFind") || 'true';
                 if(isFind == 'true') {
+
                     if(record.length < pageSize){
                         walletETH.attr("isFind",'false')
                     }
                     $.each(record, function (index, data) {
-                        var li = '<li>';
-                        if (data.type == '0') {
-                            li = "<li class='li_come'>";
+                        var new_li;
+                        if(flag && index == 0){
+                            new_li = li.clone();
+                        }else {
+                            new_li = $("."+classProperty).find("ul").find("li:last-child").clone();
                         }
-                        if (data.type == '1') {
-                            li = "<li class='li_comeInto'>";
+                        new_li.find(".statusTime").html(data.statusTime);
+                        new_li.find(".expendOrReceipts").html(data.amount);
+                        new_li.find(".balance1").html(data.balance);
+                        var gas = typeof(data.gasFee);
+                        if(gas && gas != 'undefined'){
+                            new_li.find(".ethGasStr").html(data.gasFee);
+                        }else {
+                            new_li.find(".ethGas").hide();
                         }
-                        li +=
-                            '<div>' +
-                            '<p><span>' + data.statusTime + '</span></p>' +
-                            '<p>' +
-                            '<span class="span_right" >' + data.amount + '</span>' +
-                            '<span class="span_right" >' + data.balance + '</span>';
-                        if(classProperty == 'walletETH'){
-                            li += '<span>' + data.gasFee + '</span>';
-                        }
-                        li +=    '</p>' +
-                            '</div>' +
-                            '</li>';
-                        if (flag && index == 0) {
-                            ul.append(li);
-                        } else {
-                            ul.append("<hr class='hrEth'>" + li);
-                        }
+                        ul.append( new_li);
                     });
                     walletETH.attr("currentPage", (parseInt(currentPage) + 1));
                     walletETH.attr("pageSize", pageSize);
                     if (record.length < pageSize) {
-                        ul.append("<hr class='hrEth'>" + "<li class='li_eth_come' dataTag='noMore'>No More</li>")
+                        ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
                     }
                 }
             }
         })
     }
+}
+
+function findLotteryRecord(flag,classProperty){
+    var walletETH = $("."+classProperty);
+    var currentPage = walletETH.attr("currentPage") || 1;
+    var pageSize = walletETH.attr("pageSize") || 20;
+    var isFind = walletETH.attr("isFind") || 'true';
+    var ul = walletETH.find("ul");
+    var startTime = $(".startDateInput").val() || "";
+    var endTime = $(".endDateInput").val() || "";
+    var type = $(".lotteryTypeSelect").val() || "";
+    var li = $("."+classProperty).find("ul").find("li:first-child");
+    if(flag){
+        ul.html("");
+        walletETH.attr("currentPage","1")
+        walletETH.attr("isFind","true");
+        isFind = "true";
+        currentPage = 1;
+    }
+    if(isFind == 'true') {
+        $.ajax({
+            url: "/api/base/v1/member/findLotterPurchaseResord",
+            type: 'post',
+            data: {"currentPage": currentPage, "pageSize": pageSize, "type":type,"startTime":startTime,"endTime":endTime},
+            dataType: "json",
+            success: function (result) {
+                var dataInfo = result.extend.data;
+                var record = dataInfo;
+                isFind = walletETH.attr("isFind") || 'true';
+                if(isFind == 'true') {
+                    if(record.length < pageSize){
+                        walletETH.attr("isFind",'false')
+                    }
+                    $.each(record, function (index, data) {
+                        var new_li;
+                        if(flag && index == 0){
+                            new_li = li.clone();
+                        }else {
+                            new_li = $("."+classProperty).find("ul").find("li:last-child").clone();
+                        }
+                        if(data.lotteryType == '1'){
+                            new_li.find(".lotteryType").html("lotteryA")
+                        }
+                        new_li.find(".lotteryIssue").html("#"+data.issueNum);
+                        new_li.find(".selfLuckNum").html(data.selfLuckNum);
+                        new_li.find(".luckNum").html(data.luckNum);
+                        new_li.find(".luckTotal").html(data.luck_total || 0);
+                        new_li.find(".startTime").html(data.startTime);
+                        new_li.find(".endTime").html(data.endTime);
+                        ul.append( new_li);
+                    });
+                    walletETH.attr("currentPage", (parseInt(currentPage) + 1));
+                    walletETH.attr("pageSize", pageSize);
+                    if (record.length < pageSize) {
+                        ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+                    }
+                }
+            }
+        })
+    }
+}
+
+
+function findwalletTotal(exchangeRate,personal_wallet_center){
+    $.ajax({
+        url:"/api/base/v1/member/findWalletTotal",
+        type:"get",
+        data:{"exchangeRate":exchangeRate},
+        dataType:"json",
+        success:function (result){
+            var info = result.extend.data;
+            var personalWalletCenter = $("."+personal_wallet_center);
+            personalWalletCenter.find(".walletTotalEth").html(info.ethTotal);
+            personalWalletCenter.find(".ethTotalToUsd").html(info.ethTotalToUsd);
+            personalWalletCenter.find(".walletEth").html(info.eth);
+            personalWalletCenter.find(".ethToUsd").html(info.ethToUsd);
+            personalWalletCenter.find(".walletGold").html(info.lsb);
+            personalWalletCenter.find(".goldToEth").html(info.lsbToEth);
+            personalWalletCenter.find(".goldToUsd").html(info.lsbToUsd);
+            personalWalletCenter.find(".walletPutMoney").html(info.dlb);
+            personalWalletCenter.find(".putMoneyToEth").html(info.dlbToEtb);
+            personalWalletCenter.find(".putMoneyToUsd").html(info.dlbToUsd);
+        }
+    })
+}
+
+function getEthToUsd(personal_wallet_center){
+// https://docs.coincap.io/?version=latest#2a87f3d4-f61f-42d3-97e0-3a9afa41c73b
+    $.ajax({
+        url:"https://api.coincap.io/v2/rates/ethereum",
+        type:"get",
+        dataType:"json",
+        success:function (info){
+            var data = info.data;
+            findwalletTotal(data.rateUsd,personal_wallet_center);
+        }
+    })
 }
