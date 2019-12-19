@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.entity.EsGdethaccounts;
 import com.didu.lotteryshop.common.mapper.EsGdethaccountsMapper;
 import com.didu.lotteryshop.common.service.form.IEsGdethaccountsService;
+import com.github.abel533.sql.SqlMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -27,6 +30,8 @@ import java.util.List;
 public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMapper, EsGdethaccounts> implements IEsGdethaccountsService {
     @Autowired
     private EsGdethwalletServiceImpl esGdethwalletService;
+    @Autowired
+    private BaseService baseService;
     /** dic_type 在sys_dic字段值*/
     public static String DIC_TYPE = "gdethaccounts_dictype";
     /** A彩票推广分成 */
@@ -250,5 +255,25 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
         wrapper.orderBy("create_time",false);
         Page<EsGdethaccounts> pageEthRecord = new Page<EsGdethaccounts>(currentPage,pageSize);
         return super.selectPage(pageEthRecord,wrapper);
+    }
+
+    /**
+     * 根据天数查询是否有结算账款数据。
+     * @param day
+     * @return
+     */
+    public  boolean findToSAByDay(int day){
+        boolean bool = false;
+        SqlMapper sqlMapper = baseService.getSqlMapper();
+        String sql = "select " +
+                         " count(egea_.id) as cnts " +
+                    " from es_gdethaccounts egea_" +
+                    " where egea_.status in(0,1) and egea_.dic_type = '"+DIC_TYPE_SA+"'" +
+                        " and DATE_SUB(CURDATE(), INTERVAL "+day+" DAY) <= date(egea_.create_time)";
+        Map<String,Object> rMap = sqlMapper.selectOne(sql);
+        if(rMap != null && !rMap.isEmpty() && rMap.get("cnts") != null && Integer.valueOf(rMap.get("cnts").toString()) > 0){
+            bool = true;
+        }
+        return bool;
     }
 }

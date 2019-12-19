@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -172,6 +173,16 @@ public class EsGdethwalletServiceImpl extends ServiceImpl<EsGdethwalletMapper, E
         esGdethwallet.setUpdateTime(new Date());
         boolean bool = super.updateById(esGdethwallet);
         return bool ? esGdethwallet.getBalance() : null;
+    }
+
+    /**
+     * 查询推广分成eth钱包 > 0 的所有账户
+     * @return
+     */
+    public List<EsGdethwallet> findBalanceGtZero(){
+        Wrapper<EsGdethwallet> wrapper = new EntityWrapper<>();
+        wrapper.and("balance > {0}",0);
+        return super.selectList(wrapper);
     }
 
 }
