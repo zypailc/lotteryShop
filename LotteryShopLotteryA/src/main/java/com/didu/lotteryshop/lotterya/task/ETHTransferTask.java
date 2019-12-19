@@ -1,6 +1,6 @@
 package com.didu.lotteryshop.lotterya.task;
 
-import com.didu.lotteryshop.lotterya.service.TaskLotteryABuyService;
+import com.didu.lotteryshop.lotterya.service.TaskETHTransferService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +20,15 @@ import org.springframework.stereotype.Component;
 public class ETHTransferTask {
     private static final Logger logger = LoggerFactory.getLogger(ETHTransferTask.class);
     @Autowired
-    private TaskLotteryABuyService taskLotteryABuyService;
+    private TaskETHTransferService taskETHTransferService;
     /** 每2分钟执行 */
     @Scheduled(cron = "0 0/2 * * * ?")//默认是fixedDelay 上一次执行完毕时间后执行下一轮
     private void configureTasks() {
         //开始执行转账定时任务！
-        logger.info("==============================☆☆ Start execution BuyLotteryA timing task! ☆☆==============================================");
-        //处理购买彩票待确认的数据
-        taskLotteryABuyService.disposeLotteryABuyWait();
+        logger.info("==============================☆☆ Start execution LotteryAETHTransfer timing task! ☆☆==============================================");
+        //处理待确认的数据
+        taskETHTransferService.lotteryAETHTransfer();
         //执行转账定时任务结束！
-        logger.info("==============================☆☆ End execution BuyLotteryA timing task!   ☆☆==============================================");
+        logger.info("==============================☆☆ End execution LotteryAETHTransfer timing task!   ☆☆==============================================");
     }
 }

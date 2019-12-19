@@ -40,15 +40,15 @@ public class TaskLotteryAPayBonusService {
                 return;
             }
             //step 2:发放提成（待领币）
-            logger.info("==============================☆☆ PayBonusLotteryA: Start payPushMoney  ☆☆==============================================");
+            logger.info("==============================☆☆ PayBonusLotteryA: Start updateStatus  ☆☆==============================================");
             bool = lotteryaPmService.updateStatus();
             if(!bool){
                 //错误，提成发放失败
-                logger.error(" PayBonusLotteryA: Start payBonus --> error:PushMoney payment failure!");
+                logger.error(" PayBonusLotteryA: Start updateStatus --> error:PushMoney payment failure!");
                 return;
             }
-            logger.info("==============================☆☆ PayBonusLotteryA: End payPushMoney  ☆☆==============================================");
-           //step 3:核算一级推广商分成。
+            logger.info("==============================☆☆ PayBonusLotteryA: End updateStatus  ☆☆==============================================");
+           //step 3:核算一级推广商分成，并把管理员账户ether发送到分成钱包地址。
             logger.info("==============================☆☆ PayBonusLotteryA: Start generalizeDividedInto  ☆☆==============================================");
             bool =  lotteryaDiService.generalizeDividedInto(lotteryaIssue.getId());
             if(!bool){
@@ -57,7 +57,16 @@ public class TaskLotteryAPayBonusService {
                 return;
             }
             logger.info("==============================☆☆ PayBonusLotteryA: End generalizeDividedInto  ☆☆==============================================");
-            //step 4:生成下期彩票彩票数据
+            //step 4:核算平台币分成eher，并把管理员账户ether发送到平台币钱包地址。
+            logger.info("==============================☆☆ PayBonusLotteryA: Start LotteryAPmTransfer  ☆☆==============================================");
+            bool = lotteryaPmService.LotteryAPmTransfer();
+            if(!bool){
+                //错误，提成发放失败
+                logger.error(" PayBonusLotteryA: Start LotteryAPmTransfer --> error:LotteryAPmTransfer error!");
+                return;
+            }
+            logger.info("==============================☆☆ PayBonusLotteryA: Start LotteryAPmTransfer  ☆☆==============================================");
+            //step 5:生成下期彩票彩票数据
             logger.info("==============================☆☆ PayBonusLotteryA: Start createNext  ☆☆==============================================");
             bool = lotteryaIssueService.createNext();
             if(!bool){

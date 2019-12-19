@@ -38,7 +38,7 @@ public class LotteryaPm extends Model<LotteryaPm> {
 	@TableField("lotterya_issue_id")
 	private Integer lotteryaIssueId;
     /**
-     * 金额
+     * 金额(待领币)
      */
 	private BigDecimal total;
     /**
@@ -59,6 +59,32 @@ public class LotteryaPm extends Model<LotteryaPm> {
      * 类型，1：购买提成，2：中奖提成
      */
 	private Integer type;
+
+	/**
+	 * 转账状态，-1：未转账,0：等待确认，1：已经确，2：失败
+	 */
+	@TableField("transfer_status")
+	private String transferStatus;
+	/**
+	 * 转账操作时间
+	 */
+	@TableField("transfer_status_time")
+	private Date transferStatusTime;
+	/**
+	 * 转账has码，用于异步查询转账状态
+	 */
+	@TableField("transfer_hash_value")
+	private String transferHashValue;
+	/**
+	 * 转账燃气费（ether）
+	 */
+	@TableField("transfer_gasfee")
+	private BigDecimal transferGasfee;
+	/**
+	 * 金额（ether）
+	 */
+	@TableField("total_ether")
+	private BigDecimal totalEther;
 
 
 	public Integer getId() {
@@ -125,6 +151,46 @@ public class LotteryaPm extends Model<LotteryaPm> {
 		this.type = type;
 	}
 
+	public String getTransferStatus() {
+		return transferStatus;
+	}
+
+	public void setTransferStatus(String transferStatus) {
+		this.transferStatus = transferStatus;
+	}
+
+	public Date getTransferStatusTime() {
+		return transferStatusTime;
+	}
+
+	public void setTransferStatusTime(Date transferStatusTime) {
+		this.transferStatusTime = transferStatusTime;
+	}
+
+	public String getTransferHashValue() {
+		return transferHashValue;
+	}
+
+	public void setTransferHashValue(String transferHashValue) {
+		this.transferHashValue = transferHashValue;
+	}
+
+	public BigDecimal getTransferGasfee() {
+		return transferGasfee;
+	}
+
+	public void setTransferGasfee(BigDecimal transferGasfee) {
+		this.transferGasfee = transferGasfee;
+	}
+
+	public BigDecimal getTotalEther() {
+		return totalEther;
+	}
+
+	public void setTotalEther(BigDecimal totalEther) {
+		this.totalEther = totalEther;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -141,6 +207,11 @@ public class LotteryaPm extends Model<LotteryaPm> {
 			", statusTime=" + statusTime +
 			", createTime=" + createTime +
 			", type=" + type +
+			", transferStatus=" + transferStatus +
+			", transferStatusTime=" + transferStatusTime +
+			", transferHashValue=" + transferHashValue +
+			", transferGasfee=" + transferGasfee +
+			", totalEther=" + totalEther +
 			"}";
 	}
 }

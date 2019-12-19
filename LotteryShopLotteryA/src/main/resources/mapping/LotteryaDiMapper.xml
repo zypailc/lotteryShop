@@ -20,6 +20,7 @@
 		<result column="transfer_status" property="transferStatus" />
 		<result column="transfer_status_time" property="transferStatusTime" />
 		<result column="transfer_hash_value" property="transferHashValue" />
+		<result column="transfer_gasfee" property="transferGasfee" />
 	</resultMap>
 
 </mapper>

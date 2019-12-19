@@ -9,6 +9,8 @@
 		<result column="gas_limit" property="gasLimit" />
 		<result column="eth_to_lsb" property="ethToLsb" />
 		<result column="lsb_to_eth" property="lsbToEth" />
+		<result column="di_address" property="diAddress" />
+		<result column="lsb_address" property="lsbAddress" />
 	</resultMap>
 
 </mapper>

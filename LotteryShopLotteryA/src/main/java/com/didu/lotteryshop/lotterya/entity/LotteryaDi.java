@@ -102,6 +102,11 @@ public class LotteryaDi extends Model<LotteryaDi> {
      */
 	@TableField("transfer_hash_value")
 	private String transferHashValue;
+	/**
+	 * 转账燃气费（ether）
+	 */
+	@TableField("transfer_gasfee")
+	private BigDecimal transferGasfee;
 
 
 	public Integer getId() {
@@ -232,6 +237,14 @@ public class LotteryaDi extends Model<LotteryaDi> {
 		this.transferHashValue = transferHashValue;
 	}
 
+	public BigDecimal getTransferGasfee() {
+		return transferGasfee;
+	}
+
+	public void setTransferGasfee(BigDecimal transferGasfee) {
+		this.transferGasfee = transferGasfee;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -256,6 +269,7 @@ public class LotteryaDi extends Model<LotteryaDi> {
 			", transferStatus=" + transferStatus +
 			", transferStatusTime=" + transferStatusTime +
 			", transferHashValue=" + transferHashValue +
+			", transferGasfee=" + transferGasfee +
 			"}";
 	}
 }

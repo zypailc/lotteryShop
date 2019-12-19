@@ -43,6 +43,16 @@ public class SysConfig extends Model<SysConfig> {
 	 */
 	@TableField("lsb_to_eth")
 	private BigDecimal lsbToEth;
+	/**
+	 *系统推广分成钱包地址
+	 */
+	@TableField("di_address")
+	private String diAddress;
+	/**
+	 *系统平台币钱包地址
+	 */
+	@TableField("lsb_address")
+	private String lsbAddress;
 
 	public Integer getId() {
 		return id;
@@ -84,6 +94,22 @@ public class SysConfig extends Model<SysConfig> {
 		this.lsbToEth = lsbToEth;
 	}
 
+	public String getDiAddress() {
+		return diAddress;
+	}
+
+	public void setDiAddress(String diAddress) {
+		this.diAddress = diAddress;
+	}
+
+	public String getLsbAddress() {
+		return lsbAddress;
+	}
+
+	public void setLsbAddress(String lsbAddress) {
+		this.lsbAddress = lsbAddress;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -97,6 +123,8 @@ public class SysConfig extends Model<SysConfig> {
 			", gasLimit=" + gasLimit +
 			", ethToLsb=" + ethToLsb +
 			", lsbToEth=" + lsbToEth +
+			", diAddress=" + diAddress +
+			", lsbAddress=" + lsbAddress +
 			"}";
 	}
 }

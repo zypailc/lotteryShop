@@ -12,6 +12,11 @@
 		<result column="status_time" property="statusTime" />
 		<result column="create_time" property="createTime" />
 		<result column="type" property="type" />
+		<result column="transfer_status" property="transferStatus" />
+		<result column="transfer_status_time" property="transferStatusTime" />
+		<result column="transfer_hash_value" property="transferHashValue" />
+		<result column="transfer_gasfee" property="transferGasfee" />
+		<result column="total_ether" property="totalEther" />
 	</resultMap>
 
 </mapper>

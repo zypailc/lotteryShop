@@ -3,19 +3,26 @@ package com.didu.lotteryshop.lotterya.service.form.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.didu.lotteryshop.common.entity.SysConfig;
 import com.didu.lotteryshop.common.service.form.impl.EsDlbaccountsServiceImpl;
+import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
 import com.didu.lotteryshop.lotterya.entity.LotteryaInfo;
 import com.didu.lotteryshop.lotterya.entity.LotteryaIssue;
 import com.didu.lotteryshop.lotterya.entity.LotteryaPm;
 import com.didu.lotteryshop.lotterya.mapper.LotteryaPmMapper;
+import com.didu.lotteryshop.lotterya.service.LotteryABaseService;
+import com.didu.lotteryshop.lotterya.service.Web3jService;
 import com.didu.lotteryshop.lotterya.service.form.ILotteryaPmService;
-import org.apache.commons.lang3.time.DateUtils;
+import com.github.abel533.sql.SqlMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -35,6 +42,20 @@ public class LotteryaPmServiceImpl extends ServiceImpl<LotteryaPmMapper, Lottery
     private LotteryaBuyServiceImpl lotteryaBuyService;
     @Autowired
     private EsDlbaccountsServiceImpl esDlbaccountsService;
+    @Autowired
+    private LotteryABaseService lotteryABaseService;
+    @Autowired
+    private SysConfigServiceImpl sysConfigService;
+    @Autowired
+    private Web3jService web3jService;
+    /** 未转账 */
+    public static final String TRANSFER_STATUS_UNTREATED = "-1";
+    /** 等待确认 */
+    public static final String TRANSFER_STATUS_WAIT = "0";
+    /** 已经确认 */
+    public static final String TRANSFER_STATUS_SUCCESS = "1";
+    /** 失败 */
+    public static final String TRANSFER_STATUS_FAIL = "2";
     /**
      * 新增中奖提成
      * @param memberId
@@ -184,9 +205,14 @@ public class LotteryaPmServiceImpl extends ServiceImpl<LotteryaPmMapper, Lottery
                     //有效提成数据
                   int cnt =  lotteryaBuyService.getBuyCount(lapm.getMemberId(),nowLotteryaIssue.getId());
                   if((cnt >= 1 && lapm.getLotteryaIssueId() == nowLotteryaIssue.getId()) || (cnt >= lotteryaInfo.getPmRnum())){
+
                       //领取提成
                       lapm.setStatus("1");
                       lapm.setStatusTime(new Date());
+                      //增加转账状态
+                      SysConfig sysConfig = sysConfigService.getSysConfig();
+                      lapm.setTransferStatus("-1");
+                      lapm.setTotalEther(lapm.getTotal().divide(sysConfig.getLsbToEth()).setScale(4,BigDecimal.ROUND_DOWN));
                       bool = super.updateById(lapm);
                       if(bool){
                           //增加待领币
@@ -210,4 +236,82 @@ public class LotteryaPmServiceImpl extends ServiceImpl<LotteryaPmMapper, Lottery
         return bool;
     }
 
+    /**
+     * A彩票提成转账到平台币钱包
+     * @return
+     */
+    public boolean LotteryAPmTransfer(){
+        boolean bool = false;
+        SqlMapper sqlMapper = lotteryABaseService.getSqlMapper();
+        String sumSql = " select sum(lap_.total_ether) as allTotalEther from lotterya_pm as lap_ ";
+        String conditionSql = " where lap_.status = '1' and lap_.transfer_status = '"+TRANSFER_STATUS_UNTREATED+"'";
+        Map<String,Object> sMap = sqlMapper.selectOne(sumSql+conditionSql);
+        if(sMap != null && !sMap.isEmpty() &&  sMap.get("allTotalEther") != null){
+              BigDecimal allTotalEther =   new BigDecimal(sMap.get("allTotalEther").toString());
+              if(allTotalEther.compareTo(BigDecimal.ZERO) > 0){
+                  SysConfig sysConfig = sysConfigService.getSysConfig();
+                  Map<String,Object> rMap =  web3jService.managerSendToETH(sysConfig.getLsbAddress(),allTotalEther);
+                  if(rMap != null && !rMap.isEmpty()){
+                      String hashvalue = rMap.get(Web3jService.TRANSACTION_HASHVALUE).toString();
+                      String status = rMap.get(Web3jService.TRANSACTION_STATUS).toString();
+                      BigDecimal gasUsed = new BigDecimal(rMap.get(Web3jService.TRANSACTION_GASUSED).toString());
+                      String transferStatus = "";
+                      if(status.equals("0")){
+                          transferStatus = "0";
+                      }else if(status.equals("1")){
+                          transferStatus = "1";
+                      }else if(status.equals("2")){
+                          transferStatus = "2";
+                      }
+                      String updateSql = "update lotterya_pm as lap_ set lap_.transfer_status='"+transferStatus+"'"+
+                              ",lap_.transfer_hash_value='"+hashvalue+"'"+
+                              ",lap_.transfer_status_time=now()"+
+                              ",lap_.transfer_gasfee="+gasUsed;
+                      bool = sqlMapper.update(updateSql+conditionSql) > 0 ? true : false;
+                  }
+              }else{
+                  bool = true;
+              }
+        }else{
+            bool = true;
+        }
+        return bool;
+    }
+
+   /**
+    * 修改A彩票提成表，转账状态
+     * @param transferStatus
+     * @param transferHashValue
+     * @param transferGasfee
+     * @return
+     */
+    public boolean updateLotteryAPmTransferStatus(String transferStatus,String transferHashValue,BigDecimal transferGasfee){
+        boolean bool = false;
+        if(StringUtils.isBlank(transferHashValue)|| StringUtils.isBlank(transferStatus)) return bool;
+        Wrapper<LotteryaPm> wrapper = new EntityWrapper<>();
+        wrapper.eq("transfer_hash_value",transferHashValue);
+        LotteryaPm lotteryaPm = new LotteryaPm();
+        lotteryaPm.setTransferHashValue(transferHashValue);
+        lotteryaPm.setTransferStatus(transferStatus);
+        lotteryaPm.setTransferStatusTime(new Date());
+        lotteryaPm.setTransferGasfee(transferGasfee);
+        bool = super.update(lotteryaPm,wrapper);
+        return bool;
+    }
+
+    /**
+     * 查询A彩票提成，转账等待确认的数据
+     * @return
+     */
+    public List<Map<String,Object>> findTransferStatusWait(){
+        List<Map<String,Object>> mapList = new ArrayList<>();
+        String sql = "select " +
+                        " lap_.transfer_hash_value as transferHashValue" +
+                    " from lotterya_pm as lap_" +
+                    " where lap_.status = '1' and lap_.transfer_status = '"+TRANSFER_STATUS_WAIT+"' and lap_.transfer_hash_value is not null and lap_.transfer_hash_value<>'' " +
+                    " group by transfer_hash_value";
+        SqlMapper sqlMapper = lotteryABaseService.getSqlMapper();
+        mapList = sqlMapper.selectList(sql);
+        return mapList;
+    }
 }

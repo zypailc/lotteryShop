@@ -2,28 +2,29 @@ package com.didu.lotteryshop.lotterya.service;
 
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.LoginUser;
-import com.didu.lotteryshop.common.enumeration.ResultCode;
 import com.didu.lotteryshop.common.service.GasProviderService;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
-import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.common.utils.Web3jUtils;
 import com.didu.lotteryshop.lotterya.contract.LotteryAContract;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.TransactionEncoder;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.utils.Convert;
+import org.web3j.utils.Numeric;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -56,6 +57,8 @@ public class Web3jService extends LotteryABaseService {
     /** 调节基金地址*/
     @Value("${adjustFundAddress}")
     private String adjustFundAddress;
+    /** 事务哈希值**/
+    public static final String TRANSACTION_HASHVALUE = "transaction_hashvalue";
     /** 是否确认状态，0未确认，1已确认，2失败 */
     public static final String TRANSACTION_STATUS = "transaction_status";
     /** 实际确认产生的gas费用 */
@@ -165,6 +168,14 @@ public class Web3jService extends LotteryABaseService {
     }
 
     /**
+     * 获取管理员Credentials
+     * @returnCredentials
+     */
+    public Credentials getManagerCredentials(){
+        return Credentials.create(managerPrivateKey);
+    }
+
+    /**
      * 获取登录用户钱包余额
      * @return ether
      */
@@ -227,6 +238,39 @@ public class Web3jService extends LotteryABaseService {
     }
 
     /**
+     * 管理员转账ETH
+     * @param toAddress
+     * @param etherValue
+     * @return
+     */
+    public Map<String,Object> managerSendToETH(String toAddress,BigDecimal etherValue){
+        Map<String,Object> reMap = new HashMap<>();
+        try {
+            Credentials credentials = this.getManagerCredentials();
+            EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(
+                    credentials.getAddress(), DefaultBlockParameterName.LATEST).send();
+            BigInteger nonce = ethGetTransactionCount.getTransactionCount();
+            RawTransaction rawTransaction = RawTransaction.createEtherTransaction(
+                    nonce, gasProviderService.getGasPrice(),
+                    gasProviderService.getGasLimit(),
+                    toAddress,
+                    Convert.toWei(etherValue, Convert.Unit.ETHER).toBigInteger()
+            );
+            byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);
+            String hexValue = Numeric.toHexString(signedMessage);
+            EthSendTransaction ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
+            String  transactionHashValue = ethSendTransaction.getTransactionHash();
+            //转账事务hash值，可用来查看交易是否被确认
+            reMap.put(TRANSACTION_HASHVALUE,transactionHashValue);
+            Map<String,Object> sMap = this.findTransactionStatus(transactionHashValue);
+            reMap.putAll(sMap);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return reMap;
+    }
+
+    /**
      * 查询交易状态
      * @param transactionHashValue 事务哈希码
      * @return Map
@@ -238,6 +282,7 @@ public class Web3jService extends LotteryABaseService {
             transactionReceipt = web3j.ethGetTransactionReceipt(transactionHashValue).send();
             //是否确认状态，0未确认，1已确认，2失败
             reMap.put(TRANSACTION_STATUS,0);
+            reMap.put(TRANSACTION_GASUSED,BigDecimal.ZERO);
             if (transactionReceipt.getTransactionReceipt().isPresent()) {
                 //状态，需要实际数据，修改状态
                 String status = transactionReceipt.getTransactionReceipt().get().getStatus();
@@ -247,6 +292,7 @@ public class Web3jService extends LotteryABaseService {
                     reMap.put(TRANSACTION_GASUSED,Web3jUtils.bigIntegerToBigDecimal(gasProviderService.getGasPrice().multiply(transactionReceipt.getTransactionReceipt().get().getGasUsed())).toPlainString());
                 }else if(Web3jUtils.transactionReceiptStatusFail(status)){
                     reMap.put(TRANSACTION_STATUS,2);
+                    reMap.put(TRANSACTION_GASUSED,Web3jUtils.bigIntegerToBigDecimal(gasProviderService.getGasPrice().multiply(transactionReceipt.getTransactionReceipt().get().getGasUsed())).toPlainString());
                 }
             }
         } catch (IOException e) {
