@@ -107,6 +107,16 @@ public class LotteryaDi extends Model<LotteryaDi> {
 	 */
 	@TableField("transfer_gasfee")
 	private BigDecimal transferGasfee;
+	/**
+	 * 经营分成比例（%）
+	 */
+	@TableField("operation_ratio")
+	private BigDecimal operationRatio;
+	/**
+	 * 经营分成总额（ether）
+	 */
+	@TableField("operation_total")
+	private BigDecimal operationTotal;
 
 
 	public Integer getId() {
@@ -245,6 +255,22 @@ public class LotteryaDi extends Model<LotteryaDi> {
 		this.transferGasfee = transferGasfee;
 	}
 
+	public BigDecimal getOperationRatio() {
+		return operationRatio;
+	}
+
+	public void setOperationRatio(BigDecimal operationRatio) {
+		this.operationRatio = operationRatio;
+	}
+
+	public BigDecimal getOperationTotal() {
+		return operationTotal;
+	}
+
+	public void setOperationTotal(BigDecimal operationTotal) {
+		this.operationTotal = operationTotal;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -270,6 +296,8 @@ public class LotteryaDi extends Model<LotteryaDi> {
 			", transferStatusTime=" + transferStatusTime +
 			", transferHashValue=" + transferHashValue +
 			", transferGasfee=" + transferGasfee +
+			", operationRatio=" + operationRatio +
+			", operationTotal=" + operationTotal +
 			"}";
 	}
 }

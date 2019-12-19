@@ -4,12 +4,10 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.common.entity.EsGdethconfig;
+import com.didu.lotteryshop.common.entity.EsGdethconfigAcquire;
 import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.entity.SysConfig;
-import com.didu.lotteryshop.common.service.form.impl.EsGdethaccountsServiceImpl;
-import com.didu.lotteryshop.common.service.form.impl.EsGdethconfigServiceImpl;
-import com.didu.lotteryshop.common.service.form.impl.MemberServiceImpl;
-import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
+import com.didu.lotteryshop.common.service.form.impl.*;
 import com.didu.lotteryshop.lotterya.entity.LotteryaDi;
 import com.didu.lotteryshop.lotterya.entity.LotteryaInfo;
 import com.didu.lotteryshop.lotterya.mapper.LotteryaDiMapper;
@@ -53,6 +51,8 @@ public class LotteryaDiServiceImpl extends ServiceImpl<LotteryaDiMapper, Lottery
     private SysConfigServiceImpl sysConfigService;
     @Autowired
     private LotteryABaseService lotteryABaseService;
+    @Autowired
+    private EsGdethconfigAcquireServiceImpl esGdethconfigAcquireService;
     /** 等待确认 */
     public static final String TRANSFER_STATUS_WAIT = "0";
     /** 已经确认 */
@@ -147,19 +147,27 @@ public class LotteryaDiServiceImpl extends ServiceImpl<LotteryaDiMapper, Lottery
                     lotteryaDi.setLuckCnts(luckCounts);
                     lotteryaDi.setActiveMcnts(activeMembers);
                     lotteryaDi.setLuckRatio(lotteryaInfo.getDrawPm());
-                    lotteryaDi.setDiRatio(esGdethconfig.getDiRatio());
+                    lotteryaDi.setOperationRatio(esGdethconfig.getDiRatio());
                     //推广分成 购买总金额*25%
                     BigDecimal diTotalAll = total.divide(new BigDecimal("100"))
                                                 .multiply(esGdethconfig.getDiRatio())
                                                 .setScale(4,BigDecimal.ROUND_DOWN);
                     //中奖提成
-                    BigDecimal luckDiTotal = diTotalAll.divide(new BigDecimal("100"))
+                    BigDecimal luckDiTotal = luckTotal.divide(new BigDecimal("100"))
                                                 .multiply(lotteryaInfo.getDrawPm())
                                                 .setScale(4,BigDecimal.ROUND_DOWN);
                     BigDecimal diTotal = diTotalAll.subtract(luckDiTotal);
+                    lotteryaDi.setOperationTotal(diTotal);
+                    //根据活跃人数查询从分成比例
+                    EsGdethconfigAcquire esGdethconfigAcquire = esGdethconfigAcquireService.findEsGdethconfigAcquireByActiveMembers(activeMembers);
+                    diTotal = diTotal.divide(new BigDecimal("100"))
+                            .multiply(esGdethconfigAcquire.getRatio())
+                            .setScale(4,BigDecimal.ROUND_DOWN);
+
                     diTotalCuntAll = diTotalCuntAll.add(diTotal);
 
                     lotteryaDi.setLuckDiTotal(luckDiTotal);
+                    lotteryaDi.setDiRatio(esGdethconfigAcquire.getRatio());
                     lotteryaDi.setDiTotal(diTotal);
                     lotteryaDi.setCreateTime(new Date());
                     lotteryaDi.setTransferHashValue("");

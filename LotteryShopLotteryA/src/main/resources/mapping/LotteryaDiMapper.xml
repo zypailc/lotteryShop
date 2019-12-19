@@ -21,6 +21,9 @@
 		<result column="transfer_status_time" property="transferStatusTime" />
 		<result column="transfer_hash_value" property="transferHashValue" />
 		<result column="transfer_gasfee" property="transferGasfee" />
+		<result column="operation_ratio" property="operationRatio" />
+		<result column="operation_total" property="operationTotal" />
+
 	</resultMap>
 
 </mapper>
