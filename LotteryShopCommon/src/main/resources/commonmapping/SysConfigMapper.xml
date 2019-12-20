@@ -11,6 +11,9 @@
 		<result column="lsb_to_eth" property="lsbToEth" />
 		<result column="di_address" property="diAddress" />
 		<result column="lsb_address" property="lsbAddress" />
+		<result column="manager_address" property="managerAddress" />
+		<result column="withdraw_ratio" property="withdrawRatio" />
+		<result column="lsbwithdraw_min" property="lsbwithdrawMin" />
 	</resultMap>
 
 </mapper>

@@ -53,6 +53,21 @@ public class SysConfig extends Model<SysConfig> {
 	 */
 	@TableField("lsb_address")
 	private String lsbAddress;
+	/**
+	 *系统平台管理员ETH钱包地址
+	 */
+	@TableField("manager_address")
+	private String managerAddress;
+	/**
+	 * ETH钱包提现手续费比例（%）
+	 */
+	@TableField("withdraw_ratio")
+	private BigDecimal withdrawRatio;
+	/**
+	 *平台币兑换Eth最低限制（平台币）
+	 */
+	@TableField("lsbwithdraw_min")
+	private BigDecimal lsbwithdrawMin;
 
 	public Integer getId() {
 		return id;
@@ -110,6 +125,30 @@ public class SysConfig extends Model<SysConfig> {
 		this.lsbAddress = lsbAddress;
 	}
 
+	public String getManagerAddress() {
+		return managerAddress;
+	}
+
+	public void setManagerAddress(String managerAddress) {
+		this.managerAddress = managerAddress;
+	}
+
+	public BigDecimal getWithdrawRatio() {
+		return withdrawRatio;
+	}
+
+	public void setWithdrawRatio(BigDecimal withdrawRatio) {
+		this.withdrawRatio = withdrawRatio;
+	}
+
+	public BigDecimal getLsbwithdrawMin() {
+		return lsbwithdrawMin;
+	}
+
+	public void setLsbwithdrawMin(BigDecimal lsbwithdrawMin) {
+		this.lsbwithdrawMin = lsbwithdrawMin;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -125,6 +164,9 @@ public class SysConfig extends Model<SysConfig> {
 			", lsbToEth=" + lsbToEth +
 			", diAddress=" + diAddress +
 			", lsbAddress=" + lsbAddress +
+			", managerAddress=" + managerAddress +
+			", withdrawRatio=" + withdrawRatio +
+			", lsbwithdrawMin=" + lsbwithdrawMin +
 			"}";
 	}
 }
