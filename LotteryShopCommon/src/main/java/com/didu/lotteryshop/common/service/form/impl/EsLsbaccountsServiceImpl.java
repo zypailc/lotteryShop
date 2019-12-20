@@ -235,16 +235,16 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
             BigDecimal balance = null;
             if(status == STATUS_SUCCESS){
                 if(esLsbaccounts.getType() == TYPE_IN) {
-                    balance = esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(), memberId, false);
+                    balance = esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(), esLsbaccounts.getMemberId(), false);
                 }else{
-                    balance = esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(), memberId, true);
+                    balance = esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(), esLsbaccounts.getMemberId(), true);
                 }
                 if(balance == null) return bool;
             }else if(status == STATUS_FAIL){
                 if(esLsbaccounts.getType() == TYPE_IN) {
-                    balance = esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(), memberId, true);
+                    balance = esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(), esLsbaccounts.getMemberId(), true);
                 }else{
-                    balance = esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(), memberId, false);
+                    balance = esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(), esLsbaccounts.getMemberId(), false);
                 }
                 if(balance == null) return bool;
             }
