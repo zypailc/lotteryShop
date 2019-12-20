@@ -234,10 +234,18 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
             esLsbaccounts.setStatusTime(new Date());
             BigDecimal balance = null;
             if(status == STATUS_SUCCESS){
-                balance =  esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(),memberId,true);
+                if(esLsbaccounts.getType() == TYPE_IN) {
+                    balance = esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(), memberId, false);
+                }else{
+                    balance = esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(), memberId, true);
+                }
                 if(balance == null) return bool;
             }else if(status == STATUS_FAIL){
-                balance =  esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(),memberId,false);
+                if(esLsbaccounts.getType() == TYPE_IN) {
+                    balance = esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(), memberId, true);
+                }else{
+                    balance = esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(), memberId, false);
+                }
                 if(balance == null) return bool;
             }
             esLsbaccounts.setBalance(balance);
