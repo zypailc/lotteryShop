@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.didu.lotteryshop.common.entity.EsDlbaccounts;
 import com.didu.lotteryshop.common.entity.EsLsbaccounts;
 import com.didu.lotteryshop.common.mapper.EsLsbaccountsMapper;
 import com.didu.lotteryshop.common.service.form.IEsLsbaccountsService;
@@ -58,7 +57,20 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
      * @return
      */
     public boolean addInSuccess(String memberId,String dicTypeValue,BigDecimal total,String operId){
-        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_SUCCESS,operId);
+        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_SUCCESS,operId,BigDecimal.ZERO,null);
+    }
+    /**
+     * 新增入账（成功）记录
+     * @param memberId 用户ID
+     * @param dicTypeValue sys_dic 字典表类型值
+     * @param total 金额
+     * @param operId  操作业务表主键ID
+     * @param  gasFee 燃气费
+     * @param  transferHashValue 转账事务哈希值
+     * @return
+     */
+    public boolean addInSuccess(String memberId,String dicTypeValue,BigDecimal total,String operId,BigDecimal gasFee,String transferHashValue){
+        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_SUCCESS,operId,gasFee,transferHashValue);
     }
     /**
      * 新增入账（处理中）记录
@@ -69,7 +81,19 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
      * @return
      */
     public boolean addInBeingprocessed(String memberId,String dicTypeValue,BigDecimal total,String operId){
-        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_BEINGPROCESSED,operId);
+        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO,null);
+    }
+    /**
+     * 新增入账（处理中）记录
+     * @param memberId 用户ID
+     * @param dicTypeValue sys_dic 字典表类型值
+     * @param total 金额
+     * @param operId  操作业务表主键ID
+     * @param  transferHashValue 转账事务哈希值
+     * @return
+     */
+    public boolean addInBeingprocessed(String memberId,String dicTypeValue,BigDecimal total,String operId,String transferHashValue){
+        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO,transferHashValue);
     }
 
     /**
@@ -81,7 +105,20 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
      * @return
      */
     public boolean addOutSuccess(String memberId,String dicTypeValue,BigDecimal total,String operId){
-        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_SUCCESS,operId);
+        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_SUCCESS,operId,BigDecimal.ZERO,null);
+    }
+    /**
+     * 新增出账（成功）记录
+     * @param memberId 用户ID
+     * @param dicTypeValue sys_dic 字典表类型值
+     * @param total 金额
+     * @param operId  操作业务表主键ID
+     * @param  gasFee 燃气费
+     * @param  transferHashValue 转账事务哈希值
+     * @return
+     */
+    public boolean addOutSuccess(String memberId,String dicTypeValue,BigDecimal total,String operId,BigDecimal gasFee,String transferHashValue){
+        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_SUCCESS,operId,gasFee,transferHashValue);
     }
     /**
      * 新增出账（处理中）记录
@@ -92,7 +129,19 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
      * @return
      */
     public boolean addOutBeingProcessed(String memberId,String dicTypeValue,BigDecimal total,String operId){
-        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_BEINGPROCESSED,operId);
+        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO,null);
+    }
+    /**
+     * 新增出账（处理中）记录
+     * @param memberId 用户ID
+     * @param dicTypeValue sys_dic 字典表类型值
+     * @param total 金额
+     * @param operId  操作业务表主键ID
+     * @param transferHashValue  转账事务哈希值
+     * @return
+     */
+    public boolean addOutBeingProcessed(String memberId,String dicTypeValue,BigDecimal total,String operId,String transferHashValue){
+        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO,transferHashValue);
     }
     /**
      * 新增记录
@@ -102,9 +151,11 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
      * @param total 金额
      * @param status 状态
      * @param operId  操作业务表主键ID
+     * @param  gasFee 燃气费
+     * @param  transferHashValue 转账事务哈希值
      * @return
      */
-    private boolean add(String memberId, String dicTypeValue, int type, BigDecimal total, int status, String operId){
+    private boolean add(String memberId, String dicTypeValue, int type, BigDecimal total, int status, String operId,BigDecimal gasFee,String transferHashValue){
         boolean bool = false;
         if(StringUtils.isNotBlank(memberId) && StringUtils.isNotBlank(dicTypeValue) && total != null
                 && status != STATUS_FAIL){ //新增时禁止直接插入失败数据，只有异步调用update来修改数据状态为失败
@@ -134,6 +185,8 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
             esLsbaccounts.setStatusTime(new Date());
             esLsbaccounts.setCreateTime(new Date());
             esLsbaccounts.setOperId(operId);
+            esLsbaccounts.setGasFee(gasFee);
+            esLsbaccounts.setTransferHashValue(transferHashValue);
             bool = super.insert(esLsbaccounts);
         }
         return bool;
