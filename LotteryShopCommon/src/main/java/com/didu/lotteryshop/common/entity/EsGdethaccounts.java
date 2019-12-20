@@ -74,6 +74,12 @@ public class EsGdethaccounts extends Model<EsGdethaccounts> {
 	@TableField("gas_fee")
 	private BigDecimal gasFee;
 
+	/**
+	 * 转账has码，用于异步查询转账状态
+	 */
+	@TableField("transfer_hash_value")
+	private String transferHashValue;
+
 
 	public Integer getId() {
 		return id;
@@ -163,6 +169,14 @@ public class EsGdethaccounts extends Model<EsGdethaccounts> {
 		this.gasFee = gasFee;
 	}
 
+	public String getTransferHashValue() {
+		return transferHashValue;
+	}
+
+	public void setTransferHashValue(String transferHashValue) {
+		this.transferHashValue = transferHashValue;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -182,6 +196,7 @@ public class EsGdethaccounts extends Model<EsGdethaccounts> {
 			", createTime=" + createTime +
 			", operId=" + operId +
 			", gasFee=" + gasFee +
+			", transferHashValue=" + transferHashValue +
 			"}";
 	}
 }

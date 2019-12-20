@@ -15,6 +15,7 @@
 		<result column="create_time" property="createTime" />
 		<result column="oper_id" property="operId" />
 		<result column="gas_fee" property="gasFee" />
+		<result column="transfer_hash_value" property="transferHashValue" />
 	</resultMap>
 
 </mapper>

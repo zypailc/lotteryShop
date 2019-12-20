@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.entity.EsEthaccounts;
-import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.mapper.EsEthaccountsMapper;
 import com.didu.lotteryshop.common.service.form.IEsEthaccountsService;
 import com.github.abel533.sql.SqlMapper;
@@ -79,7 +78,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * @return
      */
     public boolean addInSuccess(String memberId,String dicTypeValue,BigDecimal total,String operId){
-        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_SUCCESS,operId,BigDecimal.ZERO);
+        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_SUCCESS,operId,BigDecimal.ZERO,null);
     }
     /**
      * 新增入账（处理中）记录
@@ -90,7 +89,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * @return
      */
     public boolean addInBeingprocessed(String memberId,String dicTypeValue,BigDecimal total,String operId){
-        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO);
+        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO,null);
     }
 
     /**
@@ -103,7 +102,20 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * @return
      */
     public boolean addOutSuccess(String memberId,String dicTypeValue,BigDecimal total,String operId,BigDecimal gasFee){
-        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_SUCCESS,operId,gasFee);
+        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_SUCCESS,operId,gasFee,null);
+    }
+    /**
+     * 新增出账（成功）记录
+     * @param memberId 用户ID
+     * @param dicTypeValue sys_dic 字典表类型值
+     * @param total 金额
+     * @param operId  操作业务表主键ID
+     * @param gasFee gas手续费
+     * @param transferHashValue 转账事务哈希值
+     * @return
+     */
+    public boolean addOutSuccess(String memberId,String dicTypeValue,BigDecimal total,String operId,BigDecimal gasFee,String transferHashValue){
+        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_SUCCESS,operId,gasFee,transferHashValue);
     }
     /**
      * 新增出账（处理中）记录
@@ -114,8 +126,22 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * @return
      */
     public boolean addOutBeingProcessed(String memberId,String dicTypeValue,BigDecimal total,String operId){
-        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO);
+        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO,null);
     }
+
+    /**
+     * 新增出账（处理中）记录
+     * @param memberId 用户ID
+     * @param dicTypeValue sys_dic 字典表类型值
+     * @param total 金额
+     * @param operId  操作业务表主键ID
+     * @param  transferHashValue 转账事务哈希值
+     * @return
+     */
+    public boolean addOutBeingProcessed(String memberId,String dicTypeValue,BigDecimal total,String operId,String transferHashValue){
+        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO,transferHashValue);
+    }
+
 
 
     /**
@@ -127,9 +153,10 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * @param status 状态
      * @param operId  操作业务表主键ID
      * @param  gasFee 燃气费
+     * @param  transferHashValue 转账事务哈希值
      * @return
      */
-    private boolean add(String memberId, String dicTypeValue, int type,BigDecimal total,int status,String operId,BigDecimal gasFee){
+    private boolean add(String memberId, String dicTypeValue, int type,BigDecimal total,int status,String operId,BigDecimal gasFee,String transferHashValue){
         boolean bool = false;
         if(StringUtils.isNotBlank(memberId) && StringUtils.isNotBlank(dicTypeValue) && total != null
                 && status != STATUS_FAIL){ //新增时禁止直接插入失败数据，只有异步调用update来修改数据状态为失败
@@ -166,6 +193,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
             esEthaccounts.setCreateTime(new Date());
             esEthaccounts.setOperId(operId);
             esEthaccounts.setGasFee(gasFee);
+            esEthaccounts.setTransferHashValue(transferHashValue);
             bool = super.insert(esEthaccounts);
         }
         return bool;
