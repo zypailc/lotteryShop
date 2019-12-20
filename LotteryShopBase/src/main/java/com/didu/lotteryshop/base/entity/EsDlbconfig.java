@@ -48,6 +48,12 @@ public class EsDlbconfig extends Model<EsDlbconfig> {
 	@TableField("c_level")
 	private Integer cLevel;
 
+	/**
+	 * 计算周期（天）
+	 */
+	@TableField("calculate_day")
+	private Integer calculateDay;
+
 
 	public Integer getId() {
 		return id;
@@ -89,6 +95,14 @@ public class EsDlbconfig extends Model<EsDlbconfig> {
 		this.cLevel = cLevel;
 	}
 
+	public Integer getCalculateDay() {
+		return calculateDay;
+	}
+
+	public void setCalculateDay(Integer calculateDay) {
+		this.calculateDay = calculateDay;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -102,6 +116,7 @@ public class EsDlbconfig extends Model<EsDlbconfig> {
 			", consumeTotal=" + consumeTotal +
 			", createTime=" + createTime +
 			", cLevel=" + cLevel +
+			", calculateDay=" + calculateDay +
 			"}";
 	}
 }

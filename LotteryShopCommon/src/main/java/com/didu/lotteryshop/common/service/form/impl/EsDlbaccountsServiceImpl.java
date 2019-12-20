@@ -4,18 +4,18 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.entity.EsDlbaccounts;
-import com.didu.lotteryshop.common.entity.EsEthaccounts;
 import com.didu.lotteryshop.common.mapper.EsDlbaccountsMapper;
 import com.didu.lotteryshop.common.service.form.IEsDlbaccountsService;
+import com.github.abel533.sql.SqlMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -29,6 +29,8 @@ import java.util.List;
 public class EsDlbaccountsServiceImpl extends ServiceImpl<EsDlbaccountsMapper, EsDlbaccounts> implements IEsDlbaccountsService {
     @Autowired
     private EsDlbwalletServiceImpl esDlbwalletService;
+    @Autowired
+    private BaseService baseService;
 
     /** dic_type 在sys_dic字段值*/
     public static String DIC_TYPE = "dlbaccounts_dictype";
@@ -230,5 +232,25 @@ public class EsDlbaccountsServiceImpl extends ServiceImpl<EsDlbaccountsMapper, E
         wrapper.orderBy("create_time",false);
         Page<EsDlbaccounts> pageDlbRecord = new Page<EsDlbaccounts>(currentPage,pageSize);
         return super.selectPage(pageDlbRecord,wrapper);
+    }
+
+    /**
+     * 根据天数查询是否有结算账款数据。
+     * @param day
+     * @return
+     */
+    public  boolean findToSAByDay(int day){
+        boolean bool = false;
+        SqlMapper sqlMapper = baseService.getSqlMapper();
+        String sql = "select " +
+                " count(eda_.id) as cnts " +
+                " from es_dlbaccounts eda_" +
+                " where eda_.status in(0,1) and eda_.dic_type = '"+DIC_TYPE_DRAW+"'" +
+                " and DATE_SUB(CURDATE(), INTERVAL "+day+" DAY) <= date(eda_.create_time)";
+        Map<String,Object> rMap = sqlMapper.selectOne(sql);
+        if(rMap != null && !rMap.isEmpty() && rMap.get("cnts") != null && Integer.valueOf(rMap.get("cnts").toString()) > 0){
+            bool = true;
+        }
+        return bool;
     }
 }

@@ -8,6 +8,8 @@
 		<result column="cycle_day" property="cycleDay" />
 		<result column="consume_total" property="consumeTotal" />
 		<result column="create_time" property="createTime" />
+		<result column="c_level" property="cLevel" />
+		<result column="calculate_day" property="calculateDay" />
 	</resultMap>
 
 </mapper>
