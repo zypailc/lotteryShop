@@ -60,7 +60,7 @@ public class TaskGdEthCalculateService extends BaseBaseService {
                     //新注册的会员未到结算周期
                     if(member.getCreateTime().compareTo(calculateDate) > 0) continue;
                     //周期内有结账数据，有下一条，无则进行结账
-                    if(esGdethaccountsService.findToSAByDay(esGdethconfigWithdraw.getwDay())) continue;
+                    if(esGdethaccountsService.findToSAByDay(member.getId(),esGdethconfigWithdraw.getwDay())) continue;
                     //结账
                     Map<String,Object> rMap = web3jService.divideIntoManagerSendToETH(member.getPAddress(),egew.getBalance());
                     if(rMap != null && !rMap.isEmpty()){

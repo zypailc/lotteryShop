@@ -59,7 +59,7 @@ public class TaskDlbCalculateService {
                 //新注册的会员未到结算周期
                 if(member.getCreateTime().compareTo(calculateDate) > 0) continue;
                 //周期内是否已经结算过，结算过下一条
-                if(esDlbaccountsService.findToSAByDay(esDlbconfig.getCalculateDay())) continue;
+                if(esDlbaccountsService.findToSAByDay(member.getId(),esDlbconfig.getCalculateDay())) continue;
                 consumeTotal = BigDecimal.ZERO;
                 consumeTotal = esEthaccountsService.findConsumeTotalByDay(edw.getMemberId(),esDlbconfig.getCycleDay());
                 //满足第一条件（周期内消费达到）

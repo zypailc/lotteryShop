@@ -173,6 +173,7 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
         }
         return bool;
     }
+
     /**
      * 修改账目记录（成功）
      * @param memberId 会议ID
@@ -181,7 +182,7 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
      * @return
      */
     public boolean updateSuccess(String memberId,String dicTypeValue,String operId){
-        return this.update(memberId,dicTypeValue,operId,STATUS_SUCCESS,BigDecimal.ZERO);
+        return this.update(memberId,dicTypeValue,operId,STATUS_SUCCESS,BigDecimal.ZERO,null);
     }
     /**
      * 修改账目记录（成功）
@@ -192,7 +193,7 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
      * @return
      */
     public boolean updateSuccess(String memberId,String dicTypeValue,String operId,BigDecimal gasFee){
-        return this.update(memberId,dicTypeValue,operId,STATUS_SUCCESS,gasFee);
+        return this.update(memberId,dicTypeValue,operId,STATUS_SUCCESS,gasFee,null);
     }
     /**
      * 修改账目记录（失败）
@@ -202,9 +203,34 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
      * @return
      */
     public boolean updateFail(String memberId,String dicTypeValue,String operId){
-        return this.update(memberId,dicTypeValue,operId,STATUS_FAIL,BigDecimal.ZERO);
+        return this.update(memberId,dicTypeValue,operId,STATUS_FAIL,BigDecimal.ZERO,null);
     }
 
+    /**
+     * 修改账目记录（成功）
+     * @param id 主键ID
+     * @return
+     */
+    public boolean updateSuccessById(Integer id){
+        return this.update(null,null,null,STATUS_SUCCESS,BigDecimal.ZERO,id);
+    }
+    /**
+     * 修改账目记录（成功）
+     * @param id 主键ID
+     * @param gasFee 燃气费
+     * @return
+     */
+    public boolean updateSuccessById(Integer id,BigDecimal gasFee){
+        return this.update(null,null,null,STATUS_SUCCESS,gasFee,id);
+    }
+    /**
+     * 修改账目记录（失败）
+     * @param id 操作业务表主键ID
+     * @return
+     */
+    public boolean updateFailById(Integer id){
+        return this.update(null,null,null,STATUS_FAIL,BigDecimal.ZERO,id);
+    }
 
 
     /**
@@ -214,14 +240,20 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
      * @param operId 操作业务表主键ID
      * @param status 状态
      * @param gasFee 燃气费
+     * @param id 主键ID
      * @return
      */
-    private  boolean update(String memberId,String dicTypeValue,String operId,int status,BigDecimal gasFee){
+    private  boolean update(String memberId,String dicTypeValue,String operId,int status,BigDecimal gasFee,Integer id){
         boolean bool = false;
-        if(StringUtils.isBlank(dicTypeValue) || StringUtils.isBlank(operId)) return bool;
-        Wrapper<EsGdethaccounts> wrapper = new EntityWrapper<>();
-        wrapper.eq("member_id",memberId).and().eq("dic_type",dicTypeValue).and().eq("oper_id",operId);
-        EsGdethaccounts  esGdethaccounts = super.selectOne(wrapper);
+        EsGdethaccounts  esGdethaccounts = null;
+        if(id != null){
+            esGdethaccounts = super.selectById(id);
+        }else{
+            if(StringUtils.isBlank(dicTypeValue) || StringUtils.isBlank(operId)) return bool;
+            Wrapper<EsGdethaccounts> wrapper = new EntityWrapper<>();
+            wrapper.eq("member_id",memberId).and().eq("dic_type",dicTypeValue).and().eq("oper_id",operId);
+            esGdethaccounts = super.selectOne(wrapper);
+        }
         gasFee = gasFee == null ? BigDecimal.ZERO : gasFee;
         if(esGdethaccounts != null &&  esGdethaccounts.getStatus() != STATUS_FAIL && esGdethaccounts.getStatus() != STATUS_SUCCESS){
             esGdethaccounts.setStatus(status);
@@ -229,12 +261,12 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
             esGdethaccounts.setGasFee(gasFee);
             BigDecimal balance = null;
             if(status == STATUS_SUCCESS){
-                balance = esGdethwalletService.updateBalance(gasFee,memberId,false);
+                balance = esGdethwalletService.updateBalance(gasFee,esGdethaccounts.getMemberId(),false);
                 if(balance == null) return bool;
-                balance =  esGdethwalletService.updateSubtractFreeze(esGdethaccounts.getAmount(),memberId,true);
+                balance =  esGdethwalletService.updateSubtractFreeze(esGdethaccounts.getAmount(),esGdethaccounts.getMemberId(),true);
                 if(balance == null) return bool;
             }else if(status == STATUS_FAIL){
-                balance =  esGdethwalletService.updateSubtractFreeze(esGdethaccounts.getAmount(),memberId,false);
+                balance =  esGdethwalletService.updateSubtractFreeze(esGdethaccounts.getAmount(),esGdethaccounts.getMemberId(),false);
                 if(balance == null) return bool;
             }
             esGdethaccounts.setBalance(balance);
@@ -287,20 +319,34 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
     /**
      * 根据天数查询是否有结算账款数据。
      * @param day
+     * @param memberId
      * @return
      */
-    public  boolean findToSAByDay(int day){
+    public  boolean findToSAByDay(String memberId,int day){
         boolean bool = false;
         SqlMapper sqlMapper = baseService.getSqlMapper();
         String sql = "select " +
                          " count(egea_.id) as cnts " +
                     " from es_gdethaccounts egea_" +
                     " where egea_.status in(0,1) and egea_.dic_type = '"+DIC_TYPE_SA+"'" +
+                        " and egea_.member_id='"+memberId+"'"+
                         " and DATE_SUB(CURDATE(), INTERVAL "+day+" DAY) <= date(egea_.create_time)";
         Map<String,Object> rMap = sqlMapper.selectOne(sql);
         if(rMap != null && !rMap.isEmpty() && rMap.get("cnts") != null && Integer.valueOf(rMap.get("cnts").toString()) > 0){
             bool = true;
         }
         return bool;
+    }
+
+    /**
+     * 查询等待处理的结账数据
+     * @return List<EsGdethaccounts>
+     */
+    public List<EsGdethaccounts> findSATransferStatusWait(){
+        Wrapper<EsGdethaccounts> wrapper = new EntityWrapper<>();
+        wrapper.and("transfer_hash_value is not null and transfer_hash_value<>''")
+                .and().eq("status",EsGdethaccountsServiceImpl.STATUS_BEINGPROCESSED)
+                .and().eq("dic_type",EsGdethaccountsServiceImpl.DIC_TYPE_SA);
+        return super.selectList(wrapper);
     }
 }

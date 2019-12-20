@@ -237,15 +237,17 @@ public class EsDlbaccountsServiceImpl extends ServiceImpl<EsDlbaccountsMapper, E
     /**
      * 根据天数查询是否有结算账款数据。
      * @param day
+     * @param memberId
      * @return
      */
-    public  boolean findToSAByDay(int day){
+    public  boolean findToSAByDay(String memberId,int day){
         boolean bool = false;
         SqlMapper sqlMapper = baseService.getSqlMapper();
         String sql = "select " +
                 " count(eda_.id) as cnts " +
                 " from es_dlbaccounts eda_" +
                 " where eda_.status in(0,1) and eda_.dic_type = '"+DIC_TYPE_DRAW+"'" +
+                " and eda_.member_id='"+memberId+"' "+
                 " and DATE_SUB(CURDATE(), INTERVAL "+day+" DAY) <= date(eda_.create_time)";
         Map<String,Object> rMap = sqlMapper.selectOne(sql);
         if(rMap != null && !rMap.isEmpty() && rMap.get("cnts") != null && Integer.valueOf(rMap.get("cnts").toString()) > 0){
