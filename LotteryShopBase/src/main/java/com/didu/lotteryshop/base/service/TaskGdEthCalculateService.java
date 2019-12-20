@@ -5,10 +5,12 @@ import com.didu.lotteryshop.common.entity.EsGdethconfigWithdraw;
 import com.didu.lotteryshop.common.entity.EsGdethwallet;
 import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.service.form.impl.*;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -46,15 +48,20 @@ public class TaskGdEthCalculateService extends BaseBaseService {
             EsGdethconfig esGdethconfig = esGdethconfigService.findEsGdethconfig();
             Integer cLevel = esGdethconfig.getcLevel();
             cLevel = cLevel == -1 ? null : cLevel;
+
             for(EsGdethwallet egew : esGdethwalletList){
                 //下级活跃人数
                 int activeMembers = memberService.findActiveMembers(egew.getMemberId(),esGdethconfig.getConsumeTotal(),cLevel,esGdethconfig.getCycleDay());
                 EsGdethconfigWithdraw esGdethconfigWithdraw = esGdethconfigWithdrawService.findEsGdethconfigWithdrawByActiveMembers(activeMembers);
                 if(esGdethconfigWithdraw != null){
+                    //结算周期
+                    Date calculateDate = DateUtils.addDays(new Date(),-esGdethconfigWithdraw.getwDay());
+                    Member member = memberService.selectById(egew.getMemberId());
+                    //新注册的会员未到结算周期
+                    if(member.getCreateTime().compareTo(calculateDate) > 0) continue;
                     //周期内有结账数据，有下一条，无则进行结账
                     if(esGdethaccountsService.findToSAByDay(esGdethconfigWithdraw.getwDay())) continue;
                     //结账
-                    Member member = memberService.selectById(egew.getMemberId());
                     Map<String,Object> rMap = web3jService.divideIntoManagerSendToETH(member.getPAddress(),egew.getBalance());
                     if(rMap != null && !rMap.isEmpty()){
                         String hashvalue = rMap.get(Web3jService.TRANSACTION_HASHVALUE).toString();

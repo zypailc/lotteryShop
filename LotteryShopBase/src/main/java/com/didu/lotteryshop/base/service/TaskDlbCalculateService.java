@@ -5,13 +5,16 @@ import com.didu.lotteryshop.base.entity.EsDlbconfigAcquire;
 import com.didu.lotteryshop.base.service.form.impl.EsDlbconfigAcquireServiceImpl;
 import com.didu.lotteryshop.base.service.form.impl.EsDlbconfigServiceImpl;
 import com.didu.lotteryshop.common.entity.EsDlbwallet;
+import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.service.form.impl.*;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,9 +50,14 @@ public class TaskDlbCalculateService {
         List<EsDlbwallet> esDlbwalletList = esDlbwalletService.findBalanceGtTen();
         if(esDlbwalletList != null && esDlbwalletList.size() > 0){
             EsDlbconfig esDlbconfig = esDlbconfigService.findEsDlbconfig();
-            int maxActiveMembers = esDlbconfigAcquireService.findMaxActiveMembers();
+            //int maxActiveMembers = esDlbconfigAcquireService.findMaxActiveMembers();
+            //结算周期
+            Date calculateDate = DateUtils.addDays(new Date(),-esDlbconfig.getCalculateDay());
             BigDecimal consumeTotal = BigDecimal.ZERO;
             for(EsDlbwallet edw : esDlbwalletList){
+                Member member = memberService.selectById(edw.getMemberId());
+                //新注册的会员未到结算周期
+                if(member.getCreateTime().compareTo(calculateDate) > 0) continue;
                 //周期内是否已经结算过，结算过下一条
                 if(esDlbaccountsService.findToSAByDay(esDlbconfig.getCalculateDay())) continue;
                 consumeTotal = BigDecimal.ZERO;
