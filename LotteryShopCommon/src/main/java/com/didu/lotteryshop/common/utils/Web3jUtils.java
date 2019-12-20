@@ -116,6 +116,7 @@ public class Web3jUtils {
      */
     public static boolean transactionReceiptStatusWait(String status){
         boolean bool = false;
+        //TODO 正式坏境测试，状态码，进行修改
         if(true){
             bool = true;
         }
@@ -128,6 +129,7 @@ public class Web3jUtils {
      */
     public static boolean transactionReceiptStatusFail(String status){
         boolean bool = false;
+        //TODO 正式坏境测试，状态码，进行修改
         if(true){
             bool = true;
         }
