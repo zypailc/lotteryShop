@@ -27,7 +27,13 @@ public class TestContract2 {
     @Test
   public void test(){
     try{
-        String xx = AesEncryptUtil.encrypt("3E5E0BC6DA93639AA9FA5C1E36091E552404F20A5D6F410788FA8B5CCBFF8E7F",Constants.AES_ETHMANAGER_PRIVATEKEY);
+        //平台币管理账户
+         String key = "70EC14BBA185AAF29938464E8F9042562A8A5AE48EFC3126B0A627984EE7B683";
+        //推广账户
+         //String key = "933B1C3A14704A82A5B6323CF9FEFE6150DD8BCD740EFBC88427BD0E223E2A37";
+        //A彩票管理员账号
+        // String key = "3E5E0BC6DA93639AA9FA5C1E36091E552404F20A5D6F410788FA8B5CCBFF8E7F";
+        String xx = AesEncryptUtil.encrypt(key,Constants.AES_ETHMANAGER_PRIVATEKEY);
         System.out.println(xx);
     }catch (Exception e){
 
