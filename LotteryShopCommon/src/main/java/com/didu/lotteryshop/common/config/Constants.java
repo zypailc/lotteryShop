@@ -29,8 +29,9 @@ public class Constants {
     /** 钱包名称加密密钥*/
     public static final  String KEY_THREE = "9d949958cccd454a";
     /** 静态资源的文件名*/
-    public static final  String []STATIC_RESOURCE_FILENAME = {"/plugins/","/js/","/lang/","/images/","/static/","/styles/"};
-
+    public static final  String[] STATIC_RESOURCE_FILENAME = {"/plugins/","/js/","/lang/","/images/","/static/","/styles/"};
+    /** 会员Eth钱包助记词**/
+    public  static final String MEMBER_MNEMONIC = "u5ki9nxj8eceyvjg";
 
 
     /**二维码背景图片id*/

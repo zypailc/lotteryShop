@@ -1,5 +1,6 @@
 package com.didu.lotteryshop.wallet.api.v1.service;
 
+import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.SysConfig;
 import com.didu.lotteryshop.common.service.GasProviderService;
 import com.didu.lotteryshop.common.utils.ResultUtil;
@@ -9,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.web3j.crypto.Bip39Wallet;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
@@ -50,7 +52,9 @@ public class WalletService extends WalletBaseService {
             return ResultUtil.errorJson("WalletFilePath not configured!");
         }
         try {
-            String fileName = WalletUtils.generateNewWalletFile(payPassword, new File(walletFilePath), false);
+            Bip39Wallet bip39Wallet = WalletUtils.generateBip39WalletFromMnemonic(payPassword,userId+Constants.MEMBER_MNEMONIC,new File(walletFilePath));
+            String fileName = bip39Wallet.getFilename();
+            //String fileName = WalletUtils.generateNewWalletFile(payPassword, new File(walletFilePath), false);
             Credentials ALICE = WalletUtils.loadCredentials(payPassword, walletFilePath+fileName);
             // System.out.println("fileName:"+fileName); //钱包文件名称
             //System.out.println(ALICE.getAddress());//钱包地址
@@ -65,13 +69,14 @@ public class WalletService extends WalletBaseService {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
         }
+//        } catch (InvalidAlgorithmParameterException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchProviderException e) {
+//            e.printStackTrace();
+//        }
         //生成eth钱包错误！
         return ResultUtil.errorJson("Error generating  eth wallet!");
     }

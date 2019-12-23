@@ -3,6 +3,7 @@ package com.didu.lotteryshop;
 import com.didu.lotteryshop.lotterya.contract.LotteryAContract;
 import org.junit.Test;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -29,8 +30,8 @@ public class TestContract {
             //查询所有账户余额
             fianAccountsBalance(web3j);
             //部署智能合约
-            String managerAddress = "0xbA1e2307bdF9F74375789e9E49AE1Aa30F52a635";
-            String managerPrivateKey = "0x45acdf957f67eb1ed889631d58111c37e2bb9ec84f434d814d6cfa73a63b6007";
+            String managerAddress = "0x0B723f261cdd874Bd2dF700a95d01E907c245EF0";
+            String managerPrivateKey = "0x49d5ad76622376539a9cd9aa00b3b154ae55bc5aeb998ea2c6f1e8b74d2dd364";
 
             //EthGetBalance ethGetBalance1 = web3j.ethGetBalance(managerAddress, DefaultBlockParameter.valueOf("latest")).send();
             //System.out.println("部署前账户余额："+bigIntegerToBigDecimal(ethGetBalance1.getBalance()));
@@ -57,9 +58,11 @@ public class TestContract {
             //37870671883850778949080478822205071849234530571768223490210874449181176623464
             //37870671883850778949080478822205071849234530571768223490210874449181176623464
             //37870671883850778949080478822205071849234530571768223490210874449181176623464
-           // Credentials credentials1 = Credentials.create("37870671883850778949080478822205071849234530571768223490210874449181176623464");
+           Credentials credentials1 = Credentials.create("37870671883850778949080478822205071849234530571768223490210874449181176623464");
             //Credentials credentials2 = new Credentials();
-            Credentials credentials1 = Credentials.create("37870671883850778949080478822205071849234530571768223490210874449181176623464","11618217269991821615218593357079731003858423955559408825389419986837277478149220225557283957473406432356002690773835466465284860131754276005873533539057535");
+//            ECKeyPair ecKeyPair = new ECKeyPair();
+//            Credentials.create();
+            //Credentials credentials1 = Credentials.create("37870671883850778949080478822205071849234530571768223490210874449181176623464","11618217269991821615218593357079731003858423955559408825389419986837277478149220225557283957473406432356002690773835466465284860131754276005873533539057535");
             LotteryAContract lotteryAContractLoad = LotteryAContract.load(contractAddress, web3j, credentials1, defaultGasProvider);
 
            String buyNum = randomLuckNum(3);

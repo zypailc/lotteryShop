@@ -41,8 +41,8 @@ import java.util.Map;
 @Service
 public class Web3jService extends LotteryABaseService {
     /** 生成钱包文件地址*/
-    @Value("${ethwallet.filePath}")
-    private String walletFilePath;
+//    @Value("${ethwallet.filePath}")
+//    private String walletFilePath;
     /** 主网络地址 */
     @Value("${ethwallet.web3j.url}")
     private String ethwalletWeb3jUrl;
@@ -133,7 +133,9 @@ public class Web3jService extends LotteryABaseService {
     public Credentials getLoginMemberCredentials(){
         try{
             LoginUser loginUser = super.getLoginUser();
-            return WalletUtils.loadCredentials(loginUser.getPaymentCode(), walletFilePath+loginUser.getWalletName());
+            return WalletUtils.loadBip39Credentials(loginUser.getPaymentCode(),loginUser.getId()+Constants.MEMBER_MNEMONIC);
+            //TODO 2019-12-23 lyl 注释，钱包文件生成，跨服务就没有办法生成，调整为助记词方式
+            //return WalletUtils.loadCredentials(loginUser.getPaymentCode(), walletFilePath+loginUser.getWalletName());
 
 // TODO 2019-12-11 lyl 注释，因返回钱包秘钥，直接用秘钥生成Credentials 无法进行操作。需要进一步研究。
 
