@@ -38,6 +38,8 @@ include("../common/common.js.html"){}
 				findLotteryIssue("the_lottery_record_id",false);
 			}
 		});
+
+
 		var loginUser = '${loginUser!}';
 		$(".ul_self_record").scroll(function(){
 			var viewH = $(this).height();
@@ -395,12 +397,16 @@ include("../common/common.js.html"){}
 		var li = dataObj.find("li:first-child");
 		if(flag){
 			issue = issue;
+			dataObj.attr("currentPage",'1');
+			dataObj.attr("isFind","true");
+			dataObj.attr("issus",issue);
+			currentPage = 1;
 			ul.html("");
 		}
 		$.ajax({
 			url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryBuy',
 			type:'get',
-			data:{"currentPage":currentPage,"pageSize":pageSize,"lotteryaBuy.lotteryaIssueId":issue,"type":2},
+			data:{"currentPage":currentPage,"pageSize":pageSize,"lotteryaIssueId":issue,"type":2},
 			dataType:"json",
 			success:function (result) {
 				var dataInfo = result.extend.data;
@@ -422,15 +428,18 @@ include("../common/common.js.html"){}
 						new_li.find(".multiples").html(data.multipleNum + " Multiples");
 						ul.append(new_li);
 					})
+					dataObj.attr("currentPage",parseInt(currentPage) + 1);
+					dataObj.attr("pageSize",pageSize);
 					if (dataInfo.length < pageSize) {
 						ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
 					}
 				}
-				open_lottery_issue_record();
+				if(flag){
+					open_lottery_issue_record();
+				}
 			}
 		})
-		dataObj.attr("currentPage",parseInt(currentPage) + 1);
-		dataObj.attr("pageSize",pageSize);
+
 	}
 	function open_lottery_issue_record(){
 		layer.open({
@@ -439,8 +448,19 @@ include("../common/common.js.html"){}
 			closeBtn: 0,
 			shadeClose: true,
 			scrollbar:false,
+			skin: 'issue-record-class',
 			area:  ['auto','auto'],            //宽高自适应
 			content: $(".lottery_winning_record").html()
+		});
+
+		$(".issue-record-class").find(".layer_open_lottery_issue").scroll(function(){
+			var $this =$(this),
+					viewH =$(this).height(),//可见高度
+					contentH =$(this).get(0).scrollHeight,//内容高度
+					scrollTop =$(this).scrollTop();//滚动高度
+			if(scrollTop/(contentH -viewH) >= 0.95){ //当滚动到距离底部5%时
+				findWinningRecord(false,'lottery_winning_record_ul');
+			}
 		});
 	}
 </script>
@@ -679,7 +699,7 @@ include("../common/common.js.html"){}
 				<li>
 					<p><span class="memberName">on</span> </p>
 					<p><span class="email">on@xx.xx</span></p>
-					<P><span class="luckNum"> 0ETH</span> <span class="multiples"> 0 Multiples </span> </P>
+					<P><span class="luckNum span_right"> 0ETH</span> <span class="multiples"> 0 Multiples </span> </P>
 					<hr>
 				</li>
 			</ul>

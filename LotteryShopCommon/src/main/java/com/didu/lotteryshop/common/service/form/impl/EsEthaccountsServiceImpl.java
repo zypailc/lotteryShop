@@ -55,6 +55,10 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
     public static String DIC_TYPE_PLATFEE = "7";
     /** 推广结算账款 **/
     public static String DIC_TYPE_GSA = "8";
+    /** Lsb提现**/
+    public static String DIC_TYPE_LSBTOETH = "9";
+    /** Lsb充值 **/
+    public static String DIC_TYPE_ETHTOLSB = "10";
 
 
 
@@ -206,7 +210,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * @return
      */
     public boolean updateSuccess(String memberId,String dicTypeValue,String operId){
-        return this.update(memberId,dicTypeValue,operId,STATUS_SUCCESS,BigDecimal.ZERO);
+        return this.update(memberId,dicTypeValue,operId,STATUS_SUCCESS,BigDecimal.ZERO,null);
     }
     /**
      * 修改账目记录（成功）
@@ -217,8 +221,20 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * @return
      */
     public boolean updateSuccess(String memberId,String dicTypeValue,String operId,BigDecimal gasFee){
-        return this.update(memberId,dicTypeValue,operId,STATUS_SUCCESS,gasFee);
+        return this.update(memberId,dicTypeValue,operId,STATUS_SUCCESS,gasFee,null);
     }
+
+    /**
+     * 修改账目记录（成功）
+     * @param id 账目记录Id
+     * @param dicTypeValue sys_dic 字典表类型值
+     * @param gasFee 燃气费
+     * @return
+     */
+    public boolean updateSuccess(Integer id,String dicTypeValue,BigDecimal gasFee){
+        return  this.update(null,dicTypeValue,null,STATUS_SUCCESS,gasFee,id);
+    }
+
     /**
      * 修改账目记录（失败）
      * @param memberId 会议ID
@@ -227,9 +243,18 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * @return
      */
     public boolean updateFail(String memberId,String dicTypeValue,String operId){
-        return this.update(memberId,dicTypeValue,operId,STATUS_FAIL,BigDecimal.ZERO);
+        return this.update(memberId,dicTypeValue,operId,STATUS_FAIL,BigDecimal.ZERO,null);
     }
 
+    /**
+     * 修改账目记录（失败）
+     * @param id 账目记录Id
+     * @param dicTypeValue sys_dic 字典表类型值
+     * @return
+     */
+    public boolean updateFail(Integer id,String dicTypeValue){
+        return this.update(null,dicTypeValue,null,STATUS_FAIL,BigDecimal.ZERO,id);
+    }
 
 
     /**
@@ -241,13 +266,19 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * @param gasFee 燃气费
      * @return
      */
-    private  boolean update(String memberId,String dicTypeValue,String operId,int status,BigDecimal gasFee){
+    private  boolean update(String memberId,String dicTypeValue,String operId,int status,BigDecimal gasFee,Integer id){
         boolean bool = false;
-        if(StringUtils.isBlank(dicTypeValue) || StringUtils.isBlank(operId)) return bool;
-        Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
-        wrapper.eq("member_id",memberId).and().eq("dic_type",dicTypeValue).and().eq("oper_id",operId);
-        EsEthaccounts  esEthaccounts = super.selectOne(wrapper);
+        EsEthaccounts  esEthaccounts = null;
+        if(id != null && !"".equals(id)){
+            esEthaccounts = super.selectById(id);
+        }else {
+            if(StringUtils.isBlank(dicTypeValue) || StringUtils.isBlank(operId)) return bool;
+            Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
+            wrapper.eq("member_id",memberId).and().eq("dic_type",dicTypeValue).and().eq("oper_id",operId);
+            esEthaccounts = super.selectOne(wrapper);
+        }
         gasFee = gasFee == null ? BigDecimal.ZERO : gasFee;
+
         if(esEthaccounts != null &&  esEthaccounts.getStatus() != STATUS_FAIL && esEthaccounts.getStatus() != STATUS_SUCCESS){
             esEthaccounts.setStatus(status);
             esEthaccounts.setStatusTime(new Date());
@@ -281,6 +312,15 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
         wrapper.eq("member_id",memberId)
                 .and().eq("type",TYPE_OUT)
                 .and().eq("status",STATUS_BEINGPROCESSED);
+        return super.selectList(wrapper);
+    }
+
+    /**
+     * 查询Eth记录里面所有待处理的数据
+     */
+    public List<EsEthaccounts> findSATransferStatusWait(){
+        Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
+        wrapper.and().eq("type",TYPE_OUT).eq("status",STATUS_BEINGPROCESSED);
         return super.selectList(wrapper);
     }
 

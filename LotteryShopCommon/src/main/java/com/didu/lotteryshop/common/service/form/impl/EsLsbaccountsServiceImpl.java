@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -200,8 +201,20 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
      * @return
      */
     public boolean updateSuccess(String memberId,String dicTypeValue,String operId){
-        return this.update(memberId,dicTypeValue,operId,STATUS_SUCCESS);
+        return this.update(memberId,dicTypeValue,operId,STATUS_SUCCESS,null,null);
     }
+
+    /**
+     * 修改账目记录（成功）
+     * @param id 账目流水Id
+     * @param dicTypeValue sys_dic 字典表类型值
+     * @param gasFee 燃气费
+     * @return
+     */
+    public boolean updateSuccess(Integer id,String dicTypeValue,BigDecimal gasFee){
+        return this.update(null,dicTypeValue,null,STATUS_SUCCESS,gasFee,id);
+    }
+
     /**
      * 修改账目记录（失败）
      * @param memberId 会议ID
@@ -210,7 +223,17 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
      * @return
      */
     public boolean updateFail(String memberId,String dicTypeValue,String operId){
-        return this.update(memberId,dicTypeValue,operId,STATUS_FAIL);
+        return this.update(memberId,dicTypeValue,operId,STATUS_FAIL,null,null);
+    }
+
+    /**
+     * 修改账目记录（失败）
+     * @param id 账目流水Id
+     * @param dicTypeValue sys_dic 字典表类型值
+     * @return
+     */
+    public boolean updateFail(Integer id,String dicTypeValue){
+        return this.update(null,dicTypeValue,null,STATUS_FAIL,null,id);
     }
 
 
@@ -223,13 +246,20 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
      * @param status 状态
      * @return
      */
-    private  boolean update(String memberId,String dicTypeValue,String operId,int status){
+    private  boolean update(String memberId,String dicTypeValue,String operId,int status,BigDecimal gasFee,Integer id){
         boolean bool = false;
-        if(StringUtils.isBlank(dicTypeValue) || StringUtils.isBlank(operId)) return bool;
-        Wrapper<EsLsbaccounts> wrapper = new EntityWrapper<>();
-        wrapper.eq("member_id",memberId).and().eq("dic_type",dicTypeValue).and().eq("oper_id",operId);
-        EsLsbaccounts  esLsbaccounts = super.selectOne(wrapper);
+        EsLsbaccounts  esLsbaccounts = null; //
+        if(id != null && id > 0) {
+            esLsbaccounts = super.selectById(id);
+        }else {
+            if (StringUtils.isBlank(dicTypeValue) || StringUtils.isBlank(operId)) return bool;
+            Wrapper<EsLsbaccounts> wrapper = new EntityWrapper<>();
+            wrapper.eq("member_id", memberId).and().eq("dic_type", dicTypeValue).and().eq("oper_id", operId);
+            esLsbaccounts = super.selectOne(wrapper);
+        }
+
         if(esLsbaccounts != null &&  esLsbaccounts.getStatus() != STATUS_FAIL && esLsbaccounts.getStatus() != STATUS_SUCCESS){
+
             esLsbaccounts.setStatus(status);
             esLsbaccounts.setStatusTime(new Date());
             BigDecimal balance = null;
@@ -247,6 +277,11 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
                     balance = esLsbwalletService.updateSubtractFreeze(esLsbaccounts.getAmount(), esLsbaccounts.getMemberId(), false);
                 }
                 if(balance == null) return bool;
+            }
+            //增加燃气费（可能产生燃气费）
+            gasFee = gasFee == null ? BigDecimal.ZERO : gasFee;
+            if(gasFee != BigDecimal.ZERO){
+                esLsbaccounts.setGasFee(gasFee);
             }
             esLsbaccounts.setBalance(balance);
             bool = super.updateById(esLsbaccounts);
@@ -284,4 +319,15 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
         Page<EsLsbaccounts> pageLsbRecord = new Page<EsLsbaccounts>(currentPage,pageSize);
         return super.selectPage(pageLsbRecord,wrapper);
     }
+
+    /**
+     * 查询所有Lsb和Eth
+     * @return
+     */
+    public List<EsLsbaccounts> findSATransferStatusWait(){
+        Wrapper<EsLsbaccounts> wrapper = new EntityWrapper<>();
+        wrapper.and().eq("status",STATUS_BEINGPROCESSED);
+        return super.selectList(wrapper);
+    }
+
 }

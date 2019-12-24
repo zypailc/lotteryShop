@@ -34,6 +34,17 @@
     "expenditure": "Payment amount : ",
     "bounty": "Amount of bonus : ",
     "confirm": "confirm",
-    "putMoney": "PM"
+    "putMoney": "PM",
+    "update" : "Update",
+    "withdrawCash": "Withdraw cash",
+    "expend": "expend",
+    "recorded": "recorded",
+    "balance1": "balance",
+    "recharge": "recharge",
+    "address": "address",
+    "total": "total",
+    "freeze": "freeze",
+    "recharge": "recharge",
+    "exchange": "exchange"
   }
 }

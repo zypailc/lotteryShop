@@ -3,11 +3,11 @@
 <head>
     <!-- commonality  meta and title -->
     <%
-    include("../../common/common.meta.html"){}
+    include("../../../common/common.meta.html"){}
     %>
     <!-- commonality style -->
     <%
-    include("../../common/common.css.html"){}
+    include("../../../common/common.css.html"){}
     %>
     <link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
     <link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
@@ -16,77 +16,78 @@
 </head>
 <!-- commonality js -->
 <%
-include("../../common/common.js.html"){}
+include("../../../common/common.js.html"){}
 %>
 <script src="../js/portfolio_custom.js"></script>
-<script src="../js/lotteryshop/person_center.js"></script>
+<script src="../js/lotteryshop/person_center.js" ></script>
 <script>
     $(function(){
         $(".back").click(function(){
             history.back();
         });
-        //var window_height = document.documentElement.clientHeight;
-        $(".generalizePersonal").scroll(function(){
-            var $this =$(this),
-                viewH =$(this).height() - 90,//可见高度
-                contentH =$(this).get(0).scrollHeight,//内容高度
-                scrollTop =$(this).scrollTop();//滚动高度
-            if(scrollTop/(contentH - viewH) >= 0.95){ //当滚动到距离底部5%时
-                gengeralizeMemberInit(false,'generalizePersonal');
-            }
-        });
-
-        gengeralizeMemberInit(true,'generalizePersonal');
-
     })
-
 </script>
 <style>
-    li{
-        margin: 5px;
-        border-radius: 5px;
-        background: #f8f9fa;
-        padding: 5px;
+    .create_wallet_local{
+        text-align: center;
     }
-    .base_head{
-        padding-top: 90px;
-        overflow: auto;
+    .wallet_content{
+        margin-top: 25px;
     }
-    .span_title{
-        font-size: 15px;
-        color: #909090;
+    .wallet_password_input{
+        width: 98%;
+        margin-bottom: 20px;
     }
-    .ul_personal_generalizePersonal{
+    .div_btn{
+        text-align: center;
         width: 100%;
-        text-align: left;
+    }
+    .layui_btn_bottom{
+        margin: 15px;
+        height: 45px;
+    }
+    .button_display{
+        display: block;
     }
 </style>
 <body class="body_top">
 
 <div class="super_container">
 
-    <!-- 引入头部文件 -->
+    <!-- commonality head -->
     <%
-    include("../../common/top.html"){}
+    include("../../../common/top.html"){}
     %>
     <!-- Home -->
-
-
-    <div class="base_head card-1 card-1_scroll generalizePersonal">
-        <ul class="ul_personal_generalizePersonal">
-            <li>
-                <div>
-                    <p><span class="span_title generalizePersonalRecordNikeName"></span></p>
-                    <p><span class="generalizePersonalRecordEmail"></span></p>
+    <div class="base_head">
+        <div class="wallet_phone">
+            <div class="wallet_extract">
+                <% if(has(loginUser)  && loginUser.bAddress != ''){ %>
+                <div class="wallet_address_self">
+                    <p><span class="title_span_1">wallet address</span></p>
+                    <p><span>${loginUser.bAddress!"error"}</span></p>
+                    <input class="input_class_2 wallet_password_input" type="text" name="update_bAddress" placeholder="wallet address">
+                    <div class="div_btn">
+                        <a class="wallet_button button_display" href="#" onclick="update_confirm()">Update</a>
+                    </div>
                 </div>
-                <hr class="hrEth">
-            </li>
-        </ul>
+                <% }else{ %>
+                <div class="wallet_extract">
+                    <input class="input_class_2 wallet_password_input" type="text" id="bAddress" name="bAddress" placeholder="wallet address">
+                    <input class="input_class_2 wallet_password_input" type="password" id="paymentCode" name="paymentCode" placeholder="password">
+                    <input class="input_class_2 wallet_password_input" type="password" id="paymentCodeConfirm" name="paymentCodeConfirm" placeholder="confirm password">
+                    <div class="div_btn">
+                        <a onclick="create_confirm()" href="#" class="wallet_button button_display">confirm</a>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
     </div>
 
-    <!-- commonality footer -->
+    <!-- 引入底部文件 -->
     <%
-    include("../../common/bottom.html"){}
+    include("../../../common/bottom.html"){}
     %>
 
 </div>

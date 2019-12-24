@@ -205,6 +205,23 @@ include("../common/common.js.html"){}
 	.personal_li{
 		width: 100%;
 	}
+	.wallet_left{
+		overflow: auto;
+	}
+	.wallet_left::-webkit-scrollbar {/*滚动条整体样式*/
+		width: 2px;     /*高宽分别对应横竖滚动条的尺寸*/
+		height: 1px;
+	}
+	.wallet_left::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+		border-radius: 2px;
+		-webkit-box-shadow: inset 0 0 2px rgba(0,0,0, 0.07);
+		background: rgba(151, 151, 151, 0.3);
+	}
+	.wallet_left::-webkit-scrollbar-track {/*滚动条里面轨道*/
+		-webkit-box-shadow: inset 0 0 2px rgba(0,0,0, 0.07);
+		border-radius: 2px;
+		background: rgba(151, 151, 151, 0.3);
+	}
 </style>
 <script>
 	$(function(){
@@ -283,6 +300,9 @@ include("../common/common.js.html"){}
 			});
 		});
 
+		var height = document.body.clientHeight;
+		$(".wallet_left").height(height-50);
+
 		gengeralizeMemberInit(true,'generalizeRecord');
 		findETHWallet( 'walletETH','/api/base/v1/ethWallet/findEthWallet');//eth
 		findETHWallet( 'walletPutMoney','/api/base/v1/dlbWallet/findDlbWallet');//dlb
@@ -293,11 +313,11 @@ include("../common/common.js.html"){}
 		getEthToUsd("personal_wallet_center");
 		div_head_images();//heard
 		findLotteryRecord(true,"lottery_record");
+		getWalletConfig();
 	})
 </script>
 <body class="body_top">
 <div class="super_container">
-
 	<!-- commonality head -->
 	<%
 	include("../common/index_top.html"){}
@@ -407,14 +427,15 @@ include("../common/common.js.html"){}
 						<div class="wallet_head">
 							<p><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span></p>
 							<p><span class="wallet_span_total"></span></p>
-							<p><span data-localize="base.balance">balance</span><span class="span_right balance"></span> <span data-localize="base.freeze">freeze</span><span class="freeze"></span></p>
+							<p><span data-localize="base.balance1">balance</span><span class="span_right balance"></span> <span data-localize="base.freeze">freeze</span><span class="freeze"></span></p>
 						</div>
 						<ul class="ul_personal_Eth">
 							<li class="li_come">
 								<div>
 									<p><span class="statusTime">2019-12-13 15:15:07</span></p>
 									<p>
-										<span data-localize="base.expend">支出 : </span><span class="span_right expendOrReceipts">0.1</span>
+										<span class="expend" data-localize="base.expend">支出 : </span><span class="recorded" data-localize="base.recorded">入账 : </span>
+										<span class="span_right expendOrReceipts">0.1</span>
 										<span data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
 										<span class="ethGas" data-localize="base.ethGas">燃气费 : </span><span class="ethGas ethGasStr">0.00298507</span>
 									</p>
@@ -432,14 +453,15 @@ include("../common/common.js.html"){}
 						<div class="wallet_head">
 							<p><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span></p>
 							<p><span class="wallet_span_total"></span></p>
-							<p><span data-localize="base.balance">balance</span><span class="span_right balance"></span> <span data-localize="base.freeze">freeze</span><span class="freeze"></span></p>
+							<p><span data-localize="base.balance1">balance</span><span class="span_right balance"></span> <span data-localize="base.freeze">freeze</span><span class="freeze"></span></p>
 						</div>
 						<ul class="ul_personal_Dlb">
 							<li class="li_come">
 								<div>
 									<p><span class="statusTime">2019-12-13 15:15:07</span></p>
 									<p>
-										<span data-localize="base.expend">支出 : </span><span class="span_right expendOrReceipts">0.1</span>
+										<span class="expend" data-localize="base.expend">支出 : </span><span class="recorded" data-localize="base.recorded">入账 : </span>
+										<span class="span_right expendOrReceipts">0.1</span>
 										<span data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
 									</p>
 								</div>
@@ -456,14 +478,15 @@ include("../common/common.js.html"){}
 						<div class="wallet_head">
 							<p><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span></p>
 							<p><span class="wallet_span_total"></span></p>
-							<p><span data-localize="base.balance">balance</span><span class="span_right balance"></span> <span data-localize="base.freeze">freeze</span><span class="freeze"></span></p>
+							<p><span data-localize="base.balance1">balance</span><span class="span_right balance"></span> <span data-localize="base.freeze">freeze</span><span class="freeze"></span></p>
 						</div>
 						<ul class="ul_personal_lottery">
 							<li class="li_come">
 								<div>
 									<p><span class="statusTime">2019-12-13 15:15:07</span></p>
 									<p>
-										<span data-localize="base.expend">支出 : </span><span class="span_right expendOrReceipts">0.1</span>
+										<span class="expend" data-localize="base.expend">支出 : </span><span class="recorded" data-localize="base.recorded">入账 : </span>
+										<span class="span_right expendOrReceipts">0.1</span>
 										<span data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
 									</p>
 								</div>
@@ -506,31 +529,83 @@ include("../common/common.js.html"){}
 			<!-- 钱包 包括绑定地址和提现功能 -->
 			<div class="card wallet wallet_piece">
 				<div class="wallet_left">
-					<div class="wallet_extract wallet_extract_wallet">
-						<%
-						if(pAddress == true){
-						%>
-						<div class="wallet_address_self">
-							<p><span class="title_span_1">wallet address</span></p>
-							<p><span>${loginUser.PAddress!"error"}</span></p>
-							<input class="input_class_2 wallet_password_input" type="text" name="update_bAddress" placeholder="wallet address">
-							<div class="div_btn">
-								<a class="wallet_button button_display" href="#" onclick="update_confirm()">Update</a>
+					<%
+					if(pAddress == true){
+					%>
+						<div class="wallet_extract wallet_extract_wallet ">
+							<div class="wallet_address_self">
+								<p><span class="title_span_1">wallet address</span></p>
+								<p><span>${loginUser.BAddress!"error"}</span></p>
+								<input class="input_class_2 wallet_password_input" type="text" name="update_bAddress" placeholder="wallet address">
+								<div class="div_btn">
+									<a class="wallet_button button_display" href="#" onclick="update_confirm()" data-localize="base.update">Update</a>
+								</div>
 							</div>
 						</div>
-						<% }else{ %>
-						<div class="wallet_extract">
-							<input class="input_class_2 wallet_password_input" type="text" id="bAddress" name="bAddress" placeholder="wallet address">
-							<input class="input_class_2 wallet_password_input" type="password" id="paymentCode" name="paymentCode" placeholder="password">
-							<input class="input_class_2 wallet_password_input" type="password" id="paymentCodeConfirm" name="paymentCodeConfirm" placeholder="confirm password">
-							<div class="div_btn">
-								<a onclick="create_confirm()" href="#" class="wallet_button button_display">confirm</a>
+						<div class="wallet_extract wallet_extract_wallet">
+							<div class="wallet_address_self">
+								<p><span class="title_span_1">ETH </span></p>
+								<div class="wallet_address_self_eth_withdrawCash">
+									<p><span class="title_span_2" data-localize="base.withdrawCash">Withdraw cash</span></p>
+									<p>规则：</p>
+									<p>
+										<span class="title_span_3" data-localize="base.total">total</span> : <span class="wallet_span_total">0ETH</span>
+										<span class="title_span_3" data-localize="base.balance1">balance</span> : <span class="balance">0ETH </span>
+										<span class="title_span_3" data-localize="base.freeze">freeze</span> : <span class="freeze">0ETH</span>
+									</p>
+									<input class="input_class_2 wallet_password_input " type="text" placeholder="Extract the number">
+									<div class="div_btn">
+										<a class="wallet_button button_display" href="#" propertyType="1" onclick="withdrawCashEth(this)" ><span data-localize="base.withdrawCash">withdraw cash</span></a>
+									</div>
+								</div>
+								<hr>
+								<div>
+									<p><span class="title_span_2" data-localize="base.recharge">Recharge</span></p>
+									<p><span class="title_span_3" data-localize="base.address">address</span> : <span>${loginUser.PAddress!"error"}</span></p>
+								</div>
 							</div>
 						</div>
-						<%
-						}
-						%>
-					</div>
+						<div class="wallet_extract wallet_extract_wallet wallet_extract_wallet_bottom">
+							<div class="wallet_address_self">
+								<p><span class="title_span_1" data-localize="base.flat">flat</span></p>
+								<div class="wallet_address_self_flat_withdrawCash">
+									<p><span class="title_span_2" data-localize="base.withdrawCash">Withdraw cash</span></p>
+									<p>
+										<span class="title_span_3" data-localize="base.total">total</span> : <span class="wallet_span_total"></span>
+										<span class="title_span_3" data-localize="base.balance1">balance</span> : <span class="balance"></span>
+										<span class="title_span_3" data-localize="base.freeze">freeze</span> : <span class="freeze"></span>
+									</p>
+									<p><span data-localize="base.exchange">exchange</span> : <span class="lsbToEth"></span> = 1 ETH</p>
+									<input class="input_class_2 wallet_password_input" type="text" placeholder="Extract the number">
+									<div class="div_btn">
+										<a class="wallet_button button_display" href="#" propertyType="2" onclick="withdrawCashEth(this)" data-localize="base.withdrawCash">withdraw cash</a>
+									</div>
+								</div>
+								<hr>
+								<div class="wallet_address_self_flat_recharge">
+									<p><span class="title_span_2" data-localize="base.recharge">Recharge</span></p>
+									<p><span data-localize="base.exchange">exchange</span> : 1 ETH = <span class="ethToLsb"></span></p>
+									<input class="input_class_2 wallet_password_input" type="text" placeholder="Prepaid phone number">
+									<div class="div_btn">
+										<a class="wallet_button button_display" href="#" propertyType="3" onclick="withdrawCashEth(this)" data-localize="base.recharge">recharge</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					<% }else{ %>
+						<div class="wallet_extract wallet_extract_wallet">
+							<div class="wallet_extract">
+								<input class="input_class_2 wallet_password_input" type="text" id="bAddress" name="bAddress" placeholder="wallet address">
+								<input class="input_class_2 wallet_password_input" type="password" id="paymentCode" name="paymentCode" placeholder="password">
+								<input class="input_class_2 wallet_password_input" type="password" id="paymentCodeConfirm" name="paymentCodeConfirm" placeholder="confirm password">
+								<div class="div_btn">
+									<a onclick="create_confirm()" href="#" class="wallet_button button_display">confirm</a>
+								</div>
+							</div>
+						</div>
+					<%
+					}
+					%>
 				</div>
 			</div>
 		</div>
@@ -552,7 +627,7 @@ include("../common/common.js.html"){}
 			</div>
 		</div>
 	</div>
-	<!-- 头像弹框 -->
+	<!-- head -->
 	<div class="layui_head" style="display: none">
 		<div class="layui_title">
 			<span>头像</span>
@@ -561,6 +636,17 @@ include("../common/common.js.html"){}
 			<!-- 头像列表 -->
 		</div>
 		<button class="btn btn_head_button" onclick="img_change_button()" >更改</button>
+	</div>
+	<!-- play code -->
+	<div id="playPassword" style="display: none;">
+		<div style="margin: 30px;">
+			<div>
+				<input type="password" class="paymentCode" name="playCode" placeholder="payment code">
+			</div>
+			<div class="model_purchase_button">
+				<div class="button_purchase confirm" onclick="paymentCodeConfirm(this)"><span data-localize="base.confirm">confirm</span></div>
+			</div>
+		</div>
 	</div>
 	<!-- commonality fotter -->
 	<%

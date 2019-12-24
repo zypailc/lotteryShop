@@ -20,17 +20,17 @@
 
 	<!-- 查询每期的购买记录 -->
 	<select id="getPageLotteryBuyAll" parameterType="java.lang.String" resultType="java.util.Map">
-		select em_.email,em_.member_name as memberName,lb_.luck_total as luckTotal,lb_.multiple_num as multipleNum from es_member em_
-		left join lotterya_buy lb_ on (lb_.member_id = em_.id)
-		left join lotterya_issue li_ on (li_.id = lb_.lotterya_issue_id)
-		where 1 = 1
+		 select em_.email,em_.member_name as memberName,lb_.luck_total as luckTotal,lb_.multiple_num as multipleNum from es_member em_
+		 left join lotterya_buy lb_ on (lb_.member_id = em_.id)
+		 left join lotterya_issue li_ on (li_.id = lb_.lotterya_issue_id)
+		 where 1 = 1
 		<if test="lotteryaBuy.lotteryaIssueId != null and  lotteryaBuy.lotteryaIssueId !=  ''">
 			and lb_.lotterya_issue_id = #{lotteryaBuy.lotteryaIssueId}
 		</if>
 		<if test="mTransferStatus != null and  mTransferStatus != ''">
 			and lb_.transfer_status in(#{mTransferStatus})
 		</if>
-		LIMIT #{currentPage},#{pageSize}
+		 LIMIT #{currentPage},#{pageSize}
 	</select>
 
 </mapper>

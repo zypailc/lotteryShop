@@ -35,8 +35,8 @@ public class MIntroController {
 
     @ResponseBody
     @RequestMapping("/saveCharacteristicProject")
-    public ResultUtil saveCharacteristicProject(HttpServletRequest request,String title_zh, String content_zh, String title_en, String content_en){
-        return  mIntroService.saveCharacteristicProject(request,title_zh,content_zh,title_en,content_en);
+    public ResultUtil saveCharacteristicProject(HttpServletRequest request,String title_zh, String content_zh, String title_en, String content_en,Integer type){
+        return  mIntroService.saveCharacteristicProject(request,title_zh,content_zh,title_en,content_en,type);
     }
 
 

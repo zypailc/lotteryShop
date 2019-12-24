@@ -5,6 +5,7 @@ import com.didu.lotteryshop.common.entity.MIntro;
 import com.didu.lotteryshop.common.entity.MPartner;
 import com.didu.lotteryshop.common.entity.SysConfig;
 import com.didu.lotteryshop.common.mapper.MIntroMapper;
+import com.didu.lotteryshop.common.service.form.impl.MIntroServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
 import com.didu.lotteryshop.common.utils.Web3jUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class BaseInfoService extends BaseBaseService {
      * @return
      */
     public List<Map<String,Object>> infoContentWhiteBook(String languageType){
-        return  findMintro(languageType,MIntro.TYPE_WHITE_BOOK,null);
+        return  findMintro(languageType, MIntroServiceImpl.TYPE_WHITE_BOOK,null);
     }
 
     /**
@@ -40,7 +41,7 @@ public class BaseInfoService extends BaseBaseService {
      * @return
      */
     public List<Map<String,Object>> infoContentCharacteristic(String languageType){
-        return  findMintro(languageType,MIntro.TYPE_CHARACTERISTIC_PROJECT,null);
+        return  findMintro(languageType,MIntroServiceImpl.TYPE_CHARACTERISTIC_PROJECT,null);
     }
 
     /**
@@ -60,13 +61,22 @@ public class BaseInfoService extends BaseBaseService {
     }
 
     /**
-     *
+     * 查询玩法规则
      * @param playType
      * @param languageType
      * @return
      */
     public List<Map<String,Object>> findPlayTypeRule(String playType,String languageType){
-        return  findMintro(languageType,MIntro.TYPE_ALLOCATION_FUNDS,Integer.parseInt(playType));
+        return  findMintro(languageType,MIntroServiceImpl.TYPE_ALLOCATION_FUNDS,Integer.parseInt(playType));
+    }
+
+    /**
+     *
+     * @param languageType
+     * @return
+     */
+    public List<Map<String,Object>> findNotice(String languageType){
+        return  findMintro(languageType,MIntroServiceImpl.TYPE_NOTICE,null);
     }
 
     /**
@@ -107,6 +117,7 @@ public class BaseInfoService extends BaseBaseService {
         if(playType != null){
             sql +=" and mi_.play_type = " + playType;
         }
+        sql += " order by mi_.sort,mi_.create_time ";
         return getSqlMapper().selectList(sql);
     }
 

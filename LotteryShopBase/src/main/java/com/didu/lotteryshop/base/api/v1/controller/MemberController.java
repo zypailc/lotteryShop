@@ -145,4 +145,7 @@ public class MemberController extends BaseBaseController {
         return memberService.findLotterPurchaseResord(currentPage,pageSize,startTime,endTime,type);
     }
 
+
+
+
 }

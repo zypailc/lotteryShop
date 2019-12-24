@@ -66,6 +66,7 @@
 	{
 		display: none;
 	}
+
 	.logo
 	{
 		padding-left: 50px;
@@ -274,6 +275,17 @@
 	.footer_cr_2
 	{
 		display: block;
+	}
+	.hero_side_text_container_button{
+		top:85px;
+
+	}
+	.hero_side_text_container{
+		top: 85px;
+		background: rgba(233,236,239,0.7);
+	}
+	.hero_side_text p{
+		color: black;
 	}
 }
 

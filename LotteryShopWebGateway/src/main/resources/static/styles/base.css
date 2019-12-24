@@ -41,8 +41,17 @@
     padding-right: 2px;*/
 }
 .title_span_1{
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 500;
+}
+.title_span_2{
+    margin-left: 15px;
+    font-size: 18px;
+    font-weight: 400;
+}
+.title_span_3{
+    margin-left: 30px;
+    font-size: 14px;
 }
 .span_personal{
     color: #868e96;
@@ -72,4 +81,22 @@
     {
         display: inline-block;
     }
+}
+.model_purchase_button{
+    text-align: center;
+    cursor: pointer;
+    top: 10px;
+
+}
+.model_purchase_button span{
+    font-size: 25px;
+    border: solid 1px #9f88be;
+    border-radius: 5px;
+    padding: 5px 20px;
+    margin-top: 10px;
+    background: #9f88be;
+    color: white;
+}
+.model_purchase_button span:hover{
+    color: #322445;
 }

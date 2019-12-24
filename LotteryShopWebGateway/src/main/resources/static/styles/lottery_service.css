@@ -165,24 +165,7 @@
     border-radius: 2px;
     cursor: pointer;
 }
-.model_purchase_button{
-    text-align: center;
-    cursor: pointer;
-    top: 10px;
 
-}
-.model_purchase_button span{
-    font-size: 25px;
-    border: solid 1px #9f88be;
-    border-radius: 5px;
-    padding: 5px 20px;
-    margin-top: 10px;
-    background: #9f88be;
-    color: white;
-}
-.model_purchase_button span:hover{
-    color: #322445;
-}
 .font_color{
     color: black;
 }

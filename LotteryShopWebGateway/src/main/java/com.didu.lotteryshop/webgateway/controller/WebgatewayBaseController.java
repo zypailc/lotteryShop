@@ -20,6 +20,15 @@ public class WebgatewayBaseController extends BaseContorller {
         model.addAttribute("defaultHeadImg", Constants.HEAD_PORTRAIT_URL);
         model.addAttribute("projectPath",webGatewayConfig.getProjectContent());
         model.addAttribute("access_token",super.getSession().getAttribute(com.didu.lotteryshop.webgateway.config.Constants.SESSION_LOGIN_TOKEN));
+        boolean pAddress = true;
+        if(loginUser != null){
+            if(loginUser.getPAddress() == null || "".equals(loginUser.getPAddress())){
+                pAddress = false;
+            }
+        }else {
+            pAddress = false;
+        }
+        model.addAttribute("pAddress",pAddress);
         if(loginUser == null){
             model.addAttribute("whetherLogin",false);
         }else{

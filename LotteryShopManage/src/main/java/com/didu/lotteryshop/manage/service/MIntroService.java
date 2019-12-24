@@ -9,8 +9,10 @@ import com.didu.lotteryshop.common.entity.MIntro;
 import com.didu.lotteryshop.common.mapper.MIntroMapper;
 import com.didu.lotteryshop.common.service.form.impl.IntroEnServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.IntroZhServiceImpl;
+import com.didu.lotteryshop.common.service.form.impl.MIntroServiceImpl;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.github.abel533.sql.SqlMapper;
+import jnr.ffi.annotations.In;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +44,7 @@ public class MIntroService {
         String sql = "";
         String fild = "";
         String table = "";
-        for (String s: MIntro.LANGUAGES) {
+        for (String s: MIntroServiceImpl.LANGUAGES) {
             fild += " ,m_"+s+".title as title_" + s + " , m_"+s+".content as content_"+s;
             table += " left join intro_"+s+" m_" + s + " on (mi_.language_id = m_"+s+".id) ";
         }
@@ -52,12 +54,15 @@ public class MIntroService {
         return  mIntroList;
     }
 
-    public ResultUtil saveCharacteristicProject(HttpServletRequest request, String title_zh, String content_zh, String title_en, String content_en){
-        LsImage lsImage = lsImageService.saveLsImage(request,LsImage.PROJECT_TYPE);
-        if(lsImage == null){
-            return ResultUtil.successJson("error !");
+    public ResultUtil saveCharacteristicProject(HttpServletRequest request, String title_zh, String content_zh, String title_en, String content_en,Integer type){
+        LsImage lsImage = new LsImage();
+        if(type == MIntroServiceImpl.TYPE_CHARACTERISTIC_PROJECT) {
+            lsImage = lsImageService.saveLsImage(request, LsImage.PROJECT_TYPE);
+            if (lsImage == null) {
+                return ResultUtil.successJson("error !");
+            }
         }
-        boolean b = save(title_zh,content_zh,title_en,content_en,MIntro.TYPE_CHARACTERISTIC_PROJECT,lsImage.getId());
+        boolean b = save(title_zh,content_zh,title_en,content_en,type,lsImage.getId());
         if(b){
             return ResultUtil.successJson("success !");
         }

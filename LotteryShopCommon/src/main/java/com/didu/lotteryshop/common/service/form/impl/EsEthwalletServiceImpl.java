@@ -8,14 +8,20 @@ import com.didu.lotteryshop.common.entity.EsEthwallet;
 import com.didu.lotteryshop.common.entity.SysConfig;
 import com.didu.lotteryshop.common.mapper.EsEthwalletMapper;
 import com.didu.lotteryshop.common.service.form.IEsEthwalletService;
+import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.common.utils.Web3jUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -191,5 +197,8 @@ public class EsEthwalletServiceImpl extends ServiceImpl<EsEthwalletMapper, EsEth
         boolean bool = super.updateById(esEthwallet);
         return bool ? esEthwallet.getBalance() : null;
     }
+
+
+
 
 }

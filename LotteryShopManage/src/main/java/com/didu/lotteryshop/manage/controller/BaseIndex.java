@@ -1,6 +1,7 @@
 package com.didu.lotteryshop.manage.controller;
 
 import com.didu.lotteryshop.common.entity.MIntro;
+import com.didu.lotteryshop.common.service.form.impl.MIntroServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,25 +62,33 @@ public class BaseIndex {
 
     @RequestMapping("/table/characteristicProject")
     public String characteristicProject(Model model){
-        model.addAttribute("language", MIntro.LANGUAGES_STR);
+        model.addAttribute("language", MIntroServiceImpl.LANGUAGES_STR);
         return "table/table_characteristic_project";
     }
 
     @RequestMapping("/table/allocationFunds")
     public String AllocationFunds(Model model){
-        model.addAttribute("language", MIntro.LANGUAGES_STR);
+        model.addAttribute("language", MIntroServiceImpl.LANGUAGES_STR);
         return "table/table_allocation_funds";
     }
 
     @RequestMapping("/table/whiteBook")
     public String whiteBook(Model model){
-        model.addAttribute("language", MIntro.LANGUAGES_STR);
+        model.addAttribute("language", MIntroServiceImpl.LANGUAGES_STR);
         return "table/table_white_book";
+    }
+
+    @RequestMapping("/table/notice")
+    public String notice(Model model){
+        model.addAttribute("language", MIntroServiceImpl.LANGUAGES_STR);
+        return "table/table_notice";
     }
 
     @RequestMapping("/table/tableQRBackground")
     public String tableQRBackground(Model model){
         return  "table/table_QR_background";
     }
+
+
 
 }

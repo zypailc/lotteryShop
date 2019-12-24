@@ -134,12 +134,6 @@ public class IndexController extends WebgatewayBaseController {
     @RequestMapping("/web/personalCenter")
     public String personalCenter(Model model){
         model = getModel(model);
-        LoginUser loginUser = getLoginUser();
-        boolean pAddress = true;
-        if(loginUser.getPAddress() == null || "".equals(loginUser.getPAddress())){
-            pAddress = false;
-        }
-        model.addAttribute("pAddress",pAddress);
         return "personal/personal_center";
     }
 
@@ -180,6 +174,7 @@ public class IndexController extends WebgatewayBaseController {
     public String walletWallet(Model model,@Param(value = "type")String type){
         model = getModel(model);
         model.addAttribute("type",type);
+
         return "personal/wallet/phone/wallet_bind";
     }
 

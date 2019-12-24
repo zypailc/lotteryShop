@@ -90,6 +90,20 @@ public class BaseInfoController extends BaseBaseController {
     }
 
     /**
+     * 查询公告
+     * @param languageType
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/findNotice")
+    public List<Map<String,Object>> find(String languageType){
+        if(languageType == null || "".equals(languageType)){
+            return null;
+        }
+        return baseInfoService.findNotice(languageType);
+    }
+
+    /**
      * 獲取配置數據
      * @return
      */

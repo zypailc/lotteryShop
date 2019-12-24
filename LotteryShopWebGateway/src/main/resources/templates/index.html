@@ -80,8 +80,18 @@
 				</div>
 			</div>
 
+			<div class="hero_side_text_container">
+				<div class="hero_side_text">
+					<div class="notice_head"><span >公告</span></div>
+					<div class="notice_content">
+						<p>1.It hasn't been announced yet !</p>
+					</div>
+				</div>
+			</div>
+			<div class="hero_side_text_container_button">
+				<span >公告</span>
+			</div>
 		</div>
-
 		<div class="next_section_scroll">
 			<div class="next_section nav_links" data-scroll-to=".icon_boxes">
 				<i class="fas fa-chevron-down trans_200"></i>
@@ -316,16 +326,30 @@
 </body>
 <script>
 	$(function(){
-
 		//存储推广人员的Id，推广人员Id存储在session有效期24小时
 		var generalizePersonId = "${generalizePersonId!''}";
 		setCookie("generalizePersonId",generalizePersonId,24);
 		var languageType = getLanguage();
 		infoContentWhiteBook(languageType);
 		infoContentCharacteristic(languageType);
+		infoContentNotice(languageType);
 		infoContentPartners();
 		infoContentExternal();
+		hero_side_text_container_button_click();
+		hero_side_text_container_niticeHear_click();
 })
+	function hero_side_text_container_niticeHear_click(){
+		$(".notice_head").click(function(){
+			$(".hero_side_text_container_button").show();
+			$(".hero_side_text_container").hide();
+		})
+	}
+	function hero_side_text_container_button_click(){
+		$(".hero_side_text_container_button").click(function(){
+			$(".hero_side_text_container_button").hide();
+			$(".hero_side_text_container").show();
+		})
+	}
 
 function infoContentWhiteBook(languageType){
 	$.ajax({
@@ -340,6 +364,24 @@ function infoContentWhiteBook(languageType){
 				$(".div_white_book").html(info.content);
 			}
 
+		}
+	})
+}
+function infoContentNotice(languageType){
+	$.ajax({
+		url:'${projectPath}/apiauthorization/base/authorization/v1/baseInfo/findNotice',
+		type:'get',
+		data:{"languageType":languageType},
+		dataType:"json",
+		success:function (result) {
+			if(result.length > 0){
+				var info = $(".notice_content");
+				info.html("");
+				$.each(result,function(index,data){
+					var p = "<p>"+(index + 1)+"."+data.content+"</p>";
+					info.append(p);
+				})
+			}
 		}
 	})
 }

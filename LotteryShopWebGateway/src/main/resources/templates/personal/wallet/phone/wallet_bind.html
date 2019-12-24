@@ -62,13 +62,19 @@
     <div class="base_head">
         <div class="wallet_phone">
             <div class="wallet_extract">
-            <% if(has(loginUser)  && loginUser.bAddress != ''){ %>
+            <% if(pAddress == true){ %>
                 <div class="wallet_address_self">
                     <p><span class="title_span_1">wallet address</span></p>
                     <p><span>${loginUser.bAddress!"error"}</span></p>
                     <input class="input_class_2 wallet_password_input" type="text" name="update_bAddress" placeholder="wallet address">
                     <div class="div_btn">
-                        <a class="wallet_button button_display" href="#" onclick="update_confirm()">Update</a>
+                        <a class="wallet_button button_display" href="#" onclick="update_confirm()" data-localize="base.update">Update</a>
+                    </div>
+                </div>
+                <div class="wallet_address_self">
+
+                    <div class="div_btn">
+                        <a class="wallet_button button_display" href="#" onclick="update_confirm()" data-localize="base.withdrawCash">withdraw cash</a>
                     </div>
                 </div>
             <% }else{ %>

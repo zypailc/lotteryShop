@@ -6,7 +6,6 @@ package com.didu.lotteryshop.wallet.api.v1.RequestEntity;
  * @date 2019-12-18
  */
 public class TransferEntity {
-    public CharSequence getwalletFileName;
     private String walletFileName;//钱包名字
     private String payPassword;//支付密码
     private String formAddress;//出账地址

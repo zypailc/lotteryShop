@@ -77,11 +77,6 @@
                 </div>
                 <div class="modal-body">
                     <form id="form_img" enctype="multipart/form-data">
-                        <div class="file-loading">
-                            <label class="lable_title">head portrait</label>
-                            <input id="file_upload" class="input_content" type="text" readonly="readonly">
-                            <input id="input_img" style="display: none;" type="file" name="imgFile" onchange="input_setFileName()" class="form-control inline-form-control">
-                        </div>
                         <div>
                             <label class="lable_title">title_zh:</label>
                             <input id="title_input_zh" class="input_content" type="text" />
@@ -123,11 +118,6 @@
                     </h4>
                 </div>
                 <div class="modal-body">
-                    <div class="file-loading">
-                        <label class="lable_title">head portrait</label>
-                        <input id="update_file_upload" class="input_content" type="text" readonly="readonly">
-                        <input id="update_input_img" style="display: none;" type="file" name="imgFile" onchange="update_input_setFileName()" class="form-control inline-form-control">
-                    </div>
                     <div>
                         <label class="lable_title">sort:</label>
                         <input id="sort" class="input_content" type="text" />
@@ -197,13 +187,6 @@
                     return "No sorting";
                 }
             },{
-                field:"imgId",
-                title:"icon",
-                formatter:function(value, row, index){
-
-                    return "<img src='../../lsImage/getImg?id="+(value || "")+"'>";
-                }
-            },{
                 field:"operation",
                 title:"operation",
                 formatter: function (value, row, index){
@@ -213,7 +196,7 @@
                 }
             })
             $(".table_partner").bootstrapTable({
-                url: '../../mIntro/findMIntro?type=1',        // 表格数据来源
+                url: '../../mIntro/findMIntro?type=4',        // 表格数据来源
                 columns: columns_s
             })
 
@@ -253,7 +236,7 @@
                $.ajax({
                     url:'../../mIntro/saveCharacteristicProject',
                     type:'POST',
-                    data:{"title_zh":title_zh,"content_zh":content_zh,"title_en":title_en,"content_en":content_en,"type":1},
+                    data:{"title_zh":title_zh,"content_zh":content_zh,"title_en":title_en,"content_en":content_en,"type":4},
                     dataType:"json",
                     success:function (data) {
                         window.location.reload();

@@ -234,7 +234,7 @@
                $.ajax({
                     url:'../../mIntro/saveAllocationfunds',
                     type:'POST',
-                    data:{"title_zh":title_zh,"content_zh":content_zh,"title_en":title_en,"content_en":content_en},
+                    data:{"title_zh":title_zh,"content_zh":content_zh,"title_en":title_en,"content_en":content_en,"type":2},
                     dataType:"json",
                     success:function (data) {
                         window.location.reload();

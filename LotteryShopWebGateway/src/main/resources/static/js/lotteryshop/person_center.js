@@ -178,18 +178,29 @@ function findETHWallet(classProperty,url){
             if(result.code == 200) {
                 var dataInfo = result.extend.data;
                 var ethHead;
+                var walletdetail;
                 if(classProperty == 'walletETH'){
                     ethHead = $(".eth_record");
+                    walletdetail = $(".wallet_address_self_eth");
                 }
                 if(classProperty == 'walletPutMoney'){
                     ethHead = $(".wallet_head");
                 }
                 if(classProperty == 'walletFLAT'){
                     ethHead = $(".lsb_record");
+                    walletdetail = $(".wallet_address_self_flat");
                 }
                 ethHead.find(".wallet_span_total").html(dataInfo.total);
-                ethHead.find(".balance").html(dataInfo.balance);
-                ethHead.find(".freeze").html(dataInfo.freeze);
+                ethHead.find(".balance").html(" : "+dataInfo.balance);
+                ethHead.find(".freeze").html(" : "+dataInfo.freeze);
+                if(classProperty == 'walletETH' || classProperty == 'walletFLAT'){
+                    walletdetail.find(".wallet_span_total").html(dataInfo.total);
+                    walletdetail.find(".wallet_span_total").attr("dataValue",dataInfo.total);
+                    walletdetail.find(".balance").html(dataInfo.balance);
+                    walletdetail.find(".balance").attr("dataValue",dataInfo.balance);
+                    walletdetail.find(".freeze").html(dataInfo.freeze);
+                    walletdetail.find(".freeze").attr("dataValue",dataInfo.freeze);
+                }
             }
         }
     })
@@ -230,9 +241,19 @@ function findWalletRecord(flag,classProperty,url){
                         }else {
                             new_li = $("."+classProperty).find("ul").find("li:last-child").clone();
                         }
+                        if(data.type == '0'){
+                            new_li.find(".recorded").hide();
+                            new_li.find(".expend").show();
+                        }
+                        if(data.type == '1'){
+                            new_li.find(".expend").hide();
+                            new_li.find(".recorded").show();
+                        }
+
                         new_li.find(".statusTime").html(data.statusTime);
                         new_li.find(".expendOrReceipts").html(data.amount);
                         new_li.find(".balance1").html(data.balance);
+
                         var gas = typeof(data.gasFee);
                         if(gas && gas != 'undefined'){
                             new_li.find(".ethGasStr").html(data.gasFee);
@@ -347,4 +368,127 @@ function getEthToUsd(personal_wallet_center){
             findwalletTotal(data.rateUsd,personal_wallet_center);
         }
     })
+}
+
+function getWalletConfig(){
+    $.ajax({
+        url:"/api/base/v1/baseWallet/walletConfig",
+        type:"get",
+        dataType:"json",
+        success:function (result){
+            console.log(result);
+            var data = result.extend.data;
+            var ethToLsb = data.ethToLsb;
+            var lsbToEth = data.lsbToEth;
+            $(".lsbToEth").html(lsbToEth);
+            $(".ethToLsb").html(ethToLsb)
+        }
+    })
+}
+
+function openPlayCode(type){
+    $("#playPassword").find("input").attr("operationType",type);
+    lay_play_code = layer.open({
+        type: 1,
+        title:"支付密碼",
+        closeBtn: 0, //不显示关闭按钮
+        anim: 2,
+        shadeClose: true, //开启遮罩关闭
+        content: $("#playPassword").html()
+    });
+}
+
+function withdrawCashEth(e){
+    var obj = $(e);
+    var propertyType = obj.attr("propertyType") || "-1";
+    var propertyObj = "";
+    if(propertyType == "-1"){
+        layer.msg("There is an error in the operation, please refresh before operation !");
+        return;
+    }
+    if(propertyType == "1"){//Eth
+        propertyObj = "wallet_address_self_eth_withdrawCash";
+    }
+    if(propertyType == "2"){//Lsb to Eth
+        propertyObj = "wallet_address_self_flat_withdrawCash";
+    }
+    if(propertyType == "3"){// Eth To Lsb
+        propertyObj = "wallet_address_self_flat_recharge";
+    }
+    var balance = $("."+propertyObj).find(".balance").attr("dataValue") || "";
+    var extractTheNumber = $("."+propertyObj).find("input").val() || "10";
+    if(!extractTheNumber){
+        layer.msg("Please enter quantity ! ");
+        return;
+    }
+    if((!balance) && (propertyType == "1" || propertyType == "2")){
+        layer.msg("The extractable number is zero ! ");
+        return;
+        balance = parseFloat(balance);
+        extractTheNumber = parseFloat(extractTheNumber);
+        if(extractTheNumber > balance){
+            layer.msg("The extracted number shall not be greater than the extractable number !");
+            return;
+        }
+    }
+    console.log("extractTheNumber:"+extractTheNumber);
+    if(propertyType == "1" || propertyType == "3"){
+        openPlayCode(propertyType);
+    }
+    if(propertyType == "2"){
+        withdrawCashLsbToEth(extractTheNumber);
+    }
+}
+
+function withdrawCashLsbToEth(extractTheNumber){
+    if(!extractTheNumber){
+       return;
+    }
+    var url = "/api/base/v1/baseWallet/withdrawCashLsbToEth"
+    var dataJson;
+    dataJson.push({"num":extractTheNumber});
+    walletOperation(url,dataJson);
+}
+
+function paymentCodeConfirm(e){
+    var div = $(e).parent().parent();
+    var operationType = div.find("input[name=playCode]").attr("operationType") || "";
+    var playCode = getPlayCode();
+    var dataJson = {};
+    var url;
+    if(operationType == '1'){//ETH
+        url = "/api/base/v1/baseWallet/withdrawCashEth";
+        var num = $(".wallet_address_self_eth_withdrawCash").find("input").val() || "";
+        dataJson = {"num":num,"playCode":playCode};
+    }
+    if(operationType == '2'){//ETH TO Lsb
+        url = "/api/base/v1/baseWallet/withdrawCashEthToLsb";
+        var num = $(".wallet_address_self_flat_recharge").find("input").val() || "";
+        dataJson = {"num":num,"playCode":playCode};
+    }
+    console.log(dataJson);
+    walletOperation(url,dataJson);
+}
+
+function walletOperation(url,dataJson){
+    $.ajax({
+        url:url,
+        type:"get",
+        data:dataJson,
+        dataType:"json",
+        success:function (result){
+            console.log(result);
+        }
+    })
+}
+
+function getPlayCode(){
+    var payPasswod = "";
+    $(".paymentCode").each(function(index,data){
+        var paymentCode_1 = $(data).val() || "";
+        if(paymentCode_1){
+            payPasswod = paymentCode_1;
+        }
+    });
+    return payPasswod;
 }

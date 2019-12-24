@@ -19,26 +19,6 @@ import java.io.Serializable;
 @TableName("m_intro")
 public class MIntro extends Model<MIntro> {
 
-	public static final String[] LANGUAGES = new String[]{"zh", "en"};
-	public static final String LANGUAGES_STR = "zh,en";
-	/**
-	 * 项目特点
-	 */
-	public static final Integer TYPE_CHARACTERISTIC_PROJECT = 1;
-
-	/**
-	 * 资金分配
-	 */
-	public static final Integer TYPE_ALLOCATION_FUNDS = 2;
-	/**
-	 * 白皮书
-	 */
-	public static final Integer TYPE_WHITE_BOOK = 3;
-	/**
-	 * 头像
-	 */
-	public static final  Integer TYPE_HEADIMG = 1;
-
     private static final long serialVersionUID = 1L;
 
 	@TableId(value="id", type= IdType.AUTO)
