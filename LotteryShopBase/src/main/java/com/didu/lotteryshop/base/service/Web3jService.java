@@ -11,7 +11,9 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
@@ -124,6 +126,36 @@ public class Web3jService extends BaseBaseService {
             e.printStackTrace();
         }
         return reMap;
+    }
+
+    /**
+     * 获取平台币ETH账户余额
+     * @return ether
+     */
+    public BigDecimal getLsbManagerBalanceByEther(){
+        BigDecimal total = BigDecimal.ZERO;
+        try {
+            EthGetBalance ethGetBalancel = web3j.ethGetBalance(this.getLsbManagerCredentials().getAddress(), DefaultBlockParameter.valueOf("latest")).send();
+            total = Web3jUtils.bigIntegerToBigDecimal(ethGetBalancel.getBalance());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
+
+    /**
+     * 获取推广ETH账户余额
+     * @return ether
+     */
+    public BigDecimal geGdManagerBalanceByEther(){
+        BigDecimal total = BigDecimal.ZERO;
+        try {
+            EthGetBalance ethGetBalancel = web3j.ethGetBalance(this.getDivideIntoManagerCredentials().getAddress(), DefaultBlockParameter.valueOf("latest")).send();
+            total = Web3jUtils.bigIntegerToBigDecimal(ethGetBalancel.getBalance());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return total;
     }
 
     /**

@@ -2,11 +2,13 @@ package com.didu.lotteryshop.base.api.v1.service;
 
 import com.didu.lotteryshop.base.service.BaseBaseService;
 import com.didu.lotteryshop.base.service.Web3jService;
+import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.EsEthwallet;
 import com.didu.lotteryshop.common.entity.EsLsbwallet;
 import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.entity.SysConfig;
 import com.didu.lotteryshop.common.service.form.impl.*;
+import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.common.utils.Web3jUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +60,7 @@ public class WalletService extends BaseBaseService {
         LoginUser loginUser = getLoginUser();
         SysConfig sysConfig = sysConfigService.getSysConfig();
         //判断支付密码是否正确
+        playCode = AesEncryptUtil.encrypt_code(playCode, Constants.KEY_TOW);
         if(!playCode.equals(loginUser.getPaymentCode())){
             return ResultUtil.errorJson(" wrong password !");
         }
@@ -70,7 +73,7 @@ public class WalletService extends BaseBaseService {
         BigDecimal serviceCharge = sysConfig.getWithdrawRatio().multiply(sum);
         //提现一次所需要的燃气费
         BigDecimal gas = Web3jUtils.gasToEtherByBigDecimal(sysConfig.getGasPrice(),sysConfig.getGasLimit());
-        if(esEthwalletService.judgeBalance(loginUser.getId(),sum.add(gas))){
+        if(!esEthwalletService.judgeBalance(loginUser.getId(),sum.add(gas))){
             return ResultUtil.errorJson("The extracted ETH is not sufficient to support the GAS consumption !");
         }
         //本次可提现实际金额
@@ -81,7 +84,7 @@ public class WalletService extends BaseBaseService {
             return ResultUtil.errorJson("Transfer failed !");
         }
         //新增出账明细
-        boolean b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",map1.get("transactionHashValue") == null ? "" : map1.get("transactionHashValue").toString());
+        boolean b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",map1.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map1.get(web3jService.TRANSACTION_HASHVALUE).toString());
         if(!b){
             return ResultUtil.errorJson("Transfer failed !");
         }
@@ -89,7 +92,7 @@ public class WalletService extends BaseBaseService {
         if(map2 == null){
             return ResultUtil.errorJson("Transfer failed !");
         }
-        b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE,serviceCharge,"-1",map1.get("transactionHashValue") == null ? "" : map1.get("transactionHashValue").toString());
+        b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE,serviceCharge,"-1",map1.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map1.get(web3jService.TRANSACTION_HASHVALUE).toString());
         if(!b){
             return ResultUtil.errorJson("Transfer failed !");
         }
@@ -107,17 +110,24 @@ public class WalletService extends BaseBaseService {
         EsLsbwallet esLsbwallet = esLsbwalletService.findByMemberId(loginUser.getId());//查询平台币钱包信息
         SysConfig sysConfig = sysConfigService.getSysConfig();
         //判断平台币可用余额是否足够
-        if(esLsbwalletService.judgeBalance(loginUser.getId(),sum)){
+        if(!esLsbwalletService.judgeBalance(loginUser.getId(),sum)){
             return ResultUtil.errorJson("not sufficient funds !");
         }
         //计算可提现ETH
-        BigDecimal lsbToEth = sum.multiply(sysConfig.getLsbToEth());
-        Map<String,Object> map = web3jService.lsbManagerSendToETH(loginUser.getPAddress(),lsbToEth);
-        if(map != null){
-            return ResultUtil.errorJson("Transfer failed !");
+        BigDecimal lsbToEth = sum.divide(sysConfig.getLsbToEth(),50,BigDecimal.ROUND_DOWN);
+        Map<String, Object> map = null;
+        boolean b = false;
+        if(web3jService.getLsbManagerBalanceByEther().compareTo(lsbToEth) >= 0){
+            map = web3jService.lsbManagerSendToETH(loginUser.getPAddress(), lsbToEth);
+            if (map == null) {
+                return ResultUtil.errorJson("Transfer failed !");
+            }
+            //新增平台币转Eth处理中信息
+             b = esLsbaccountsService.addOutBeingProcessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",map.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map.get(web3jService.TRANSACTION_HASHVALUE).toString());
+        }else{
+            // TODO 後台開發需要做預警處理
+            esLsbaccountsService.addOutFail(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",EsLsbaccountsServiceImpl.STATUS_MSG_FAIL);
         }
-        //新增平台币转Eth处理中信息
-        boolean b = esLsbaccountsService.addOutBeingProcessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",map.get("transactionHashValue") == null ? "" : map.get("transactionHashValue").toString());
         if(!b){
             return ResultUtil.errorJson("Transfer failed !");
         }
@@ -135,12 +145,13 @@ public class WalletService extends BaseBaseService {
         EsEthwallet esEthwallet = esEthwalletService.findByMemberId(loginUser.getId());
         SysConfig sysConfig = sysConfigService.getSysConfig();
         //验证支付密码
+        playCode = AesEncryptUtil.encrypt_code(playCode, Constants.KEY_TOW);
         if(!playCode.equals(loginUser.getPaymentCode())){
             return  ResultUtil.errorJson(" wrong password !");
         }
-        BigDecimal EthToLsb = sum.multiply(sysConfig.getEthToLsb());
+        BigDecimal EthToLsb = sum.divide(sysConfig.getEthToLsb(),50,BigDecimal.ROUND_DOWN);
         //判断余额是否可支付
-        if(esEthwalletService.judgeBalance(loginUser.getId(),EthToLsb)){
+        if(!esEthwalletService.judgeBalance(loginUser.getId(),EthToLsb)){
             return ResultUtil.errorJson("not sufficient funds !");
         }
         Map<String,Object> map = ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),sysConfig.getLsbAddress(),EthToLsb);
@@ -148,7 +159,7 @@ public class WalletService extends BaseBaseService {
             return ResultUtil.errorJson("Top-up failure !");
         }
         //新新增充值记录
-        boolean b = esLsbaccountsService.addInBeingprocessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_IN,sum,"-1",map.get("transactionHashValue") == null ? "" : map.get("transactionHashValue").toString());
+        boolean b = esLsbaccountsService.addInBeingprocessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_IN,sum,"-1",map.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map.get(web3jService.TRANSACTION_HASHVALUE).toString());
         if(!b){
             return ResultUtil.errorJson("Transfer failed !");
         }

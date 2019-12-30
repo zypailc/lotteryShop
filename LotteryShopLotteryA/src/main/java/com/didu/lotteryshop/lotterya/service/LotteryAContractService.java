@@ -122,35 +122,36 @@ public class LotteryAContractService extends LotteryABaseService {
                 " from lotterya_buy " +
                 " where lotterya_issue_id="+lotteryaIssueId+" and transfer_status in('0','1') and luck_num='"+luckNum+"'";
         Map<String, Object> mMap =  super.getSqlMapper().selectOne(sql);
+        Integer allMultipleNum = 0;
         if(mMap != null && !mMap.isEmpty()){
             //获取幸运号码总倍数
-            Integer allMultipleNum = Integer.parseInt(mMap.get("allMultipleNum").toString());
+            allMultipleNum = Integer.parseInt(mMap.get("allMultipleNum").toString());
             allMultipleNum = allMultipleNum == null ? 0 : allMultipleNum;
-            allMultipleNum += multipleNumber;
-            LotteryaInfo lotteryaInfo = lotteryaInfoService.findLotteryaInfo();
-            //最高限制奖金
-            BigDecimal upTotal = BigDecimal.ZERO;
-            //单注奖金，公式：(price*1000)/100*50
-            BigDecimal pTotal = lotteryaInfoService.calculateSingleBonus(lotteryaInfo);
-            //幸运号码中奖奖金总额
-            BigDecimal cTotal = pTotal.multiply(new BigDecimal(allMultipleNum));
-            //合约余额（当期奖金）
-            BigDecimal cBalance  = web3jService.getContractBalanceByEther(lotteryaInfo.getContractAddress());
-            //调节基金余额
-            BigDecimal afBalance  = web3jService.getAdjustFundBalanceByEther();
-            if(cBalance.compareTo(lotteryaInfo.getCurrenBonusDown()) >= 0){
-                upTotal = cBalance.divide(new BigDecimal("100")).multiply(lotteryaInfo.getCurrenBonusRatio());
-            }else{
-                upTotal = cBalance;
-            }
-            if(afBalance.compareTo(lotteryaInfo.getAdjustBonusDown()) >= 0 ){
-                upTotal = upTotal.add(afBalance.divide(new BigDecimal("100")).multiply(lotteryaInfo.getAdjustBonusRatio()));
-            }else{
-                upTotal = upTotal.add(lotteryaInfo.getAdjustBonusUp());
-            }
-            if(cTotal.compareTo(upTotal) > 0){
-                bool = true;
-            }
+        }
+        allMultipleNum += multipleNumber;
+        LotteryaInfo lotteryaInfo = lotteryaInfoService.findLotteryaInfo();
+        //最高限制奖金
+        BigDecimal upTotal = BigDecimal.ZERO;
+        //单注奖金，公式：(price*1000)/100*50
+        BigDecimal pTotal = lotteryaInfoService.calculateSingleBonus(lotteryaInfo);
+        //幸运号码中奖奖金总额
+        BigDecimal cTotal = pTotal.multiply(new BigDecimal(allMultipleNum));
+        //合约余额（当期奖金）
+        BigDecimal cBalance  = web3jService.getContractBalanceByEther(lotteryaInfo.getContractAddress());
+        //调节基金余额
+        BigDecimal afBalance  = web3jService.getAdjustFundBalanceByEther();
+        if(cBalance.compareTo(lotteryaInfo.getCurrenBonusDown()) >= 0){
+            upTotal = cBalance.divide(new BigDecimal("100")).multiply(lotteryaInfo.getCurrenBonusRatio());
+        }else{
+            upTotal = cBalance;
+        }
+        if(afBalance.compareTo(lotteryaInfo.getAdjustBonusDown()) >= 0 ){
+            upTotal = upTotal.add(afBalance.divide(new BigDecimal("100")).multiply(lotteryaInfo.getAdjustBonusRatio()));
+        }else{
+            upTotal = upTotal.add(lotteryaInfo.getAdjustBonusUp());
+        }
+        if(cTotal.compareTo(upTotal) > 0){
+            bool = true;
         }
         return bool;
     }

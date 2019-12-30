@@ -7,7 +7,7 @@ package com.didu.lotteryshop.wallet.api.v1.RequestEntity;
  */
 public class GenerateWalletEntity {
     private String userId;//用户ID
-    private String paymentCode; //交易密码
+    private String paymentCode; //交易密文
 
     public String getUserId() {
         return userId;

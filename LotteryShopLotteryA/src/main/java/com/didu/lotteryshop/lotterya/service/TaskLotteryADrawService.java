@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * A彩票开奖定时任务Service
+ * A彩票xxxxx定时任务Service
  * @author CHJ
  * @date 2019-11-27
  */
@@ -43,7 +43,8 @@ public class TaskLotteryADrawService extends LotteryABaseService{
         Date endAndIntervalDate = DateUtils.addMinutes(endTime,intervalDate.intValue());
         //延迟10分钟后开奖
         Date delayEndTime = DateUtils.addMinutes(endTime,10);
-        if(nowDate.after(delayEndTime) && nowDate.before(endAndIntervalDate) && lotteryaIssue.getBuyStatus().equals("0")){
+        //if(nowDate.after(delayEndTime) && nowDate.before(endAndIntervalDate) && lotteryaIssue.getBuyStatus().equals("0")){
+        if(nowDate.after(delayEndTime) && lotteryaIssue.getBuyStatus().equals("0")){//TODO 开奖的结束时间间隔不能大于10分钟 如果正在开奖  停机时间大于10钟 则不能征程开奖
             boolean bool = false;
             //关闭彩票购买功能
             logger.info("==============================☆☆ DrawLotteryA: Start off  BuyLotteryA ☆☆==============================================");

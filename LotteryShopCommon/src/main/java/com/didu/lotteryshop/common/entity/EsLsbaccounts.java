@@ -79,6 +79,12 @@ public class EsLsbaccounts extends Model<EsLsbaccounts> {
 	@TableField("transfer_hash_value")
 	private String transferHashValue;
 
+	/**
+	 * 處理狀態標識符
+	 */
+	@TableField("status_msg")
+	private String statusMsg;
+
 	public Integer getId() {
 		return id;
 	}
@@ -173,6 +179,14 @@ public class EsLsbaccounts extends Model<EsLsbaccounts> {
 
 	public void setTransferHashValue(String transferHashValue) {
 		this.transferHashValue = transferHashValue;
+	}
+
+	public String getStatusMsg() {
+		return statusMsg;
+	}
+
+	public void setStatusMsg(String statusMsg) {
+		this.statusMsg = statusMsg;
 	}
 
 	@Override

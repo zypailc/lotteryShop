@@ -217,6 +217,22 @@
 	.lottery_play_div_Multiple{
 		width: 100% !important;
 	}
+	.lottery_play_div_select{
+		width: 100% !important;
+	}
+	.multiple_input{
+		top: -15px !important;
+	}
+	.model_purchase_1{
+		height: 200px !important;
+	}
+	.button_width_all{
+		width: 100% !important;
+		text-align: center;
+	}
+	.model_purchase_button{
+		top: 0px !important;
+	}
 }
 
 /************

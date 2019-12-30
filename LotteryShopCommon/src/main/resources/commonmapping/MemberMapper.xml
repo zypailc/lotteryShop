@@ -17,6 +17,7 @@
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="generalize_type" property="generalizeType" />
+        <result column="payment_code_wallet" property="paymentCodeWallet" />
         <collection property="roles" fetchType="eager" column="id" select="com.didu.lotteryshop.auth.mapper.RoleMapper.findByMemberId"></collection>
     </resultMap>
 

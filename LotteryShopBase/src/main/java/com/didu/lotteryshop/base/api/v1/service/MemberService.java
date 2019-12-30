@@ -53,9 +53,11 @@ public class MemberService extends BaseBaseService {
      */
     public ResultUtil bindWallet(String paymentCode, String bAddress){
         LoginUser loginUser = super.getLoginUser();
+        String paymentCodeWallet = CodeUtil.getCode(32);//钱包文件生成需要密文和支付密码冲突
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("userId",loginUser.getId());
-        map.put("paymentCode",paymentCode);
+        //支付密码
+        map.put("paymentCode",paymentCodeWallet);
         map.put("bAddress",bAddress);
         String reStr = "";
         ResultUtil result = null;
@@ -75,13 +77,15 @@ public class MemberService extends BaseBaseService {
             resultMap = (Map<String, Object>) result.getExtend().get(ResultUtil.DATA_KEY);
             if (resultMap != null) {
                 WallName = AesEncryptUtil.encrypt(resultMap.get("fileName") == null ? "":resultMap.get("fileName").toString(), Constants.KEY_THREE);//钱包文件加密
-                paymentCode = AesEncryptUtil.encrypt(paymentCode, Constants.KEY_TOW);//加密支付密码
+                paymentCode = AesEncryptUtil.encrypt_code(paymentCode,Constants.KEY_TOW);//加密支付密码 // 不可逆加密
+                //paymentCode = AesEncryptUtil.encrypt(paymentCode, Constants.KEY_TOW);//加密支付密码 // 可逆加密
                 Member member = new Member();
                 member.setId(loginUser.getId());
                 member.setPAddress(resultMap.get("address").toString());
                 member.setBAddress(bAddress);
                 member.setWalletName(WallName);
                 member.setPaymentCode(paymentCode);
+                member.setPaymentCodeWallet(paymentCodeWallet);
                 b = memberServiceImp.updateMember(member);
                 if(!b){
                     return ResultUtil.errorJson("Failed to initialize wallet!");
@@ -143,7 +147,7 @@ public class MemberService extends BaseBaseService {
         //随机生成一个秘钥jsonObjectjsonObject
         String secretKey = Constants.KEY_TOW;
         //随机生成随机密码
-        String password = CodeUtil.getCode(18);
+        String password = "1";//CodeUtil.getCode(18);
         try {
             //秘钥和密码加密生成暗文
             String ciphertext = AesEncryptUtil.encrypt_code(password,secretKey);
@@ -162,8 +166,8 @@ public class MemberService extends BaseBaseService {
             Member memberUp = new Member();
             memberUp = memberServiceImp.selectById(member.getGeneralizeMemberId());
             if(memberUp != null){
-                member.setGeneralizeMemberId(memberUp.getGeneralizeMemberId());
-                member.setGeneralizeMemberIds(memberUp.getGeneralizeMemberId() == null || "".equals(memberUp.getGeneralizeMemberId()) ? "":memberUp.getGeneralizeMemberId() + "," + memberUp.getId());
+                member.setGeneralizeMemberId(memberUp.getId());
+                member.setGeneralizeMemberIds(memberUp.getGeneralizeMemberIds() == null || "".equals(memberUp.getGeneralizeMemberIds()) ? memberUp.getId():memberUp.getGeneralizeMemberIds() + "," + memberUp.getId());
                 member.setGeneralizeMemberLevel(memberUp.getGeneralizeMemberLevel() == null ? 0:(memberUp.getGeneralizeMemberLevel()+1));
             }
         }
@@ -273,7 +277,7 @@ public class MemberService extends BaseBaseService {
      * @param type ; type = 1 查询A玩法 type = -1 查询所有
      * @return
      */
-    public ResultUtil findLotterPurchaseResord(Integer currentPage,Integer pageSize,String startTime,String endTime,String type){
+    public ResultUtil findLotterPurchaseResord(Integer currentPage,Integer pageSize,String startTime,String endTime,String type,String winning){
         LoginUser loginUser = getLoginUser();
         //可能会有多种玩法 把所有玩法的购买记录拼接在一起 （字段类型：彩票类型(loteryType)，期数(issueNum)，时间(startTime,endTime)，开奖号(luckNum)，自选号(selfLuckNum),中奖金额(luckNum),是否中奖(isLuck)）
         String sql = " select 1 as lotteryType , li_.issue_num as issueNum, DATE_FORMAT(li_.start_time,'%Y-%m-%d %H:%i:%s') as startTime, DATE_FORMAT(li_.end_time,'%Y-%m-%d %H:%i:%s') as endTime,"+
@@ -288,10 +292,48 @@ public class MemberService extends BaseBaseService {
         if (endTime != null && !"".equals(endTime)) {
             sql += " and DATE_FORMAT(lb_.create_time,'%Y-%m-%d') <= '"+endTime+"'";
         }
+        if(winning != null && !"".equals(winning) && !"-1".equals(winning)){
+            sql += " and lb_.is_luck = '" + winning + "'";
+        }
         sql += " ORDER BY createTime DESC ";
         sql += " limit " + ((currentPage - 1) * pageSize)+ "," +pageSize;
         List<Map<String,Object>> list = getSqlMapper().selectList(sql);
         return ResultUtil.successJson(list);
+    }
+
+    /**
+     * 修改用户密码
+     * @param oldPassword
+     * @param newPassword
+     * @param type
+     * @return
+     */
+    public ResultUtil updatePassword(String oldPassword,String newPassword,String type){
+        Member member = new Member();
+        oldPassword = AesEncryptUtil.encrypt_code(oldPassword,Constants.KEY_TOW);
+        newPassword = AesEncryptUtil.encrypt_code(newPassword,Constants.KEY_TOW);
+        LoginUser loginUser = getLoginUser();
+        if("1".equals(type)){
+            //login
+            if(!loginUser.getPassword().equals(oldPassword)){
+                return ResultUtil.errorJson("Original password error !");
+            }
+            member.setPassword(newPassword);
+        }
+
+        if("2".equals(type)){
+            //play code
+            if(!loginUser.getPaymentCode().equals(oldPassword)){
+                return ResultUtil.errorJson("Original password error !");
+            }
+            member.setPaymentCode(newPassword);
+        }
+        member.setId(loginUser.getId());
+        boolean b = memberServiceImp.updateById(member);
+        if(!b){
+            return ResultUtil.errorJson("system error , please try again !");
+        }
+        return ResultUtil.successJson("modify successfully !");
     }
 
 }

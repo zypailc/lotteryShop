@@ -88,12 +88,14 @@ function create_confirm(){
         layer.msg("The password is inconsistent with the confirmation code !");
         return;
     }
+    var index = layer.load(1);
     $.ajax({
         method: "post",
         url: "/api/base/v1/member/bindWallet",
         data:{"bAddress":bAddress,"paymentCode":paymentCode},
         dataType: "json",
         success:function (data){
+            layer.close(index);
             if(data.code == '200'){//success
                 location.reload();
             }else {
@@ -181,14 +183,14 @@ function findETHWallet(classProperty,url){
                 var walletdetail;
                 if(classProperty == 'walletETH'){
                     ethHead = $(".eth_record");
-                    walletdetail = $(".wallet_address_self_eth");
+                    walletdetail = $(".wallet_address_self_eth_withdrawCash");
                 }
                 if(classProperty == 'walletPutMoney'){
                     ethHead = $(".wallet_head");
                 }
                 if(classProperty == 'walletFLAT'){
                     ethHead = $(".lsb_record");
-                    walletdetail = $(".wallet_address_self_flat");
+                    walletdetail = $(".wallet_address_self_flat_withdrawCash");
                 }
                 ethHead.find(".wallet_span_total").html(dataInfo.total);
                 ethHead.find(".balance").html(" : "+dataInfo.balance);
@@ -282,7 +284,9 @@ function findLotteryRecord(flag,classProperty){
     var startTime = $(".startDateInput").val() || "";
     var endTime = $(".endDateInput").val() || "";
     var type = $(".lotteryTypeSelect").val() || "";
+    var winning = $(".lotteryWinningSelect").val() || "";
     var li = $("."+classProperty).find("ul").find("li:first-child");
+    console.log(li.show());
     if(flag){
         ul.html("");
         walletETH.attr("currentPage","1")
@@ -294,7 +298,7 @@ function findLotteryRecord(flag,classProperty){
         $.ajax({
             url: "/api/base/v1/member/findLotterPurchaseResord",
             type: 'post',
-            data: {"currentPage": currentPage, "pageSize": pageSize, "type":type,"startTime":startTime,"endTime":endTime},
+            data: {"currentPage": currentPage, "pageSize": pageSize, "type":type,"startTime":startTime,"endTime":endTime,"winning":winning},
             dataType: "json",
             success: function (result) {
                 var dataInfo = result.extend.data;
@@ -309,7 +313,7 @@ function findLotteryRecord(flag,classProperty){
                         if(flag && index == 0){
                             new_li = li.clone();
                         }else {
-                            new_li = $("."+classProperty).find("ul").find("li:last-child").clone();
+                            new_li = $("."+classProperty).find("ul").find("li:first-child").clone();
                         }
                         if(data.lotteryType == '1'){
                             new_li.find(".lotteryType").html("lotteryA")
@@ -325,6 +329,11 @@ function findLotteryRecord(flag,classProperty){
                     walletETH.attr("currentPage", (parseInt(currentPage) + 1));
                     walletETH.attr("pageSize", pageSize);
                     if (record.length < pageSize) {
+                        if(flag && record.length == 0){
+                            li.hide();
+                            ul.append(li);
+
+                        }
                         ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
                     }
                 }
@@ -376,7 +385,6 @@ function getWalletConfig(){
         type:"get",
         dataType:"json",
         success:function (result){
-            console.log(result);
             var data = result.extend.data;
             var ethToLsb = data.ethToLsb;
             var lsbToEth = data.lsbToEth;
@@ -431,7 +439,6 @@ function withdrawCashEth(e){
             return;
         }
     }
-    console.log("extractTheNumber:"+extractTheNumber);
     if(propertyType == "1" || propertyType == "3"){
         openPlayCode(propertyType);
     }
@@ -445,14 +452,16 @@ function withdrawCashLsbToEth(extractTheNumber){
        return;
     }
     var url = "/api/base/v1/baseWallet/withdrawCashLsbToEth"
-    var dataJson;
-    dataJson.push({"num":extractTheNumber});
+    var dataJson = {};
+    dataJson = {"num":extractTheNumber};
+    console.log(dataJson)
     walletOperation(url,dataJson);
 }
 
 function paymentCodeConfirm(e){
     var div = $(e).parent().parent();
     var operationType = div.find("input[name=playCode]").attr("operationType") || "";
+    console.log(operationType);
     var playCode = getPlayCode();
     var dataJson = {};
     var url;
@@ -461,12 +470,11 @@ function paymentCodeConfirm(e){
         var num = $(".wallet_address_self_eth_withdrawCash").find("input").val() || "";
         dataJson = {"num":num,"playCode":playCode};
     }
-    if(operationType == '2'){//ETH TO Lsb
+    if(operationType == '3'){//ETH TO Lsb
         url = "/api/base/v1/baseWallet/withdrawCashEthToLsb";
         var num = $(".wallet_address_self_flat_recharge").find("input").val() || "";
         dataJson = {"num":num,"playCode":playCode};
     }
-    console.log(dataJson);
     walletOperation(url,dataJson);
 }
 
@@ -491,4 +499,52 @@ function getPlayCode(){
         }
     });
     return payPasswod;
+}
+
+function generalizeInitRegisterUrl(){
+    $.ajax({
+        url:"/api/base/v1/member/generalizeInitRegisterUrl",
+        type:"get",
+        dataType:"json",
+        success:function (result){
+            if(result.code == '200'){
+                $(".generalizeEwmUrl").html(result.extend.data);
+            }
+        }
+    })
+}
+
+function updatePassword(e,type){
+    var obj = $(e).parent().parent();
+    var oldPassword = obj.find("input[name=oldPassword]").val() || "";
+    var newPassword = obj.find("input[name=newPassword]").val() || "";
+    var confirmPassword = obj.find("input[name=confirmPassword]").val() || "";
+    if(!oldPassword){
+        layui_open("Please enter the original password !");
+        return ;
+    }
+    if(!newPassword){
+        layui_open("Please enter your new password !");
+        return ;
+    }
+    if(!confirmPassword){
+        layui_open("Please enter the confirmation code !");
+        return ;
+    }
+    $.ajax({
+        url:"/api/base/v1/member/updatePassword",
+        type:"get",
+        data:{"oldPassword":oldPassword,"newPassword":newPassword,"confirmPassword":confirmPassword,"type":type},
+        dataType:"json",
+        success:function (result){
+            if(result.code == '200'){
+                layer.msg(result.extend.data);
+                if(type == '1'){
+                    //退出登陆
+                }
+            }else if(result.code == '500'){
+                layui_open(result.msg);
+            }
+        }
+    })
 }

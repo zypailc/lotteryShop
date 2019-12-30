@@ -66,6 +66,10 @@ public class LotteryAService extends LotteryABaseService {
         rMap.put("issueNumId",lotteryaIssue.getId());
         //购买状态，0：开启，1：关闭
         rMap.put("buyStatus",lotteryaIssue.getBuyStatus());
+        //周期开始时间
+        rMap.put("startTime",lotteryaIssue.getStartTime());
+        //当前时间
+        rMap.put("presentTime",new Date());
         //开奖时间
         rMap.put("endTime",lotteryaIssue.getEndTime());
         //合约地址
@@ -106,8 +110,12 @@ public class LotteryAService extends LotteryABaseService {
      * @return
      */
     public ResultUtil getLotteryBuy(Integer currentPage, Integer pageSize,Integer isOneself,String mTransferStatus, LotteryaBuy lotteryaBuy,Integer type){
-        if(isOneself != null && isOneself == 1 && super.getLoginUser() != null){
-            lotteryaBuy.setMemberId(super.getLoginUser().getId());
+        if(isOneself != null && isOneself == 1){
+            if(super.getLoginUser() != null){
+                lotteryaBuy.setMemberId(super.getLoginUser().getId());
+            }else {
+                lotteryaBuy.setMemberId("-1");
+            }
         }else{
             lotteryaBuy.setMemberId(null);
         }

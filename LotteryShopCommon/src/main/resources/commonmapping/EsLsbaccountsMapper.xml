@@ -16,6 +16,7 @@
 		<result column="oper_id" property="operId" />
 		<result column="gas_fee" property="gasFee" />
 		<result column="transfer_hash_value" property="transferHashValue" />
+		<result column="status_msg" property="statusMsg" />
 	</resultMap>
 
 </mapper>

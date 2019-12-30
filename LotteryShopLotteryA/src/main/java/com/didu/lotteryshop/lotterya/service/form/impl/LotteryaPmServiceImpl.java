@@ -212,7 +212,7 @@ public class LotteryaPmServiceImpl extends ServiceImpl<LotteryaPmMapper, Lottery
                       //增加转账状态
                       SysConfig sysConfig = sysConfigService.getSysConfig();
                       lapm.setTransferStatus("-1");
-                      lapm.setTotalEther(lapm.getTotal().divide(sysConfig.getLsbToEth()).setScale(4,BigDecimal.ROUND_DOWN));
+                      lapm.setTotalEther(lapm.getTotal().divide(sysConfig.getLsbToEth(),25,BigDecimal.ROUND_DOWN));
                       bool = super.updateById(lapm);
                       if(bool){
                           //增加待领币
@@ -250,24 +250,27 @@ public class LotteryaPmServiceImpl extends ServiceImpl<LotteryaPmMapper, Lottery
               BigDecimal allTotalEther =   new BigDecimal(sMap.get("allTotalEther").toString());
               if(allTotalEther.compareTo(BigDecimal.ZERO) > 0){
                   SysConfig sysConfig = sysConfigService.getSysConfig();
-                  Map<String,Object> rMap =  web3jService.managerSendToETH(sysConfig.getLsbAddress(),allTotalEther);
-                  if(rMap != null && !rMap.isEmpty()){
-                      String hashvalue = rMap.get(Web3jService.TRANSACTION_HASHVALUE).toString();
-                      String status = rMap.get(Web3jService.TRANSACTION_STATUS).toString();
-                      BigDecimal gasUsed = new BigDecimal(rMap.get(Web3jService.TRANSACTION_GASUSED).toString());
-                      String transferStatus = "";
-                      if(status.equals("0")){
-                          transferStatus = "0";
-                      }else if(status.equals("1")){
-                          transferStatus = "1";
-                      }else if(status.equals("2")){
-                          transferStatus = "2";
+                  //TODO 如果A彩票管理员账号ETH不够发放中奖提成 暂时不发放 需要人工填账
+                  if(web3jService.getManagerBalanceByEther().compareTo(allTotalEther) >= 0){
+                      Map<String,Object> rMap =  web3jService.managerSendToETH(sysConfig.getLsbAddress(),allTotalEther);
+                      if(rMap != null && !rMap.isEmpty()){
+                          String hashvalue = rMap.get(Web3jService.TRANSACTION_HASHVALUE).toString();
+                          String status = rMap.get(Web3jService.TRANSACTION_STATUS).toString();
+                          BigDecimal gasUsed = new BigDecimal(rMap.get(Web3jService.TRANSACTION_GASUSED).toString());
+                          String transferStatus = "";
+                          if(status.equals("0")){
+                              transferStatus = "0";
+                          }else if(status.equals("1")){
+                              transferStatus = "1";
+                          }else if(status.equals("2")){
+                              transferStatus = "2";
+                          }
+                          String updateSql = "update lotterya_pm as lap_ set lap_.transfer_status='"+transferStatus+"'"+
+                                  ",lap_.transfer_hash_value='"+hashvalue+"'"+
+                                  ",lap_.transfer_status_time=now()"+
+                                  ",lap_.transfer_gasfee="+gasUsed;
+                          bool = sqlMapper.update(updateSql+conditionSql) > 0 ? true : false;
                       }
-                      String updateSql = "update lotterya_pm as lap_ set lap_.transfer_status='"+transferStatus+"'"+
-                              ",lap_.transfer_hash_value='"+hashvalue+"'"+
-                              ",lap_.transfer_status_time=now()"+
-                              ",lap_.transfer_gasfee="+gasUsed;
-                      bool = sqlMapper.update(updateSql+conditionSql) > 0 ? true : false;
                   }
               }else{
                   bool = true;

@@ -96,6 +96,7 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                         //step 3 查询数据库，存入用户
                         String sql = "select id,member_name as memberName,email,head_portrait_url as headPortraitUrl,p_address as pAddress,b_address as bAddress,wallet_name as walletName " +
                                 " ,date_format(create_time,'%Y-%m-%d %H:%i:%s') as createTime ,date_format(update_time,'%Y-%m-%d %H:%i:%s') as updateTime ,payment_code as paymentCode" +
+                                " , payment_code_wallet as paymentCodeWallet , password as password " +
                                 " from es_member where email = '" + memberName + "'";
                         //存入用户修改时间
                         List<Map<String, Object>> list = sqlMapper.selectList(sql);
@@ -105,7 +106,7 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                             String paymentCode = "";
                             try {
                                 WalletName = AesEncryptUtil.decrypt(map.get("walletName") != null ? map.get("walletName").toString() : "", Constants.KEY_THREE);
-                                paymentCode = AesEncryptUtil.decrypt(map.get("paymentCode") != null ? map.get("paymentCode").toString() : "", Constants.KEY_TOW);
+                                paymentCode = map.get("paymentCode") != null ? map.get("paymentCode").toString() : "";
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -117,6 +118,8 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                             loginUser.setHeadPortraitUrl((map.get("headPortraitUrl") != null && !"".equals(map.get("headPortraitUrl"))) ? map.get("headPortraitUrl").toString() : Constants.HEAD_PORTRAIT_URL);
                             loginUser.setPAddress(map.get("pAddress") != null ? map.get("pAddress").toString() : "");
                             loginUser.setBAddress(map.get("bAddress") != null ? map.get("bAddress").toString() : "");
+                            loginUser.setPaymentCodeWallet(map.get("paymentCodeWallet") != null ? map.get("paymentCodeWallet").toString() : "");
+                            loginUser.setPassword(map.get("password") != null ? map.get("password").toString() : "");
                             loginUser.setPaymentCode(paymentCode);
                             loginUser.setWalletName(WalletName);
                         }

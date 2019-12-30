@@ -47,7 +47,7 @@ public class WalletContorller extends WalletBaseController {
             return ResultUtil.errorJson("The userId cannot be empty!");
         }
         if(StringUtils.isBlank(gwEntity.getPaymentCode())){
-            //支付密码不能为空！
+            //交易密文不能为空！
            return ResultUtil.errorJson("The payPassword cannot be empty!");
         }
         return walletService.generateWallet(gwEntity.getUserId(),gwEntity.getPaymentCode());

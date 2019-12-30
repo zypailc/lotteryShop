@@ -3,12 +3,17 @@ package com.didu.lotteryshop.common.utils;
 import cn.hutool.core.convert.Convert;
 import com.didu.lotteryshop.common.config.Constants;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import org.apache.commons.lang3.time.DateUtils;
+import org.web3j.crypto.WalletUtils;
+import sun.security.krb5.Credentials;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.SecretKeySpec;
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -157,9 +162,28 @@ public class AesEncryptUtil {
         System.out.println("SLeGFAaTwsTnsqLCNQvXzBY0EcQ65uV1v1jIbQdUFh5Q9fx4XEKPpYYUvWiuUtla5XZPy6cQyvFliLJuNI3/rr/AdtecYaCZIFj0kD8GyOK2Q5B4QUfJrw4IeQBRJ9Ii".length());
         //SLeGFAaTwsTnsqLCNQvXzGr6fC5d+KYQJZJZhWhkr9NFtq3t0ykqAzR1r70FtaT6ev2nV4jHPNW3J+7gQElTcu5jvh+6s8M9yYFbXnwXIGuC8VDASazbqYEPKv87d42FsokVJjojUxNRB6k4Of46oQ==
         System.out.println(AesEncryptUtil.decrypt("SLeGFAaTwsTnsqLCNQvXzBY0EcQ65uV1v1jIbQdUFh5Q9fx4XEKPpYYUvWiuUtla5XZPy6cQyvFliLJuNI3/rr/AdtecYaCZIFj0kD8GyOK2Q5B4QUfJrw4IeQBRJ9Ii",Constants.KEY_THREE));*/
-        System.out.println("mima:"+AesEncryptUtil.encrypt_code("1",Constants.KEY_TOW));
+        /*System.out.println("mima:"+AesEncryptUtil.encrypt_code("1",Constants.KEY_TOW));
 
-        System.out.println("mima:"+AesEncryptUtil.decrypt("icx44PKACC5WOJke8+U53Q==",Constants.KEY_TOW));
+        System.out.println("mima:"+AesEncryptUtil.decrypt("icx44PKACC5WOJke8+U53Q==",Constants.KEY_TOW));*/
+
+
+        Date nowDate = new Date();
+        //彩票结束时间
+        Date endTime = new Date(1577507100);//"2019-12-28 12:25:00"
+
+        //彩票开奖间隔时间(单位分钟)
+        BigDecimal intervalDate = new BigDecimal("10");
+
+        //彩票结束时间加开奖间隔时间
+        //Date endAndIntervalDate = DateUtils.addMinutes(endTime,intervalDate.intValue());
+        //延迟10分钟后开奖
+        Date delayEndTime = DateUtils.addMinutes(endTime,10);
+        endTime = DateUtils.addMinutes(new Date(),-11);
+        Date endAndIntervalDate = DateUtils.addMinutes(endTime,intervalDate.intValue());
+        System.out.println(nowDate.after(delayEndTime));
+        System.out.println(nowDate.before(endAndIntervalDate));
+
+
 
     }
 

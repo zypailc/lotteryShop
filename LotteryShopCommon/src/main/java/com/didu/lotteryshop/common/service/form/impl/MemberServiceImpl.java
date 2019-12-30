@@ -33,7 +33,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> {
         int cnts = 0;
         if(level != null){
             Member member = super.selectById(memberId);
-            level += member.getGeneralizeMemberLevel();
+            level += member.getGeneralizeMemberLevel() == null ? 0 : member.getGeneralizeMemberLevel();
         }
         String sql = " select count(1) as cnts from(" +
                             " select" +

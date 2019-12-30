@@ -116,8 +116,20 @@ public class EsLsbwalletServiceImpl extends ServiceImpl<EsLsbwalletMapper, EsLsb
      * @return
      */
     public BigDecimal updateAddFreeze(BigDecimal freeze,String memberId){
-        return this.updateFreeze(freeze,memberId,true,false);
+        return this.updateFreeze(freeze,memberId,true,false,null);
     }
+
+    /**
+     * 增加冻结金额 Eth 充值
+     * @param freeze 金额
+     * @param memberId 会员ID
+     * @param type  0：出，1：入
+     * @return
+     */
+    public BigDecimal updateAddFreeze(BigDecimal freeze,String memberId,Integer type){
+        return this.updateFreeze(freeze,memberId,true,false,type);
+    }
+
     /**
      *  减少冻结金额
      * @param freeze 金额
@@ -126,7 +138,7 @@ public class EsLsbwalletServiceImpl extends ServiceImpl<EsLsbwalletMapper, EsLsb
      * @return 返回可用余额，返回null时执行失败
      */
     public BigDecimal updateSubtractFreeze(BigDecimal freeze,String memberId,boolean isSuc){
-        return this.updateFreeze(freeze,memberId,false,isSuc);
+        return this.updateFreeze(freeze,memberId,false,isSuc,null);
     }
 
     /**
@@ -135,19 +147,31 @@ public class EsLsbwalletServiceImpl extends ServiceImpl<EsLsbwalletMapper, EsLsb
      * @param memberId 会员ID
      * @param isAdd 是否是增加，反之减少
      * @param isSuc 当isAdd为false时生效，是否是成功出账，反之解冻
+     * @param type 0：出，1：入
      * @return 返回可用余额，返回null时执行失败
      */
-    private BigDecimal updateFreeze(BigDecimal freeze,String memberId,boolean isAdd,boolean isSuc){
+    private BigDecimal updateFreeze(BigDecimal freeze,String memberId,boolean isAdd,boolean isSuc,Integer type){
         if(StringUtils.isBlank(memberId) || freeze == null ) return null;
         EsLsbwallet esLsbwallet = this.findByMemberId(memberId);
+        if(type == null){
+            type = EsLsbaccountsServiceImpl.TYPE_OUT;
+        }
         if(isAdd){
-            //账户余额，要大于出账金额
-            if(this.judgeBalance(memberId,freeze)){
-                esLsbwallet.setBalance(esLsbwallet.getBalance().subtract(freeze));
+            if(type == EsLsbaccountsServiceImpl.TYPE_OUT){ // 出账
+                //账户余额，要大于出账金额
+                if(this.judgeBalance(memberId,freeze)){
+                    esLsbwallet.setBalance(esLsbwallet.getBalance().subtract(freeze));
+                    esLsbwallet.setFreeze(esLsbwallet.getFreeze().add(freeze));
+                }else{
+                    return null;
+                }
+            }else if(type == EsLsbaccountsServiceImpl.TYPE_IN){//进账充值 ，直接增加冻结金额
                 esLsbwallet.setFreeze(esLsbwallet.getFreeze().add(freeze));
-            }else{
-                return null;
+                esLsbwallet.setTotal(esLsbwallet.getTotal().add(freeze));
+            }else {
+                return  null;
             }
+
         }else {
             if (this.judgeFreeze(memberId,freeze)) {
                 //成功出账

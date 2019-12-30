@@ -47,6 +47,8 @@ public class Member{
     private Date updateTime;//用户信息更新时间
     @TableField("generalize_type")
     private Integer generalizeType;//推广类型，0：散户：1：推广商
+    @TableField("payment_code_wallet")
+    private String paymentCodeWallet;//生成钱包文件的秘钥
 
     @TableField(exist = false)
     private Set<Role> roles;//角色

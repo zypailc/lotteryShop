@@ -45,6 +45,9 @@
     "total": "总额",
     "freeze": "冻结",
     "recharge": "充值",
-    "exchange": "兑换"
+    "exchange": "兑换",
+    "drawALottery": "正在开奖",
+    "giveOut": "正在发放奖金",
+    "passwordManagement": "密码管理"
   }
 }

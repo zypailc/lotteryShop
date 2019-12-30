@@ -48,7 +48,7 @@ public class TaskTransferEtherService extends BaseBaseService {
         logger.info("==============================☆☆ baseTransferEther：End withdraw deposit  ☆☆==============================================");
         //处理Lsb转ETH和ETH转平台币的处理结果
         logger.info("==============================☆☆ baseTransferEther：Start ETH  withdraw deposit ☆☆==============================================");
-        this.disposeEthAccountsWait();
+        this.disposeLsbAndEth();
         logger.info("==============================☆☆ baseTransferEther：End withdraw deposit  ☆☆==============================================");
     }
 
@@ -76,16 +76,17 @@ public class TaskTransferEtherService extends BaseBaseService {
                             if(status.equals("1")){
                                 success++;
                                //修改记录为成功
-                                if(esLsbaccounts.getType() == EsLsbaccountsServiceImpl.TYPE_IN){//lsbToEth(平台出账，ETH入账)
+                                if(esLsbaccounts.getType() == EsLsbaccountsServiceImpl.TYPE_IN){//lsbToEth(平台入账，ETH出账)
                                     bool = esLsbaccountsService.updateSuccess(esLsbaccounts.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_IN,new BigDecimal(gasUsed));
-                                    if(! bool ) return;
-                                    //记录一条成功的ETH账目记录(入账)
-                                    bool = esEthaccountsService.addInBeingprocessed(esLsbaccounts.getMemberId(), EsEthaccountsServiceImpl.DIC_TYPE_LSBTOETH,esLsbaccounts.getAmount().multiply(sysConfig.getLsbToEth()),esLsbaccounts.getId().toString());
-                                }else{
-                                    bool = esLsbaccountsService.updateSuccess(esLsbaccounts.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,new BigDecimal(gasUsed));
                                     if(! bool ) return;
                                     //记录一条成功的ETH账目记录(出账)
                                     bool = esEthaccountsService.addOutSuccess(esLsbaccounts.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,esLsbaccounts.getAmount().multiply(sysConfig.getEthToLsb()),esLsbaccounts.getId().toString(),new BigDecimal(gasUsed));
+                                }else{
+                                    bool = esLsbaccountsService.updateSuccess(esLsbaccounts.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,new BigDecimal(gasUsed));
+                                    if(! bool ) return;
+                                    //记录一条成功的ETH账目记录(入账)
+                                    bool = esEthaccountsService.addInBeingprocessed(esLsbaccounts.getMemberId(), EsEthaccountsServiceImpl.DIC_TYPE_LSBTOETH,esLsbaccounts.getAmount().multiply(sysConfig.getLsbToEth()),esLsbaccounts.getId().toString());
+
                                 }
                             }
                             if(status.equals("2")){

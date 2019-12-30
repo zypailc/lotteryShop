@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -130,13 +131,13 @@ public class LotteryaDiServiceImpl extends ServiceImpl<LotteryaDiMapper, Lottery
                     //下级活跃人数
                     int activeMembers = memberService.findActiveMembers(m.getId(),esGdethconfig.getConsumeTotal(),cLevel,esGdethconfig.getCycleDay());
                     //购买总金额
-                    BigDecimal total = new BigDecimal(lbMap.get("total").toString());
+                    BigDecimal total = new BigDecimal(lbMap.get("total") == null ? "0" : lbMap.get("total").toString());
                     //购买总注数
-                    Integer counts = Integer.valueOf(lbMap.get("counts").toString());
+                    Integer counts = Integer.valueOf(lbMap.get("counts") == null ? "0" : lbMap.get("counts").toString());
                     //中奖总金额
-                    BigDecimal luckTotal = new BigDecimal(lbMap.get("luckTotal").toString());
+                    BigDecimal luckTotal = new BigDecimal(lbMap.get("luckTotal") == null ? "0" : lbMap.get("luckTotal").toString());
                     //中奖总注数
-                    Integer luckCounts = Integer.valueOf(lbMap.get("luckCounts").toString());
+                    Integer luckCounts = Integer.valueOf(lbMap.get("luckCounts") == null ? "0" : lbMap.get("luckCounts").toString());
 
                     LotteryaDi lotteryaDi = new LotteryaDi();
                     lotteryaDi.setMemberId(m.getId());
@@ -160,15 +161,18 @@ public class LotteryaDiServiceImpl extends ServiceImpl<LotteryaDiMapper, Lottery
                     lotteryaDi.setOperationTotal(diTotal);
                     //根据活跃人数查询从分成比例
                     EsGdethconfigAcquire esGdethconfigAcquire = esGdethconfigAcquireService.findEsGdethconfigAcquireByActiveMembers(activeMembers);
-                    diTotal = diTotal.divide(new BigDecimal("100"))
-                            .multiply(esGdethconfigAcquire.getRatio())
-                            .setScale(4,BigDecimal.ROUND_DOWN);
+                    if(esGdethconfigAcquire != null) {
+                        diTotal = diTotal.divide(new BigDecimal("100"))
+                                .multiply(esGdethconfigAcquire.getRatio())
+                                .setScale(4, BigDecimal.ROUND_DOWN);
 
-                    diTotalCuntAll = diTotalCuntAll.add(diTotal);
-
-                    lotteryaDi.setLuckDiTotal(luckDiTotal);
-                    lotteryaDi.setDiRatio(esGdethconfigAcquire.getRatio());
+                        diTotalCuntAll = diTotalCuntAll.add(diTotal);
+                        lotteryaDi.setDiRatio(esGdethconfigAcquire.getRatio());
+                    }else {
+                        lotteryaDi.setDiRatio(BigDecimal.ZERO);
+                    }
                     lotteryaDi.setDiTotal(diTotal);
+                    lotteryaDi.setLuckDiTotal(luckDiTotal);
                     lotteryaDi.setCreateTime(new Date());
                     lotteryaDi.setTransferHashValue("");
                     lotteryaDi.setTransferStatus("0");

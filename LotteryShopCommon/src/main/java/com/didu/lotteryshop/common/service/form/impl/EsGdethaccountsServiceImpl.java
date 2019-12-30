@@ -49,6 +49,8 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
     public static int STATUS_SUCCESS = 1;
     /** 状态：失败 */
     public static int STATUS_FAIL = 2;
+    /** 状态标识符 **/
+    public static  String STATUS_MSG_FAIL = "transfer_failed_insufficient_balance";
 
     /**
      * 新增入账（成功）记录
@@ -59,7 +61,7 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
      * @return
      */
     public boolean addInSuccess(String memberId, String dicTypeValue, BigDecimal total, String operId){
-        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_SUCCESS,operId,BigDecimal.ZERO,null);
+        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_SUCCESS,operId,BigDecimal.ZERO,null,null);
     }
     /**
      * 新增入账（处理中）记录
@@ -70,7 +72,7 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
      * @return
      */
     public boolean addInBeingprocessed(String memberId,String dicTypeValue,BigDecimal total,String operId){
-        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO,null);
+        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO,null,null);
     }
 
     /**
@@ -83,7 +85,7 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
      * @return
      */
     public boolean addOutSuccess(String memberId,String dicTypeValue,BigDecimal total,String operId,BigDecimal gasFee){
-        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_SUCCESS,operId,gasFee,null);
+        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_SUCCESS,operId,gasFee,null,null);
     }
     /**
      * 新增出账（成功）记录
@@ -96,7 +98,7 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
      * @return
      */
     public boolean addOutSuccess(String memberId,String dicTypeValue,BigDecimal total,String operId,BigDecimal gasFee,String transferHashValue){
-        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_SUCCESS,operId,gasFee,transferHashValue);
+        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_SUCCESS,operId,gasFee,transferHashValue,null);
     }
     /**
      * 新增出账（处理中）记录
@@ -107,7 +109,7 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
      * @return
      */
     public boolean addOutBeingProcessed(String memberId,String dicTypeValue,BigDecimal total,String operId){
-        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO,null);
+        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO,null,null);
     }
     /**
      * 新增出账（处理中）记录
@@ -119,7 +121,31 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
      * @return
      */
     public boolean addOutBeingProcessed(String memberId,String dicTypeValue,BigDecimal total,String operId,String transferHashValue){
-        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO,transferHashValue);
+        return this.add(memberId,dicTypeValue,TYPE_OUT,total,STATUS_BEINGPROCESSED,operId,BigDecimal.ZERO,transferHashValue,null);
+    }
+
+    /**
+     * 新增入账（失敗）记录
+     * @param memberId 用户ID
+     * @param dicTypeValue sys_dic 字典表类型值
+     * @param total 金额
+     * @param operId  操作业务表主键ID
+     * @param statusMsg 状态信息
+     * @return
+     */
+    public boolean addInFail(String memberId,String dicTypeValue,BigDecimal total,String operId,String statusMsg){
+        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_SUCCESS,operId,BigDecimal.ZERO,null,statusMsg);
+    }
+    /**
+     * 新增入账（失敗）记录
+     * @param memberId 用户ID
+     * @param dicTypeValue sys_dic 字典表类型值
+     * @param total 金额
+     * @param operId  操作业务表主键ID
+     * @return
+     */
+    public boolean addInFail(String memberId,String dicTypeValue,BigDecimal total,String operId){
+        return this.add(memberId,dicTypeValue,TYPE_IN,total,STATUS_SUCCESS,operId,BigDecimal.ZERO,null,null);
     }
 
 
@@ -133,17 +159,18 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
      * @param operId  操作业务表主键ID
      * @param  gasFee 燃气费
      * @param  transferHashValue 转账事务哈希值
+     * @param  statusMsg 状态标识符
      * @return
      */
-    private boolean add(String memberId, String dicTypeValue, int type,BigDecimal total,int status,String operId,BigDecimal gasFee,String transferHashValue){
+    private boolean add(String memberId, String dicTypeValue, int type,BigDecimal total,int status,String operId,BigDecimal gasFee,String transferHashValue,String statusMsg){
         boolean bool = false;
-        if(StringUtils.isNotBlank(memberId) && StringUtils.isNotBlank(dicTypeValue) && total != null
-                && status != STATUS_FAIL){ //新增时禁止直接插入失败数据，只有异步调用update来修改数据状态为失败
+        if(StringUtils.isNotBlank(memberId) && StringUtils.isNotBlank(dicTypeValue) && total != null){
+                //&& status != STATUS_FAIL){ //新增时禁止直接插入失败数据，只有异步调用update来修改数据状态为失败
             BigDecimal  balance = null;
             gasFee = gasFee == null ? BigDecimal.ZERO : gasFee;
             BigDecimal amount = total.add(gasFee);
             //进账
-            if(type == TYPE_IN && status == STATUS_SUCCESS){
+            /*if(type == TYPE_IN && status == STATUS_SUCCESS){
                 balance = esGdethwalletService.updateBalance(amount,memberId,true);
                 //出账
             }else if(type == TYPE_OUT){
@@ -154,6 +181,24 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
                     //处理中，冻结金额
                     balance = esGdethwalletService.updateAddFreeze(amount,memberId);
                 }
+            }*/
+            if(status == STATUS_SUCCESS){
+                if(type == TYPE_IN ){
+                    balance = esGdethwalletService.updateBalance(amount,memberId,true);
+                }else if(type == TYPE_OUT ){
+                    //成功，直接减余额
+                    balance = esGdethwalletService.updateBalance(amount,memberId,false);
+                }
+                statusMsg = statusMsg == null ? "success":statusMsg;
+            }else if(status == STATUS_BEINGPROCESSED){
+                if(type == TYPE_OUT){
+                    //处理中，冻结金额
+                    balance = esGdethwalletService.updateAddFreeze(amount,memberId);
+                }
+                statusMsg = statusMsg == null ? "beingprocessed":statusMsg;
+            }else if(status == STATUS_FAIL){
+                balance = esGdethwalletService.findByMemberId(memberId).getBalance();
+                statusMsg = statusMsg == null ? "fail":statusMsg;
             }
             //balance是null时，以上方法执行失败，请认真查看。
             if(balance == null) return bool;
@@ -164,6 +209,7 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
             esGdethaccounts.setAmount(total);
             esGdethaccounts.setBalance(balance);
             esGdethaccounts.setStatus(status);
+            esGdethaccounts.setStatusMsg(statusMsg);
             esGdethaccounts.setStatusTime(new Date());
             esGdethaccounts.setCreateTime(new Date());
             esGdethaccounts.setOperId(operId);

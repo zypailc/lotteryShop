@@ -57,6 +57,7 @@ public class TaskDlbCalculateService {
             for(EsDlbwallet edw : esDlbwalletList){
                 Member member = memberService.selectById(edw.getMemberId());
                 //新注册的会员未到结算周期
+                if(member == null) continue;
                 if(member.getCreateTime().compareTo(calculateDate) > 0) continue;
                 //周期内是否已经结算过，结算过下一条
                 if(esDlbaccountsService.findToSAByDay(member.getId(),esDlbconfig.getCalculateDay())) continue;

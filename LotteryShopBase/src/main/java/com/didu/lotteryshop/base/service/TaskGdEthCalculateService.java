@@ -61,23 +61,27 @@ public class TaskGdEthCalculateService extends BaseBaseService {
                     if(member.getCreateTime().compareTo(calculateDate) > 0) continue;
                     //周期内有结账数据，有下一条，无则进行结账
                     if(esGdethaccountsService.findToSAByDay(member.getId(),esGdethconfigWithdraw.getwDay())) continue;
-                    //结账
-                    Map<String,Object> rMap = web3jService.divideIntoManagerSendToETH(member.getPAddress(),egew.getBalance());
-                    if(rMap != null && !rMap.isEmpty()){
-                        String hashvalue = rMap.get(Web3jService.TRANSACTION_HASHVALUE).toString();
-                        //是否确认状态，0未确认，1已确认，2失败
-                        String status = rMap.get(Web3jService.TRANSACTION_STATUS).toString();
-                        boolean bool = false;
-                        BigDecimal gasUsed = new BigDecimal(rMap.get(Web3jService.TRANSACTION_GASUSED).toString());
-                        if(status.equals("0")){
-                            bool = esGdethaccountsService.addOutBeingProcessed(egew.getMemberId(),EsGdethaccountsServiceImpl.DIC_TYPE_SA,egew.getBalance(),"-1",hashvalue);
-                        }else if(status.equals("1")){
-                            bool = esGdethaccountsService.addOutSuccess(egew.getMemberId(),EsGdethaccountsServiceImpl.DIC_TYPE_SA,egew.getBalance(),"-1",gasUsed,hashvalue);
-                            if(bool){
-                                esEthaccountsService.addInSuccess(egew.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_GSA,egew.getBalance(),"-1");
+                    if(web3jService.geGdManagerBalanceByEther().compareTo(egew.getBalance()) >= 0) {
+                        Map<String, Object> rMap = web3jService.divideIntoManagerSendToETH(member.getPAddress(), egew.getBalance());
+                        if (rMap != null && !rMap.isEmpty()) {
+                            String hashvalue = rMap.get(Web3jService.TRANSACTION_HASHVALUE).toString();
+                            //是否确认状态，0未确认，1已确认，2失败
+                            String status = rMap.get(Web3jService.TRANSACTION_STATUS).toString();
+                            boolean bool = false;
+                            BigDecimal gasUsed = new BigDecimal(rMap.get(Web3jService.TRANSACTION_GASUSED).toString());
+                            if (status.equals("0")) {
+                                bool = esGdethaccountsService.addOutBeingProcessed(egew.getMemberId(), EsGdethaccountsServiceImpl.DIC_TYPE_SA, egew.getBalance(), "-1", hashvalue);
+                            } else if (status.equals("1")) {
+                                bool = esGdethaccountsService.addOutSuccess(egew.getMemberId(), EsGdethaccountsServiceImpl.DIC_TYPE_SA, egew.getBalance(), "-1", gasUsed, hashvalue);
+                                if (bool) {
+                                    esEthaccountsService.addInSuccess(egew.getMemberId(), EsEthaccountsServiceImpl.DIC_TYPE_GSA, egew.getBalance(), "-1");
+                                }
                             }
+                            if (!bool) return;
                         }
-                        if(!bool) return;
+                    }else {
+                        //结账 TODO 结账失败 存储一条失败数据
+                        esGdethaccountsService.addInFail(egew.getMemberId(),EsGdethaccountsServiceImpl.DIC_TYPE_SA, egew.getBalance(),"-1",EsLsbaccountsServiceImpl.STATUS_MSG_FAIL);
                     }
                 }
             }

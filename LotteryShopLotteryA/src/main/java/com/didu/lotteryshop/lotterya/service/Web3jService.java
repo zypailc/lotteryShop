@@ -133,7 +133,7 @@ public class Web3jService extends LotteryABaseService {
     public Credentials getLoginMemberCredentials(){
         try{
             LoginUser loginUser = super.getLoginUser();
-            return WalletUtils.loadBip39Credentials(loginUser.getPaymentCode(),loginUser.getId()+Constants.MEMBER_MNEMONIC);
+            return WalletUtils.loadBip39Credentials(loginUser.getPaymentCodeWallet(),loginUser.getId()+Constants.MEMBER_MNEMONIC);//添加生成钱包文件的密文字段 2019-12-30 zm
             //TODO 2019-12-23 lyl 注释，钱包文件生成，跨服务就没有办法生成，调整为助记词方式
             //return WalletUtils.loadCredentials(loginUser.getPaymentCode(), walletFilePath+loginUser.getWalletName());
 

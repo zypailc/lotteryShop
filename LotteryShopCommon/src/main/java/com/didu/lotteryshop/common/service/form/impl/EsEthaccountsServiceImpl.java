@@ -73,6 +73,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
     /** 状态：失败 */
     public static int STATUS_FAIL = 2;
 
+
     /**
      * 新增入账（成功）记录
      * @param memberId 用户ID
@@ -285,16 +286,16 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
             esEthaccounts.setGasFee(gasFee);
             BigDecimal balance = null;
             if(status == STATUS_SUCCESS){
-                balance = esEthwalletService.updateBalance(gasFee,memberId,false);
+                balance = esEthwalletService.updateBalance(gasFee,esEthaccounts.getMemberId(),false);
                 if(balance == null) return bool;
-                balance =  esEthwalletService.updateSubtractFreeze(esEthaccounts.getAmount(),memberId,true);
+                balance =  esEthwalletService.updateSubtractFreeze(esEthaccounts.getAmount(),esEthaccounts.getMemberId(),true);
                 if(balance == null) return bool;
                 //第一次消费奖励
-                sysTaskService.TaskFirstConsumption(memberId);
+                sysTaskService.TaskFirstConsumption(esEthaccounts.getMemberId());
                 //第一次消费直属上级奖励
-                sysTaskService.TaskLowerFirstConsumption(memberId);
+                sysTaskService.TaskLowerFirstConsumption(esEthaccounts.getMemberId());
             }else if(status == STATUS_FAIL){
-                balance =  esEthwalletService.updateSubtractFreeze(esEthaccounts.getAmount(),memberId,false);
+                balance =  esEthwalletService.updateSubtractFreeze(esEthaccounts.getAmount(),esEthaccounts.getMemberId(),false);
                 if(balance == null) return bool;
             }
             esEthaccounts.setBalance(balance);

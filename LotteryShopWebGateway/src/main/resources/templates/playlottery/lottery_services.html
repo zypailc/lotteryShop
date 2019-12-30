@@ -61,29 +61,32 @@ include("../common/common.js.html"){}
 			var dataNumber = div_up.attr("data-number");
 			div_up.find(".lottery_play_div_element").removeClass("lottery_play_div_element_select"+"_"+(parseInt(dataNumber) - 1));
 			$(this).addClass("lottery_play_div_element_select"+"_"+(parseInt(dataNumber) - 1));
-			$(".lottery_play_"+dataNumber).html($(this).find("span").html());
+            var lottery_play = $(".lottery_play_"+dataNumber);
+            var lottery_play_parent = lottery_play.parent();
+            lottery_play_parent.html("<div class='lottery_play_"+dataNumber+" span_element_num_"+($(this).find(".span_element ").attr("data_html"))+"' dataValue='"+$(this).find(".span_element ").attr("data_html")+"'></div>");
+			//$(".lottery_play_"+dataNumber).html($(this).find("span").html());
 		});
 		$("#fast_select_random").click(function(){
 			var number_1 = Math.floor(Math.random()*10);
 			var number_2 = Math.floor(Math.random()*10);
 			var number_3 = Math.floor(Math.random()*10);
-			$(".lottery_play_div_element_0").find("span[data_html="+number_1+"]").click();
-			$(".lottery_play_div_element_1").find("span[data_html="+number_2+"]").click();
-			$(".lottery_play_div_element_2").find("span[data_html="+number_3+"]").click();
+			$(".lottery_play_div_element_0").find("div[data_html="+number_1+"]").click();
+			$(".lottery_play_div_element_1").find("div[data_html="+number_2+"]").click();
+			$(".lottery_play_div_element_2").find("div[data_html="+number_3+"]").click();
 			calculateCost();
 		});
 
 		$("#button_purchase").click(function(){
 			var availableBalance = $(".money_self").html() || 0;
-			var incurExpense = $("") || 0;
+			var incurExpense = $(".money_expenditure").attr("dataValue") || 0;
 			if(!loginUser){
 				layer.msg("please log in !");
-			} else if(availableBalance < incurExpense){
+			} else if(parseFloat(availableBalance) < parseFloat(incurExpense)){
 				layui_open("Account balance is insufficient, please recharge first !");
 			} else {
-				var number_1 = $(".lottery_play_1").find("span").html() || 0;
-				var number_2 = $(".lottery_play_2").find("span").html() || 0;
-				var number_3 = $(".lottery_play_3").find("span").html() || 0;
+				var number_1 = $(".lottery_play_1").attr("dataValue") || 0;
+				var number_2 = $(".lottery_play_2").attr("dataValue") || 0;
+				var number_3 = $(".lottery_play_3").attr("dataValue") || 0;
 				var multiple = $(".input_number").val() || 0;
 				lay_play_code = layer.open({
 					type: 1,
@@ -103,9 +106,9 @@ include("../common/common.js.html"){}
 	})
 
 	function paymentCodeConfirm(){
-		var number_1 = $(".lottery_play_1").html() || "";
-		var number_2 = $(".lottery_play_2").html() || "";
-		var number_3 = $(".lottery_play_3").html() || "";
+        var number_1 = $(".lottery_play_1").attr("dataValue") || 0;
+        var number_2 = $(".lottery_play_2").attr("dataValue") || 0;
+        var number_3 = $(".lottery_play_3").attr("dataValue") || 0;
 		var payPasswod = "";
 		$(".paymentCode").each(function(index,data){
 			var paymentCode_1 = $(data).val() || "";
@@ -119,15 +122,21 @@ include("../common/common.js.html"){}
 		}
 		var luckNum = number_1 +　number_2 + number_3;
 		var multipleNumber = $(".input_number").val() || "";
+		var index = layer.load(1);
 		$.ajax({
 			url:'${projectPath}/api/lotteryA/v1/lotteryA/ethBuyLottery',
 			type:'get',
 			data:{"payPasswod":payPasswod,"luckNum":luckNum,"multipleNumber":multipleNumber},
 			dataType:"json",
 			success:function (result) {
+				layer.close(index);
 				if(result.code == 200){
 					layer.close(lay_play_code);
-					layer.msg(result.msg);
+					layer.msg(result.msg,{time: 2000},function () {
+						parent.layer.close(index);
+						location.reload();
+					});
+
 				}else {
 					layui_open(result.msg);
 				}
@@ -141,9 +150,10 @@ include("../common/common.js.html"){}
 		var price = $(".money_haploid").attr("price") || 0;
 		var doubledMoney = $(".money_haploid").attr("doubledMoney") || 0;
 		var total = parseFloat(multiple) * parseFloat(price) + parseFloat(gas);
-		var tatalStr = price + " * " + multiple +  " + 燃氣費(最高≈0.0946) = " +　parseFloat(total.toFixed(6));
-		$(".money_expenditure").html(tatalStr)
+		var tatalStr = price + "*" + multiple +  "+Gas(Max≈0.0946)=" +　parseFloat(total.toFixed(6));
+		$(".money_expenditure").html(tatalStr);
 		$(".money_bounty").html(multiple * doubledMoney);
+		$(".money_expenditure").attr("dataValue",total);
 	}
 
 	function getLotteryConfig(){
@@ -169,14 +179,11 @@ include("../common/common.js.html"){}
 					$(".money_bounty").html(info.total);
 					$(".number_of_periods").html(info.issueNum);
 					$(".lottery_service_time").attr("endTime",info.endTime);
+					$(".lottery_service_time").attr("startTime",info.startTime)
+					$(".lottery_service_time").attr("presentTime",info.presentTime)
 					countDown();
 					getGas(parseFloat(info.price));
-					var loginUser = '${loginUser!}';
-					if(loginUser){
-						findLotteryRecord(1,"0,1,2","lottery_self_record",false,info.issueNumId)
-					}else{
-						findLotteryRecord(1,"0,1,2","lottery_self_record",true,info.issueNumId);
-					}
+                    findLotteryRecord(1,"0,1,2","lottery_self_record",true,info.issueNumId);
 				}
 			}
 		})
@@ -201,31 +208,45 @@ include("../common/common.js.html"){}
 				$(".money_expenditure").attr("gas",gas)
 				var total = parseFloat(gas) + parseFloat(price);
 				total = parseFloat(total.toFixed(6));
-				$(".money_expenditure").html( price+ " * 1 + 燃氣費(最高≈"+gas+") = " + total);
+				$(".money_expenditure").html( price+ " * 1 + Gas(Max≈"+gas+") = " + total);
 			}
 		})
 	}
 
 	function countDown(){
-		var today=new Date(),//当前时间
-				h=today.getHours(),
-				m=today.getMinutes(),
-				s=today.getSeconds();
-		var stopTime=new Date($(".lottery_service_time").attr("endTime")),//结束时间
-				stopH=stopTime.getHours(),
-				stopM=stopTime.getMinutes(),
-				stopS=stopTime.getSeconds();
-		var shenyu=stopTime.getTime()-today.getTime(),//倒计时毫秒数
-				shengyuD=parseInt(shenyu/(60*60*24*1000)),//转换为天
-				D=parseInt(shenyu)-parseInt(shengyuD*60*60*24*1000),//除去天的毫秒数
-				shengyuH=parseInt(D/(60*60*1000)),//除去天的毫秒数转换成小时
-				H=D-shengyuH*60*60*1000,//除去天、小时的毫秒数
-				shengyuM=parseInt(H/(60*1000)),//除去天的毫秒数转换成分钟
-				M=H-shengyuM*60*1000;//除去天、小时、分的毫秒数
-		S=parseInt((shenyu-shengyuD*60*60*24*1000-shengyuH*60*60*1000-shengyuM*60*1000)/1000)//除去天、小时、分的毫秒数转化为秒
-		$(".time_hour").html(shengyuH);
-		$(".time_minute").html(shengyuM);
-		$(".time_second").html(S);
+		var today=new Date(),h=today.getHours(),m=today.getMinutes(),s=today.getSeconds();
+		//var today=new Date($(".lottery_service_time").attr("presentTime")),h=today.getHours(),m=today.getMinutes(),s=today.getSeconds();
+		var startTime = new Date($(".lottery_service_time").attr("startTime"));
+		var stopTime=new Date($(".lottery_service_time").attr("endTime"));
+		if((today.getTime() - startTime.getTime()) > 0 && stopTime.getTime() - today.getTime() > 0){//start period
+			$(".timeIssueGiveOut").hide();
+			$(".timeIssueDraw").hide();
+			$(".timeIssueView").show();
+			var stopH=stopTime.getHours(),stopM=stopTime.getMinutes(),stopS=stopTime.getSeconds();
+			var shenyu=stopTime.getTime()-today.getTime(),//倒计时毫秒数
+					shengyuD=parseInt(shenyu/(60*60*24*1000)),//转换为天
+					D=parseInt(shenyu)-parseInt(shengyuD*60*60*24*1000),//除去天的毫秒数
+					shengyuH=parseInt(D/(60*60*1000)),//除去天的毫秒数转换成小时
+					H=D-shengyuH*60*60*1000,//除去天、小时的毫秒数
+					shengyuM=parseInt(H/(60*1000)),//除去天的毫秒数转换成分钟
+					M=H-shengyuM*60*1000;//除去天、小时、分的毫秒数
+			var shengyus = parseInt((shenyu-shengyuD*60*60*24*1000-shengyuH*60*60*1000-shengyuM*60*1000)/1000)//除去天、小时、分的毫秒数转化为秒
+			$(".time_hour").html(shengyuH);
+			$(".time_minute").html(shengyuM);
+			$(".time_second").html(shengyus);
+		}
+		if(today.getTime() - startTime.getTime() < 0){
+			$(".timeIssueView").hide();
+			$(".timeIssueDraw").hide();
+			$(".timeIssueGiveOut").show();
+			$("#button_purchase").addClass("button_purchase_forbid")
+		}
+		if(today.getTime() - stopTime.getTime() > 0 ){
+			$(".timeIssueView").hide();
+			$(".timeIssueGiveOut").hide();
+			$(".timeIssueDraw").show();
+			$("#button_purchase").addClass("button_purchase_forbid")
+		}
 		setTimeout(countDown,500);
 	}
 	function numner_add_or_aubtract(number){
@@ -264,16 +285,18 @@ include("../common/common.js.html"){}
 		var pageSize = dataObj.attr("pageSize") || 20;
 		var isFind = dataObj.attr("isFind") || 'true';
 		var ul = dataObj.find("ul");
+		var li = ul.find("li:first-child");
 		if(flag){
 			ul.html("");
-			ul.append("<li>No More !</li>")
+			ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
 			return ;
 		}
 		if(isFind == 'true'){
 			$.ajax({
-				url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryBuy',
+				url:'${projectPath}/api/lotteryA/v1/lotteryA/getLotteryBuy',
 				type:'get',
 				data:{"currentPage":currentPage,"pageSize":pageSize,"mTransferStatus":mTransferStatus,"lotteryaIssueId":lotteryaIssueId},
+				//data:{"currentPage":currentPage,"pageSize":pageSize,"mTransferStatus":mTransferStatus,"lotteryaIssueId":lotteryaIssueId,"isOneself":1},
 				dataType:"json",
 				success:function (result) {
 					var data = result.extend.data;
@@ -285,46 +308,26 @@ include("../common/common.js.html"){}
 					}else {
 						$.each(data.records, function (index, dataInfo) {
 							var luckNum = dataInfo.luckNum.split("");
-							var li = '<li>' +
-									'<div class="model_purchase_record">' +
-									'<div class="lottery_play_div_element_4 lottery_play_div_element_border_0">' +
-									'<span class="span_element_1">' + luckNum[0] + '</span>' +
-									'</div>' +
-									'<div class="lottery_play_div_element_4 lottery_play_div_element_border_1">' +
-									'<span class="span_element_1">' + luckNum[1] + '</span>' +
-									'</div>' +
-									'<div class="lottery_play_div_element_4 lottery_play_div_element_border_2">' +
-									'<span class="span_element_1">' + luckNum[2] + '</span>' +
-									'</div>' +
-									'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
-									'<span class="span_element_1">5<span data-localize="base.spendAFewLater">Bet</span></span>' +
-									'</div>' +
-									'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
-									'<span class="span_element_1">' + (parseFloat(doubledMoney) * parseFloat(dataInfo.multipleNum)) + ' ETH</span>' +
-									'</div>' +
-									'<div class="lottery_play_div_element_4 lottery_play_div_Multiple">' +
-									'<span class="span_element_1">' + dataInfo.createTime + '</span>' +
-									'</div>' +
-									'</div>' +
-									'</li>';
-							if (ul.html()) {
-								ul.append("<hr>" + li);
-							} else {
-								ul.append(li);
-							}
+                            var new_li;
+                            if(flag && index == 0){
+                                new_li = li.clone();
+                            }else {
+                                new_li = dataObj.find("ul").find("li:first-child").clone();
+                            }
+                            new_li.find(".luckNum_1").addClass("span_element_num_"+luckNum[0]);
+                            new_li.find(".luckNum_2").addClass("span_element_num_"+luckNum[1]);
+                            new_li.find(".luckNum_3").addClass("span_element_num_"+luckNum[2]);
+                            new_li.find(".multiple").html(dataInfo.multipleNum);
+                            new_li.find(".luckTotal").html((parseFloat(doubledMoney) * parseFloat(dataInfo.multipleNum)) + "ETH");
+                            new_li.find(".createTime").html(dataInfo.createTime);
+                            ul.append(new_li);
 						})
-						if(data.records.length < pageSize){
-							flag_1 = true;
-						}
-					}
-					if(flag_1){
-						var noMore = ul.find("li[dataTag=noMore]");
-						if(!noMore.html()){
-							ul.append("<li dataTag='noMore'>No More</li>");
-						}
 					}
 				}
 			})
+            if (data.length < pageSize) {
+                ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+            }
 		}
 		dataObj.attr("currentPage",parseInt(currentPage) + 1);
 		dataObj.attr("pageSize",pageSize);
@@ -352,20 +355,22 @@ include("../common/common.js.html"){}
 						dataObj.attr("isFind", 'false')
 					}
 					$.each(dataInfo, function (index, data) {
-						var luckNum = data.luckNum.split("");
-						var new_li;
-						if(flag && index == 0){
-							new_li = li.clone();
-						}else {
-							new_li = dataObj.find("ul").find("li:first-child").clone();
+						if(data.luckNum){
+							var luckNum = data.luckNum.split("");
+							var new_li;
+							if(flag && index == 0){
+								new_li = li.clone();
+							}else {
+								new_li = dataObj.find("ul").find("li:first-child").clone();
+							}
+							new_li.find(".lotteryIssue").html("#"+data.issueNum);
+							new_li.find(".luckNum_1").addClass("span_element_num_"+luckNum[0]);
+							new_li.find(".luckNum_2").addClass("span_element_num_"+luckNum[1]);
+							new_li.find(".luckNum_3").addClass("span_element_num_"+luckNum[2]);
+							new_li.find(".luckTotal").html(data.luckTotal+"ETH");
+							new_li.find(".lotteryTime").html(data.startTime + " ~ " + data.endTime);
+							ul.append(new_li);
 						}
-						new_li.find(".lotteryIssue").html("#"+data.issueNum);
-						new_li.find(".luckNum_1").html(luckNum[0]);
-						new_li.find(".luckNum_2").html(luckNum[1]);
-						new_li.find(".luckNum_3").html(luckNum[2]);
-						new_li.find(".luckTotal").html(data.luckTotal+"ETH");
-						new_li.find(".lotteryTime").html(data.startTime + " ~ " + data.endTime);
-						ul.append(new_li);
 					})
 					if (dataInfo.length < pageSize) {
 						ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
@@ -384,8 +389,6 @@ include("../common/common.js.html"){}
 		layer_open_lottery.find(".luckNum").html(li.find(".luckNum_1").html()+ " " + li.find(".luckNum_2").html() + " " + li.find(".luckNum_3").html());
 		layer_open_lottery.find(".time").html(li.find(".lotteryTime").html());
 		findWinningRecord(true,'lottery_winning_record_ul',issue);
-
-
 	}
 	function findWinningRecord(flag,classProperty,issue){
 		var dataObj = $("."+classProperty);
@@ -500,143 +503,219 @@ include("../common/common.js.html"){}
 			<div class="lottery_item lotteryPlay ">
 				<div class="service_item_content">
 					<div class="service_item_title">
-						<p class="lottery_service_title"> <span class="lottery_title"></span> <span class="number_of_periods"></span></p>
-						<p class="lottery_service_time"><em class="em_time time_hour">00</em> : <em  class="em_time time_minute">00</em> : <em  class="em_time time_second">00</em></p>
+						<div class="lottery_service_title"> <span class="lottery_title"></span> <span class="number_of_periods"></span></div>
+						<div class="lottery_service_time">
+							<div class="timeIssueDraw" data-localize="base.drawALottery" style="display: none"></div>
+							<div class="timeIssueGiveOut" data-localize="base.giveOut" style="display: none"></div>
+                            <!--<div class="timeIssueView" style="display: none">
+                                <div style="width: 100%;">
+                                <div class="em_time"><em class="time_hour"></em></div>
+                                 :
+                                <div class="em_time"><em class="time_minute"></em></div>
+                                 :
+                                <div class="em_time"><em class="time_minute"></em></div>
+                                </div>
+                            </div>-->
+							<span class="timeIssueView" style="display: none">
+                               <em class="em_time time_hour">00</em> :
+                                <em  class="em_time time_minute">00</em> :
+                                <em  class="em_time time_second">00</em>
+                            </span>
+						</div>
 					</div>
 					<div class="lottery_play_div">
 						<div class="lottery_play_div_1" data-number="1">
 							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0 lottery_play_div_element_select_0">
-								<span class="span_element" data_html="0">0</span>
+								<!--<span class="span_element" data_html="0">0</span>-->
+                                <div class="span_element span_element_num_0" data_html="0"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
-								<span class="span_element" data_html="1">1</span>
+								<!--<span class="span_element" data_html="1">1</span>-->
+                                <div class="span_element span_element_num_1" data_html="1"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
-								<span class="span_element" data_html="2">2</span>
+								<!--<span class="span_element" data_html="2">2</span>-->
+                                <div class="span_element span_element_num_2" data_html="2"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
-								<span class="span_element" data_html="3">3</span>
+								<!--<span class="span_element" data_html="3">3</span>-->
+                                <div class="span_element span_element_num_3" data_html="3"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
-								<span class="span_element" data_html="4">4</span>
+								<!--<span class="span_element" data_html="4">4</span>-->
+                                <div class="span_element span_element_num_4" data_html="4"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
-								<span class="span_element" data_html="5">5</span>
+								<!--<span class="span_element" data_html="5">5</span>-->
+                                <div class="span_element span_element_num_5" data_html="5"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
-								<span class="span_element" data_html="6">6</span>
+								<!--<span class="span_element" data_html="6">6</span>-->
+                                <div class="span_element span_element_num_6" data_html="6"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
-								<span class="span_element" data_html="7">7</span>
+								<!--<span class="span_element" data_html="7">7</span>-->
+                                <div class="span_element span_element_num_7" data_html="7"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
-								<span class="span_element" data_html="8">8</span>
+								<!--<span class="span_element" data_html="8">8</span>-->
+                                <div class="span_element span_element_num_8" data_html="8"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_0 lottery_play_div_element_border_0">
-								<span class="span_element" data_html="9">9</span>
+								<!--<span class="span_element" data_html="9">9</span>-->
+                                <div class="span_element span_element_num_9" data_html="9"></div>
 							</div>
 						</div>
 						<div class="lottery_play_div_1" data-number="2" >
 							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1 lottery_play_div_element_select_1">
-								<span class="span_element" data_html="0">0</span>
+								<!--<span class="span_element" data_html="0">0</span>-->
+                                <div class="span_element span_element_num_0" data_html="0"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
-								<span class="span_element" data_html="1">1</span>
+								<!--<span class="span_element" data_html="1">1</span>-->
+                                <div class="span_element span_element_num_1" data_html="1"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
-								<span class="span_element" data_html="2">2</span>
+								<!--<span class="span_element" data_html="2">2</span>-->
+                                <div class="span_element span_element_num_2" data_html="2"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
-								<span class="span_element" data_html="3">3</span>
+								<!--<span class="span_element" data_html="3">3</span>-->
+                                <div class="span_element span_element_num_3" data_html="3"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
-								<span class="span_element" data_html="4">4</span>
+								<!--<span class="span_element" data_html="4">4</span>-->
+                                <div class="span_element span_element_num_4" data_html="5"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
-								<span class="span_element" data_html="5">5</span>
+								<!--<span class="span_element" data_html="5">5</span>-->
+                                <div class="span_element span_element_num_5" data_html="5"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
-								<span class="span_element" data_html="6">6</span>
+								<!--<span class="span_element" data_html="6">6</span>-->
+                                <div class="span_element span_element_num_6" data_html="6"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
-								<span class="span_element" data_html="7">7</span>
+								<!--<span class="span_element" data_html="7">7</span>-->
+                                <div class="span_element span_element_num_6" data_html="6"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
-								<span class="span_element" data_html="8">8</span>
+								<!--<span class="span_element" data_html="8">8</span>-->
+                                <div class="span_element span_element_num_8" data_html="8"></div>
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_1 lottery_play_div_element_border_1">
-								<span class="span_element" data_html="9">9</span>
+								<!--<span class="span_element" data_html="9">9</span>-->
+                                <div class="span_element span_element_num_9" data_html="9"></div>
 							</div>
 						</div>
 						<div class="lottery_play_div_1" data-number="3">
 							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2 lottery_play_div_element_select_2">
-								<span class="span_element" data_html="0">0</span>
+                                <div class="span_element span_element_num_0" data_html="0"></div>
+                                <!--<span class="span_element span_element_num_0" data_html="0">0</span>-->
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
-								<span class="span_element" data_html="1">1</span>
+                                <div class="span_element span_element_num_1" data_html="1"></div>
+								<!--<span class="span_element span_element_num_1" data_html="1">1</span>-->
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
-								<span class="span_element" data_html="2">2</span>
+                                <div class="span_element span_element_num_2" data_html="2"></div>
+								<!--<span class="span_element span_element_num_2" data_html="2">2</span>-->
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
-								<span class="span_element" data_html="3">3</span>
+                                <div class="span_element span_element_num_3" data_html="3"></div>
+								<!--<span class="span_element" data_html="3">3</span>-->
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
-								<span class="span_element" data_html="4">4</span>
+                                <div class="span_element span_element_num_4" data_html="4"></div>
+								<!--<span class="span_element" data_html="4">4</span>-->
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
-								<span class="span_element" data_html="5">5</span>
+                                <div class="span_element span_element_num_5" data_html="5"></div>
+								<!--<span class="span_element" data_html="5">5</span>-->
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
-								<span class="span_element" data_html="6">6</span>
+                                <div class=" span_element span_element_num_6" data_html="6"></div>
+								<!--<span class="span_element" data_html="6">6</span>-->
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
-								<span class="span_element" data_html="7">7</span>
+                                <div class="span_element span_element_num_7" data_html="7"></div>
+								<!--<span class="span_element" data_html="7">7</span>-->
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
-								<span class="span_element" data_html="8">8</span>
+                                <div class="span_element span_element_num_8" data_html="8"></div>
+								<!--<span class="span_element" data_html="8">8</span>-->
 							</div>
 							<div class="lottery_play_div_element lottery_play_div_element_2 lottery_play_div_element_border_2">
-								<span class="span_element" data_html="9">9</span>
+                                <div class="span_element span_element_num_9" data_html="9"></div>
+								<!--<span class="span_element" data_html="9">9</span>-->
+							</div>
+							<div class="magicStick" id="fast_select_random">
+								<img src="../images/mfb.png" style="width: 25px;height: 25px;">
 							</div>
 						</div>
+
 					</div>
 					<div class="purchase">
 						<div class="model_purchase">
-							<div class="lottery_play_div_select">
+							<div class="lottery_play_div_select lottery_play_div_select_left">
 								<div class="lottery_play_div_element_3 lottery_play_div_element_border_0 ">
-									<span class="span_element lottery_play_1">0</span>
+									<!--<span class="span_element lottery_play_1">0</span>-->
+                                    <div class="lottery_play_1 span_element_num_0" dataValue="0"></div>
 								</div>
 								<div class="lottery_play_div_element_3 lottery_play_div_element_border_1">
-									<span class="span_element lottery_play_2 ">0</span>
+									<!--<span class="span_element lottery_play_2 ">0</span>-->
+                                    <div class="lottery_play_2 span_element_num_0" dataValue="0"></div>
 								</div>
 								<div class="lottery_play_div_element_3 lottery_play_div_element_border_2">
-									<span class="span_element lottery_play_3 ">0</span>
+									<!--<span class="span_element lottery_play_3 ">0</span>-->
+                                    <div class="lottery_play_3 span_element_num_0" dataValue="0"></div>
 								</div>
 							</div>
-							<div class="lottery_play_div_select">
+							<div class="lottery_play_div_select lottery_play_div_select_right">
 								<!--<span class="font_color" data-localize="base.spendAFewBefore">You select the</span>-->
-								<a onclick="numner_add_or_aubtract(-1)" class="a_button">-</a><input value="1" class="input_number" onchange="numner_add_or_aubtract(0)"><a onclick="numner_add_or_aubtract(1)"  class="a_button">+</a>
-								<span class="font_color" data-localize="base.spendAFewLater">Bet</span>
-							</div>
+								<div class="multiple_input">
+                                    <a onclick="numner_add_or_aubtract(-1)" class="a_button">-</a><input value="1" class="input_number" onchange="numner_add_or_aubtract(0)"><a onclick="numner_add_or_aubtract(1)"  class="a_button">+</a>
+                                    <!--<span class="font_color" data-localize="base.spendAFewLater">Bet</span>-->
+                                </div>
+                            </div>
 						</div>
 						<div class="model_purchase_1">
-							<div class="lottery_play_div_select lottery_play_div_money">
+							<div class="lottery_play_div_select lottery_play_div_select_left">
 								<div class="model_money">
 									<p class="money_portion"><span data-localize="base.haploid">Double bonus : </span><span class="money_haploid">0</span> ETH</p>
 									<p class="money_portion"><span data-localize="base.usable">Available Funds : </span><span class="money_self">0</span> ETH</p>
-									<p class="money_portion"><span data-localize="base.expenditure">Payment amount : </span><span class="money_expenditure">0 * 1 + 燃氣費(最高≈0) = 0</span> ETH</p>
+									<p class="money_portion"><span data-localize="base.expenditure">Payment amount : </span><span class="money_expenditure">0 * 1 + Gas(Max≈0) = 0</span> ETH</p>
 									<p class="money_portion bounty_title"><span data-localize="base.bounty">Amount of bonus : </span><span class="money_bounty">0</span> ETH</p>
 								</div>
-								<div class="lottery_play_div_select model_purchase_button">
-									<div class="button_purchase" id="fast_select_random"><span data-localize="base.fastSelect">fast select</span></div>
-									<div class="button_purchase" disabled="disabled" id="button_purchase"><span data-localize="base.purchase">purchase</span></div>
-								</div>
 							</div>
+                            <div class="lottery_play_div_select lottery_play_div_select_right">
+                                <div class="model_purchase_button">
+                                    <div class="button_purchase button_width_all" disabled="disabled" id="button_purchase"><span data-localize="base.purchase">purchase</span></div>
+                                </div>
+                            </div>
 						</div>
 						<div class="model_purchase_1 ul_self_record services_item_inner-1">
 							<div class="model_purchase_left" id="lottery_self_record">
-								<ul class=""></ul>
+								<ul class="">
+                                    <li>
+                                        <div class="model_purchase_record">
+                                            <div class="lottery_play_div_element_4 lottery_play_div_element_border_0">
+                                                <div class="span_element_1 luckNum_1"></div>
+                                            </div>
+                                            <div class="lottery_play_div_element_4 lottery_play_div_element_border_1">
+                                                <div class="span_element_1 luckNum_2"></div>
+                                            </div>
+                                            <div class="lottery_play_div_element_4 lottery_play_div_element_border_2">
+                                                <div class="span_element_1 luckNum_3"></div>
+                                            </div>
+                                            <div class="lottery_play_div_element_4 lottery_play_div_Multiple">
+                                                <span class="span_element_1 multiple">1<span data-localize="base.spendAFewLater"> Bet</span></span>
+                                            </div>
+                                            <div class="lottery_play_div_element_4 lottery_play_div_Multiple"><span class="span_element_1 luckTotal" >0 ETH</span></div>
+                                            <div class="lottery_play_div_element_4 lottery_play_div_Multiple"><span class="span_element_1 createTime">00-00-00 00:00:00</span></div>
+                                        </div>
+                                    </li>
+                                </ul>
 							</div>
 						</div>
 					</div>
@@ -665,13 +744,16 @@ include("../common/common.js.html"){}
 							<div>
 								<div class="model_purchase_record">
 									<div class="lottery_play_div_element_4 lottery_play_div_element_border_0">
-										<span class="span_element_1 luckNum_1">0</span>
+										<!--<span class="span_element_1 luckNum_1">0</span>-->
+                                        <div class="span_element_1 luckNum_1" ></div>
 									</div>
 									<div class="lottery_play_div_element_4 lottery_play_div_element_border_1">
-										<span class="span_element_1 luckNum_2">0</span>
+										<!--<span class="span_element_1 luckNum_2">0</span>-->
+                                        <div class="span_element_1 luckNum_2"></div>
 									</div>
 									<div class="lottery_play_div_element_4 lottery_play_div_element_border_2">
-										<span class="span_element_1 luckNum_3">0</span>
+										<!--<span class="span_element_1 luckNum_3">0</span>-->
+                                        <div class="span_element_1 luckNum_3"></div>
 									</div>
 									<div class="lottery_play_div_element_4 lottery_play_div_Multiple">
 										<span class="span_element_1 luckTotal">0 ETH</span>

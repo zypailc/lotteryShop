@@ -15,6 +15,8 @@ public class LoginUser {
     private String bAddress;//绑定钱包地址
     private String WalletName;//钱包名称
     private String paymentCode;//支付密码
+    private String password;//登陆密码
+    private String paymentCodeWallet;//生成钱包的密文
 
     public String getId() {
         return id;
@@ -78,5 +80,21 @@ public class LoginUser {
 
     public void setPaymentCode(String paymentCode) {
         this.paymentCode = paymentCode;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPaymentCodeWallet() {
+        return paymentCodeWallet;
+    }
+
+    public void setPaymentCodeWallet(String paymentCodeWallet) {
+        this.paymentCodeWallet = paymentCodeWallet;
     }
 }

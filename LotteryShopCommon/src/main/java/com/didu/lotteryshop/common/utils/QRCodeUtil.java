@@ -26,11 +26,11 @@ public class QRCodeUtil {
     private static final String CREATE_BACKGROUND = "";
 
     // 二维码尺寸
-    private static final int QRCODE_SIZE = 50;
+    private static final int QRCODE_SIZE = 200;
     // LOGO宽度
-    private static final int WIDTH = 60;
+    private static final int WIDTH = 100;
     // LOGO高度
-    private static final int HEIGHT = 60;
+    private static final int HEIGHT = 100;
     public static BufferedImage createImage_1(String content, String imgPath, boolean needCompress) throws Exception{
         return  createImage(content,imgPath,needCompress);
     };

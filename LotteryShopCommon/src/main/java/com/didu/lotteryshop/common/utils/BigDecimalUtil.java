@@ -25,4 +25,8 @@ public class BigDecimalUtil {
         return bigDecimal.setScale(PRECISION,BigDecimal.ROUND_HALF_DOWN).stripTrailingZeros();
     }
 
+    public static void main(String [] args){
+        System.out.println(new BigDecimal("3").divide((new BigDecimal("100")).setScale(4,BigDecimal.ROUND_HALF_DOWN)));
+    }
+
 }

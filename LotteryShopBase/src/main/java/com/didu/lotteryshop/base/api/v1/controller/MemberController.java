@@ -76,6 +76,23 @@ public class MemberController extends BaseBaseController {
     }
 
     /**
+     * 修改用户密码
+     * @param oldPassword
+     * @param newPassword
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/updatePassword")
+    public ResultUtil updatePassword(String oldPassword,String newPassword,String type){
+        if(oldPassword == null || "".equals(oldPassword) ||
+        newPassword == null || "".equals(newPassword) ||
+        type == null || "".equals(type)){
+            return ResultUtil.errorJson("parameter error !");
+        }
+        return  memberService.updatePassword(oldPassword,newPassword,type);
+    }
+
+    /**
      * 推广页面数据初始化
      * @param userId
      * @return
@@ -111,6 +128,19 @@ public class MemberController extends BaseBaseController {
     }
 
     /**
+     * 返回推广地址二维码
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/generalizeInitRegisterUrl")
+    public ResultUtil generalizeInitRegisterUrl(){
+        LoginUser loginUser = getLoginUser();
+        String QR = baseConfig.getUrl() +  "?generalizePersonId="+loginUser.getId();
+        return ResultUtil.successJson(QR);
+    }
+
+
+    /**
      * 查询推广用户
      * @return
      */
@@ -139,10 +169,10 @@ public class MemberController extends BaseBaseController {
      */
     @ResponseBody
     @RequestMapping("/findLotterPurchaseResord")
-    public ResultUtil findLotterPurchaseResord(Integer currentPage,Integer pageSize,String startTime,String endTime,String type){
+    public ResultUtil findLotterPurchaseResord(Integer currentPage,Integer pageSize,String startTime,String endTime,String type,String winning){
         currentPage =  currentPage == null ? 1:currentPage;
         pageSize = pageSize == null ? 20 : pageSize;
-        return memberService.findLotterPurchaseResord(currentPage,pageSize,startTime,endTime,type);
+        return memberService.findLotterPurchaseResord(currentPage,pageSize,startTime,endTime,type,winning);
     }
 
 

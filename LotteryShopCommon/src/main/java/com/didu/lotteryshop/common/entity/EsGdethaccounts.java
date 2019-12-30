@@ -80,6 +80,12 @@ public class EsGdethaccounts extends Model<EsGdethaccounts> {
 	@TableField("transfer_hash_value")
 	private String transferHashValue;
 
+	/**
+	 * 状态标识符
+	 */
+	@TableField("status_msg")
+	private String statusMsg;
+
 
 	public Integer getId() {
 		return id;
@@ -175,6 +181,14 @@ public class EsGdethaccounts extends Model<EsGdethaccounts> {
 
 	public void setTransferHashValue(String transferHashValue) {
 		this.transferHashValue = transferHashValue;
+	}
+
+	public String getStatusMsg() {
+		return statusMsg;
+	}
+
+	public void setStatusMsg(String statusMsg) {
+		this.statusMsg = statusMsg;
 	}
 
 	@Override

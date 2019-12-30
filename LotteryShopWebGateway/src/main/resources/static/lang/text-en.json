@@ -45,6 +45,9 @@
     "total": "total",
     "freeze": "freeze",
     "recharge": "recharge",
-    "exchange": "exchange"
+    "exchange": "exchange",
+    "drawALottery": "Is the lottery",
+    "giveOut": "Bonuses are being paid",
+    "passwordManagement": "Password management"
   }
 }

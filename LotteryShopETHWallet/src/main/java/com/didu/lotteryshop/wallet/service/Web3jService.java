@@ -40,6 +40,8 @@ public class Web3jService extends WalletBaseService {
 
     @Autowired
     private GasProviderService gasProviderService;
+    /** 事务哈希值**/
+    public static final String TRANSACTION_HASHVALUE = "transaction_hashvalue";
     /** 是否确认状态，0为确认，1已确认 */
     public static final String TRANSACTION_STATUS = "transaction_status";
     /** 实际确认产生的gas费用 */

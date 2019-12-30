@@ -31,37 +31,37 @@ public class WalletController extends BaseBaseController {
 
     /**
      * Eth提现
-     * @param sum 提现数
+     * @param num 提现数
      * @param playCode 支付密码
      * @return
      */
     @ResponseBody
     @RequestMapping("/withdrawCashEth")
-    public ResultUtil withdrawCashEth(BigDecimal sum,String playCode){
-        return walletService.withdrawCashEth(sum,playCode);
+    public ResultUtil withdrawCashEth(BigDecimal num,String playCode){
+        return walletService.withdrawCashEth(num,playCode);
     }
 
     /**
      * 平台币转ETH
-     * @param sum 提现数
+     * @param num 提现数
      * @return
      */
     @ResponseBody
     @RequestMapping("/withdrawCashLsbToEth")
-    public ResultUtil withdrawCashLsbToEth(BigDecimal sum){
-        return  walletService.withdrawCashLsbToEth(sum);
+    public ResultUtil withdrawCashLsbToEth(BigDecimal num){
+        return  walletService.withdrawCashLsbToEth(num);
     }
 
     /**
      * Eth转平台币
-     * @param sum 数量
+     * @param num 数量
      * @param playCode 支付密码
      * @return
      */
     @ResponseBody
     @RequestMapping("/withdrawCashEthToLsb")
-    public ResultUtil withdrawCashEthToLsb(BigDecimal sum,String playCode){
-        return walletService.withdrawCashEthToLsb(sum,playCode);
+    public ResultUtil withdrawCashEthToLsb(BigDecimal num,String playCode){
+        return walletService.withdrawCashEthToLsb(num,playCode);
     }
 
 }
