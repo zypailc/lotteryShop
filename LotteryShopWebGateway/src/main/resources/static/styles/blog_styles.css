@@ -302,7 +302,7 @@ section
 .home
 {
 	width: 100%;
-	height: 372px;
+	height: 990px;
 }
 .home_background_container
 {
@@ -312,14 +312,33 @@ section
 	width: 100%;
 	height: 100%;
 }
-.home_background
+.home_background_container canvas {
+    width:100%;
+    height:100%;
+    display:inline-block;
+    vertical-align:baseline;
+    position:absolute;
+    z-index:-1;
+}
+.home_background_container .canvaszz{
+    width:100%;
+    background-image: url(../../images/bgpurper3.jpg);
+    height:100%;
+    position:absolute;
+    z-index:1;
+    filter:alpha(opacity=40);
+    -moz-opacity:0.4;
+    -khtml-opacity: 0.4;
+    opacity: 0.4;
+}
+/*.home_background
 {
 	width: 100%;
 	height: 100%;
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center center;
-}
+}*/
 
 /*********************************
 3.1 Header
