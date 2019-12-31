@@ -286,7 +286,6 @@ function findLotteryRecord(flag,classProperty){
     var type = $(".lotteryTypeSelect").val() || "";
     var winning = $(".lotteryWinningSelect").val() || "";
     var li = $("."+classProperty).find("ul").find("li:first-child");
-    console.log(li.show());
     if(flag){
         ul.html("");
         walletETH.attr("currentPage","1")
@@ -454,14 +453,12 @@ function withdrawCashLsbToEth(extractTheNumber){
     var url = "/api/base/v1/baseWallet/withdrawCashLsbToEth"
     var dataJson = {};
     dataJson = {"num":extractTheNumber};
-    console.log(dataJson)
     walletOperation(url,dataJson);
 }
 
 function paymentCodeConfirm(e){
     var div = $(e).parent().parent();
     var operationType = div.find("input[name=playCode]").attr("operationType") || "";
-    console.log(operationType);
     var playCode = getPlayCode();
     var dataJson = {};
     var url;

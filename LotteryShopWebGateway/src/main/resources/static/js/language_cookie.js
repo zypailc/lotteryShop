@@ -1,6 +1,6 @@
 ﻿var name = "somoveLanguage";
 /*server*/
-var ctx = window.document.location.href.substring(0, window.document.location.href.indexOf(window.document.location.pathname));
+var ctx_1 = window.document.location.href.substring(0, window.document.location.href.indexOf(window.document.location.pathname));
 function chgLang() {
     //var value = $("#ddlSomoveLanguage").children('option:selected').val();
     var value = getCookie(name) || "en";
@@ -61,23 +61,22 @@ function getLanguage(){
 }
 /*console.log("getCookie:"+getCookie(name));*/
 $(function () {
-
     var uulanguage = (navigator.language || navigator.browserLanguage).toLowerCase();
     //判断浏览器的语言
     if (uulanguage.indexOf("en") > -1) {
-        $("[data-localize]").localize("text", { pathPrefix: ctx + "/lang", language: "en" });
+        $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
     } else if (uulanguage.indexOf("zh") > -1) {
-        $("[data-localize]").localize("text", { pathPrefix: ctx + "/lang", language: "zh" });
+        $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "zh" });
     } else {
         //默认显示英文
-        $("[data-localize]").localize("text", { pathPrefix: ctx + "/lang", language: "en" });
+        $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
     };
     if (getCookie(name) != "") {
         if (getCookie(name) == "zh") {
-            $("[data-localize]").localize("text", { pathPrefix: ctx + "/lang", language: "zh" });
+            $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "zh" });
         }
         if (getCookie(name) == "en") {
-            $("[data-localize]").localize("text", { pathPrefix: ctx + "/lang", language: "en" });
+            $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
         }       
     }
 });

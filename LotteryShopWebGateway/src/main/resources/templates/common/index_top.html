@@ -69,8 +69,14 @@
                 </a>
 
                 <div class="dropdown-menu"  aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="zh">
-                        <img class="language_img" src="../images/flags/zh.png"> <!--<span>zh</span>-->
+                    <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="ar">
+                        <img class="language_img" src="../images/flags/ar.png"> <!--<span>da</span>-->
+                    </a>
+                    <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="da">
+                        <img class="language_img" src="../images/flags/da.png"> <!--<span>da</span>-->
+                    </a>
+                    <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="de">
+                        <img class="language_img" src="../images/flags/de.png"> <!--<span>da</span>-->
                     </a>
                     <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="en">
                         <img class="language_img" src="../images/flags/en.png"> <!--<span>en</span>-->
@@ -78,8 +84,14 @@
                     <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="ja">
                         <img class="language_img" src="../images/flags/ja.png"> <!--<span>ja</span>-->
                     </a>
-                    <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="da">
-                        <img class="language_img" src="../images/flags/da.png"> <!--<span>da</span>-->
+                    <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="fr">
+                        <img class="language_img" src="../images/flags/fr.png"> <!--<span>da</span>-->
+                    </a>
+                    <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="ru">
+                        <img class="language_img" src="../images/flags/ru.png"> <!--<span>da</span>-->
+                    </a>
+                    <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="zh">
+                        <img class="language_img" src="../images/flags/zh.png"> <!--<span>zh</span>-->
                     </a>
                 </div>
                 <!--<select class="language_select_onchange">
@@ -162,8 +174,8 @@
                 //这个是当前页面的原语言，便于插件精确翻译
                 pageLanguage: 'en',
                 //这个是你需要翻译的语言，比如你只需要翻译成越南和英语，这里就只写en,vi
-                //includedLanguages: 'en,zh-TW,hr,cs,da,nl,fr,de,el,iw,hu,ga,it,ja,ko,pt,ro,ru,sr,es,th,vi',
-                includedLanguages: 'ja,zh-TW,en,da',
+                //includedLanguages: 'ar,en,zh-TW,hr,cs,da,nl,fr,de,el,iw,hu,ga,it,ja,ko,pt,ro,ru,sr,es,th,vi',
+                includedLanguages: 'ja,zh-TW,en,da,ar,fr,ru,de',
                 //选择语言的样式，这个是面板，还有下拉框的样式，具体的记不到了，找不到api~~
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
                 //自动显示翻译横幅，就是翻译后顶部出现的那个，有点丑，这个属性没有用的话，请看文章底部的其他方法
@@ -177,7 +189,7 @@
         //初始化语言选择
         var language_navigator = getLanguage();
         //$(".language_select_onchange").prop('value',language_cookie);
-        var imgHtml = "<img class='language_img' src='../images/flags/"+ language_navigator +".png'> ";
+        var imgHtml = "<img class='language_img' src='../images/flags/view/"+ language_navigator +".png'> ";
         $(".a_language_select_onchange").html(imgHtml);
     })
 
@@ -192,14 +204,18 @@
             language_select_1 = $(e).attr("data_value") || "en";
         }
         //获取浏览器的语言
-        imgHtml = "<img class='language_img' src='../images/flags/"+ language_select +".png'> ";
+        imgHtml = "<img class='language_img' src='../images/flags/view/"+ language_select +".png'> ";
         $(".a_language_select_onchange").html(imgHtml);
         var browserLanguage = navigator.language.toLowerCase();
         var browserLanguage_array;
-        var langeage_zh = {ja:"日语",da:"丹麦语"};//中文繁体
-        var langeage_en = {ja:"Japanese",da:"Danish"};//英文
-        var language_ja = {ja:"日本語",da:"デンマーク語"};//日本
-        var language_da = {ja:"Japansk",da:"Dansk"};//丹麦
+        var langeage_zh = {ja:"日语",da:"丹麦语",ar:"阿拉伯语",de:"德语",fr:"法语",ru:"俄语"};//中文繁体
+        var langeage_en = {ja:"Japanese",da:"Danish",ar:"Arabic",de:"German",fr:"French",ru:"Russian"};//英文
+        var language_ja = {ja:"日本語",da:"デンマーク語",ar:"アラビア語",de:"ドイツ語",fr:"フランス語",ru:"ロシア語"};//日本
+        var language_da = {ja:"Japansk",da:"Dansk",ar:"Arabisk",de:"Tysk",fr:"Fransk",ru:"Russisk"};//丹麦
+        var language_ar = {ja:"اليابانية",da:"الدانماركية",ar:"العربية",de:"الألمانية",fr:"الفرنسية",ru:"الروسية"};//阿拉伯
+        var language_de = {ja:"Japanisch",da:"Dänisch",ar:"Arabisch",de:"Deutsch",fr:"Französisch",ru:"Russisch"};//德文
+        var language_ru = {ja:"японский",da:"датский",ar:"арабский",de:"немецкий",fr:"французский",ru:"русский"};//俄语
+        var language_fr = {ja:"Japonais",da:"Danois",ar:"Arabe",de:"Allemand",fr:"Français",ru:"Russe"};//丹麦
         var name = "somoveLanguage";
         SetCookie(name, language_select_1);
         var flag = true;
@@ -218,6 +234,22 @@
                     language_select = language_ja[language_select];
                     break;
                 case 'da':
+                    browserLanguage_array = language_da;
+                    language_select = language_da[language_select];
+                    break;
+                case 'ar':
+                    browserLanguage_array = language_da;
+                    language_select = language_da[language_select];
+                    break;
+                case 'de':
+                    browserLanguage_array = language_da;
+                    language_select = language_da[language_select];
+                    break;
+                case 'ru':
+                    browserLanguage_array = language_da;
+                    language_select = language_da[language_select];
+                    break;
+                case 'fr':
                     browserLanguage_array = language_da;
                     language_select = language_da[language_select];
                     break;

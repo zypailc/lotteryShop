@@ -322,7 +322,7 @@ section
 }
 .home_background_container .canvaszz{
     width:100%;
-    background-image: url(../../images/bgpurper3.jpg);
+    /*background-image: url(../../images/bgpurper3.jpg);*/
     height:100%;
     position:absolute;
     z-index:1;
