@@ -35,7 +35,7 @@
 
     <!-- Logo -->
     <div class="logo mr-auto">
-        <a href="#">Ran<span>Lottery</span></a>
+        <a href="../web/authIndex">Ran<span>Lottery</span></a>
     </div>
 
     <!-- Navigation -->
@@ -45,7 +45,7 @@
                 <% if(has(whetherLogin) && whetherLogin){ %>
                 <div class="top_center_span">
                     <span class="span_personal">2019-09-26 00:00:00</span> ，<a class="a_logout" onclick="logOut()" data-localize="base.logOut">log out</a><br/>
-                    <span><a class="a_person" href="../web/personalCenter">${loginUser.memberName!"without"} ，<span data-localize="base.personalCenter"> Personal Center</span></a> </span>
+                    <span><a class="a_person" href="../web/personalCenter">${loginUser.memberName!"without"}<!--<span data-localize="base.personalCenter"> Personal Center</span>--></a> </span>
                 </div>
                 <% }else{ %>
                 <div class="top_login_span">
@@ -102,12 +102,12 @@
                 </select>-->
             </div>
         </div>
-        <div class="top_div">
+        <!--<div class="top_div">
             <ul>
                 <li><a href="../web/authIndex" data-localize="base.home">Home</a></li>
                 <li><a href="../web/authPlayTheLottery" data-localize="base.playTheLottery">Play The Lottery</a></li>
             </ul>
-        </div>
+        </div>-->
     </nav>
 
     <div class="hamburger_container_language">
@@ -239,26 +239,28 @@
                     break;
                 case 'ar':
                     browserLanguage_array = language_da;
-                    language_select = language_da[language_select];
+                    language_select = language_ar[language_select];
                     break;
                 case 'de':
                     browserLanguage_array = language_da;
-                    language_select = language_da[language_select];
+                    language_select = language_de[language_select];
                     break;
                 case 'ru':
                     browserLanguage_array = language_da;
-                    language_select = language_da[language_select];
+                    language_select = language_ru[language_select];
                     break;
                 case 'fr':
                     browserLanguage_array = language_da;
-                    language_select = language_da[language_select];
+                    language_select = language_fr[language_select];
                     break;
                 default:
             }
         }
         if((language_select_1 != 'zh' && language_select_1 != 'en')) {
             $("iframe.goog-te-menu-frame").contents().find("table").find("span.text").each(function (i, data) {
+                console.log("1:"+$(this).html());
                 if ($(this).html() == language_select) {
+                    console.log("2:"+$(this).html());
                     $(this).click();
                 }
             })

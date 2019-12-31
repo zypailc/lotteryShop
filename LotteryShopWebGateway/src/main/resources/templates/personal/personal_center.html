@@ -498,6 +498,29 @@ include("../common/common.js.html"){}
 							<p><span class="wallet_span_total"></span></p>
 							<p><span data-localize="base.balance1">balance</span><span class="span_right balance"></span> <span data-localize="base.freeze">freeze</span><span class="freeze"></span></p>
 						</div>
+						<div class="wallet_extract">
+							<div class="wallet_address_self">
+								<p><span class="title_span_1">ETH </span></p>
+								<div class="wallet_address_self_eth_withdrawCash">
+									<p><span class="title_span_2" data-localize="base.withdrawCash">Withdraw cash</span></p>
+									<p>规则：</p>
+									<p>
+										<span class="title_span_3" data-localize="base.total">total</span> : <span class="wallet_span_total">0ETH</span>
+										<span class="title_span_3" data-localize="base.balance1">balance</span> : <span class="balance">0ETH </span>
+										<span class="title_span_3" data-localize="base.freeze">freeze</span> : <span class="freeze">0ETH</span>
+									</p>
+									<input class="input_class_2 wallet_password_input " type="text" placeholder="Extract the number">
+									<div class="div_btn">
+										<a class="wallet_button button_display" href="#" propertyType="1" onclick="withdrawCashEth(this)" ><span data-localize="base.withdrawCash">withdraw cash</span></a>
+									</div>
+								</div>
+								<hr>
+								<div>
+									<p><span class="title_span_2" data-localize="base.recharge">Recharge</span></p>
+									<p><span class="title_span_3" data-localize="base.address">address</span> : <span>${loginUser.PAddress!"error"}</span></p>
+								</div>
+							</div>
+						</div>
 						<ul class="ul_personal_Eth">
 							<li class="li_come">
 								<div>
@@ -548,6 +571,33 @@ include("../common/common.js.html"){}
 							<p><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span></p>
 							<p><span class="wallet_span_total"></span></p>
 							<p><span data-localize="base.balance1">balance</span><span class="span_right balance"></span> <span data-localize="base.freeze">freeze</span><span class="freeze"></span></p>
+						</div>
+						<div class="wallet_extract wallet_extract_wallet_bottom">
+							<div class="wallet_address_self">
+								<p><span class="title_span_1" data-localize="base.flat">flat</span></p>
+								<div class="wallet_address_self_flat_withdrawCash">
+									<p><span class="title_span_2" data-localize="base.withdrawCash">Withdraw cash</span></p>
+									<p>
+										<span class="title_span_3" data-localize="base.total">total</span> : <span class="wallet_span_total"></span>
+										<span class="title_span_3" data-localize="base.balance1">balance</span> : <span class="balance"></span>
+										<span class="title_span_3" data-localize="base.freeze">freeze</span> : <span class="freeze"></span>
+									</p>
+									<p><span data-localize="base.exchange">exchange</span> : <span class="lsbToEth"></span> = 1 ETH</p>
+									<input class="input_class_2 wallet_password_input" type="text" placeholder="Extract the number">
+									<div class="div_btn">
+										<a class="wallet_button button_display" href="#" propertyType="2" onclick="withdrawCashEth(this)" data-localize="base.withdrawCash">withdraw cash</a>
+									</div>
+								</div>
+								<hr>
+								<div class="wallet_address_self_flat_recharge">
+									<p><span class="title_span_2" data-localize="base.recharge">Recharge</span></p>
+									<p><span data-localize="base.exchange">exchange</span> : 1 ETH = <span class="ethToLsb"></span></p>
+									<input class="input_class_2 wallet_password_input" type="text" placeholder="Prepaid phone number">
+									<div class="div_btn">
+										<a class="wallet_button button_display" href="#" propertyType="3" onclick="withdrawCashEth(this)" data-localize="base.recharge">recharge</a>
+									</div>
+								</div>
+							</div>
 						</div>
 						<ul class="ul_personal_lottery">
 							<li class="li_come">
@@ -611,7 +661,7 @@ include("../common/common.js.html"){}
 								</div>
 							</div>
 						</div>
-						<div class="wallet_extract wallet_extract_wallet">
+						<!--<div class="wallet_extract wallet_extract_wallet">
 							<div class="wallet_address_self">
 								<p><span class="title_span_1">ETH </span></p>
 								<div class="wallet_address_self_eth_withdrawCash">
@@ -633,8 +683,8 @@ include("../common/common.js.html"){}
 									<p><span class="title_span_3" data-localize="base.address">address</span> : <span>${loginUser.PAddress!"error"}</span></p>
 								</div>
 							</div>
-						</div>
-						<div class="wallet_extract wallet_extract_wallet wallet_extract_wallet_bottom">
+						</div>-->
+						<!--<div class="wallet_extract wallet_extract_wallet wallet_extract_wallet_bottom">
 							<div class="wallet_address_self">
 								<p><span class="title_span_1" data-localize="base.flat">flat</span></p>
 								<div class="wallet_address_self_flat_withdrawCash">
@@ -660,7 +710,7 @@ include("../common/common.js.html"){}
 									</div>
 								</div>
 							</div>
-						</div>
+						</div>-->
 					<% }else{ %>
 						<div class="wallet_extract wallet_extract_wallet">
 							<div class="wallet_extract">

@@ -91,7 +91,6 @@ include("../common/common.js.html"){}
 				lay_play_code = layer.open({
 					type: 1,
 					title:"支付密碼",
-					closeBtn: 0, //不显示关闭按钮
 					anim: 2,
 					shadeClose: true, //开启遮罩关闭
 					data:{"number_1":number_1,"number_2":number_2,"number_3":number_3,"multiple":multiple},
@@ -267,6 +266,9 @@ include("../common/common.js.html"){}
 	function findRule(){
 		var playType = '${playType}' || "";
 		var languageType = getLanguage();
+		if(languageType != 'zh'){
+			languageType = 'en';
+		}
 		$.ajax({
 			url:'${projectPath}/apiauthorization/base/authorization/v1/baseInfo/findPlayTypeRule',
 			type:'get',

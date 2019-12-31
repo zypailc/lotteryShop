@@ -12,7 +12,6 @@ function changePicture(){
     img_head_layer = layer.open({
         type: 1,
         title: false,
-        closeBtn: 0,
         shadeClose: true,
         content: $(".layui_head")
     });
@@ -119,6 +118,9 @@ function update_confirm(){
         success:function (data){
             if(data.code == '200'){//success
                 location.reload();
+            }
+            if(data.code == '500'){
+                layui_open(data.msg);
             }
         }
     })
@@ -398,7 +400,6 @@ function openPlayCode(type){
     lay_play_code = layer.open({
         type: 1,
         title:"支付密碼",
-        closeBtn: 0, //不显示关闭按钮
         anim: 2,
         shadeClose: true, //开启遮罩关闭
         content: $("#playPassword").html()

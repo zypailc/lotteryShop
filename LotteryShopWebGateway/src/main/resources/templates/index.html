@@ -293,6 +293,9 @@
 		var generalizePersonId = "${generalizePersonId!''}";
 		setCookie("generalizePersonId",generalizePersonId,24);
 		var languageType = getLanguage();
+		if(languageType != 'zh'){
+			languageType = 'en'
+		}
 		infoContentWhiteBook(languageType);
 		infoContentCharacteristic(languageType);
 		infoContentNotice(languageType);
