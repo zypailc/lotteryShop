@@ -1,8 +1,8 @@
 # 服务配置
 server:
   port: 8080
-  #servlet:
-    #context-path: /lottery
+#  servlet:
+#    context-path: /
 # Sping配置
 spring:
   application:
@@ -12,6 +12,17 @@ spring:
       enabled: true
       charset: UTF-8
       force: true
+  #redis 缓存数据库配置
+#  redis:
+#    database: 0
+#    host: localhost
+#    port: 6379
+#    password:
+#    jedis:
+#      pool:
+#        max-active: 8
+#        max-idle: 8
+#        min-idle: 0
   datasource:
     name: druidDataSource
     type: com.alibaba.druid.pool.DruidDataSource
@@ -56,21 +67,26 @@ zuul:
     api-a:
       path: /eurekaserver/**
       serviceId:  eureka-service
+      sensitiveHeaders: "*"
     #验证服务配置
     api-b:
       path: /authservice/**
       serviceId: auth-service
+      sensitiveHeaders: "*"
     #api需要授权网关服务配置
     api-c:
       path: /api/**
       serviceId: apiGateway-service
+      sensitiveHeaders: "*"
     #api不需要授权网关服务
     api-d:
       path: /apiauthorization/**
       serviceId: apiGateway-service
+      sensitiveHeaders: "*"
     api-e:
       path: /manage/**
       serviceId: manage-service
+      sensitiveHeaders: "*"
   #sensitiveHeaders: "*"
   #sensitive-headers: "*"
   #add-host-header: false
@@ -78,15 +94,15 @@ zuul:
   add-host-header: true
 
 #security&oauth2 配置
-security:
-  oauth2:
-    resource:
-      user-info-uri: http://localhost:8083/auth/api/member # 资源服务认证
-    client:
-      client-id: browser # 认证服务ID
-      client-secret: browser # 认证服务密码
-      access-token-uri: http://localhost:8083/auth/oauth/token # 获取token
-      user-authorization-uri: http://localhost:8083/auth/oauth/authorize # 获取授权码
+#security:
+#  oauth2:
+#    resource:
+#      user-info-uri: http://localhost:8083/auth/api/member # 资源服务认证
+#    client:
+#      client-id: browser # 认证服务ID
+#      client-secret: browser # 认证服务密码
+#      access-token-uri: http://localhost:8083/auth/oauth/token # 获取token
+#      user-authorization-uri: http://localhost:8083/auth/oauth/authorize # 获取授权码
 #security:
 #  oauth2:
 #    resource:
@@ -98,7 +114,7 @@ security:
 #      user-authorization-uri: http://localhost:${server.port}/authservice/auth/oauth/authorize # 获取授权码
 
 # 提高延时设置 elevate timeout settings, 避免因为延时造成失败
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 126000
 # 负载均衡工具配置
 ribbon:
   ConnectTimeout: 3000

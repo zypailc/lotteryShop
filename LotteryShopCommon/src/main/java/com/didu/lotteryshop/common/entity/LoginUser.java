@@ -1,11 +1,12 @@
 package com.didu.lotteryshop.common.entity;
 
-import com.didu.lotteryshop.common.config.Constants;
-import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class LoginUser {
+public class LoginUser implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private String id;
     private String memberName;//昵称

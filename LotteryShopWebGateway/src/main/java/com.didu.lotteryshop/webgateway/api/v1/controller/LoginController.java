@@ -5,8 +5,14 @@ import com.didu.lotteryshop.webgateway.config.Constants;
 import com.didu.lotteryshop.webgateway.controller.WebgatewayBaseController;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 登录Contorller
@@ -26,6 +34,40 @@ import java.security.Principal;
 public class LoginController extends WebgatewayBaseController {
     @Autowired
     private RestTemplate restTemplate;
+
+    @RequestMapping("/web/authUserLogin")
+    @ResponseBody
+    public ResultUtil authUserLogin(String username,String password,String rdirectUrl){
+        if(StringUtils.isBlank(rdirectUrl)) rdirectUrl = "/web/authIndex";
+        if(StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)){
+            MultiValueMap<String, Object> paramMap = new LinkedMultiValueMap<String, Object>();
+            paramMap.add("username",username);
+            paramMap.add("password",password);
+            paramMap.add("grant_type","password");
+            paramMap.add("client_id","browser");
+            paramMap.add("client_secret","browser");
+            //HttpHeaders headers = new HttpHeaders();
+            //headers.setContentType(MediaType.valueOf("application/json;UTF-8"));
+           // HttpEntity<Map> httpEntity = new HttpEntity<Map>(paramMap,headers);
+           // ResponseEntity<Map> rMapList = restTemplate.postForEntity("http://auth-service/auth/oauth/token",httpEntity,Map.class);
+            Map<String,String> rMap = restTemplate.postForObject("http://auth-service/auth/oauth/token",paramMap,Map.class);
+            if(rMap != null && !rMap.isEmpty()){
+                String accessToken = rMap.get("access_token");
+                String tokenType = rMap.get("token_type");
+                if(StringUtils.isNotBlank(accessToken) && StringUtils.isNotBlank(tokenType)){
+                    super.getRequest().getSession().setAttribute(Constants.SESSION_LOGIN_TOKEN,accessToken);
+                    super.getRequest().getSession().setAttribute(Constants.SESSION_LOGIN_TOKEN_TYPE,tokenType);
+                    super.getRequest().getSession().setAttribute("LoginUserName",username);
+                    Map<String,String> map = new HashMap<>();
+                    map.put("msg","Login the success！");
+                    map.put("rdirectUrl",rdirectUrl);
+                    return ResultUtil.successJson("Login the success！");
+                }
+            }
+        }
+        return ResultUtil.errorJson("User or password error!");
+    }
+
     /**
      * 登录操作存储Session
      * @param request
@@ -33,7 +75,7 @@ public class LoginController extends WebgatewayBaseController {
      * @param accessToken
      * @param rdirectUrl
      */
-    @RequestMapping("/loginSession")
+    @RequestMapping("/web/loginSession")
     public String loginSession(Model model,HttpServletRequest request, HttpServletResponse response, String accessToken, String rdirectUrl, Principal user){
         //try {
             request.getSession().setAttribute(Constants.SESSION_LOGIN_TOKEN,accessToken);

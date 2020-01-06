@@ -30,16 +30,24 @@ zuul:
     api-a:
       path: /base/**
       serviceId:  base-service
+      sensitiveHeaders: "*"
     api-b:
       path: /ethwallet/**
       serviceId: allet-service
+      sensitiveHeaders: "*"
     api-c:
       path: /lotteryA/**
       serviceId: lotterya-service
+      sensitiveHeaders: "*"
   #sensitive-headers: "*"
   #add-host-header: false
 
-
+# 提高延时设置 elevate timeout settings, 避免因为延时造成失败
+#hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 126000
+# 负载均衡工具配置
+#ribbon:
+#  ConnectTimeout: 3000
+#  ReadTimeout: 60000
 
 
 

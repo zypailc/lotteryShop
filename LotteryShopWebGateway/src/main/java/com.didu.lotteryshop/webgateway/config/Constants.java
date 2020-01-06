@@ -9,6 +9,8 @@ package com.didu.lotteryshop.webgateway.config;
 public class Constants {
     /** 登录成功token */
     public static final String SESSION_LOGIN_TOKEN = "session_login_token";
+    /** 登录成功tokenType*/
+    public static final String SESSION_LOGIN_TOKEN_TYPE = "session_login_token_type";
 
     /** 跳转主页的地址 */
     public static final String INDEX_URL = "authIndex";
