@@ -7,13 +7,11 @@ import com.didu.lotteryshop.common.service.form.impl.EsMemberPropertiesServiceIm
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.github.abel533.sql.SqlMapper;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -39,33 +37,51 @@ public class LoginSessionFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         String path = path(httpServletRequest.getRequestURI());
         //如果是前台请求的资源文件 不需要过滤请求
-        if(path_s().indexOf(path) < 0){
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            //最新登陆的用户名
-            String memberName = null;
-            try {
-                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-                memberName = userDetails.getUsername();
-            } catch (Exception e) {
-                memberName = authentication.getPrincipal().toString();
-            }
-            //后台管理员用户不用记录用户信息
-            if(!"didu123456didu".equals(memberName)){
-                //如果 memberName == ‘anonymousUser’ 没有登陆用户
-                //登陆后记录的用户名
-                String user_name = (String) httpServletRequest.getSession().getAttribute(Constants.LOGIN_SESSION_KEY);
+        if(path_s().indexOf(path) < 0) {
+//            String requestURI = httpServletRequest.getRequestURI();
+//            boolean bool = true;
+//            if (requestURI.indexOf("/web/") >= 0) {
+//                if (requestURI.indexOf("/web/auth") == -1) {
+//                    String token = (String) httpServletRequest.getSession().getAttribute("session_login_token");
+//                    if(StringUtils.isBlank(token)){
+//                        httpServletResponse.sendRedirect("/web/authLogin?rdirectUrl=" + requestURI);
+//                        bool = false;
+//                    }
+//                }
+//            }
 
-                if(httpServletRequest.getRequestURI().indexOf("generalizeInit") > 0){
-                    String token = httpServletRequest.getSession().getAttribute("session_login_token") == null ? "":httpServletRequest.getSession().getAttribute("session_login_token").toString();
+//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//            //最新登陆的用户名
+//            String memberName = null;
+//            try {
+//                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//                memberName = userDetails.getUsername();
+//            } catch (Exception e) {
+//                memberName = authentication.getPrincipal().toString();
+//            }
+         //   if (bool){
+                String memberName = httpServletRequest.getHeader("LoginUserName");
+                if (StringUtils.isBlank(memberName)) {
+                    memberName = (String) httpServletRequest.getSession().getAttribute("LoginUserName");
                 }
-                //证明是页面请求
-                String token = httpServletRequest.getSession().getAttribute("session_login_token") == null ? "":httpServletRequest.getSession().getAttribute("session_login_token").toString();
-                if(token == null || "".equals(token)) {
-                    String[] map =  httpServletRequest.getParameterMap().get("access_token");
-                    if(map != null) {
-                        httpServletRequest.getSession().setAttribute("session_login_token", map[0]);
-                    }
-                }
+
+                //后台管理员用户不用记录用户信息
+                if (!"didu123456didu".equals(memberName)) {
+                    //如果 memberName == ‘anonymousUser’ 没有登陆用户
+                    //登陆后记录的用户名
+                    String user_name = (String) httpServletRequest.getSession().getAttribute(Constants.LOGIN_SESSION_KEY);
+
+    //                if(httpServletRequest.getRequestURI().indexOf("generalizeInit") > 0){
+    //                    String token = httpServletRequest.getSession().getAttribute("session_login_token") == null ? "":httpServletRequest.getSession().getAttribute("session_login_token").toString();
+    //                }
+                    //证明是页面请求
+    //                String token = httpServletRequest.getSession().getAttribute("session_login_token") == null ? "":httpServletRequest.getSession().getAttribute("session_login_token").toString();
+    //                if(token == null || "".equals(token)) {
+    //                    String[] map =  httpServletRequest.getParameterMap().get("access_token");
+    //                    if(map != null) {
+    //                        httpServletRequest.getSession().setAttribute("session_login_token", map[0]);
+    //                    }
+    //                }
 
                 Map<String, Object> map = null;
                 LoginUser loginUser = null;

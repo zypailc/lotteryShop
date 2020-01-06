@@ -3,12 +3,10 @@ package com.didu.lotteryshop;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 /**
  * WEB 页面网关项目启动类
@@ -19,10 +17,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EnableZuulProxy
 @EnableHystrix
 @EnableDiscoveryClient
-@EnableOAuth2Client
-@EnableResourceServer
-@MapperScan("com.didu.lotteryshop.*.mapper*")
-//@EnableOAuth2Sso
+@MapperScan("com.didu.lotteryshop.**.mapper*")
+@EnableEurekaClient
+//@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1800,redisFlushMode = RedisFlushMode.IMMEDIATE)
 public class WebGatewayApplication  {
 
     public static void main(String[] args) {

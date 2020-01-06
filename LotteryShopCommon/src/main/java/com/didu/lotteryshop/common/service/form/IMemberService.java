@@ -2,8 +2,6 @@ package com.didu.lotteryshop.common.service.form;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.didu.lotteryshop.common.entity.Member;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
 
 /**
  * <p>
@@ -13,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * @author null123
  * @since 2019-10-23
  */
-public interface IMemberService extends IService<Member>,UserDetailsService  {
+public interface IMemberService extends IService<Member>  {
 
 
 }

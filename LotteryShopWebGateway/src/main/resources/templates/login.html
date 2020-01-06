@@ -40,17 +40,11 @@
 				<div class="col-lg-8">
 					<!-- Reply -->
 					<div class="reply">
-                        <input type="hidden" id="rdirect_url" value="${rdirect_url}"/>
+
 						<div class="reply_form_container">
 							<!-- Reply Form -->
-							<!--<form id="reply_form" action="http://localhost:8083/auth/login" method="post">-->
-							<!--<form id="reply_form" action="/authservice/auth/oauth/token" method="post">-->
-							<form id="reply_form" action="/authservice/auth/oauth/token" method="post">
-							<!--<form id="reply_form" action="/authservice/auth/login" method="post">-->
-							<!--<form id="reply_form" action="/authservice/auth/custom/authorize" method="post">-->
-								<input type="hidden" name="grant_type" value ="password"/>
-								<input type="hidden" name="client_id" value ="${client_id}"/>
-								<input type="hidden" name="client_secret" value ="${client_secret}"/>
+							<form id="reply_form"  method="post">
+								<input type="hidden" name="rdirectUrl" value="${rdirect_url}"/>
 								<div>
 									<input  name="username" id="reply_form_email" class="input_field reply_form_email" type="text" placeholder="E-mail" required="required" data-error="Wrong username and password.">
 									<input  name="password" id="reply_form_password" class="input_field reply_form_password" type="password" placeholder="password" required="required" data-error="Wrong username and password.">
@@ -109,24 +103,41 @@
 				}
 			});
 		}*/
+		// function login(){
+		// 	$.ajax({
+		// 		url:"${projectPath}/authservice/auth/oauth/token",
+		// 		data:$('#reply_form').serializeArray(),
+		// 		type:"post",
+		// 		dataType:"json",
+		// 		success:function(data){
+		// 			/*$.ajax({
+		// 				url:"${projectPath}/loginSession?access_token="+data.access_token+"&accessToken="+data.access_token+"&rdirectUrl="+$('#rdirect_url').val(),
+		// 				type:"get",
+		// 				success:function(data){
+		// 					alert(data)
+		// 				}
+		// 			});*/
+		// 			var a = $("<a>");
+		// 			a.attr("href","${projectPath}/loginSession?access_token="+data.access_token+"&accessToken="+data.access_token+"&rdirectUrl="+$('#rdirect_url').val());
+		// 			a[0].click();
+		// 			//window.location.href = "${projectPath}/loginSession?access_token="+data.access_token+"&accessToken="+data.access_token+"&rdirectUrl="+$('#rdirect_url').val();
+		// 		},
+		// 		error:function(){
+		// 			alert("User or password error!")
+		// 		}
+		// 	});
+		// }
+
 		function login(){
 			$.ajax({
-				url:"${projectPath}/authservice/auth/oauth/token",
+				url:"${projectPath}/web/authUserLogin",
 				data:$('#reply_form').serializeArray(),
 				type:"post",
 				dataType:"json",
 				success:function(data){
-					/*$.ajax({
-						url:"${projectPath}/loginSession?access_token="+data.access_token+"&accessToken="+data.access_token+"&rdirectUrl="+$('#rdirect_url').val(),
-						type:"get",
-						success:function(data){
-							alert(data)
-						}
-					});*/
-					var a = $("<a>");
-					a.attr("href","${projectPath}/loginSession?access_token="+data.access_token+"&accessToken="+data.access_token+"&rdirectUrl="+$('#rdirect_url').val());
-					a[0].click();
-					//window.location.href = "${projectPath}/loginSession?access_token="+data.access_token+"&accessToken="+data.access_token+"&rdirectUrl="+$('#rdirect_url').val();
+					if(data.success){
+						window.location.href = data.extend.data.rdirectUrl;
+					}
 				},
 				error:function(){
 					alert("User or password error!")

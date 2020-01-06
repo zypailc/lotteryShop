@@ -18,12 +18,17 @@ import javax.servlet.http.HttpServletRequest;
  *
  */
 @Controller
-@RequestMapping("")
 public class IndexController extends WebgatewayBaseController {
-    @Value("${security.oauth2.client.client-id}")
-    private String securityClientId;
-    @Value("${security.oauth2.client.client-secret}")
-    private String securityClientSecret;
+//    @Value("${security.oauth2.client.client-id}")
+//    private String securityClientId;
+//    @Value("${security.oauth2.client.client-secret}")
+//    private String securityClientSecret;
+
+    @RequestMapping("/")
+    public String index1(Model model){
+        model = getModel(model);
+        return Constants.INDEX;
+    }
 
     /**
      * 500错误页面
@@ -71,8 +76,8 @@ public class IndexController extends WebgatewayBaseController {
         //}
         model = getModel(model);
         model.addAttribute("type","login");
-        model.addAttribute("client_id",securityClientId);
-        model.addAttribute("client_secret",securityClientSecret);
+//        model.addAttribute("client_id",securityClientId);
+//        model.addAttribute("client_secret",securityClientSecret);
         model.addAttribute("rdirect_url",rdirectUrl);
         return "login";
     }
