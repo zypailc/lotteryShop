@@ -3,6 +3,7 @@ package com.didu.lotteryshop.webgateway.controller;
 import com.didu.lotteryshop.common.base.contorller.BaseContorller;
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.LoginUser;
+import com.didu.lotteryshop.common.service.form.impl.MemberServiceImpl;
 import com.didu.lotteryshop.webgateway.config.WebGatewayConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,14 @@ public class WebgatewayBaseController extends BaseContorller {
             pAddress = false;
         }
         model.addAttribute("pAddress",pAddress);
+        boolean generalizeType = false;
+        if(loginUser != null){
+            if(loginUser.getGeneralizeType() == null || MemberServiceImpl.GENERALIZE_TYPE_1.equals(loginUser.getGeneralizeType())){
+                generalizeType = true;
+            }
+        }
+        model.addAttribute("generalizeType",generalizeType);
+
         if(loginUser == null){
             model.addAttribute("whetherLogin",false);
         }else{

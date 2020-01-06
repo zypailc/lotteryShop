@@ -36,6 +36,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/manage/**").permitAll()
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/favicon**").permitAll()
+                .antMatchers("/web/person**").permitAll()
                 .anyRequest().authenticated()
                 //.and().formLogin().loginPage("/login").permitAll()
                 // .and().logout().permitAll()

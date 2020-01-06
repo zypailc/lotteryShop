@@ -29,6 +29,7 @@ $(document).ready(function() {
 	var searchActive = false;
 	var menuActive = false;
 	var header = $('.header');
+	var notice = $('.hero_side_text_container_button');
 	var ctrl = new ScrollMagic.Controller();
 
 	setHeader();
@@ -65,10 +66,12 @@ $(document).ready(function() {
 			if($(window).scrollTop() > 100)
 			{
 				header.addClass('scrolled');
+				notice.removeClass('scrolledNotice');
 			}
 			else
 			{
 				header.removeClass('scrolled');
+				notice.addClass('scrolledNotice');
 			}
 		}
 		else
@@ -76,10 +79,12 @@ $(document).ready(function() {
 			if($(window).scrollTop() > 100)
 			{
 				header.addClass('scrolled');
+				notice.removeClass('scrolledNotice');
 			}
 			else
 			{
 				header.removeClass('scrolled');
+				notice.addClass('scrolledNotice');
 			}
 		}
 		if(window.innerWidth > 991 && menuActive)

@@ -22,7 +22,9 @@ public class DlbCalculateTask {
     @Autowired
     private TaskDlbCalculateService taskDlbCalculateService;
     /** 每天0点10分钟执行一次 */
-    @Scheduled(cron = "0 10 0 * * ?")//默认是fixedDelay 上一次执行完毕时间后执行下一轮
+    //@Scheduled(cron = "0 10 0 * * ?")//默认是fixedDelay 上一次执行完毕时间后执行下一轮
+    /** 每3分钟执行 */
+    @Scheduled(cron = "0 0/3 * * * ?")
     private void configureTasks() {
         //开始执行待领币核算定时任务
         logger.info("==============================☆☆ Start execution DlbCalculateTask timing task! ☆☆==============================================");

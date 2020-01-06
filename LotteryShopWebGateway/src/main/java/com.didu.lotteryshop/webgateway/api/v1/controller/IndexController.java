@@ -200,6 +200,13 @@ public class IndexController extends WebgatewayBaseController {
         return "personal/generalize/generalize_record";
     }
 
+    @RequestMapping("/web/personalPasswordManagement")
+    public String personalPasswordManagement(Model model){
+        model = getModel(model);
+        return  "personal/wallet/phone/password_management";
+    }
+
+
     /**
      * 推广收益 暂时弃用
      * @param model

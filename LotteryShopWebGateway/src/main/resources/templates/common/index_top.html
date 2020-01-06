@@ -29,6 +29,23 @@
     .a_logout{
         cursor: pointer;
     }
+    .hero_side_text_container_button{
+        position: absolute;
+        top: 45px;
+        right: 50px;
+        width: 60px;
+        height: 30px;
+        z-index: 9;
+        transform-origin: top right;
+        border-radius: 5px;
+        border: solid 1px;
+        text-align: center;
+        font-weight: 900;
+    }
+    .scrolledNotice{
+        top: 70px;
+        right: 50px;
+    }
 </style>
 <!-- Header -->
 <header id="header_load" class="header d-flex flex-row justify-content-end align-items-center trans_200">
@@ -116,17 +133,29 @@
         </a>
 
         <div class="dropdown-menu"  aria-labelledby="dropdownMenuLink">
-            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="zh">
-                <img class="language_img" src="../images/flags/zh.png"> <!--zh-->
-            </a>
-            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="en">
-                <img class="language_img" src="../images/flags/en.png"> <!--en-->
-            </a>
-            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="ja">
-                <img class="language_img" src="../images/flags/ja.png"> <!--ja-->
+            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="ar">
+                <img class="language_img" src="../images/flags/ar.png"> <!--<span>da</span>-->
             </a>
             <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="da">
-                <img class="language_img" src="../images/flags/da.png"> <!--da-->
+                <img class="language_img" src="../images/flags/da.png"> <!--<span>da</span>-->
+            </a>
+            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="de">
+                <img class="language_img" src="../images/flags/de.png"> <!--<span>da</span>-->
+            </a>
+            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="en">
+                <img class="language_img" src="../images/flags/en.png"> <!--<span>en</span>-->
+            </a>
+            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="ja">
+                <img class="language_img" src="../images/flags/ja.png"> <!--<span>ja</span>-->
+            </a>
+            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="fr">
+                <img class="language_img" src="../images/flags/fr.png"> <!--<span>da</span>-->
+            </a>
+            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="ru">
+                <img class="language_img" src="../images/flags/ru.png"> <!--<span>da</span>-->
+            </a>
+            <a class="dropdown-item select_language_option " onclick="language_select_onchange(this)" data_value="zh">
+                <img class="language_img" src="../images/flags/zh.png"> <!--<span>zh</span>-->
             </a>
         </div>
         <!--<select class="language_select_onchange">
@@ -136,6 +165,18 @@
             <option class="select_option" value="da">Danish</option>
         </select>-->
     </div>
+    <div class="hero_side_text_container_button">
+        <span >公告</span>
+    </div>
+    <div class="hero_side_text_container">
+        <div class="hero_side_text">
+            <div class="notice_head"><span >公告</span></div>
+            <div class="notice_content">
+                <p>1.It hasn't been announced yet !</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Hamburger -->
     <div class="hamburger_container">
         <i class="fas fa-bars trans_200"></i>
@@ -148,9 +189,9 @@
         <div class="menu_close"><i class="far fa-times-circle trans_200"></i></div>
         <ul class="menu_mm">
             <li><a href="../web/authIndex" data-localize="base.home">Home</a></li>
-            <li><a href="../web/authPlayTheLottery" data-localize="base.playTheLottery">Play The Lottery</a></li>
+            <!--<li><a href="../web/authPlayTheLottery" data-localize="base.playTheLottery">Play The Lottery</a></li>-->
             <% if(has(whetherLogin) && whetherLogin){ %>
-            <li><a href="../web/personalCenter">${loginUser.memberName!"without"} , <span data-localize="base.personalCenter"> Personal Center</span></a></li>
+            <li><a href="../web/personalCenter">${loginUser.memberName!"without"}<!-- , <span data-localize="base.personalCenter"> Personal Center</span>--></a></li>
             <% } else { %>
                 <% if(has(type) && type == 'register'){ %>
                     <li class="menu_mm"><a class="a_border" href="../web/authLogin" data-localize="base.login">Login</a></li>
@@ -258,9 +299,7 @@
         }
         if((language_select_1 != 'zh' && language_select_1 != 'en')) {
             $("iframe.goog-te-menu-frame").contents().find("table").find("span.text").each(function (i, data) {
-                console.log("1:"+$(this).html());
                 if ($(this).html() == language_select) {
-                    console.log("2:"+$(this).html());
                     $(this).click();
                 }
             })

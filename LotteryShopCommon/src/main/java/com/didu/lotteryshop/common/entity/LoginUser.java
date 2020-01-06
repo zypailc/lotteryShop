@@ -17,6 +17,9 @@ public class LoginUser {
     private String paymentCode;//支付密码
     private String password;//登陆密码
     private String paymentCodeWallet;//生成钱包的密文
+    private String generalizeType;// 推广类型
+    private String moneyView;//金额是否显示
+    private String noticeView;//公告是否已读
 
     public String getId() {
         return id;
@@ -96,5 +99,29 @@ public class LoginUser {
 
     public void setPaymentCodeWallet(String paymentCodeWallet) {
         this.paymentCodeWallet = paymentCodeWallet;
+    }
+
+    public String getGeneralizeType() {
+        return generalizeType;
+    }
+
+    public void setGeneralizeType(String generalizeType) {
+        this.generalizeType = generalizeType;
+    }
+
+    public String getMoneyView() {
+        return moneyView;
+    }
+
+    public void setMoneyView(String moneyView) {
+        this.moneyView = moneyView;
+    }
+
+    public String getNoticeView() {
+        return noticeView;
+    }
+
+    public void setNoticeView(String noticeView) {
+        this.noticeView = noticeView;
     }
 }

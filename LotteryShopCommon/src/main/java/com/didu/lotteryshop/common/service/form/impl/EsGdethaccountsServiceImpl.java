@@ -339,23 +339,19 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
      * @param pageSize
      * @param startTime 创建开始时间
      * @param endTime 创建结束时间
-     * @param status  状态 1,2
      * @return
      */
-    public Page<EsGdethaccounts> findEthRecordPagination(String memberId, Integer currentPage, Integer pageSize, String startTime, String endTime, String status){
+    public Page<EsGdethaccounts> findGdethRecordPagination(String memberId, Integer currentPage, Integer pageSize, String startTime, String endTime){
         Wrapper<EsGdethaccounts> wrapper = new EntityWrapper<EsGdethaccounts>();
         wrapper.where("1=1");
         if(startTime != null && !"".equals(startTime)){
-            wrapper.and(" status_time < {0}",startTime);
+            wrapper.and(" create_time < {0}",startTime);
         }
         if(endTime != null && !"".equals(endTime)){
-            wrapper.and("  status_time < {0}",endTime);
+            wrapper.and("  create_time < {0}",endTime);
         }
         if(memberId != null && !"".equals(memberId)){
             wrapper.and("member_id = {0}",memberId);
-        }
-        if(status != null && !"".equals(status)){
-            wrapper.in("status",status);
         }
         wrapper.orderBy("create_time",false);
         Page<EsGdethaccounts> pageEthRecord = new Page<EsGdethaccounts>(currentPage,pageSize);

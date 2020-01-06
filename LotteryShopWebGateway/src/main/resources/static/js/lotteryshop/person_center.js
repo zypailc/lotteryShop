@@ -5,6 +5,7 @@ $(function(){
     $(".search_lottery_record_phone").click(function(){
         findLotteryRecord(true,"lottery_record_phone");
     });
+
 })
 // head portrait layer
 var img_head_layer;
@@ -107,7 +108,7 @@ function create_confirm(){
 function update_confirm(){
     var bAddress = $("input[name=update_bAddress]").val() || "";
     if(bAddress == ""){
-        layer.msg("Please enter your wallet address !");
+        layui_open("Please enter your wallet address !");
         return;
     }
     $.ajax({
@@ -193,6 +194,9 @@ function findETHWallet(classProperty,url){
                 if(classProperty == 'walletFLAT'){
                     ethHead = $(".lsb_record");
                     walletdetail = $(".wallet_address_self_flat_withdrawCash");
+                }
+                if(classProperty == 'walletGdEth'){
+                    ethHead = $(".gdEth_record");
                 }
                 ethHead.find(".wallet_span_total").html(dataInfo.total);
                 ethHead.find(".balance").html(" : "+dataInfo.balance);
@@ -353,7 +357,7 @@ function findwalletTotal(exchangeRate,personal_wallet_center){
         success:function (result){
             var info = result.extend.data;
             var personalWalletCenter = $("."+personal_wallet_center);
-            personalWalletCenter.find(".walletTotalEth").html(info.ethTotal);
+            /*personalWalletCenter.find(".walletTotalEth").html(info.ethTotal);
             personalWalletCenter.find(".ethTotalToUsd").html(info.ethTotalToUsd);
             personalWalletCenter.find(".walletEth").html(info.eth);
             personalWalletCenter.find(".ethToUsd").html(info.ethToUsd);
@@ -362,7 +366,19 @@ function findwalletTotal(exchangeRate,personal_wallet_center){
             personalWalletCenter.find(".goldToUsd").html(info.lsbToUsd);
             personalWalletCenter.find(".walletPutMoney").html(info.dlb);
             personalWalletCenter.find(".putMoneyToEth").html(info.dlbToEtb);
-            personalWalletCenter.find(".putMoneyToUsd").html(info.dlbToUsd);
+            personalWalletCenter.find(".putMoneyToUsd").html(info.dlbToUsd);*/
+            personalWalletCenter.find(".walletTotalEth").find("input").val(info.ethTotal+"ETH");
+            personalWalletCenter.find(".ethTotalToUsd").find("input").val("≈$"+info.ethTotalToUsd);
+            personalWalletCenter.find(".walletEth").find("input").val(info.eth);
+            personalWalletCenter.find(".ethToUsd").find("input").val("≈$"+info.ethToUsd);
+            personalWalletCenter.find(".walletGold").find("input").val(info.lsb);
+            personalWalletCenter.find(".goldToEth").find("input").val("≈ETH"+info.lsbToEth);
+            personalWalletCenter.find(".goldToUsd").find("input").val("≈$"+info.lsbToUsd);
+            personalWalletCenter.find(".walletPutMoney").find("input").val(info.dlb);
+            personalWalletCenter.find(".putMoneyToEth").find("input").val("≈ETH"+info.dlbToEtb);
+            personalWalletCenter.find(".putMoneyToUsd").find("input").val("≈$"+info.dlbToUsd);
+            personalWalletCenter.find(".walletGdEth").find("input").val("≈$"+info.gdEth);
+            personalWalletCenter.find(".gdEthToUsd").find("input").val("≈$"+info.gdEthToUsd);
         }
     })
 }
@@ -424,8 +440,8 @@ function withdrawCashEth(e){
         propertyObj = "wallet_address_self_flat_recharge";
     }
     var balance = $("."+propertyObj).find(".balance").attr("dataValue") || "";
-    var extractTheNumber = $("."+propertyObj).find("input").val() || "10";
-    if(!extractTheNumber){
+    var extractTheNumber = $("."+propertyObj).find("input").val() || "0";
+    if(!extractTheNumber || extractTheNumber == '0'){
         layer.msg("Please enter quantity ! ");
         return;
     }
@@ -543,6 +559,18 @@ function updatePassword(e,type){
             }else if(result.code == '500'){
                 layui_open(result.msg);
             }
+        }
+    })
+}
+
+function updateMoneyIsView(isView){
+    $.ajax({
+        url:"/api/base/v1/member/updateMoneyIsView",
+        type:"get",
+        data:{"isView":isView},
+        dataType:"json",
+        success:function (result){
+
         }
     })
 }

@@ -192,7 +192,6 @@
             $(".addPartner").click(function (){
                 var file = document.getElementById('partner') == null ?  "":document.getElementById('partner').files[0];
                 var linkAddress = $("#linkAddress").val() || "";
-                console.log(file);
                 if(!linkAddress){
                     alert("Link address not null !");
                     return;

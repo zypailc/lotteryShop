@@ -659,7 +659,7 @@ section
 {
 	width: calc(16% - 15px);
 	margin-bottom: 80px;
-	border-radius: 0px;
+	border-radius: 5px;
 	border: 1px solid #dcdcdc;
 	margin: 5px;
 }

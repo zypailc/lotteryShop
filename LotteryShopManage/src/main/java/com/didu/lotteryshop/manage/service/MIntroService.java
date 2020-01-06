@@ -2,14 +2,13 @@ package com.didu.lotteryshop.manage.service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.entity.IntroEn;
 import com.didu.lotteryshop.common.entity.IntroZh;
 import com.didu.lotteryshop.common.entity.LsImage;
 import com.didu.lotteryshop.common.entity.MIntro;
 import com.didu.lotteryshop.common.mapper.MIntroMapper;
-import com.didu.lotteryshop.common.service.form.impl.IntroEnServiceImpl;
-import com.didu.lotteryshop.common.service.form.impl.IntroZhServiceImpl;
-import com.didu.lotteryshop.common.service.form.impl.MIntroServiceImpl;
+import com.didu.lotteryshop.common.service.form.impl.*;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.github.abel533.sql.SqlMapper;
 import jnr.ffi.annotations.In;
@@ -23,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class MIntroService {
+public class MIntroService extends BaseService {
     @Autowired
     private MIntroMapper mIntroMapper;
     @Autowired
@@ -34,6 +33,8 @@ public class MIntroService {
     private IntroZhServiceImpl introZhService;
     @Autowired
     private LsImageService lsImageService;
+    @Autowired
+    private EsMemberPropertiesServiceImpl esMemberPropertiesService;
 
     public List<Map<String,Object>> findMIntro(String type){
         Wrapper wrapper = new EntityWrapper();
@@ -61,6 +62,10 @@ public class MIntroService {
             if (lsImage == null) {
                 return ResultUtil.successJson("error !");
             }
+        }
+        if(type == MIntroServiceImpl.TYPE_NOTICE){
+            //更新所有的用户公告为未查看
+            getSqlMapper().update("update es_member_properties set is_view = 1 where type = " + EsMemberPropertiesServiceImpl.TYPE_NOTICE);
         }
         boolean b = save(title_zh,content_zh,title_en,content_en,type,lsImage.getId());
         if(b){

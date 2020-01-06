@@ -604,7 +604,7 @@ section
 {
 	color: #251343;
 }
-.hero_side_text_container
+/*.hero_side_text_container
 {
 	position: absolute;
 	top: 0;
@@ -619,14 +619,14 @@ section
 	-ms-transform: rotate(-90deg);
 	-o-transform: rotate(-90deg);
 	transform: rotate(-90deg);
-}
+}*/
 .hero_side_text
 {
-	width: 80.5%;
+	/*width: 80.5%;
 	height: 100%;
 	padding-right: 170px;
 	padding-top: 51px;
-	float: left;
+	float: left;*/
 }
 .hero_side_text h2
 {

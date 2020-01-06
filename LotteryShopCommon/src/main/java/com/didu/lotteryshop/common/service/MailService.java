@@ -1,5 +1,6 @@
-package com.didu.lotteryshop.base.service;
+package com.didu.lotteryshop.common.service;
 
+import com.didu.lotteryshop.common.entity.MailCommonProperties;
 import com.didu.lotteryshop.common.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
@@ -12,8 +13,10 @@ import java.util.Base64;
 @Service
 public class MailService {
 
+    //@Autowired
+    //private MailProperties mailProperties;
     @Autowired
-    private MailProperties mailProperties;
+    private MailCommonProperties mailProperties;
 
     private String userName;
 
@@ -27,8 +30,11 @@ public class MailService {
 
     private PrintWriter printWriter;
 
+    public void sendSimpleMailMember(Member member, String subject, String text) {
+        sendSimpleMail(member.getEmail(),subject,text);
+    }
 
-    public void sendSimpleMail(Member member, String subject, String text) {
+    public void sendSimpleMail(String email,String subject,String text){
         try
         {
             host = mailProperties.getHost();
@@ -57,7 +63,7 @@ public class MailService {
                 writeCommandStream("rcpt to:" + oneReciver);
             }*/
             //设置邮件发送地址
-            writeCommandStream("rcpt to:<"+member.getEmail()+">");
+            writeCommandStream("rcpt to:<"+email+">");
             //开始输入邮件内容
             writeCommandStream("data");//邮件内容，在输入命令data之后开始
 
@@ -65,7 +71,7 @@ public class MailService {
             //填了之后，收到邮件的人，会看到以这个名字发送的邮件，但是他不能回复，因为这个是伪造的地址，无效的。
             printWriter.println("from:" + "DIDU@DIDU.COM");
             //收件人，格式和抄送者一样
-            printWriter.println("to:" + member.getEmail());
+            printWriter.println("to:" + email);
             //这是抄送者，同收件人一样，可以设置多个，中间用,号分隔
             //比如：xxx@qq.com,xxxxxx@qq.com,xxxx@qq.com
             printWriter.println("Cc:" + "DIDU");
@@ -110,6 +116,9 @@ public class MailService {
         }
     }
 
+
+
+
     private PrintWriter getWriter(Socket socket) throws IOException
     {
         OutputStream socketOut = socket.getOutputStream();
@@ -128,12 +137,12 @@ public class MailService {
         {
             printWriter.println(command);
             printWriter.flush();
-            //System.out.println("客户端命令行信息→" + command);
+            System.out.println("客户端命令行信息→" + command);
         }
         char[] serviceResponse = new char[1024];
 
         bufferedReader.read(serviceResponse);
-        //System.out.println("服务器响应→" + new String(serviceResponse));
+        System.out.println("服务器响应→" + new String(serviceResponse));
     }
 
 }

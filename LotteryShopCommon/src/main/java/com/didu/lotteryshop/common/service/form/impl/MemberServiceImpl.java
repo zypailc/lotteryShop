@@ -18,6 +18,16 @@ import java.util.Map;
 
 @Service
 public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> {
+
+    /**
+     * 推广类型 ：推广商
+     */
+    public static final String GENERALIZE_TYPE_1 = "1";
+    /**
+     * 推广类型 ：散户
+     */
+    public static final String GENERALIZE_TYPE_0 = "0";
+
     @Autowired
     private BaseService baseService;
 

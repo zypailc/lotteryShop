@@ -26,10 +26,14 @@ include("../common/common.js.html"){}
 	.draw_personal_lottery{cursor: pointer;}
 	.draw_personal_back{cursor: pointer;text-align: center;border: solid;}
 	.span_title{
-		width:30px;
+		/*width:30px;*/
 		white-space:nowrap;
 		text-overflow:ellipsis;
 		overflow:hidden;
+		display: list-item;
+		font-size: 11px;
+		font-weight: 700;
+		color: #777;
 	}
 	.personal_center{
 		font-size: 16px;
@@ -72,6 +76,9 @@ include("../common/common.js.html"){}
 		font-weight: 300;
 		letter-spacing: 2px;
 	}
+	.li_wallet_module_generalize{
+		width:33% !important;
+	}
 	.li_wallet_module_right{
 		border: none;
 	}
@@ -100,7 +107,7 @@ include("../common/common.js.html"){}
 		box-shadow: 0 0 15px;
 	}
 	.wallet_password_input{
-		width: 80%;
+		width: 90%;
 		margin-bottom: 15px;
 	}
 	.pointerClass{
@@ -121,19 +128,22 @@ include("../common/common.js.html"){}
 		width: 60%;
 	}
 	.eth_record{
-		width: 60%;
+		/*width: 60%;*/
 	}
 	.dlb_record{
-		width: 60%;
-
+		/*width: 60%;*/
 	}
 	.lsb_record{
-		width: 60%;
+		/*width: 60%;*/
 	}
+    .gdEth_record{
+        /*width: 60%;*/
+    }
 	.wallet_head{
 		background: #f8f9fa;
 		border-radius: 5px;
 		padding: 5px;
+		/*width: 60%;*/
 	}
 	.wallet_head span{
 		color: #868e96;
@@ -144,6 +154,7 @@ include("../common/common.js.html"){}
 	}
 	.personal_center_model{
 		width: 50%;
+		height: 240px;
 	}
 	.hrEth{
 		height: 1px;
@@ -170,6 +181,11 @@ include("../common/common.js.html"){}
 		width: 100%;
 		text-align: left;
 	}
+    .ul_personal_gdEth{
+        margin-top: 15px;
+        width: 100%;
+        text-align: left;
+    }
 	.walletPutMoney{
 		margin-top: 15px;
 		width: 100%;
@@ -194,7 +210,7 @@ include("../common/common.js.html"){}
 		font-size: 11px;
 	}
 	.wallet_title{
-		font-size: 16px;
+		font-size: 11px;
 		font-weight: 600;
 		padding-left: 5px;
 	}
@@ -229,10 +245,63 @@ include("../common/common.js.html"){}
 	.model_margin_top{
 		margin-top: 15px;
 	}
-	.model_title{
-		text-align: center;
-		font-size: 20px;
+
+	.personal_wallet{
+
+	}
+	.phone_model_img{
+		width: 115px;
+		height: 115px;
+	}
+	.money_input{
+		border: none;
+		border-radius: 5px;
+		width: 100%;
+		/*margin-left: 10px;*/
+		background: center;
+	}
+	.money_input_1{
+		border: none;
+		border-radius: 5px;
+		width: 20%;
+		margin-left: 10px;
+		background: center;
+	}
+	.moneyOpenOrClose{
+		float: right;
+		color: darkgrey;
+	}
+	.p_margin{
+		margin-top: 5px;
+	}
+	.p_money_main{
+		font-size: 18px;
+		font-weight: 700;
+		color: #9f88be;
+	}
+	.p_money_dollar{
+		font-size: 11px;
 		font-weight: 500;
+		color: #9f88be;
+	}
+	.personal_wallet_detail{
+		background: #e9ecef;
+		border-radius: 5px;
+		width: 30%;
+		padding: 3px;
+		margin: 3px;
+		float: left;
+		height: 120px;
+	}
+	.div_withdrawCash{
+		float: left;
+		width: 49%;
+		border-right: solid 1px #e2e2e2;
+	}
+	.div_recharge{
+		float: left;
+		width: 49%;
+		padding-left: 5px;
 	}
 </style>
 <script>
@@ -269,18 +338,18 @@ include("../common/common.js.html"){}
 
 		$(".li_wallet_module").click(function(){
 			var type = $(this).attr("data-class") || "";
-			if(type == 'wallet_bind'){
+			/*if(type == 'wallet_bind'){
 				$(location).prop('href','../web/personalWalletBind?'+"type="+type);
-			}else{
-				$(location).prop('href','../web/personalWalletBase?'+"type="+type);
-			}
+			}else{*/
+			$(location).prop('href','../web/personalWalletBase?'+"type="+type);
+			//}
 		});
 
 		//昵称标签超出长度显示省略号
 		var span_title = $(".span_title").html();
-		if (span_title.length > 3) {
+		if (span_title.length > 50) {
 			//截取固定长度
-			var span_title = span_title.substring(0, 3);
+			var span_title = span_title.substring(0, 50);
 			//为非隐藏<span>标签赋值--截取固定长度
 			$(".span_title").text(span_title+"...");
 		} else {
@@ -295,6 +364,13 @@ include("../common/common.js.html"){}
 			}
 			if(type == 'lottery_record'){
 				$(location).prop('href','../web/personalPhoneType?'+"type="+type);
+			}
+			if(type == 'password_management'){
+				$(location).prop('href','../web/personalPasswordManagement');
+
+			}
+			if(type == 'wallet_bind'){
+				$(location).prop('href','../web/personalWalletBind?'+"type="+type);
 			}
 		});
 
@@ -337,13 +413,42 @@ include("../common/common.js.html"){}
 			}
 		});
 
+		var generalizeType = '${generalizeType}';
+		if(generalizeType == 'true'){
+			$(".personal_center_model").innerHeight("370px");
+			$(".personal_wallet_detail").innerWidth('48%');
+		}
+
+		var moneyIsView = '${loginUser.moneyView!"0"}'
+		$(".moneyOpenOrClose").attr("datavalue",moneyIsView);
+		$(".moneyOpenOrClose").click(function(){
+			var isView = $(".moneyOpenOrClose").attr("datavalue");
+			if(isView == '0'){
+				$(".moneyOpenOrClose").removeClass("glyphicon-eye-open");
+				$(".moneyOpenOrClose").addClass("glyphicon-eye-close");
+				$(".moneyOpenOrClose").attr("dataValue",'1');
+				$(".money_input").prop("type","password");
+			}
+			if(isView == '1'){
+				$(".moneyOpenOrClose").removeClass("glyphicon-eye-close");
+				$(".moneyOpenOrClose").addClass("glyphicon-eye-open");
+				$(".moneyOpenOrClose").attr("dataValue",'0');
+				$(".money_input").prop("type","text");
+			}
+			updateMoneyIsView(isView);
+		})
+		$(".moneyOpenOrClose").click();
+
 		gengeralizeMemberInit(true,'generalizeRecord');
 		findETHWallet( 'walletETH','/api/base/v1/ethWallet/findEthWallet');//eth
 		findETHWallet( 'walletPutMoney','/api/base/v1/dlbWallet/findDlbWallet');//dlb
 		findETHWallet( 'walletFLAT','/api/base/v1/lsbWallet/findLsbWallet');//lsb
+		findETHWallet( 'walletGdEth','/api/base/v1/gdethWallet/findGdethWallet');//gdEth
+
 		findWalletRecord(true,'walletETH','/api/base/v1/ethWallet/findEthRecord');//eth
 		findWalletRecord(true,'walletPutMoney','/api/base/v1/dlbWallet/findDlbRecord');//dbl
 		findWalletRecord(true,'walletFLAT','/api/base/v1/lsbWallet/findLsbRecord');//lsb
+		findWalletRecord(true,'walletGdEth','/api/base/v1/gdethWallet/findGdethRecord');//gdEth
 		getEthToUsd("personal_wallet_center");
 		div_head_images();//heard
 		findLotteryRecord(true,"lottery_record");
@@ -368,16 +473,29 @@ include("../common/common.js.html"){}
 							<div class="person_center_module">
 								<div class="card-title">
 									<img onclick="changePicture()" class="img_head" src="${loginUser.headPortraitUrl!defaultHeadImg}">
-									<span class="span_title" title="${loginUser.memberName!''}">${loginUser.memberName!''}</span>
+									<!--<p><span class="span_title" title="${loginUser.memberName!''}">${loginUser.memberName!''}</span></p>-->
+									<div class="person_center_info">
+										<div class="person_center_info_div">
+									<!--<p class="p_span_title">--><span class="span_title" title="${loginUser.email!''}">${loginUser.email!''}</span><!--</p>-->
+									<!--<p class="p_span_title">--><span class="span_title" title="${loginUser.memberName!''}">${loginUser.memberName!''}</span><!--</p>-->
+										</div>
+									</div>
 								</div>
 								<div class="card-text">
 									<!--<p class="p_wallet_module" ><span>Grade:100</span><span>Gold Club</span></p>
 									<p class="p_wallet_module"><span>ETH:10ETH</span><span>gold:1000DB</span></p>-->
 									<ul class="ul_wallet_module">
-										<li class="li_wallet_module" data-class="wallet_eth">ETH &nbsp;&nbsp;> </li>
-										<li class="li_wallet_module" data-class="wallet_flat"><span data-localize="base.flat">Flat t</span> &nbsp;&nbsp;> </li>
-										<li class="li_wallet_module" data-class="wallet_putMoney"><span data-localize="base.putMoney">Put money</span> &nbsp;&nbsp;></li>
-										<li class="li_wallet_module li_wallet_module_right" data-class="wallet_bind"><span data-localize="base.wallet">Wallet</span> &nbsp;&nbsp;></li>
+										<% if(generalizeType){ %>
+											<li class="li_wallet_module" data-class="wallet_eth">ETH &nbsp;&nbsp;> </li>
+											<li class="li_wallet_module" data-class="wallet_flat"><span data-localize="base.flat">Flat t</span> &nbsp;&nbsp;> </li>
+											<li class="li_wallet_module" data-class="wallet_putMoney"><span data-localize="base.putMoney">Put money</span> &nbsp;&nbsp;></li>
+											<li class="li_wallet_module" data-class="wallet_gdEth"><span data-localize="base.gdEth">Put money</span> &nbsp;&nbsp;></li>
+										<% }else{ %>
+											<li class="li_wallet_module li_wallet_module_generalize" data-class="wallet_eth">ETH &nbsp;&nbsp;> </li>
+											<li class="li_wallet_module li_wallet_module_generalize" data-class="wallet_flat"><span data-localize="base.flat">Flat t</span> &nbsp;&nbsp;> </li>
+											<li class="li_wallet_module li_wallet_module_generalize" data-class="wallet_putMoney"><span data-localize="base.putMoney">Dividend</span> &nbsp;&nbsp;></li>
+										<% } %>
+										<!--<li class="li_wallet_module li_wallet_module_right" data-class="wallet_bind"><span data-localize="base.wallet">Wallet</span> &nbsp;&nbsp;></li>-->
 									</ul>
 								</div>
 							</div>
@@ -386,14 +504,17 @@ include("../common/common.js.html"){}
 					<div class="portfolio_categories button-group filters-button-group">
 						<ul class="personal_li">
 							<li class="portfolio_category draw_personal_lottery personal_center" data-filter=".personalCenter" data-localize="base.personalCenter">personal center</li>
-							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".passwordManagement" data-localize="base.passwordManagement">Password management</li>
-							<hr>
 							<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".walletETH">ETH</li>
 							<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".walletFLAT" data-localize="base.flat">Flat</li>
 							<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".walletPutMoney" data-localize="base.putMoney">Put money</li>
-							<li class="portfolio_category portfolio_category_bottom" data-filter=".wallet" data-localize="base.wallet">Wallet</li>
+							<% if(generalizeType){ %>
+								<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".walletGdEth" data-localize="base.gdEth">dividend</li>
+							<% } %>
+							<li class="portfolio_category portfolio_category_bottom" data-filter=".wallet" data-localize="base.wallet">Wallet address</li>
 							<hr>
 							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".web_design" data-localize="base.lotteryRecord">lottery record</li>
+							<hr>
+							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".passwordManagement" data-localize="base.passwordManagement">Password management</li>
 							<hr>
 							<li class="portfolio_category draw_personal_lottery" data-filter=".generalize" data-localize="base.generalize">generalize</li>
 							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".generalizePersonal" data-localize="base.generalizePersonnel">generalize personnel</li>
@@ -434,22 +555,49 @@ include("../common/common.js.html"){}
 			<div class="card personalCenter">
 				<div class="card-body">
 					<div class="personal_center_model personal_wallet_center">
-						<div>
-							<p class="wallet_title" data-localize="base.netAssets"></p>
-							<p class="wallet_content"><span class="walletTotalEth">0</span> ETH ≈ <span class="ethTotalToUsd">00</span> $</p>
+						<div class="personal_wallet">
+							<p class="wallet_title p_margin"><span data-localize="base.netAssets"></span><span datavalue="0.00" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
+							<p class="wallet_content p_margin">
+							<p class="p_money_main"><span class="walletTotalEth"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+							<p class="p_money_dollar"><span class="ethTotalToUsd"><input readonly="readonly" class="money_input" value="≈$0.00"/></span> </p>
+							</p>
 						</div>
-						<div>
-							<p class="wallet_title">ETH</p>
-							<p class="wallet_content"><span class="walletEth">0</span> ETH ≈ <span class="ethToUsd">0</span> $</p>
+						<div class="personal_wallet personal_wallet_detail">
+							<p class="wallet_title" p_margin>ETH</p>
+							<p class="wallet_content p_margin">
+								<p class="p_money_main"><span class="walletEth"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+								<p class="p_money_dollar"><span class="ethToUsd"><input readonly="readonly" class="money_input" value="≈$0.00"/></span></p>
+							</p>
 						</div>
-						<div>
-							<p class="wallet_title" data-localize="base.flat">gold</p>
-							<p class="wallet_content"><span class="walletGold">0</span> ≈ <span class="goldToEth">0</span> ETH ≈ <span class="goldToUsd">0</span> $</p>
+						<div class="personal_wallet personal_wallet_detail">
+							<p class="wallet_title p_margin" data-localize="base.flat">gold</p>
+							<p class="wallet_content p_margin">
+							<p class="p_money_main"><span class="walletGold"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+							<p class="p_money_dollar">
+								<span class="goldToEth"><input readonly="readonly" class="money_input" value="≈ETH0.00"/></span>
+								<span class="goldToUsd"><input readonly="readonly" class="money_input" value="≈$0.00"/></span>
+							</p>
+							</p>
 						</div>
-						<div>
-							<p class="wallet_title" data-localize="base.putMoney">put money</p>
-							<p class="wallet_content"><span class="walletPutMoney">0</span> ≈ <span class="putMoneyToEth">0</span> ETH ≈ <span class="putMoneyToUsd">0</span> $</p>
+						<div class="personal_wallet personal_wallet_detail">
+							<p class="wallet_title p_margin" data-localize="base.putMoney">put money</p>
+							<p class="wallet_content p_margin">
+							<p class="p_money_main"><span class="walletPutMoney"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+							<p class="p_money_dollar">
+								<span class="putMoneyToEth"><input readonly="readonly" class="money_input" value="≈ETH0.00"/></span>
+								<span class="putMoneyToUsd"><input readonly="readonly" class="money_input" value="≈$0.00"/></span>
+							</p>
 						</div>
+						<% if(generalizeType){ %>
+						<div class="personal_wallet personal_wallet_detail">
+							<p class="wallet_title p_margin" data-localize="base.putMoney">GdEth</p>
+							<p class="wallet_content p_margin">
+							<p class="p_money_main"><span class="walletGdEth"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+							<p class="p_money_dollar">
+								<span class="gdEthToUsd"><input readonly="readonly" class="money_input" value="≈$0.00"/></span>
+							</p>
+						</div>
+						<% } %>
 					</div>
 				</div>
 			</div>
@@ -494,28 +642,29 @@ include("../common/common.js.html"){}
 				<div class="card-body">
 					<div class="eth_record">
 						<div class="wallet_head">
-							<p><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span></p>
-							<p><span class="wallet_span_total"></span></p>
-							<p><span data-localize="base.balance1">balance</span><span class="span_right balance"></span> <span data-localize="base.freeze">freeze</span><span class="freeze"></span></p>
+							<p class="p_margin"><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span><span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
+							<p class="p_margin"><span class="wallet_span_total"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+							<p class="p_margin">
+								<span data-localize="base.balance1">balance</span><span class="span_right balance"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
+								<span data-localize="base.freeze">freeze</span><span class="freeze"><input readonly="readonly" class="money_input_1" value="0.00"/></span></p>
 						</div>
 						<div class="wallet_extract">
 							<div class="wallet_address_self">
-								<p><span class="title_span_1">ETH </span></p>
-								<div class="wallet_address_self_eth_withdrawCash">
+								<!--<p><span class="title_span_1">ETH </span></p>-->
+								<div class="div_withdrawCash wallet_address_self_eth_withdrawCash">
 									<p><span class="title_span_2" data-localize="base.withdrawCash">Withdraw cash</span></p>
-									<p>规则：</p>
-									<p>
+									<p><span data-localize="base.rules">规则</span></p>
+									<!--<p>
 										<span class="title_span_3" data-localize="base.total">total</span> : <span class="wallet_span_total">0ETH</span>
 										<span class="title_span_3" data-localize="base.balance1">balance</span> : <span class="balance">0ETH </span>
 										<span class="title_span_3" data-localize="base.freeze">freeze</span> : <span class="freeze">0ETH</span>
-									</p>
+									</p>-->
 									<input class="input_class_2 wallet_password_input " type="text" placeholder="Extract the number">
 									<div class="div_btn">
 										<a class="wallet_button button_display" href="#" propertyType="1" onclick="withdrawCashEth(this)" ><span data-localize="base.withdrawCash">withdraw cash</span></a>
 									</div>
 								</div>
-								<hr>
-								<div>
+								<div class="div_recharge">
 									<p><span class="title_span_2" data-localize="base.recharge">Recharge</span></p>
 									<p><span class="title_span_3" data-localize="base.address">address</span> : <span>${loginUser.PAddress!"error"}</span></p>
 								</div>
@@ -543,11 +692,42 @@ include("../common/common.js.html"){}
 				<div class="card-body">
 					<div class="dlb_record">
 						<div class="wallet_head">
-							<p><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span></p>
-							<p><span class="wallet_span_total"></span></p>
-							<p><span data-localize="base.balance1">balance</span><span class="span_right balance"></span> <span data-localize="base.freeze">freeze</span><span class="freeze"></span></p>
+							<p class="p_margin"><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span><span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
+							<p class="p_margin"><span class="wallet_span_total"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+							<p class="p_margin">
+								<span data-localize="base.balance1">balance</span><span class="span_right balance"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
+								<span data-localize="base.freeze">freeze</span><span class="freeze"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
+							</p>
 						</div>
 						<ul class="ul_personal_Dlb">
+							<li class="li_come">
+								<div>
+									<p><span class="statusTime">2019-12-13 15:15:07</span></p>
+									<p>
+										<span class="expend" data-localize="base.expend">支出 : </span><span class="recorded" data-localize="base.recorded">入账 : </span>
+										<span class="span_right expendOrReceipts">0.1</span>
+										<span data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
+									</p>
+								</div>
+								<hr class="hrEth">
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- gdEth Record -->
+			<div class="card card-1 card-1_scroll walletGdEth">
+				<div class="card-body">
+					<div class="gdEth_record">
+						<div class="wallet_head">
+							<p class="p_margin"><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span><span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
+							<p class="p_margin"><span class="wallet_span_total"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+							<p class="p_margin">
+								<span data-localize="base.balance1">balance</span><span class="span_right balance"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
+								<span data-localize="base.freeze">freeze</span><span class="freeze"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
+							</p>
+						</div>
+						<ul class="ul_personal_gdEth">
 							<li class="li_come">
 								<div>
 									<p><span class="statusTime">2019-12-13 15:15:07</span></p>
@@ -568,28 +748,30 @@ include("../common/common.js.html"){}
 				<div class="card-body">
 					<div class="lsb_record">
 						<div class="wallet_head">
-							<p><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span></p>
-							<p><span class="wallet_span_total"></span></p>
-							<p><span data-localize="base.balance1">balance</span><span class="span_right balance"></span> <span data-localize="base.freeze">freeze</span><span class="freeze"></span></p>
+							<p class="p_margin"><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span><span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
+							<p class="p_margin"><span class="wallet_span_total"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+							<p class="p_margin">
+								<span data-localize="base.balance1">balance</span><span class="span_right balance"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
+								<span data-localize="base.freeze">freeze</span><span class="freeze"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
+							</p>
 						</div>
 						<div class="wallet_extract wallet_extract_wallet_bottom">
 							<div class="wallet_address_self">
-								<p><span class="title_span_1" data-localize="base.flat">flat</span></p>
-								<div class="wallet_address_self_flat_withdrawCash">
+								<!--<p><span class="title_span_1" data-localize="base.flat">flat</span></p>-->
+								<div class="div_withdrawCash wallet_address_self_flat_withdrawCash">
 									<p><span class="title_span_2" data-localize="base.withdrawCash">Withdraw cash</span></p>
-									<p>
+									<!--<p>
 										<span class="title_span_3" data-localize="base.total">total</span> : <span class="wallet_span_total"></span>
 										<span class="title_span_3" data-localize="base.balance1">balance</span> : <span class="balance"></span>
 										<span class="title_span_3" data-localize="base.freeze">freeze</span> : <span class="freeze"></span>
-									</p>
+									</p>-->
 									<p><span data-localize="base.exchange">exchange</span> : <span class="lsbToEth"></span> = 1 ETH</p>
 									<input class="input_class_2 wallet_password_input" type="text" placeholder="Extract the number">
 									<div class="div_btn">
 										<a class="wallet_button button_display" href="#" propertyType="2" onclick="withdrawCashEth(this)" data-localize="base.withdrawCash">withdraw cash</a>
 									</div>
 								</div>
-								<hr>
-								<div class="wallet_address_self_flat_recharge">
+								<div class="div_recharge wallet_address_self_flat_recharge">
 									<p><span class="title_span_2" data-localize="base.recharge">Recharge</span></p>
 									<p><span data-localize="base.exchange">exchange</span> : 1 ETH = <span class="ethToLsb"></span></p>
 									<input class="input_class_2 wallet_password_input" type="text" placeholder="Prepaid phone number">
@@ -732,15 +914,27 @@ include("../common/common.js.html"){}
 		<div class="container container_phone">
 			<div class="phone_piece">
 				<div class="personal_phone" data-file="lottery_record">
-					<img src="../images/phone_js.png">
+					<img src="../images/phone/cp.png" class="phone_model_img">
 					<div>
 						<span>lottery record</span>
 					</div>
 				</div>
 				<div class="personal_phone" data-file="generalize">
-					<img src="../images/phone_js.png">
+					<img src="../images/phone/tg.png" class="phone_model_img">
 					<div>
 						<span>generalize</span>
+					</div>
+				</div>
+				<div class="personal_phone" data-file="password_management">
+					<img src="../images/phone/mm.png" class="phone_model_img">
+					<div>
+						<span>Password management</span>
+					</div>
+				</div>
+				<div class="personal_phone" data-file="wallet_bind" >
+					<img src="../images/phone/qb.png" class="phone_model_img">
+					<div>
+						<span>wallet address</span>
 					</div>
 				</div>
 			</div>

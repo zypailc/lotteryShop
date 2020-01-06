@@ -3,9 +3,9 @@ package com.didu.lotteryshop.base.api.v1.service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.didu.lotteryshop.base.service.BaseBaseService;
-import com.didu.lotteryshop.base.service.MailService;
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.*;
+import com.didu.lotteryshop.common.service.MailService;
 import com.didu.lotteryshop.common.service.form.impl.*;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.BigDecimalUtil;
@@ -44,6 +44,10 @@ public class MemberService extends BaseBaseService {
     private SysTaskServiceImpl sysTaskService;
     @Autowired
     private SysConfigServiceImpl sysConfigService;
+    @Autowired
+    private EsMemberPropertiesServiceImpl memberPropertiesService;
+    @Autowired
+    private EsGdethwalletServiceImpl esGdethwalletService;
 
     /**
      * 绑定钱包
@@ -172,7 +176,7 @@ public class MemberService extends BaseBaseService {
             }
         }
         String emailStr = "Your account number is : " + member.getEmail() + "<br/>　Your password is : "+ password;
-        mailService.sendSimpleMail(member,"password",emailStr);
+        mailService.sendSimpleMailMember(member,"password",emailStr);
         //保存用户信息
         boolean b = memberServiceImp.insert(member);
         if(b){
@@ -215,7 +219,7 @@ public class MemberService extends BaseBaseService {
         boolean b = memberServiceImp.update(member,wrapper);
         if(b) {
             String emailStr = "Your account number is : " + member.getEmail() + "<br/>　Your password is : "+ password;
-            mailService.sendSimpleMail(member, "new password", emailStr);
+            mailService.sendSimpleMailMember(member, "new password", emailStr);
             return ResultUtil.successJson("Your new password has been sent to your email !");
         }
         return  ResultUtil.errorJson("error , please operate again !");
@@ -249,6 +253,7 @@ public class MemberService extends BaseBaseService {
         EsEthwallet ethwallet = esEthwalletService.findByMemberId(loginUser.getId());// eth
         EsDlbwallet dlbwallet = esDlbwalletService.findByMemberId(loginUser.getId());// dlb
         EsLsbwallet lsbwallet = esLsbwalletService.findByMemberId(loginUser.getId());// lsb
+        EsGdethwallet gdethwallet = esGdethwalletService.findByMemberId(loginUser.getId());
         SysConfig sysConfig = sysConfigService.getSysConfig();
         BigDecimal exchangeRateBig = new BigDecimal(exchangeRate).stripTrailingZeros();
 
@@ -267,6 +272,10 @@ public class MemberService extends BaseBaseService {
         BigDecimal ethTotal = (ethwallet == null ? new BigDecimal("0") : ethwallet.getTotal()).add(dlbToEtb).add(lsbToEth);
         map.put("ethTotal",BigDecimalUtil.bigDecimalToPrecision(ethTotal));
         map.put("ethTotalToUsd",BigDecimalUtil.bigDecimalToPrecision(ethTotal.multiply(exchangeRateBig)));
+        //分红币
+
+        map.put("gdEth",BigDecimalUtil.bigDecimalToPrecision(gdethwallet == null ? new BigDecimal("0"):gdethwallet.getTotal()).stripTrailingZeros());
+        map.put("gdEthToUsd",BigDecimalUtil.bigDecimalToPrecision(exchangeRateBig.multiply(gdethwallet == null ? new BigDecimal("0"):gdethwallet.getTotal()).stripTrailingZeros()));
         return ResultUtil.successJson(map);
     }
 
@@ -334,6 +343,28 @@ public class MemberService extends BaseBaseService {
             return ResultUtil.errorJson("system error , please try again !");
         }
         return ResultUtil.successJson("modify successfully !");
+    }
+
+    /**
+     * 修改金额是否显示
+     * @param isView
+     * @return
+     */
+    public ResultUtil updateMoneyIsView(String isView){
+        LoginUser loginUser = getLoginUser();
+        return memberPropertiesService.updateMoneyIsView(loginUser.getId(),isView);
+    }
+
+    /**
+     * 修改公告已被查看
+     * @return
+     */
+    public ResultUtil updateNoticeIsRead(){
+        LoginUser loginUser = getLoginUser();
+        if(loginUser == null && loginUser.getId() == null ){
+            return null;
+        }
+        return memberPropertiesService.updateNoticeIsView(loginUser.getId());
     }
 
 }

@@ -37,21 +37,6 @@ spring:
       pool-prepared-statements: true
       max-open-prepared-statements: 50
       max-pool-prepared-statement-per-connection-size: 20
-  #email发送配置
-  mail:
-    #SMTP服务器
-    #username: didu18214553578@163.com
-    #password: 18214553578didu
-    username: zm18180545306@163.com
-    password: z18180545306
-    host: smtp.163.com
-    port: 25
-    default-encoding: UTF-8
-    properties:
-      mail:
-        debug: true
-        smtp:
-          socketFactoryClass: javax.net.ssl.SSLSocketFactory
 #微服务注册服务配置
 eureka:
   client:

@@ -3,8 +3,8 @@
     "personalCenter": "Personal center",
     "home": "Home",
     "playTheLottery": "Play the lottery",
-    "login": "Login",
-    "register": "Register",
+    "login": "Sign up",
+    "register": "Sign in",
     "boottomTitle": "@The project does not support mainland China for the time being",
     "whiteBook": "WHITE BOOK",
     "modernFeatures": "MODERN FEATURES",
@@ -48,6 +48,9 @@
     "exchange": "exchange",
     "drawALottery": "Is the lottery",
     "giveOut": "Bonuses are being paid",
-    "passwordManagement": "Password management"
+    "passwordManagement": "Password management",
+    "netAssets": "Net assets",
+    "gdEth": "Dividend",
+    "record": "record"
   }
 }

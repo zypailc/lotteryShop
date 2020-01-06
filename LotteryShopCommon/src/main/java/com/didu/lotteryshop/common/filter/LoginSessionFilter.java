@@ -1,7 +1,9 @@
 package com.didu.lotteryshop.common.filter;
 
 import com.didu.lotteryshop.common.config.Constants;
+import com.didu.lotteryshop.common.entity.EsMemberProperties;
 import com.didu.lotteryshop.common.entity.LoginUser;
+import com.didu.lotteryshop.common.service.form.impl.EsMemberPropertiesServiceImpl;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.github.abel533.sql.SqlMapper;
 import org.apache.commons.lang.ArrayUtils;
@@ -21,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -96,7 +99,7 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                         //step 3 查询数据库，存入用户
                         String sql = "select id,member_name as memberName,email,head_portrait_url as headPortraitUrl,p_address as pAddress,b_address as bAddress,wallet_name as walletName " +
                                 " ,date_format(create_time,'%Y-%m-%d %H:%i:%s') as createTime ,date_format(update_time,'%Y-%m-%d %H:%i:%s') as updateTime ,payment_code as paymentCode" +
-                                " , payment_code_wallet as paymentCodeWallet , password as password " +
+                                " , payment_code_wallet as paymentCodeWallet , password as password ,generalize_type as generalizeType " +
                                 " from es_member where email = '" + memberName + "'";
                         //存入用户修改时间
                         List<Map<String, Object>> list = sqlMapper.selectList(sql);
@@ -120,8 +123,38 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                             loginUser.setBAddress(map.get("bAddress") != null ? map.get("bAddress").toString() : "");
                             loginUser.setPaymentCodeWallet(map.get("paymentCodeWallet") != null ? map.get("paymentCodeWallet").toString() : "");
                             loginUser.setPassword(map.get("password") != null ? map.get("password").toString() : "");
+                            loginUser.setGeneralizeType(map.get("generalizeType") != null ? map.get("generalizeType").toString() : "");
                             loginUser.setPaymentCode(paymentCode);
                             loginUser.setWalletName(WalletName);
+                            //用户添加配置
+                            if(map.get("id") != null && !"".equals(map.get("id"))){
+                                EsMemberPropertiesServiceImpl memberPropertiesService = wac.getBean(EsMemberPropertiesServiceImpl.class);
+                                //金额是否显示
+                                EsMemberProperties memberProperties = findEsMemberProperties(map.get("id").toString(),EsMemberPropertiesServiceImpl.TYPE_MONEY);
+                                if(memberProperties == null){
+                                    memberProperties = new EsMemberProperties();
+                                    memberProperties.setMemberId(map.get("id").toString());
+                                    memberProperties.setIsView(0);
+                                    memberProperties.setType(EsMemberPropertiesServiceImpl.TYPE_MONEY);
+                                    memberPropertiesService.insert(memberProperties);
+                                    loginUser.setMoneyView("0");//是否显示金额明文
+                                }else {
+                                    loginUser.setMoneyView(memberProperties.getIsView() == null ? "0":memberProperties.getIsView().toString());//金额是否显示
+                                }
+                                //公告是否已读
+                                EsMemberProperties memberProperties_1 = findEsMemberProperties(map.get("id").toString(),EsMemberPropertiesServiceImpl.TYPE_NOTICE);
+                                if(memberProperties_1 == null){
+                                    memberProperties_1 = new EsMemberProperties();
+                                    memberProperties_1.setMemberId(map.get("id").toString());
+                                    memberProperties_1.setIsView(0);
+                                    memberProperties_1.setType(EsMemberPropertiesServiceImpl.TYPE_NOTICE);
+                                    memberPropertiesService.insert(memberProperties_1);
+                                    loginUser.setNoticeView("0");//公告是否已读
+                                }else {
+                                    loginUser.setNoticeView(memberProperties_1.getIsView() == null ? "0":memberProperties_1.getIsView().toString());
+                                }
+
+                            }
                         }
                     }
                     if (loginUser != null) {
@@ -131,6 +164,24 @@ public class LoginSessionFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
+    }
+
+    /**
+     * 查询个人配置
+     * @param memberId
+     * @param type
+     * @return
+     */
+    private EsMemberProperties findEsMemberProperties(String memberId,Integer type){
+        EsMemberPropertiesServiceImpl memberPropertiesService = wac.getBean(EsMemberPropertiesServiceImpl.class);
+        Map<String,Object> mapMemberProperties = new HashMap<>();
+        mapMemberProperties.put("member_id",memberId);
+        mapMemberProperties.put("type",type);
+        List<EsMemberProperties> memberProperties = memberPropertiesService.selectByMap(mapMemberProperties);
+        if(memberProperties != null && memberProperties.size() > 0){
+            return memberProperties.get(0);
+        }
+        return null;
     }
 
     private static String path(String path){

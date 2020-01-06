@@ -4,8 +4,10 @@ import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.Web3jUtils;
 import com.didu.lotteryshop.lotterya.contract.LotteryAContract;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.junit.Test;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
@@ -28,15 +30,21 @@ public class TestContract2 {
   public void test(){
     try{
         //平台币管理账户
-         String key = "70EC14BBA185AAF29938464E8F9042562A8A5AE48EFC3126B0A627984EE7B683";
+         //String key = "70EC14BBA185AAF29938464E8F9042562A8A5AE48EFC3126B0A627984EE7B683";
         //推广账户
          //String key = "933B1C3A14704A82A5B6323CF9FEFE6150DD8BCD740EFBC88427BD0E223E2A37";
         //A彩票管理员账号
         // String key = "3E5E0BC6DA93639AA9FA5C1E36091E552404F20A5D6F410788FA8B5CCBFF8E7F";
-        String xx = AesEncryptUtil.encrypt(key,Constants.AES_ETHMANAGER_PRIVATEKEY);
-        System.out.println(xx);
+        //String xx = AesEncryptUtil.encrypt(key,Constants.AES_ETHMANAGER_PRIVATEKEY);
+        String xx = AesEncryptUtil.decrypt("JenwNPZmLgYzldxJSgDHJpP1v3QplY5LK/pIKNqpFfePINMMWK6bW33Iy1n6OpgkJ4RmnYLqyzESQKz7BUHR1U49931HpJWhbkm+FjxIMW62Q5B4QUfJrw4IeQBRJ9Ii", Constants.KEY_THREE);
+        //Base64.decode("JenwNPZmLgYzldxJSgDHJpP1v3QplY5LK/pIKNqpFfePINMMWK6bW33Iy1n6OpgkJ4RmnYLqyzESQKz7BUHR1U49931HpJWhbkm+FjxIMW62Q5B4QUfJrw4IeQBRJ9Ii");
+        System.out.println("xx:"+xx);
+        Credentials credentials = WalletUtils.loadCredentials("123", "E:/IDEAWorkspace/LotteryShop2/LotteryShopETHWallet/pictures/"+"UTC--2019-12-25T02-47-00.612000000Z--2bf4aa7b78516a1259b570706c0ede305d577000.json");
+        System.out.println("xx:"+credentials.getEcKeyPair().toString());
+        /*56693158387536173117398375050602182503208718321592280486151479167780146663782
+        2075841778241809472285607751455914905989529057676159752144929253420061300172126200272922487142362249576698649946874876127875332635244598323361233168698717*/
     }catch (Exception e){
-
+        e.printStackTrace();
     }
   }
 @Test
@@ -50,7 +58,7 @@ public class TestContract2 {
           LotteryAContract lotteryAContract = LotteryAContract.deploy(web3j,credentials,defaultGasProvider,"0x9c3b669D55C411c5d70d87ce2bA44Cf8476141CA").send();
           String  contractAddress = lotteryAContract.getContractAddress();
           BigInteger gasUsed = lotteryAContract.getTransactionReceipt().get().getGasUsed();
-         // contractAddress = "0x4678ce017543f99801dd0f67c1a67e7c4792086d";
+         // contractAddress = "0x4678ce017543f99801dd0f67c1a67e7c4792086d";0x4678ce017543f99801dd0f67c1a67e7c4792086d
           System.out.println("contractAddress:"+contractAddress);
           System.out.println("gasFee:"+Web3jUtils.bigIntegerToBigDecimal(gasPrice.multiply(gasUsed)));
           EthGetBalance ethGetBalancel2 = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameter.valueOf("latest")).send();
@@ -64,11 +72,10 @@ public class TestContract2 {
       try {
           Web3j web3j = Web3j.build(new HttpService("http://127.0.0.1:8545/"));
           Credentials credentials = Credentials.create("3E5E0BC6DA93639AA9FA5C1E36091E552404F20A5D6F410788FA8B5CCBFF8E7F");
-          String contractAddress = "0xd46c4b75ac051c90231ffa5bccfe9f390397149d";
+          String contractAddress = "0x4678ce017543f99801dd0f67c1a67e7c4792086d";
           DefaultGasProvider defaultGasProvider = new DefaultGasProvider();
           LotteryAContract lotteryAContract = LotteryAContract.load(contractAddress,web3j,credentials,defaultGasProvider);
-          TransactionReceipt transactionReceipt = lotteryAContract.ContractBalanceIn(Convert.toWei("200", Convert.Unit.ETHER).toBigInteger()).send();
-          BigInteger gasUsed = transactionReceipt.getGasUsed();
+          TransactionReceipt transactionReceipt = lotteryAContract.ContractBalanceIn(Convert.toWei("10", Convert.Unit.ETHER).toBigInteger()).send();BigInteger gasUsed = transactionReceipt.getGasUsed();
           System.out.println("充值合约gasFee:"+Web3jUtils.bigIntegerToBigDecimal(gasPrice.multiply(gasUsed)));
           System.out.println("合约余额："+Web3jUtils.bigIntegerToBigDecimal(lotteryAContract.ShowContractBalance().send()));
       } catch (Exception e) {

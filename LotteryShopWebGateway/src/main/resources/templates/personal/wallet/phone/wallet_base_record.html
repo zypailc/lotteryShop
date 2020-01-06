@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- commonality  meta and title -->
+    <%
+    include("../../../common/common.meta.html"){}
+    %>
+    <!-- commonality style -->
+    <%
+    include("../../../common/common.css.html"){}
+    %>
+    <link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_styles.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_responsive.css">
+</head>
+<!-- commonality js -->
+<%
+include("../../../common/common.js.html"){}
+%>
+<script src="../js/portfolio_custom.js"></script>
+<script src="../js/lotteryshop/person_center.js"></script>
+<script>
+    $(function(){
+        $(".back").click(function(){
+            history.back();
+        });
+        getEthToUsd("personal_wallet_center_phone");
+        var type = '${type!""}';
+        if(type == 'wallet_eth'){
+            findWalletRecord(true,'person_record','/api/base/v1/ethWallet/findEthRecord');//eth
+        }
+        if(type == 'wallet_flat'){
+            findWalletRecord(true,'person_record','/api/base/v1/dlbWallet/findDlbRecord');//dbl
+        }
+        if(type == 'wallet_putMoney'){
+            findWalletRecord(true,'person_record','/api/base/v1/lsbWallet/findLsbRecord');//lsb
+        }
+        if(type == 'wallet_gdEth'){
+            findWalletRecord(true,'person_record','/api/base/v1/gdethWallet/findGdethRecord');//gdEth
+        }
+    })
+
+</script>
+<style>
+
+    .base_head{
+        padding-top: 50px;
+    }
+    .wallet_head{
+        padding: 10px;
+        /*border-radius: 5px;*/
+        background: #322445;
+        position: fixed;
+        width: 100%;
+        border-top: solid 10px white;
+        z-index:1;
+    }
+    .record{
+        padding: 10px;
+        padding-top: 240px;
+    }
+    .ul_personal_record{
+        width: 100%;
+    }
+    .ul_personal_lottery li{
+        margin-bottom: 5px;
+        background: aliceblue;
+    }
+    .wallet_type{
+
+    }
+    .wallet_content{
+        font-size: 11px;
+    }
+    .wallet_title{
+        font-size: 16px;
+        font-weight: 600;
+        padding-left: 5px;
+    }
+    .li_come{
+        text-align: left;
+        margin-bottom: 5px;
+        background: aliceblue;
+        padding: 3px;
+        border-radius: 3px;
+    }
+</style>
+<body class="body_top">
+
+<div class="super_container">
+
+    <!-- commonality head -->
+    <%
+    include("../../../common/top.html"){}
+    %>
+    <!-- Home -->
+
+
+    <div class="base_head">
+        <div class="wallet_head personal_wallet_center_phone">
+
+        </div>
+        <div class="record person_record">
+            <ul class="ul_personal_record">
+                <li class="li_come">
+                    <div>
+                        <p><span class="statusTime">2019-12-13 15:15:07</span></p>
+                        <p>
+                            <span data-localize="base.expend">支出 : </span><span class="span_right expendOrReceipts">0.1</span>
+                            <span data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
+                        </p>
+                        <p>
+                            <span class="ethGas" data-localize="base.ethGas">燃气费 : </span><span class="ethGas ethGasStr">0.00298507</span>
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- commonality fotter -->
+    <%
+    include("../../../common/bottom.html"){}
+    %>
+
+</div>
+</body>
+
+</html>

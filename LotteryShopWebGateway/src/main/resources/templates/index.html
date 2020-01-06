@@ -108,17 +108,7 @@
 				</div>
 			</div>
 
-			<div class="hero_side_text_container">
-				<div class="hero_side_text">
-					<div class="notice_head"><span >公告</span></div>
-					<div class="notice_content">
-						<p>1.It hasn't been announced yet !</p>
-					</div>
-				</div>
-			</div>
-			<div class="hero_side_text_container_button">
-				<span >公告</span>
-			</div>
+
 
 		</div>
 		<div class="next_section_scroll">
@@ -130,7 +120,7 @@
 	</div>
 
 	<!-- white book -->
-	<div class="icon_boxes">
+	<!--<div class="icon_boxes">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-4">
@@ -139,13 +129,13 @@
 					</div>
 				</div>
 				<div class="col-lg-8 icon_box_col">
-					<!-- Icon Box Item -->
+					&lt;!&ndash; Icon Box Item &ndash;&gt;
 					<div class="div_white_book icon_box_item">
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	</div>-->
 	<!-- project specialty -->
 	<div class="features">
 		<div class="container">
@@ -156,7 +146,6 @@
 					</div>
 				</div>
 			</div>
-
 			<div class="div_characteristicProject row features_row">
 				<div class="col-lg-12">
 					<div class="blog_container">
@@ -298,24 +287,11 @@
 		}
 		infoContentWhiteBook(languageType);
 		infoContentCharacteristic(languageType);
-		infoContentNotice(languageType);
+		//infoContentNotice(languageType);
 		infoContentPartners();
 		infoContentExternal();
-		hero_side_text_container_button_click();
-		hero_side_text_container_niticeHear_click();
-})
-	function hero_side_text_container_niticeHear_click(){
-		$(".notice_head").click(function(){
-			$(".hero_side_text_container_button").show();
-			$(".hero_side_text_container").hide();
-		})
-	}
-	function hero_side_text_container_button_click(){
-		$(".hero_side_text_container_button").click(function(){
-			$(".hero_side_text_container_button").hide();
-			$(".hero_side_text_container").show();
-		})
-	}
+	})
+
 
 function infoContentWhiteBook(languageType){
 	$.ajax({
@@ -333,24 +309,7 @@ function infoContentWhiteBook(languageType){
 		}
 	})
 }
-function infoContentNotice(languageType){
-	$.ajax({
-		url:'${projectPath}/apiauthorization/base/authorization/v1/baseInfo/findNotice',
-		type:'get',
-		data:{"languageType":languageType},
-		dataType:"json",
-		success:function (result) {
-			if(result.length > 0){
-				var info = $(".notice_content");
-				info.html("");
-				$.each(result,function(index,data){
-					var p = "<p>"+(index + 1)+"."+data.content+"</p>";
-					info.append(p);
-				})
-			}
-		}
-	})
-}
+
 
 function infoContentCharacteristic(languageType){
 	$.ajax({
@@ -362,17 +321,40 @@ function infoContentCharacteristic(languageType){
 			var left = "";
 			var characteristicProject = $(".div_characteristicProject");
 			$.each(result,function(index,data){
-				left += '<div class="card trans_200">'+
+				left += '<div class="cardItemContent card trans_200" content="'+data.content+'" aria-hidden="true">'+
+						'<div class="card-title"><a href="blog_post.html">'+data.title+'</a></div>'+
 						'<img class="card-img-top" src="/apiauthorization/base/authorization/v1/lsimage/getImg?id='+(data.imgId || "")+'">'+
-						'<div class="card-body">'+
+						/*'<div class="card-body">'+
 						'<div class="card-title"><a href="blog_post.html">'+data.title+'</a></div>'+
 						'<div class="card-text">'+
 						data.content +
 						'</div>'+
-						'</div>'+
+						'</div>'+*/
 						'</div>';
 			})
 			characteristicProject.html(left);
+			var width = document.body.clientWidth;
+			if(width > 991){
+				$(".cardItemContent").hover(function () {
+					var tips = layer.tips($(this).attr("content"), $(this),{
+						tips: [2, '#9f88be']
+					});
+				})
+			}else {
+				$(".cardItemContent").click(function () {
+					var content = $(this).attr("content");
+					var title = $(this).find(".card-title").find("a").html();
+					layer.open({
+						type: 1,
+						title: false,
+						shadeClose: true,
+						skin: 'yourclass',
+						content:"<p style='font-size: 25px; font-weight: 500;text-align: center;'>"+title+"</p>" +
+								"<p style='margin: 5px 20px;text-align: center;'>"+content+"</p>"
+					});
+				})
+			}
+
 		}
 	})
 }

@@ -674,7 +674,7 @@ section
 .portfolio_items
 {
 	margin-top: 0px;
-	height: 120px !important;
+	height: 160px !important;
 }
 .card
 {
@@ -767,6 +767,7 @@ section
 	font-weight: 400;
 	color: #2e2e2e;
 	margin-bottom: 0px;
+	text-align: center;
 }
 .card:hover .card-title
 {
@@ -893,7 +894,7 @@ section
 	color: #28262d;
 }
 .ul_personal_lottery{
-	width: 98%;
+	width: 100%;
 	text-align: left;
 }
 .phone_piece{
@@ -914,6 +915,7 @@ section
 	border-radius: 5px;
 	padding: 5px;
 	margin: 3px;
+	height: 200px;
 }
 .wallet_left{
 	width: 100%;
@@ -991,10 +993,19 @@ section
 }
 .person_center_module{
 	background: none;
+	width: 100%;
 }
 .p_wallet_module{
 	display: block;
 }
 .ul_wallet_module{
 	display: none;
+}
+.model_title{
+	text-align: center;
+	font-size: 20px;
+	font-weight: 500;
+}
+.p_span_title{
+	text-align: left;
 }

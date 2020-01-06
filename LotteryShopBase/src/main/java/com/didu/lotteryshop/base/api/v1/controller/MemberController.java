@@ -176,6 +176,28 @@ public class MemberController extends BaseBaseController {
     }
 
 
+    /**
+     * 修改金额是否显示
+     * @param isView
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/updateMoneyIsView")
+    public ResultUtil updateMoneyIsView(String isView){
+        if(isView == null || "".equals(isView)){
+            return null;
+        }
+        return  memberService.updateMoneyIsView(isView);
+    }
 
+    /**
+     * 修改公告为已读
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/updateNoticeIsRead")
+    public ResultUtil updateNoticeIsRead(){
+        return memberService.updateNoticeIsRead();
+    }
 
 }

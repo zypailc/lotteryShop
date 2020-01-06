@@ -189,7 +189,7 @@
 		background: #322444;
 	}
 	.span_title{
-		color: aliceblue;
+		color: aliceblue !important;
 	}
 	.container{
 		padding-right: 0px;
@@ -205,6 +205,21 @@
 		border-radius: 50%;
 		padding-top: 3px;
 		padding-left: 3px;
+	}
+	.wallet_password_input{
+		width: 90% !important;
+	}
+	.card-title{
+		text-align: left !important;
+	}
+	.person_center_info{
+		float: right;
+		width: 70%;
+	}
+	.person_center_info_div{
+		text-align: left;
+		padding-top: 10%;
+		color: white;
 	}
 }
 
