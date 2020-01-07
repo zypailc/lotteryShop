@@ -100,14 +100,17 @@ public class LoginController extends WebgatewayBaseController {
      */
     @ResponseBody
     @RequestMapping("/web/loginOut")
-    public ResultUtil loginOut(HttpServletRequest request){
-        HttpSession session = request.getSession();
+    public ResultUtil loginOut(){
+        HttpSession session = super.getRequest().getSession();
         String accessToken = (String)session.getAttribute(Constants.SESSION_LOGIN_TOKEN);
         if(StringUtils.isNotBlank(accessToken)){
-            restTemplate.delete("http://auth-service/auth/api/exit?access_token="+accessToken);
             //清除Session
             session.removeAttribute(Constants.SESSION_LOGIN_TOKEN);//清除令牌
+            session.removeAttribute(Constants.SESSION_LOGIN_TOKEN_TYPE);
+            session.removeAttribute("LoginUserName");
             session.removeAttribute(com.didu.lotteryshop.common.config.Constants.LOGIN_USER);//清除用戶信息
+            //验证服务器删除TOken
+            restTemplate.delete("http://auth-service/auth/api/exit?access_token="+accessToken);
         }
         return ResultUtil.successJson("Exit the success！");
     }
