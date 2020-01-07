@@ -25,10 +25,12 @@ include("../../../common/common.js.html"){}
         $(".back").click(function(){
             history.back();
         });
+        getEthToUsd("personal_wallet_center_phone");
+
         var generalizeType = '${generalizeType}';
         if(generalizeType == 'true'){
             $(".wallet_head").innerHeight("400px");
-            $(".wallet_model").innerWidth('48%');
+            $(".wallet_model").innerWidth('47%');
         }
         var moneyIsView = '${loginUser.moneyView!"0"}'
         $(".moneyOpenOrClose").attr("datavalue",moneyIsView);
@@ -125,6 +127,11 @@ include("../../../common/common.js.html"){}
         color: #8c8c8c;
         border: solid 1px #8a7aa9;
     }
+    .walletTitle{
+        font-size: 18px;
+        text-align: center;
+        font-weight: 700;
+    }
 </style>
 <body class="body_top">
 
@@ -139,7 +146,7 @@ include("../../../common/common.js.html"){}
 
     <div class="base_head">
         <div class="wallet_head personal_wallet_center_phone">
-            <p style="font-size: 18px;text-align: center;font-weight: 700;">title</p>
+            <p class="walletTitle">${title!'title'}</p>
             <div class="wallet_type ">
                 <div>
                     <p class="wallet_title p_margin"><span data-localize="base.netAssets"></span><span datavalue="0.00" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
@@ -235,7 +242,7 @@ include("../../../common/common.js.html"){}
 
            <div class="div_record">
                <img src="../images/wallet_record.jpg">
-               <a href="../web/personWalletRecord" data-localize="base.record">record</a>
+               <a href="../web/personWalletRecord?type=${type!''}" data-localize="base.record">record</a>
                <span class="span_entrance"> > </span>
            </div>
         </div>

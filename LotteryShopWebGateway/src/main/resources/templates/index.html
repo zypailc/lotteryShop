@@ -287,7 +287,6 @@
 		}
 		infoContentWhiteBook(languageType);
 		infoContentCharacteristic(languageType);
-		//infoContentNotice(languageType);
 		infoContentPartners();
 		infoContentExternal();
 	})
@@ -324,21 +323,18 @@ function infoContentCharacteristic(languageType){
 				left += '<div class="cardItemContent card trans_200" content="'+data.content+'" aria-hidden="true">'+
 						'<div class="card-title"><a href="blog_post.html">'+data.title+'</a></div>'+
 						'<img class="card-img-top" src="/apiauthorization/base/authorization/v1/lsimage/getImg?id='+(data.imgId || "")+'">'+
-						/*'<div class="card-body">'+
-						'<div class="card-title"><a href="blog_post.html">'+data.title+'</a></div>'+
-						'<div class="card-text">'+
-						data.content +
-						'</div>'+
-						'</div>'+*/
 						'</div>';
 			})
 			characteristicProject.html(left);
 			var width = document.body.clientWidth;
 			if(width > 991){
-				$(".cardItemContent").hover(function () {
-					var tips = layer.tips($(this).attr("content"), $(this),{
+				var tips;
+				$(".cardItemContent").on("mouseenter",function () {
+					tips = layer.tips($(this).attr("content"), $(this),{
 						tips: [2, '#9f88be']
 					});
+				}).on("mouseleave",function (){
+					layer.close(tips);
 				})
 			}else {
 				$(".cardItemContent").click(function () {

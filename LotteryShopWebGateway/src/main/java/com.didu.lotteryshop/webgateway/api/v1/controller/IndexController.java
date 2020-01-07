@@ -164,6 +164,18 @@ public class IndexController extends WebgatewayBaseController {
     @RequestMapping("/web/personalWalletBase")
     public String walletBase(Model model,@Param(value = "type")String type){
         model = getModel(model);
+        if(type.equals("wallet_eth")){
+            model.addAttribute("title","ETH");
+        }
+        if(type.equals("wallet_flat")){
+            model.addAttribute("title","FLAT");
+        }
+        if(type.equals("wallet_putMoney")){
+            model.addAttribute("title","PUT MONEY");
+        }
+        if(type.equals("wallet_gdEth")){
+            model.addAttribute("title","DIVIDEND");
+        }
         model.addAttribute("type",type);
         //eth和平台币展示记录
         return "personal/wallet/phone/wallet_base";
@@ -179,8 +191,21 @@ public class IndexController extends WebgatewayBaseController {
     public String walletWallet(Model model,@Param(value = "type")String type){
         model = getModel(model);
         model.addAttribute("type",type);
-
         return "personal/wallet/phone/wallet_bind";
+    }
+
+    /**
+     * 钱包记录界面
+     * @param model
+     * @param type
+     * @return
+     */
+    @RequestMapping("/web/personWalletRecord")
+    public String personWalletRecord(Model model,@Param(value = "type") String type){
+        model = getModel(model);
+        model.addAttribute("type",type);
+        model.addAttribute("title",walletType(type));
+        return "personal/wallet/phone/wallet_base_record";
     }
 
     /**
@@ -200,8 +225,9 @@ public class IndexController extends WebgatewayBaseController {
      * @return
      */
     @RequestMapping("/web/personalGeneralizeRecord")
-    public String generalizeRecord(Model model){
+    public String generalizeRecord(Model model,@Param(value = "type") String type){
         model = getModel(model);
+        model.addAttribute("title",walletType(type));
         return "personal/generalize/generalize_record";
     }
 
@@ -221,6 +247,27 @@ public class IndexController extends WebgatewayBaseController {
     public String generalizeEarnings(Model model){
         model = getModel(model);
         return "generalize/generalize_earnings";
+    }
+
+    /**
+     * 判断钱包类型
+     * @param type
+     * @return
+     */
+    private String walletType(String type){
+        if(type.equals("wallet_eth")){
+            return "ETH";
+        }
+        if(type.equals("wallet_flat")){
+            return "FLAT";
+        }
+        if(type.equals("wallet_putMoney")){
+            return "PUT MONEY";
+        }
+        if(type.equals("wallet_gdEth")){
+            return "DIVIDEND";
+        }
+        return "";
     }
 
 }

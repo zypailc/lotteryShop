@@ -72,112 +72,100 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                     //登陆后记录的用户名
                     String user_name = (String) httpServletRequest.getSession().getAttribute(Constants.LOGIN_SESSION_KEY);
 
-    //                if(httpServletRequest.getRequestURI().indexOf("generalizeInit") > 0){
-    //                    String token = httpServletRequest.getSession().getAttribute("session_login_token") == null ? "":httpServletRequest.getSession().getAttribute("session_login_token").toString();
-    //                }
-                    //证明是页面请求
-    //                String token = httpServletRequest.getSession().getAttribute("session_login_token") == null ? "":httpServletRequest.getSession().getAttribute("session_login_token").toString();
-    //                if(token == null || "".equals(token)) {
-    //                    String[] map =  httpServletRequest.getParameterMap().get("access_token");
-    //                    if(map != null) {
-    //                        httpServletRequest.getSession().setAttribute("session_login_token", map[0]);
-    //                    }
-    //                }
-
-                Map<String, Object> map = null;
-                LoginUser loginUser = null;
-                //判断用户 如果没有存在或者最新登陆的用户和登陆后记录的用户不匹配 重新查询用户的信息 存入session
-                if (/*(memberName != null && !"anonymousUser".equals(memberName)) ||
-                        (memberName != null && !"anonymousUser".equals(memberName) && user_name != null && !"".equals(user_name) && !user_name.equals(memberName))||
-                        ("anonymousUser".equals(memberName) && !memberName.equals(user_name))*/
-                        (memberName!= null && !"".equals(memberName)) && (
-                                ((!"browser".equals(memberName) || !"anonymousUser".equals(memberName))) ||
-                                        ("anonymousUser".equals(memberName) && user_name != null)
-                                )
-                ) {
-                    SqlSession sqlSession = wac.getBean(SqlSession.class);
-                    SqlMapper sqlMapper = new SqlMapper(sqlSession);
-                    //必须过验证之后才存储用户名
-                    if(!memberName.equals("anonymousUser")) {
-                        httpServletRequest.getSession().setAttribute(Constants.LOGIN_SESSION_KEY, memberName);
-                    }else {
-                        memberName = user_name;//如果请求的是静态资源 用户名取的是session里面的用户
-                    }
-                    String sql_date = "select date_format(update_time,'%Y-%m-%d %H:%i:%s') as updateTime from es_member where email = '" + memberName + "'";
-                    List<Map<String, Object>> list_1 = sqlMapper.selectList(sql_date);
-                    String update_date = "";
-                    String update_date_old = (String) httpServletRequest.getSession().getAttribute(Constants.LOGIN_SESSION_UPDATE_KEY);
-                    if(list_1 != null && list_1.size() > 0){
-                        if(list_1.get(0) != null && list_1.get(0).isEmpty()) {
-                            update_date = list_1.get(0).get("updateTime").toString();
+                    Map<String, Object> map = null;
+                    LoginUser loginUser = null;
+                    //判断用户 如果没有存在或者最新登陆的用户和登陆后记录的用户不匹配 重新查询用户的信息 存入session
+                    if (/*(memberName != null && !"anonymousUser".equals(memberName)) ||
+                            (memberName != null && !"anonymousUser".equals(memberName) && user_name != null && !"".equals(user_name) && !user_name.equals(memberName))||
+                            ("anonymousUser".equals(memberName) && !memberName.equals(user_name))*/
+                            (memberName!= null && !"".equals(memberName)) && (
+                                    ((!"browser".equals(memberName) || !"anonymousUser".equals(memberName))) ||
+                                            ("anonymousUser".equals(memberName) && user_name != null)
+                                    )
+                    ) {
+                        SqlSession sqlSession = wac.getBean(SqlSession.class);
+                        SqlMapper sqlMapper = new SqlMapper(sqlSession);
+                        //必须过验证之后才存储用户名
+                        if(!memberName.equals("anonymousUser")) {
+                            httpServletRequest.getSession().setAttribute(Constants.LOGIN_SESSION_KEY, memberName);
+                        }else {
+                            memberName = user_name;//如果请求的是静态资源 用户名取的是session里面的用户
                         }
-                    }
-                    if(update_date_old == null || ( update_date_old != null  && !update_date_old.equals(update_date))){
-                        //step 3 查询数据库，存入用户
-                        String sql = "select id,member_name as memberName,email,head_portrait_url as headPortraitUrl,p_address as pAddress,b_address as bAddress,wallet_name as walletName " +
-                                " ,date_format(create_time,'%Y-%m-%d %H:%i:%s') as createTime ,date_format(update_time,'%Y-%m-%d %H:%i:%s') as updateTime ,payment_code as paymentCode" +
-                                " , payment_code_wallet as paymentCodeWallet , password as password ,generalize_type as generalizeType " +
-                                " from es_member where email = '" + memberName + "'";
-                        //存入用户修改时间
-                        List<Map<String, Object>> list = sqlMapper.selectList(sql);
-                        if (list != null && list.size() > 0) {
-                            map = list.get(0);
-                            String WalletName = "";
-                            String paymentCode = "";
-                            try {
-                                WalletName = AesEncryptUtil.decrypt(map.get("walletName") != null ? map.get("walletName").toString() : "", Constants.KEY_THREE);
-                                paymentCode = map.get("paymentCode") != null ? map.get("paymentCode").toString() : "";
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            httpServletRequest.getSession().setAttribute(Constants.LOGIN_SESSION_UPDATE_KEY, map.get("updateTime") != null ? map.get("updateTime").toString() : "");
-                            loginUser = new LoginUser();
-                            loginUser.setId(map.get("id") != null ? map.get("id").toString() : "");
-                            loginUser.setEmail(map.get("email") != null ? map.get("email").toString() : "");
-                            loginUser.setMemberName(map.get("memberName") != null ? map.get("memberName").toString() : "");
-                            loginUser.setHeadPortraitUrl((map.get("headPortraitUrl") != null && !"".equals(map.get("headPortraitUrl"))) ? map.get("headPortraitUrl").toString() : Constants.HEAD_PORTRAIT_URL);
-                            loginUser.setPAddress(map.get("pAddress") != null ? map.get("pAddress").toString() : "");
-                            loginUser.setBAddress(map.get("bAddress") != null ? map.get("bAddress").toString() : "");
-                            loginUser.setPaymentCodeWallet(map.get("paymentCodeWallet") != null ? map.get("paymentCodeWallet").toString() : "");
-                            loginUser.setPassword(map.get("password") != null ? map.get("password").toString() : "");
-                            loginUser.setGeneralizeType(map.get("generalizeType") != null ? map.get("generalizeType").toString() : "");
-                            loginUser.setPaymentCode(paymentCode);
-                            loginUser.setWalletName(WalletName);
-                            //用户添加配置
-                            if(map.get("id") != null && !"".equals(map.get("id"))){
-                                EsMemberPropertiesServiceImpl memberPropertiesService = wac.getBean(EsMemberPropertiesServiceImpl.class);
-                                //金额是否显示
-                                EsMemberProperties memberProperties = findEsMemberProperties(map.get("id").toString(),EsMemberPropertiesServiceImpl.TYPE_MONEY);
-                                if(memberProperties == null){
-                                    memberProperties = new EsMemberProperties();
-                                    memberProperties.setMemberId(map.get("id").toString());
-                                    memberProperties.setIsView(0);
-                                    memberProperties.setType(EsMemberPropertiesServiceImpl.TYPE_MONEY);
-                                    memberPropertiesService.insert(memberProperties);
-                                    loginUser.setMoneyView("0");//是否显示金额明文
-                                }else {
-                                    loginUser.setMoneyView(memberProperties.getIsView() == null ? "0":memberProperties.getIsView().toString());//金额是否显示
-                                }
-                                //公告是否已读
-                                EsMemberProperties memberProperties_1 = findEsMemberProperties(map.get("id").toString(),EsMemberPropertiesServiceImpl.TYPE_NOTICE);
-                                if(memberProperties_1 == null){
-                                    memberProperties_1 = new EsMemberProperties();
-                                    memberProperties_1.setMemberId(map.get("id").toString());
-                                    memberProperties_1.setIsView(0);
-                                    memberProperties_1.setType(EsMemberPropertiesServiceImpl.TYPE_NOTICE);
-                                    memberPropertiesService.insert(memberProperties_1);
-                                    loginUser.setNoticeView("0");//公告是否已读
-                                }else {
-                                    loginUser.setNoticeView(memberProperties_1.getIsView() == null ? "0":memberProperties_1.getIsView().toString());
-                                }
-
+                        String sql_date = "select date_format(update_time,'%Y-%m-%d %H:%i:%s') as updateTime from es_member where email = '" + memberName + "'";
+                        List<Map<String, Object>> list_1 = sqlMapper.selectList(sql_date);
+                        String update_date = "";
+                        String update_date_old = (String) httpServletRequest.getSession().getAttribute(Constants.LOGIN_SESSION_UPDATE_KEY);
+                        if(list_1 != null && list_1.size() > 0){
+                            if(list_1.get(0) != null && list_1.get(0).isEmpty()) {
+                                update_date = list_1.get(0).get("updateTime").toString();
                             }
                         }
+                        if(update_date_old == null || ( update_date_old != null  && !update_date_old.equals(update_date))){
+                            //step 3 查询数据库，存入用户
+                            String sql = "select id,member_name as memberName,email,head_portrait_url as headPortraitUrl,p_address as pAddress,b_address as bAddress,wallet_name as walletName " +
+                                    " ,date_format(create_time,'%Y-%m-%d %H:%i:%s') as createTime ,date_format(update_time,'%Y-%m-%d %H:%i:%s') as updateTime ,payment_code as paymentCode" +
+                                    " , payment_code_wallet as paymentCodeWallet , password as password ,generalize_type as generalizeType " +
+                                    " from es_member where email = '" + memberName + "'";
+                            //存入用户修改时间
+                            List<Map<String, Object>> list = sqlMapper.selectList(sql);
+                            if (list != null && list.size() > 0) {
+                                map = list.get(0);
+                                String WalletName = "";
+                                String paymentCode = "";
+                                try {
+                                    WalletName = AesEncryptUtil.decrypt(map.get("walletName") != null ? map.get("walletName").toString() : "", Constants.KEY_THREE);
+                                    paymentCode = map.get("paymentCode") != null ? map.get("paymentCode").toString() : "";
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                httpServletRequest.getSession().setAttribute(Constants.LOGIN_SESSION_UPDATE_KEY, map.get("updateTime") != null ? map.get("updateTime").toString() : "");
+                                loginUser = new LoginUser();
+                                loginUser.setId(map.get("id") != null ? map.get("id").toString() : "");
+                                loginUser.setEmail(map.get("email") != null ? map.get("email").toString() : "");
+                                loginUser.setMemberName(map.get("memberName") != null ? map.get("memberName").toString() : "");
+                                loginUser.setHeadPortraitUrl((map.get("headPortraitUrl") != null && !"".equals(map.get("headPortraitUrl"))) ? map.get("headPortraitUrl").toString() : Constants.HEAD_PORTRAIT_URL);
+                                loginUser.setPAddress(map.get("pAddress") != null ? map.get("pAddress").toString() : "");
+                                loginUser.setBAddress(map.get("bAddress") != null ? map.get("bAddress").toString() : "");
+                                loginUser.setPaymentCodeWallet(map.get("paymentCodeWallet") != null ? map.get("paymentCodeWallet").toString() : "");
+                                loginUser.setPassword(map.get("password") != null ? map.get("password").toString() : "");
+                                loginUser.setGeneralizeType(map.get("generalizeType") != null ? map.get("generalizeType").toString() : "");
+                                loginUser.setPaymentCode(paymentCode);
+                                loginUser.setWalletName(WalletName);
+                                //用户添加配置
+                                if(map.get("id") != null && !"".equals(map.get("id"))){
+                                    EsMemberPropertiesServiceImpl memberPropertiesService = wac.getBean(EsMemberPropertiesServiceImpl.class);
+                                    //金额是否显示
+                                    EsMemberProperties memberProperties = findEsMemberProperties(map.get("id").toString(),EsMemberPropertiesServiceImpl.TYPE_MONEY);
+                                    if(memberProperties == null){
+                                        memberProperties = new EsMemberProperties();
+                                        memberProperties.setMemberId(map.get("id").toString());
+                                        memberProperties.setIsView(0);
+                                        memberProperties.setType(EsMemberPropertiesServiceImpl.TYPE_MONEY);
+                                        memberPropertiesService.insert(memberProperties);
+                                        loginUser.setMoneyView("0");//是否显示金额明文
+                                    }else {
+                                        loginUser.setMoneyView(memberProperties.getIsView() == null ? "0":memberProperties.getIsView().toString());//金额是否显示
+                                    }
+                                    //公告是否已读
+                                    EsMemberProperties memberProperties_1 = findEsMemberProperties(map.get("id").toString(),EsMemberPropertiesServiceImpl.TYPE_NOTICE);
+                                    if(memberProperties_1 == null){
+                                        memberProperties_1 = new EsMemberProperties();
+                                        memberProperties_1.setMemberId(map.get("id").toString());
+                                        memberProperties_1.setIsView(0);
+                                        memberProperties_1.setType(EsMemberPropertiesServiceImpl.TYPE_NOTICE);
+                                        memberPropertiesService.insert(memberProperties_1);
+                                        loginUser.setNoticeView("0");//公告是否已读
+                                    }else {
+                                        loginUser.setNoticeView(memberProperties_1.getIsView() == null ? "0":memberProperties_1.getIsView().toString());
+                                    }
+
+                                }
+                            }
+                        }
+                        if (loginUser != null) {
+                            httpServletRequest.getSession().setAttribute(Constants.LOGIN_USER, loginUser);
+                        }
                     }
-                    if (loginUser != null) {
-                        httpServletRequest.getSession().setAttribute(Constants.LOGIN_USER, loginUser);
-                    }
-                }
             }
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
