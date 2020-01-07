@@ -61,6 +61,7 @@ public class LoginSessionFilter extends OncePerRequestFilter {
 //            }
          //   if (bool){
                 String memberName = httpServletRequest.getHeader("LoginUserName");
+           String xxx =  httpServletRequest.getParameter("access_token");
                 if (StringUtils.isBlank(memberName)) {
                     memberName = (String) httpServletRequest.getSession().getAttribute("LoginUserName");
                 }

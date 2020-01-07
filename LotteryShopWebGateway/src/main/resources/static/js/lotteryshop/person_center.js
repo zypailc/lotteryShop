@@ -377,7 +377,7 @@ function findwalletTotal(exchangeRate,personal_wallet_center){
             personalWalletCenter.find(".walletPutMoney").find("input").val(info.dlb);
             personalWalletCenter.find(".putMoneyToEth").find("input").val("≈ETH"+info.dlbToEtb);
             personalWalletCenter.find(".putMoneyToUsd").find("input").val("≈$"+info.dlbToUsd);
-            personalWalletCenter.find(".walletGdEth").find("input").val("≈$"+info.gdEth);
+            personalWalletCenter.find(".walletGdEth").find("input").val(info.gdEth);
             personalWalletCenter.find(".gdEthToUsd").find("input").val("≈$"+info.gdEthToUsd);
         }
     })

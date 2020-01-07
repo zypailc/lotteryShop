@@ -61,7 +61,7 @@ public class LoginController extends WebgatewayBaseController {
                     Map<String,String> map = new HashMap<>();
                     map.put("msg","Login the success！");
                     map.put("rdirectUrl",rdirectUrl);
-                    return ResultUtil.successJson("Login the success！");
+                    return ResultUtil.successJson(map);
                 }
             }
         }
@@ -99,7 +99,7 @@ public class LoginController extends WebgatewayBaseController {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/loginOut")
+    @RequestMapping("/web/loginOut")
     public ResultUtil loginOut(HttpServletRequest request){
         HttpSession session = request.getSession();
         String accessToken = (String)session.getAttribute(Constants.SESSION_LOGIN_TOKEN);

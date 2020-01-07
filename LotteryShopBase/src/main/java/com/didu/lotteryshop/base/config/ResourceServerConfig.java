@@ -41,7 +41,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/authorization/**").permitAll()
                 // 其他请求需要认证登陆
                 .anyRequest().authenticated()
-                .and().csrf();
+                .and().csrf().disable();
                // .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
     }

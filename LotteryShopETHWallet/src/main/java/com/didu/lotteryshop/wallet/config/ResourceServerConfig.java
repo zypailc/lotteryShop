@@ -1,4 +1,4 @@
-package com.didu.lotteryshop.lotterya.config;
+package com.didu.lotteryshop.wallet.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

@@ -1,13 +1,22 @@
 package com.didu.lotteryshop.webgateway.config;
 
 
+import cn.hutool.json.JSONUtil;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import com.netflix.zuul.http.ServletInputStreamWrapper;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
+import javax.servlet.http.HttpServletRequestWrapper;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.*;
 
 /**
  * Zuul过滤器配置
