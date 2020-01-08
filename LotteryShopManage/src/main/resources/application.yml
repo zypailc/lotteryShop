@@ -38,13 +38,13 @@ spring:
       max-open-prepared-statements: 50
       max-pool-prepared-statement-per-connection-size: 20
 #微服务注册服务配置
-eureka:
-  instance:
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8090/eureka/
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:8090/eureka/
 #beelt模板引擎配置
 beetl:
   #模板路径
