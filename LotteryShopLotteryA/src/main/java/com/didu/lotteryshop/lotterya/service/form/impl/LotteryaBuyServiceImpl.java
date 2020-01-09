@@ -96,7 +96,8 @@ public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, Lotte
      */
     public List<LotteryaBuy> findTransferStatusWait(){
         Wrapper<LotteryaBuy> wrapper = new EntityWrapper<>();
-        wrapper.eq("transfer_status",LotteryaBuyServiceImpl.TRANSFER_STATUS_WAIT);
+        wrapper.and("transfer_hash_value is not null and transfer_hash_value<>''")
+                .and().eq("transfer_status",LotteryaBuyServiceImpl.TRANSFER_STATUS_WAIT);
         return super.selectList(wrapper);
     }
 

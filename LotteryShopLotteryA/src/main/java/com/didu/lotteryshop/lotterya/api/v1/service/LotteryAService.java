@@ -1,7 +1,9 @@
 package com.didu.lotteryshop.lotterya.api.v1.service;
 
+import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.service.form.impl.EsEthaccountsServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsEthwalletServiceImpl;
+import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.lotterya.entity.LotteryAContractResultEntity;
 import com.didu.lotteryshop.lotterya.entity.LotteryaBuy;
@@ -16,6 +18,7 @@ import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaIssueServiceImpl;
 import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaPmDetailServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +49,10 @@ public class LotteryAService extends LotteryABaseService {
     private LotteryAContractService lotteryAContractService;
     @Autowired
     private LotteryaPmDetailServiceImpl lotteryaPmDetailService;
+
+    @Autowired
+    private KafkaTemplate kafkaTemplate;
+
 
     /**
      * 获取彩票信息
@@ -135,7 +142,7 @@ public class LotteryAService extends LotteryABaseService {
      */
     public ResultUtil ethBuyLottery(String luckNum,Integer multipleNumber,String payPasswod){
         //判断支付密码是否错误 //支付密码错
-        if(!super.getLoginUser().getPaymentCode().equals(payPasswod)) return ResultUtil.errorJson("Payment password error!");
+        if(!super.getLoginUser().getPaymentCode().equals(AesEncryptUtil.encrypt_code(payPasswod, Constants.KEY_TOW) )) return ResultUtil.errorJson("Payment password error!");
         //判断是否正在开奖中 //正在开奖，禁止购买
         LotteryaIssue lotteryaIssue = lotteryaIssueService.findCurrentPeriodLotteryaIssue();
         if(!lotteryAContractService.isBuyLotteryA()) return ResultUtil.errorJson("Lottery drawing in progress, no purchase!");
@@ -148,26 +155,27 @@ public class LotteryAService extends LotteryABaseService {
             //账户余额不足，请先充值！
             return ResultUtil.errorJson("Account balance is insufficient, please recharge first!");
         }
-        //购买彩票
-        LotteryAContractResultEntity lacre = lotteryAContractService.buyLotterA(luckNum,multipleNumber,eValue);
+        //LotteryAContractResultEntity lacre = lotteryAContractService.buyLotterA(luckNum,multipleNumber,eValue);
         //存入购买记录
         LotteryaBuy lotteryaBuy = new LotteryaBuy();
         lotteryaBuy.setMemberId(super.getLoginUser().getId());
         lotteryaBuy.setLuckNum(luckNum);
         lotteryaBuy.setTotal(eValue);
-        lotteryaBuy.setTransferHashValue(lacre.getTransactionHash());
-        //等待确认
-        if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_WAIT){
-            lotteryaBuy.setTransferStatus("1");
-        }
-        //成功
-        if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_SUCCESS){
-          lotteryaBuy.setTransferStatus("1");
-        }
-        //失败
-        if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_FAIL){
-            lotteryaBuy.setTransferStatus("2");
-        }
+        //lotteryaBuy.setTransferHashValue(lacre.getTransactionHash());
+        lotteryaBuy.setTransferHashValue("");
+        lotteryaBuy.setTransferStatus("1");
+//        //等待确认
+//        if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_WAIT){
+//            lotteryaBuy.setTransferStatus("1");
+//        }
+//        //成功
+//        if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_SUCCESS){
+//          lotteryaBuy.setTransferStatus("1");
+//        }
+//        //失败
+//        if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_FAIL){
+//            lotteryaBuy.setTransferStatus("2");
+//        }
         lotteryaBuy.setTransferStatusTime(new Date());
         lotteryaBuy.setCreateTime(new Date());
         lotteryaBuy.setMultipleNum(multipleNumber);
@@ -175,21 +183,61 @@ public class LotteryAService extends LotteryABaseService {
         lotteryaBuy.setLotteryaIssueId(lotteryaIssue.getId());
         lotteryaBuy.setLuckTotal(BigDecimal.ZERO);
         boolean bool =  lotteryaBuyService.insert(lotteryaBuy);
-        if(bool && (lacre.getStatus() == LotteryAContractResultEntity.STATUS_WAIT || lacre.getStatus() == LotteryAContractResultEntity.STATUS_SUCCESS)){
-            if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_WAIT ){
-               bool = esEthaccountsService.addOutBeingProcessed(super.getLoginUser().getId(),EsEthaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA,eValue,lotteryaBuy.getId().toString());
+        if(bool){
+            bool = esEthaccountsService.addOutBeingProcessed(super.getLoginUser().getId(),EsEthaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA,eValue,lotteryaBuy.getId().toString());
+            if(bool){
+                //kafka 执行公链购买彩票
+                kafkaTemplate.send("kafkaBuyLottery","lotteryaBuyId",lotteryaBuy.getId().toString());
             }
-            if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_SUCCESS){
-                bool = esEthaccountsService.addOutSuccess(super.getLoginUser().getId(),EsEthaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA,eValue,lotteryaBuy.getId().toString(),lacre.getGasUsed());
-                if(bool){
-                    //购买提成
-                    bool = lotteryaPmDetailService.buyPM(lotteryaBuy,lotteryaInfo);
-                }
-            }
+//        if(bool && (lacre.getStatus() == LotteryAContractResultEntity.STATUS_WAIT || lacre.getStatus() == LotteryAContractResultEntity.STATUS_SUCCESS)){
+//            if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_WAIT ){
+//               bool = esEthaccountsService.addOutBeingProcessed(super.getLoginUser().getId(),EsEthaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA,eValue,lotteryaBuy.getId().toString());
+//            }
+//            if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_SUCCESS){
+//                bool = esEthaccountsService.addOutSuccess(super.getLoginUser().getId(),EsEthaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA,eValue,lotteryaBuy.getId().toString(),lacre.getGasUsed());
+//                if(bool){
+//                    //购买提成
+//                    bool = lotteryaPmDetailService.buyPM(lotteryaBuy,lotteryaInfo);
+//                }
+//            }
             return bool ? ResultUtil.successJson("Purchase succeeds!") :  ResultUtil.errorJson("Execution error, please contact administrator!");
         }
         //执行错误，请联系管理员！
-        return ResultUtil.errorJson("Execution error, please contact administrator!");
+       return ResultUtil.errorJson("Execution error, please contact administrator!");
+    }
+
+    /**
+     * kafka 公链购买彩票
+     * @param lotteryaBuyId
+     */
+    public void kafkaBuyLottery(Integer lotteryaBuyId){
+        if(lotteryaBuyId == null) return;
+        LotteryaBuy lotteryaBuy = lotteryaBuyService.selectById(lotteryaBuyId);
+        if(lotteryaBuy != null && lotteryaBuy.getId() != null){
+            //购买彩票
+            LotteryAContractResultEntity lacre = lotteryAContractService.buyLotterA(lotteryaBuy.getLuckNum(),lotteryaBuy.getMultipleNum(),lotteryaBuy.getTotal());
+            if(lacre != null){
+                lotteryaBuy.setTransferHashValue(lacre.getTransactionHash());
+                if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_WAIT){
+                    lotteryaBuy.setTransferStatus("1");
+                }
+                //成功
+                if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_SUCCESS){
+                    lotteryaBuy.setTransferStatus("1");
+                }
+                //失败
+                if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_FAIL){
+                    lotteryaBuy.setTransferStatus("2");
+                }
+                lotteryaBuyService.updateById(lotteryaBuy);
+                if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_SUCCESS){
+                    lotteryaBuyService.updateLotteryABuyTransferStatus(lotteryaBuy.getId(),LotteryaBuyServiceImpl.TRANSFER_STATUS_SUCCESS,lacre.getGasUsed());
+                }
+                if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_FAIL){
+                    lotteryaBuyService.updateLotteryABuyTransferStatus(lotteryaBuy.getId(),LotteryaBuyServiceImpl.TRANSFER_STATUS_FAIL,BigDecimal.ZERO);
+                }
+            }
+        }
     }
 
 }
