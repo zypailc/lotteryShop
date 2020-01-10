@@ -103,7 +103,7 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                             //step 3 查询数据库，存入用户
                             String sql = "select id,member_name as memberName,email,head_portrait_url as headPortraitUrl,p_address as pAddress,b_address as bAddress,wallet_name as walletName " +
                                     " ,date_format(create_time,'%Y-%m-%d %H:%i:%s') as createTime ,date_format(update_time,'%Y-%m-%d %H:%i:%s') as updateTime ,payment_code as paymentCode" +
-                                    " , payment_code_wallet as paymentCodeWallet , password as password ,generalize_type as generalizeType " +
+                                    " , payment_code_wallet as paymentCodeWallet , password as password ,generalize_type as generalizeType , date_format(update_time,'%Y-%m-%d %H:%i:%s') as loginDate" +
                                     " from es_member where email = '" + memberName + "'";
                             //存入用户修改时间
                             List<Map<String, Object>> list = sqlMapper.selectList(sql);
@@ -130,6 +130,7 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                                 loginUser.setGeneralizeType(map.get("generalizeType") != null ? map.get("generalizeType").toString() : "");
                                 loginUser.setPaymentCode(paymentCode);
                                 loginUser.setWalletName(WalletName);
+                                loginUser.setLoginDate(map.get("loginDate") != null ? map.get("loginDate").toString() : "");
                                 //用户添加配置
                                 if(map.get("id") != null && !"".equals(map.get("id"))){
                                     EsMemberPropertiesServiceImpl memberPropertiesService = wac.getBean(EsMemberPropertiesServiceImpl.class);

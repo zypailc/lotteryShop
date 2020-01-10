@@ -1,5 +1,6 @@
 package com.didu.lotteryshop.webgateway.api.v1.controller;
 
+import com.didu.lotteryshop.common.service.form.impl.MemberServiceImpl;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.webgateway.config.Constants;
 import com.didu.lotteryshop.webgateway.controller.WebgatewayBaseController;
@@ -34,6 +35,8 @@ import java.util.Map;
 public class LoginController extends WebgatewayBaseController {
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private MemberServiceImpl memberService;
 
     @RequestMapping("/web/authUserLogin")
     @ResponseBody
@@ -83,6 +86,7 @@ public class LoginController extends WebgatewayBaseController {
             //解析需要跳转的地址，如果是需要跳转竞彩中心，不需要管，如果是其他，直接跳转主页
             //rdirectUrl = rdirectUrl.substring(rdirectUrl.indexOf("/"),rdirectUrl.length());
             model = getModel(model);
+            memberService.updateMemberLoginInfo(getLoginUser().getId(),getRequestIp(request));
             if(Constants.PLAYTHELOTTERY_URL.equals(rdirectUrl)){
                 return Constants.PLAYTHELOTTERY;
             }
@@ -95,7 +99,6 @@ public class LoginController extends WebgatewayBaseController {
 
     /**
      * 取消登录
-     * @param request
      * @return
      */
     @ResponseBody
@@ -113,6 +116,31 @@ public class LoginController extends WebgatewayBaseController {
             restTemplate.delete("http://auth-service/auth/api/exit?access_token="+accessToken);
         }
         return ResultUtil.successJson("Exit the success！");
+    }
+
+    /**
+     * 获取用户Ip
+     * @param request
+     * @return
+     */
+    private String getRequestIp(HttpServletRequest request){
+        String ip = request.getHeader("x-forwarded-for");
+             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                     ip = request.getHeader("Proxy-Client-IP");
+                 }
+             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                     ip = request.getHeader("WL-Proxy-Client-IP");
+                 }
+             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                     ip = request.getHeader("HTTP_CLIENT_IP");
+                 }
+             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                     ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+                 }
+             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+                     ip = request.getRemoteAddr();
+                 }
+             return ip;
     }
 
 }
