@@ -55,7 +55,7 @@ public class TestContract2 {
           DefaultGasProvider defaultGasProvider = new DefaultGasProvider();
           EthGetBalance ethGetBalancel1 = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameter.valueOf("latest")).send();
           System.out.println("部署前余额："+Web3jUtils.bigIntegerToBigDecimal(ethGetBalancel1.getBalance()).toPlainString());
-          LotteryAContract lotteryAContract = LotteryAContract.deploy(web3j,credentials,defaultGasProvider,"0x9c3b669D55C411c5d70d87ce2bA44Cf8476141CA").send();
+          LotteryAContract lotteryAContract = LotteryAContract.deploy(web3j,credentials,defaultGasProvider,"0x9c3b669D55C411c5d70d87ce2bA44Cf8476141CA","0x18202bA46c2FE012411dbc218D60fBBAc9aDbf3e").send();
           String  contractAddress = lotteryAContract.getContractAddress();
           BigInteger gasUsed = lotteryAContract.getTransactionReceipt().get().getGasUsed();
          // contractAddress = "0x4678ce017543f99801dd0f67c1a67e7c4792086d";0x4678ce017543f99801dd0f67c1a67e7c4792086d

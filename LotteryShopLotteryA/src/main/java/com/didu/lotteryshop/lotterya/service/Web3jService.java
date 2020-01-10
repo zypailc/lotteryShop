@@ -57,6 +57,10 @@ public class Web3jService extends LotteryABaseService {
     /** 调节基金地址*/
     @Value("${adjustFundAddress}")
     private String adjustFundAddress;
+    /** 奖金池地址*/
+    @Value("${bonusPoolAddress}")
+    private String bonusPoolAddress;
+
     /** 事务哈希值**/
     public static final String TRANSACTION_HASHVALUE = "transaction_hashvalue";
     /** 是否确认状态，0未确认，1已确认，2失败 */
@@ -89,7 +93,7 @@ public class Web3jService extends LotteryABaseService {
         try {
             //部署管理员私钥
             Credentials credentials = Credentials.create(managerPrivateKey);
-            LotteryAContract  lotteryAContract = LotteryAContract.deploy(web3j,credentials,gasProviderService.getStaticGasProvider(),adjustFundAddress).send();
+            LotteryAContract  lotteryAContract = LotteryAContract.deploy(web3j,credentials,gasProviderService.getStaticGasProvider(),adjustFundAddress,bonusPoolAddress).send();
             contractAddress = lotteryAContract.getContractAddress();
         } catch (Exception e) {
             e.printStackTrace();
