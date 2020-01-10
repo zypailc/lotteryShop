@@ -42,8 +42,8 @@ public class TestContract {
             //调节基金账户地址
             String adjustFundAdr = "0x5aA5883FEaFE021d716b120B98350082010CaA21";
             //奖金池账户地址
-            String bonusPoolAdr = "0x058F39b60A6e17784c0A89b0EDF509Bf5377FE44";
-            LotteryAContract lotteryAContractDeploy  =  LotteryAContract.deploy(web3j,credentials,defaultGasProvider,adjustFundAdr).send();
+            String bonusPoolAdr = "0x18202bA46c2FE012411dbc218D60fBBAc9aDbf3e";
+            LotteryAContract lotteryAContractDeploy  =  LotteryAContract.deploy(web3j,credentials,defaultGasProvider,adjustFundAdr,bonusPoolAdr).send();
 
           //EthGetBalance ethGetBalance2 = web3j.ethGetBalance(managerAddress, DefaultBlockParameter.valueOf("latest")).send();
            //System.out.println("部署后账户余额："+bigIntegerToBigDecimal(ethGetBalance2.getBalance()));
