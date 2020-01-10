@@ -198,17 +198,21 @@ function findETHWallet(classProperty,url){
                 if(classProperty == 'walletGdEth'){
                     ethHead = $(".gdEth_record");
                 }
-                ethHead.find(".wallet_span_total").html(dataInfo.total);
-                ethHead.find(".balance").html(" : "+dataInfo.balance);
-                ethHead.find(".freeze").html(" : "+dataInfo.freeze);
-                if(classProperty == 'walletETH' || classProperty == 'walletFLAT'){
-                    walletdetail.find(".wallet_span_total").html(dataInfo.total);
+                ethHead.find(".wallet_span_total").find("input").val(dataInfo.total);
+                ethHead.find(".wallet_span_total").attr("dataValue",dataInfo.total);
+                ethHead.find(".balance").find("input").val(" : "+dataInfo.balance);
+                ethHead.find(".balance").attr("dataValue",dataInfo.balance);
+                ethHead.find(".freeze").find("input").val(" : "+dataInfo.freeze);
+                ethHead.find(".freeze").attr("dataValue",dataInfo.freeze);
+               /* if(classProperty == 'walletETH' || classProperty == 'walletFLAT'){
+                    walletdetail.find(".wallet_span_total").find("input").val(dataInfo.total);
                     walletdetail.find(".wallet_span_total").attr("dataValue",dataInfo.total);
-                    walletdetail.find(".balance").html(dataInfo.balance);
+                    walletdetail.find(".balance").find("input").val(dataInfo.balance);
+                    console.log(walletdetail.find(".balance").find("input"));
                     walletdetail.find(".balance").attr("dataValue",dataInfo.balance);
-                    walletdetail.find(".freeze").html(dataInfo.freeze);
+                    walletdetail.find(".freeze").find("input").val(dataInfo.freeze);
                     walletdetail.find(".freeze").attr("dataValue",dataInfo.freeze);
-                }
+                }*/
             }
         }
     })
@@ -220,6 +224,10 @@ function findWalletRecord(flag,classProperty,url){
     var isFind = walletETH.attr("isFind") || 'true';
     var ul = walletETH.find("ul");
     var li = $("."+classProperty).find("ul").find("li:first-child");
+    var languageType = getLanguage();
+    if(languageType != 'zh'){
+        languageType = 'en';
+    }
     if(flag){
         ul.html("");
         walletETH.attr("currentPage","1")
@@ -257,14 +265,45 @@ function findWalletRecord(flag,classProperty,url){
                             new_li.find(".expend").hide();
                             new_li.find(".recorded").show();
                         }
-
+                        var languageStr = 'r_'+languageType+'value';
+                        new_li.find(".divType").html(data[languageStr])
                         new_li.find(".statusTime").html(data.statusTime);
                         new_li.find(".expendOrReceipts").html(data.amount);
                         new_li.find(".balance1").html(data.balance);
 
+                        if(languageType == 'en'){
+                            new_li.find(".balanceStr").html("balance : ");
+                            if(data.status == '0'){
+                                new_li.find(".statusStr").html("being processed");
+                            }else if(data.status == '1'){
+                                new_li.find(".statusStr").html("success");
+                            }else if(data.status == '2'){
+                                new_li.find(".statusStr").html("failure");
+                            }else {
+                                new_li.find(".statusStr").html("other");
+                            }
+                        }else {
+                            new_li.find(".balanceStr").html("余额 : ");
+                            if(data.status == '0'){
+                                new_li.find(".statusStr").html("处理中");
+                            }else if(data.status == '1'){
+                                new_li.find(".statusStr").html("成功");
+                            }else if(data.status == '2'){
+                                new_li.find(".statusStr").html("失败");
+                            }else {
+                                new_li.find(".statusStr").html("其他");
+                            }
+                        }
+
                         var gas = typeof(data.gasFee);
                         if(gas && gas != 'undefined'){
-                            new_li.find(".ethGasStr").html(data.gasFee);
+                            new_li.find(".ethGasStrInfo").html(data.gasFee);
+                            if(languageType == 'en'){
+                                new_li.find(".ethGasStr").html("gas : ");
+                            }else {
+                                new_li.find(".ethGasStr").html("燃气费 : ");
+                            }
+
                         }else {
                             new_li.find(".ethGas").hide();
                         }
@@ -426,28 +465,34 @@ function withdrawCashEth(e){
     var obj = $(e);
     var propertyType = obj.attr("propertyType") || "-1";
     var propertyObj = "";
+    var propertyObjHead = "";
     if(propertyType == "-1"){
         layer.msg("There is an error in the operation, please refresh before operation !");
         return;
     }
     if(propertyType == "1"){//Eth
         propertyObj = "wallet_address_self_eth_withdrawCash";
+        propertyObjHead = "eth_record";
     }
     if(propertyType == "2"){//Lsb to Eth
         propertyObj = "wallet_address_self_flat_withdrawCash";
+        propertyObjHead = "lsb_record";
     }
     if(propertyType == "3"){// Eth To Lsb
         propertyObj = "wallet_address_self_flat_recharge";
+        propertyObjHead = "lsb_record";
     }
-    var balance = $("."+propertyObj).find(".balance").attr("dataValue") || "";
+    var balance = $("."+propertyObjHead).find(".balance").attr("dataValue") || "";
     var extractTheNumber = $("."+propertyObj).find("input").val() || "0";
     if(!extractTheNumber || extractTheNumber == '0'){
         layer.msg("Please enter quantity ! ");
         return;
     }
-    if((!balance) && (propertyType == "1" || propertyType == "2")){
+    if(!balance){
         layer.msg("The extractable number is zero ! ");
         return;
+    }
+    if((propertyType == "1" || propertyType == "2")){
         balance = parseFloat(balance);
         extractTheNumber = parseFloat(extractTheNumber);
         if(extractTheNumber > balance){
@@ -499,7 +544,11 @@ function walletOperation(url,dataJson){
         data:dataJson,
         dataType:"json",
         success:function (result){
-            console.log(result);
+            if(result.code != 200){
+                layui_open(result.msg);
+            }else {
+                layer.msg(result.msg);
+            }
         }
     })
 }
@@ -571,6 +620,22 @@ function updateMoneyIsView(isView){
         dataType:"json",
         success:function (result){
 
+        }
+    })
+}
+
+function infoContentGenerlize(languageType){
+    $.ajax({
+        url:'/apiauthorization/base/authorization/v1/baseInfo/infoContentGenerlize',
+        type:'get',
+        data:{"languageType":languageType},
+        dataType:"json",
+        success:function (result) {
+            if(result.length > 0){
+                var info = result[0];
+                //$(".generalizeContent").html(info.title);
+                $(".generalizeContent").html(info.content);
+            }
         }
     })
 }

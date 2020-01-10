@@ -58,44 +58,46 @@ public class WalletService extends BaseBaseService {
      */
     public ResultUtil withdrawCashEth(BigDecimal sum,String playCode){
         LoginUser loginUser = getLoginUser();
-        SysConfig sysConfig = sysConfigService.getSysConfig();
         //判断支付密码是否正确
         playCode = AesEncryptUtil.encrypt_code(playCode, Constants.KEY_TOW);
         if(!playCode.equals(loginUser.getPaymentCode())){
             return ResultUtil.errorJson(" wrong password !");
         }
-        EsEthwallet ethwallet = esEthwalletService.findByMemberId(loginUser.getId());
-        if(ethwallet == null){//查询到的Eth数据为空
-            return ResultUtil.errorJson(" The system is busy, please try again later !");
-        }
+//        EsEthwallet ethwallet = esEthwalletService.findByMemberId(loginUser.getId());
+//        if(ethwallet == null){//查询到的Eth数据为空
+//            return ResultUtil.errorJson(" The system is busy, please try again later !");
+//        }
+        SysConfig sysConfig = sysConfigService.getSysConfig();
         //判断余额是否充足
-        //本次提现手续费
-        BigDecimal serviceCharge = sysConfig.getWithdrawRatio().multiply(sum);
         //提现一次所需要的燃气费
         BigDecimal gas = Web3jUtils.gasToEtherByBigDecimal(sysConfig.getGasPrice(),sysConfig.getGasLimit());
         if(!esEthwalletService.judgeBalance(loginUser.getId(),sum.add(gas))){
             return ResultUtil.errorJson("The extracted ETH is not sufficient to support the GAS consumption !");
         }
+        //本次提现手续费
+        BigDecimal serviceCharge = sum.divide(new BigDecimal("100")).multiply(sysConfig.getWithdrawRatio());
         //本次可提现实际金额
         sum = sum.subtract(serviceCharge);
-        //需要转两笔账
-        Map<String,Object> map1 = ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),loginUser.getBAddress(),sum);//转到外部钱包
-        if(map1 == null ){
+        //转平台手续费
+        Map<String,Object> map2 = this.ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),sysConfig.getManagerAddress(),serviceCharge);//提取手续费
+        if(map2 == null || map2.isEmpty()){
+            return ResultUtil.errorJson("Transfer failed !");
+        }
+       boolean b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE,serviceCharge,"-1",map2.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map2.get(web3jService.TRANSACTION_HASHVALUE).toString());
+        if(!b){
+            return ResultUtil.errorJson("Transfer failed !");
+        }
+        //转账到用用户外部钱包
+        Map<String,Object> map1 = this.ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),loginUser.getBAddress(),sum);//转到外部钱包
+        if(map1 == null  || map1.isEmpty()){
             return ResultUtil.errorJson("Transfer failed !");
         }
         //新增出账明细
-        boolean b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",map1.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map1.get(web3jService.TRANSACTION_HASHVALUE).toString());
+        b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",map1.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map1.get(web3jService.TRANSACTION_HASHVALUE).toString());
         if(!b){
             return ResultUtil.errorJson("Transfer failed !");
         }
-        Map<String,Object> map2 = ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),sysConfig.getManagerAddress(),serviceCharge);//提取手续费
-        if(map2 == null){
-            return ResultUtil.errorJson("Transfer failed !");
-        }
-        b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE,serviceCharge,"-1",map1.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map1.get(web3jService.TRANSACTION_HASHVALUE).toString());
-        if(!b){
-            return ResultUtil.errorJson("Transfer failed !");
-        }
+
         return  ResultUtil.successJson("Transfer successful !");
     }
 
@@ -155,7 +157,7 @@ public class WalletService extends BaseBaseService {
             return ResultUtil.errorJson("not sufficient funds !");
         }
         Map<String,Object> map = ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),sysConfig.getLsbAddress(),EthToLsb);
-        if(map == null){
+        if(map == null && map.isEmpty()){
             return ResultUtil.errorJson("Top-up failure !");
         }
         //新新增充值记录
@@ -165,6 +167,11 @@ public class WalletService extends BaseBaseService {
         }
         return  ResultUtil.successJson("Transfer successful !");
     }
+//
+//    public Map<String,Object> loginUserEthTransferAccounts(String toAddress,BigDecimal etherValue){
+//        LoginUser loginUser = super.getLoginUser();
+//        return this.ethTransferAccounts(loginUser.getWalletName(),);
+//    }
 
 
     /**
@@ -177,29 +184,28 @@ public class WalletService extends BaseBaseService {
      * @return
      */
     private Map<String,Object> ethTransferAccounts(String walletFileName,String payPassword,String formAddress,String toAddress,BigDecimal etherValue){
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("walletFileName",walletFileName);
-        map.put("payPassword",payPassword);
-        map.put("formAddress",formAddress);//出
-        map.put("toAddress",toAddress);//入
-        map.put("etherValue",etherValue);
-        //转账
-        String reStr = "";
-        ResultUtil result;
         try {
-            reStr = oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/transfer", super.getEncryptRequestHttpEntity(map), String.class);
+            //转账
+            Map<String,Object> map = new HashMap<String,Object>();
+            map.put("walletFileName",walletFileName);
+            map.put("payPassword",payPassword);
+            map.put("formAddress",formAddress);//出
+            map.put("toAddress",toAddress);//入
+            map.put("etherValue",etherValue);
+            String reStr = oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/transfer", super.getEncryptRequestHttpEntity(map), String.class);
+
+//            if (reStr == null || "".equals(reStr)) {
+//                return null;
+//            }
+//            ResultUtil  result = super.getDecryptResponseToResultUtil(reStr); //解密
+//            //判斷是否成功
+//            if (result != null && result.getCode() != ResultUtil.SUCCESS_CODE) {
+//                return null;
+//            }
         }catch (Exception e){
             e.printStackTrace();
         }
-
-        if (reStr == null || "".equals(reStr)) {
-            return null;
-        }
-        result = super.getDecryptResponseToResultUtil(reStr); //解密
-        //判斷是否成功
-        if (result != null && result.getCode() != ResultUtil.SUCCESS_CODE) {
-            return null;
-        }
-        return (Map<String, Object>) result.getExtend().get(ResultUtil.DATA_KEY);
+       // return (Map<String, Object>) result.getExtend().get(ResultUtil.DATA_KEY);
+        return null;
     }
 }

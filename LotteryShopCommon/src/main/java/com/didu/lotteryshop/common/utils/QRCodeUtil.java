@@ -26,11 +26,11 @@ public class QRCodeUtil {
     private static final String CREATE_BACKGROUND = "";
 
     // 二维码尺寸
-    private static final int QRCODE_SIZE = 200;
+    private static final int QRCODE_SIZE = 170;
     // LOGO宽度
-    private static final int WIDTH = 100;
+    private static final int WIDTH = 300;
     // LOGO高度
-    private static final int HEIGHT = 100;
+    private static final int HEIGHT = 300;
     public static BufferedImage createImage_1(String content, String imgPath, boolean needCompress) throws Exception{
         return  createImage(content,imgPath,needCompress);
     };
@@ -130,8 +130,8 @@ public class QRCodeUtil {
             Graphics2D g = background.createGraphics();
 
             //二维码或小图在大图的左上角坐标
-            int x = (background.getWidth() - qr.getWidth() - 10);
-            int y = (background.getHeight() - qr.getHeight() - 10);
+            int x = (background.getWidth() - qr.getWidth() - 40);
+            int y = (background.getHeight() - qr.getHeight() - 24);
             g.drawImage(qr, x, y, qr.getWidth(), qr.getHeight(), null);
             g.dispose();
             //为了保证大图背景不变色，formatName必须为"png"

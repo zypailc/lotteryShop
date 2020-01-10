@@ -112,6 +112,9 @@ public class LoginController extends WebgatewayBaseController {
             session.removeAttribute(Constants.SESSION_LOGIN_TOKEN_TYPE);
             session.removeAttribute("LoginUserName");
             session.removeAttribute(com.didu.lotteryshop.common.config.Constants.LOGIN_USER);//清除用戶信息
+
+            session.removeAttribute(com.didu.lotteryshop.common.config.Constants.LOGIN_SESSION_KEY);
+            session.removeAttribute(com.didu.lotteryshop.common.config.Constants.LOGIN_SESSION_UPDATE_KEY);
             //验证服务器删除TOken
             restTemplate.delete("http://auth-service/auth/api/exit?access_token="+accessToken);
         }

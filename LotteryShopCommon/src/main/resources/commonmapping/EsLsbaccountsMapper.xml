@@ -19,4 +19,27 @@
 		<result column="status_msg" property="statusMsg" />
 	</resultMap>
 
+	<select id="findLsbRecordPagination" parameterType="java.lang.String" resultType="java.util.Map">
+		select ROUND(el_.amount,6),ROUND(el_.balance,6),el_.type,ROUND(el_.gas_fee,6) as gasFee,sd_.r_envalue,sd_.r_zhvalue,el_.status_time as statusTime,el_.status
+		from es_lsbaccounts el_
+		left join sys_dic sd_ on (el_.dic_type = sd_.key_value)
+		where sd_.group_type = 'lsbaccounts_dictype'
+		<if test="startTime != null and startTime != ''">
+			and el_.status_time &gt;= #{startTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and el_.status_time &lt;= #{endTime}
+		</if>
+		<if test="memberId != null and memberId != '' ">
+			and el_.member_id = #{memberId}
+		</if>
+		<if test="status != null and status != '' ">
+			in(el_.status,#{status})
+		</if>
+		order  by el_.create_time desc
+		<if test="currentPage != null and currentPage != '' and pageSize != null and pageSize != '' ">
+			limit #{currentPage},#{pageSize}
+		</if>
+	</select>
+
 </mapper>

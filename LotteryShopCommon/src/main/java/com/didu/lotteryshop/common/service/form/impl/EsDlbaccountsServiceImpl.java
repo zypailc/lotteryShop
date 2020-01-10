@@ -31,6 +31,8 @@ public class EsDlbaccountsServiceImpl extends ServiceImpl<EsDlbaccountsMapper, E
     private EsDlbwalletServiceImpl esDlbwalletService;
     @Autowired
     private BaseService baseService;
+    @Autowired
+    private EsDlbaccountsMapper dlbaccountsMapper;
 
     /** dic_type 在sys_dic字段值*/
     public static String DIC_TYPE = "dlbaccounts_dictype";
@@ -214,7 +216,7 @@ public class EsDlbaccountsServiceImpl extends ServiceImpl<EsDlbaccountsMapper, E
      * @param status
      * @return
      */
-    public Page<EsDlbaccounts> findDlbRecordPagination(String memberId,Integer currentPage,Integer pageSize,String startTime,String endTime,String status) {
+    public Page<Map<String,Object>> findDlbRecordPagination(String memberId,Integer currentPage,Integer pageSize,String startTime,String endTime,String status) {
         Wrapper<EsDlbaccounts> wrapper = new EntityWrapper<EsDlbaccounts>();
         wrapper.where("1=1");
         if(startTime != null && !"".equals(startTime)){
@@ -230,8 +232,9 @@ public class EsDlbaccountsServiceImpl extends ServiceImpl<EsDlbaccountsMapper, E
             wrapper.in("status",status);
         }
         wrapper.orderBy("create_time",false);
-        Page<EsDlbaccounts> pageDlbRecord = new Page<EsDlbaccounts>(currentPage,pageSize);
-        return super.selectPage(pageDlbRecord,wrapper);
+        Page<Map<String,Object>> pageDlbRecord = new Page<Map<String,Object>>();
+        pageDlbRecord.setRecords(dlbaccountsMapper.findDlbRecordPagination(currentPage,pageSize,memberId,startTime,endTime,status));
+        return pageDlbRecord;
     }
 
     /**

@@ -18,4 +18,27 @@
 		<result column="transfer_hash_value" property="transferHashValue" />
 	</resultMap>
 
+	<select id="findEthRecordPagination" parameterType="java.lang.String" resultType="java.util.Map">
+		select ROUND(ee_.amount,6) as amount,ROUND(ee_.balance,6) as balance,ROUND(ee_.gas_fee,10) as gasFee,ee_.type,sd_.r_envalue,sd_.r_zhvalue,ee_.status_time as statusTime,ee_.status
+		from es_ethaccounts ee_
+		left join sys_dic sd_ on (ee_.dic_type = sd_.key_value)
+		where sd_.group_type = 'ethaccounts_dictype'
+		<if test="startTime != null and startTime != ''">
+			and ee_.status_time &gt;= #{startTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and ee_.status_time &lt;= #{endTime}
+		</if>
+		<if test="memberId != null and memberId != '' ">
+			and ee_.member_id = #{memberId}
+		</if>
+		<if test="status != null and status != '' ">
+			in(ee_.status,#{status})
+		</if>
+		order by ee_.create_time desc
+		<if test="currentPage != null and currentPage != '' and pageSize != null and pageSize != '' ">
+			limit #{currentPage},#{pageSize}
+		</if>
+	</select>
+
 </mapper>

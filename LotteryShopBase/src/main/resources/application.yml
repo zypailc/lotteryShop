@@ -48,7 +48,7 @@ beetl:
   templatesPath: templates
 #mybatispluse
 mybatis-plus:
-  mapper-locations: classpath:mapping/*.xml
+  mapper-locations: classpath:mapping/*.xml,classpath*:/commonmapping/*.xml
   type-aliases-package: com.didu.lotteryshop
 
 #email发送配置

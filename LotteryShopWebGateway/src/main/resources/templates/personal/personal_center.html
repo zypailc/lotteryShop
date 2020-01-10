@@ -35,6 +35,15 @@ include("../common/common.js.html"){}
 		font-weight: 700;
 		color: #777;
 	}
+	.span_title_member{
+		white-space:nowrap;
+		text-overflow:ellipsis;
+		overflow:hidden;
+		display: list-item;
+		font-size: 11px;
+		font-weight: 700;
+		color: #777;
+	}
 	.personal_center{
 		font-size: 16px;
 		font-family: none;
@@ -125,7 +134,7 @@ include("../common/common.js.html"){}
 
 	}
 	.wallet_extract_wallet{
-		width: 60%;
+		/*width: 60%;*/
 	}
 	.eth_record{
 		/*width: 60%;*/
@@ -153,7 +162,7 @@ include("../common/common.js.html"){}
 		margin-right: 50px;
 	}
 	.personal_center_model{
-		width: 50%;
+		/*width: 50%;*/
 		height: 240px;
 	}
 	.hrEth{
@@ -303,6 +312,15 @@ include("../common/common.js.html"){}
 		width: 49%;
 		padding-left: 5px;
 	}
+	.wallet_extract_password{
+		height: 265px !important;
+	}
+	.wallet_extract_generalize{
+		height: auto !important;
+	}
+	.statusStr{
+		float: right;
+	}
 </style>
 <script>
 	$(function(){
@@ -428,12 +446,14 @@ include("../common/common.js.html"){}
 				$(".moneyOpenOrClose").addClass("glyphicon-eye-close");
 				$(".moneyOpenOrClose").attr("dataValue",'1');
 				$(".money_input").prop("type","password");
+				$(".money_input_1").prop("type","password");
 			}
 			if(isView == '1'){
 				$(".moneyOpenOrClose").removeClass("glyphicon-eye-close");
 				$(".moneyOpenOrClose").addClass("glyphicon-eye-open");
 				$(".moneyOpenOrClose").attr("dataValue",'0');
 				$(".money_input").prop("type","text");
+				$(".money_input_1").prop("type","text");
 			}
 			updateMoneyIsView(isView);
 		})
@@ -454,6 +474,11 @@ include("../common/common.js.html"){}
 		findLotteryRecord(true,"lottery_record");
 		getWalletConfig();
 		generalizeInitRegisterUrl();
+		var languageType = getLanguage();
+		if(languageType != 'zh'){
+			languageType = 'en'
+		}
+		infoContentGenerlize(languageType);
 	})
 </script>
 <body class="body_top">
@@ -473,11 +498,10 @@ include("../common/common.js.html"){}
 							<div class="person_center_module">
 								<div class="card-title">
 									<img onclick="changePicture()" class="img_head" src="${loginUser.headPortraitUrl!defaultHeadImg}">
-									<!--<p><span class="span_title" title="${loginUser.memberName!''}">${loginUser.memberName!''}</span></p>-->
 									<div class="person_center_info">
 										<div class="person_center_info_div">
-									<!--<p class="p_span_title">--><span class="span_title" title="${loginUser.email!''}">${loginUser.email!''}</span><!--</p>-->
-									<!--<p class="p_span_title">--><span class="span_title" title="${loginUser.memberName!''}">${loginUser.memberName!''}</span><!--</p>-->
+											<span class="span_title_member" title="${loginUser.memberName!''}">${loginUser.memberName!""}</span>
+											<span class="span_title" title="${loginUser.email!''}">${loginUser.email!""}</span>
 										</div>
 									</div>
 								</div>
@@ -529,9 +553,9 @@ include("../common/common.js.html"){}
 			<!-- Password management -->
 			<div class="card card-1 card-1_scroll passwordManagement">
 				<div class="card-body">
-					<div style="width: 60%;">
-						<div class="wallet_extract">
-							<p class="model_title">login password</p>
+					<div>
+						<div class="wallet_extract wallet_extract_password">
+							<p class="model_title" data-localize="base.loginPassword">login password</p>
 							<div><input class="input_class_2 wallet_password_input" type="password" name="oldPassword" placeholder="Old password"><span datavalue="2" class="eyeOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></div>
 							<div><input class="input_class_2 wallet_password_input" type="password" name="newPassword" placeholder="new password"><span datavalue="2" class="eyeOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></div>
 							<div><input class="input_class_2 wallet_password_input" type="password" name="confirmPassword" placeholder="confirm password"><span datavalue="2" class="eyeOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></div>
@@ -540,8 +564,8 @@ include("../common/common.js.html"){}
 							</div>
 						</div>
 
-						<div class="wallet_extract model_margin_top">
-							<p class="model_title">payment code</p>
+						<div class="wallet_extract wallet_extract_password model_margin_top">
+							<p class="model_title" data-localize="base.paymentCode">payment code</p>
 							<div><input class="input_class_2 wallet_password_input" type="password" name="oldPassword" placeholder="Old password"><span datavalue="2" class="eyeOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></div>
 							<div><input class="input_class_2 wallet_password_input" type="password" name="newPassword" placeholder="new password"><span datavalue="2" class="eyeOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></div>
 							<div><input class="input_class_2 wallet_password_input" type="password" name="confirmPassword" placeholder="confirm password"><span datavalue="2" class="eyeOpenOrClose pointerClass pointerClass glyphicon glyphicon-eye-close"></span></div>
@@ -673,12 +697,12 @@ include("../common/common.js.html"){}
 						<ul class="ul_personal_Eth">
 							<li class="li_come">
 								<div>
-									<p><span class="statusTime">2019-12-13 15:15:07</span></p>
+									<p><span class="statusTime span_right"></span><span class="divType"></span><span class="statusStr"></span></p>
 									<p>
-										<span class="expend" data-localize="base.expend">支出 : </span><span class="recorded" data-localize="base.recorded">入账 : </span>
+										<span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
 										<span class="span_right expendOrReceipts">0.1</span>
-										<span data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
-										<span class="ethGas" data-localize="base.ethGas">燃气费 : </span><span class="ethGas ethGasStr">0.00298507</span>
+										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
+										<span class="ethGas ethGasStr" data-localize="base.ethGas">燃气费 : </span><span class="ethGas ethGasStrInfo">0.00298507</span>
 									</p>
 								</div>
 								<hr class="hrEth">
@@ -702,11 +726,11 @@ include("../common/common.js.html"){}
 						<ul class="ul_personal_Dlb">
 							<li class="li_come">
 								<div>
-									<p><span class="statusTime">2019-12-13 15:15:07</span></p>
+									<p><span class="statusTime span_right">2019-12-13 15:15:07</span><span class="divType"></span><span class="statusStr"></span></p>
 									<p>
-										<span class="expend" data-localize="base.expend">支出 : </span><span class="recorded" data-localize="base.recorded">入账 : </span>
+										<span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
 										<span class="span_right expendOrReceipts">0.1</span>
-										<span data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
+										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
 									</p>
 								</div>
 								<hr class="hrEth">
@@ -730,11 +754,11 @@ include("../common/common.js.html"){}
 						<ul class="ul_personal_gdEth">
 							<li class="li_come">
 								<div>
-									<p><span class="statusTime">2019-12-13 15:15:07</span></p>
+									<p><span class="statusTime span_right">2019-12-13 15:15:07</span><span class="divType"></span><span class="statusStr"></span></p>
 									<p>
-										<span class="expend" data-localize="base.expend">支出 : </span><span class="recorded" data-localize="base.recorded">入账 : </span>
+										<span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
 										<span class="span_right expendOrReceipts">0.1</span>
-										<span data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
+										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
 									</p>
 								</div>
 								<hr class="hrEth">
@@ -784,11 +808,11 @@ include("../common/common.js.html"){}
 						<ul class="ul_personal_lottery">
 							<li class="li_come">
 								<div>
-									<p><span class="statusTime">2019-12-13 15:15:07</span></p>
+									<p><span class="statusTime span_right">2019-12-13 15:15:07</span><span class="divType"></span><span class="statusStr"></span></p>
 									<p>
-										<span class="expend" data-localize="base.expend">支出 : </span><span class="recorded" data-localize="base.recorded">入账 : </span>
+										<span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
 										<span class="span_right expendOrReceipts">0.1</span>
-										<span data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
+										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
 									</p>
 								</div>
 								<hr class="hrEth">
@@ -800,15 +824,17 @@ include("../common/common.js.html"){}
 			<!-- 推广主页 -->
 			<div class="card generalize">
 				<div class="wallet_left">
-					<div class="wallet_extract">
-						<img src="../api/base/v1/member/generalizeInit">
+					<div class="generalizeContent wallet_extract wallet_extract_generalize">
+						<!--<p>推广游戏可获得推广佣金，推广佣金层级为7层，包含消费佣金和中奖佣金两部分。</p>
+                        <p>1.当用户7层内下级产生消费时，该消费用户消费金额的5%作为消费佣金，回馈给该消费用户的7层内上级。</p>
+                        <p>2.当用户7层内下级产生中奖时，该中奖用户中奖金额的10%作为中奖佣金，回馈给该中奖用户的7层内上级。</p>
+                        <p>注：中奖佣金由平台单独支付，不影响中奖用户奖金金额。</p>-->
 					</div>
-					<div class="wallet_extract">
-						<p>推广说明：</p>
-						<p>推广分为两种推广模式，一种为三层模式，另一种为七层模式</p>
-						<p>三层模式说明：xxxxxx</p>
-						<p>七层模式说明：xxxxxx</p>
-						<p>收益说明：</p>
+					<div class="wallet_extract wallet_extract_generalize">
+						<p><span class="generalizeEwmUrl"></span></p>
+					</div>
+					<div class="wallet_extract wallet_extract_generalize">
+						<img src="../api/base/v1/member/generalizeInit">
 					</div>
 				</div>
 			</div>
@@ -916,25 +942,25 @@ include("../common/common.js.html"){}
 				<div class="personal_phone" data-file="lottery_record">
 					<img src="../images/phone/cp.png" class="phone_model_img">
 					<div>
-						<span>lottery record</span>
+						<span data-localize="base.lotteryRecord">lottery record</span>
 					</div>
 				</div>
 				<div class="personal_phone" data-file="generalize">
 					<img src="../images/phone/tg.png" class="phone_model_img">
 					<div>
-						<span>generalize</span>
+						<span data-localize="base.generalize">generalize</span>
 					</div>
 				</div>
 				<div class="personal_phone" data-file="password_management">
 					<img src="../images/phone/mm.png" class="phone_model_img">
 					<div>
-						<span>Password management</span>
+						<span data-localize="base.passwordManagement">Password management</span>
 					</div>
 				</div>
 				<div class="personal_phone" data-file="wallet_bind" >
 					<img src="../images/phone/qb.png" class="phone_model_img">
 					<div>
-						<span>wallet address</span>
+						<span data-localize="base.wallet">wallet address</span>
 					</div>
 				</div>
 			</div>

@@ -90,6 +90,12 @@ include("../../../common/common.js.html"){}
         text-align: center;
         font-weight: 700;
     }
+    .statusStr{
+        float: right;
+    }
+    .span_right{
+        margin-right: 50px;
+    }
 </style>
 <body class="body_top">
 
@@ -110,13 +116,13 @@ include("../../../common/common.js.html"){}
             <ul class="ul_personal_record">
                 <li class="li_come">
                     <div>
-                        <p><span class="statusTime">2019-12-13 15:15:07</span></p>
+                        <p><span class="statusTime span_right">2019-12-13 15:15:07</span><span class="divType"></span><span class="statusStr"></span></p>
                         <p>
-                            <span data-localize="base.expend">支出 : </span><span class="span_right expendOrReceipts">0.1</span>
-                            <span data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
+                            <span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
+                            <span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
                         </p>
                         <p>
-                            <span class="ethGas" data-localize="base.ethGas">燃气费 : </span><span class="ethGas ethGasStr">0.00298507</span>
+                            <span class="ethGas ethGasStr" data-localize="base.ethGas">燃气费 : </span><span class="ethGas ethGasStrInfo">0.00298507</span>
                         </p>
                     </div>
                 </li>

@@ -164,7 +164,9 @@
             var columns_s = [];
             var fild = "";
             $.each(language.split(","),function(index,data){
-                columns_s.push({field: 'title_'+data, title: 'title_'+data},{field:'content_'+data,title:'content_'+data});
+                columns_s.push({field: 'title_'+data, title: 'title_'+data},
+                    {field:'content_'+data,title:'content_'+data}
+                    );
             })
 
             columns_s.push({

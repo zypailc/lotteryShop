@@ -16,4 +16,27 @@
 		<result column="oper_id" property="operId" />
 	</resultMap>
 
+	<select id="findDlbRecordPagination" parameterType="java.lang.String" resultType="java.util.Map">
+		select ROUND(ed_.amount,6),ROUND(ed_.balance,6),ed_.type,sd_.r_envalue,sd_.r_zhvalue,ed_.status_time as statusTime,ed_.status
+		from es_dlbaccounts ed_
+		left join sys_dic sd_ on (ed_.dic_type = sd_.key_value)
+		where sd_.group_type = 'dlbaccounts_dictype'
+		<if test="startTime != null and startTime != ''">
+			and ed_.status_time &gt;= #{startTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and ed_.status_time &lt;= #{endTime}
+		</if>
+		<if test="memberId != null and memberId != '' ">
+			and ed_.member_id = #{memberId}
+		</if>
+		<if test="status != null and status != '' ">
+			in(ed_.status,#{status})
+		</if>
+		order by ed_.create_time desc
+		<if test="currentPage != null and currentPage != '' and pageSize != null and pageSize != '' ">
+			limit #{currentPage},#{pageSize}
+		</if>
+	</select>
+
 </mapper>

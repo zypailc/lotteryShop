@@ -89,6 +89,10 @@ public class BaseIndex {
         return  "table/table_QR_background";
     }
 
-
+    @RequestMapping("/table/tableGeneralize")
+    public String tableGeneralize(Model model){
+        model.addAttribute("language", MIntroServiceImpl.LANGUAGES_STR);
+        return "/table/table_generalize";
+    }
 
 }

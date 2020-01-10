@@ -61,8 +61,11 @@
             <div class="search_content d-flex flex-column align-items-center justify-content-center">
                 <% if(has(whetherLogin) && whetherLogin){ %>
                 <div class="top_center_span">
-                    <span class="span_personal">2019-09-26 00:00:00</span> ，<a class="a_logout" onclick="logOut()" data-localize="base.logOut">log out</a><br/>
-                    <span><a class="a_person" href="../web/personalCenter">${loginUser.memberName!"without"}<!--<span data-localize="base.personalCenter"> Personal Center</span>--></a> </span>
+                    <span class="span_personal"><span data-localize="base.lastTime"></span> ：${loginUser.loginDate!"error"}</span> <br/>
+                    <span>
+                        <a class="a_person" href="../web/personalCenter">${loginUser.memberName!"without"}</a>
+                        <a class="a_logout" onclick="logOut()" data-localize="base.logOut">[log out]</a>
+                    </span>
                 </div>
                 <% }else{ %>
                 <div class="top_login_span">
@@ -166,11 +169,11 @@
         </select>-->
     </div>
     <div class="hero_side_text_container_button">
-        <span >公告</span>
+        <span data-localize="base.notice">notice</span>
     </div>
     <div class="hero_side_text_container">
         <div class="hero_side_text">
-            <div class="notice_head"><span >公告</span></div>
+            <div class="notice_head"><span data-localize="base.notice">notice</span></div>
             <div class="notice_content">
                 <p>1.It hasn't been announced yet !</p>
             </div>
@@ -192,6 +195,7 @@
             <!--<li><a href="../web/authPlayTheLottery" data-localize="base.playTheLottery">Play The Lottery</a></li>-->
             <% if(has(whetherLogin) && whetherLogin){ %>
             <li><a href="../web/personalCenter">${loginUser.memberName!"without"}<!-- , <span data-localize="base.personalCenter"> Personal Center</span>--></a></li>
+            <li><a class="a_logout" onclick="logOut()" data-localize="base.logOut">log out</a></li>
             <% } else { %>
                 <% if(has(type) && type == 'register'){ %>
                     <li class="menu_mm"><a class="a_border" href="../web/authLogin" data-localize="base.login">Login</a></li>
@@ -310,6 +314,11 @@
         }
     }
     function logOut(){
+        var b = confirm("Determine the exit !")
+        console.log(b);
+        if(!b){
+            return false;
+        }
         $.ajax({
             type: "get",
             url: "/web/loginOut",

@@ -60,7 +60,6 @@ public class MemberService extends BaseBaseService {
         String paymentCodeWallet = CodeUtil.getCode(32);//钱包文件生成需要密文和支付密码冲突
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("userId",loginUser.getId());
-        //支付密码
         map.put("paymentCode",paymentCodeWallet);
         map.put("bAddress",bAddress);
         String reStr = "";

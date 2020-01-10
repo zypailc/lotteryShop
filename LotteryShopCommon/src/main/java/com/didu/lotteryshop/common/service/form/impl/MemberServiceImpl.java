@@ -108,7 +108,7 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> {
      */
     public boolean updateMember(Member member){
         member.setUpdateTime(new Date());
-        return  updateById(member);
+        return  super.updateById(member);
     }
 
     /**
@@ -119,6 +119,20 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> {
         Wrapper<Member> wrapper = new EntityWrapper<>();
         wrapper.eq("generalize_type",1);
         return super.selectList(wrapper);
+    }
+
+    /**
+     * 更新用户的登录信息
+     * @param memberId
+     * @param ip
+     * @return
+     */
+    public boolean updateMemberLoginInfo(String memberId,String ip){
+        Member member = new Member();
+        member.setId(memberId);
+        member.setLoginTime(new Date());
+        member.setLoginIp(ip);
+        return super.updateById(member);
     }
 
 }

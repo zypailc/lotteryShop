@@ -32,6 +32,9 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
     private EsGdethwalletServiceImpl esGdethwalletService;
     @Autowired
     private BaseService baseService;
+    @Autowired
+    private EsGdethaccountsMapper gdethaccountsMapper;
+
     /** dic_type 在sys_dic字段值*/
     public static String DIC_TYPE = "gdethaccounts_dictype";
     /** A彩票推广分成 */
@@ -341,8 +344,8 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
      * @param endTime 创建结束时间
      * @return
      */
-    public Page<EsGdethaccounts> findGdethRecordPagination(String memberId, Integer currentPage, Integer pageSize, String startTime, String endTime){
-        Wrapper<EsGdethaccounts> wrapper = new EntityWrapper<EsGdethaccounts>();
+    public Page<Map<String,Object>> findGdethRecordPagination(String memberId, Integer currentPage, Integer pageSize, String startTime, String endTime){
+        /*Wrapper<EsGdethaccounts> wrapper = new EntityWrapper<EsGdethaccounts>();
         wrapper.where("1=1");
         if(startTime != null && !"".equals(startTime)){
             wrapper.and(" create_time < {0}",startTime);
@@ -353,9 +356,10 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
         if(memberId != null && !"".equals(memberId)){
             wrapper.and("member_id = {0}",memberId);
         }
-        wrapper.orderBy("create_time",false);
-        Page<EsGdethaccounts> pageEthRecord = new Page<EsGdethaccounts>(currentPage,pageSize);
-        return super.selectPage(pageEthRecord,wrapper);
+        wrapper.orderBy("create_time",false);*/
+        Page<Map<String,Object>> pageEthRecord = new Page<Map<String, Object>>();
+        pageEthRecord.setRecords(gdethaccountsMapper.findGdethRecordPagination(currentPage,pageSize,memberId,startTime,endTime));
+        return pageEthRecord;
     }
 
     /**

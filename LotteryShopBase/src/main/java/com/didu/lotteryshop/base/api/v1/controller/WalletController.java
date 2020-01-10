@@ -4,6 +4,7 @@ import com.didu.lotteryshop.base.api.v1.service.WalletService;
 import com.didu.lotteryshop.base.controller.BaseBaseController;
 import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
 import com.didu.lotteryshop.common.utils.ResultUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,9 @@ public class WalletController extends BaseBaseController {
     @ResponseBody
     @RequestMapping("/withdrawCashEth")
     public ResultUtil withdrawCashEth(BigDecimal num,String playCode){
+        if(num == null || num.compareTo(BigDecimal.ZERO) <= 0 || StringUtils.isBlank(playCode)){
+            return ResultUtil.errorJson("Parameter error!");
+        }
         return walletService.withdrawCashEth(num,playCode);
     }
 

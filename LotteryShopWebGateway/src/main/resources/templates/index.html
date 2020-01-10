@@ -120,22 +120,22 @@
 	</div>
 
 	<!-- white book -->
-	<!--<div class="icon_boxes">
+	<div class="icon_boxes">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-4">
-					<div class="icon_box_title">
+				<div class="col-lg-12">
+					<div class="icon_box_title icon_box_title_white_book">
 						<h1 class="whiteBook">White book</h1>
 					</div>
 				</div>
-				<div class="col-lg-8 icon_box_col">
-					&lt;!&ndash; Icon Box Item &ndash;&gt;
+				<div class="col-lg-12 icon_box_col">
+					<!-- Icon Box Item -->
 					<div class="div_white_book icon_box_item">
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>-->
+	</div>
 	<!-- project specialty -->
 	<div class="features">
 		<div class="container">
@@ -228,8 +228,29 @@
 		</div>
 	</div>
 
-	<!-- partner -->
+
+
+	<!-- Top-up way -->
 	<div class="features">
+		<div class="container">
+			<div class="row">
+				<div class="col text-center">
+					<div class="section_title">
+						<h1 data-localize="base.externalLinks">EXTERNAL LINKS</h1>
+					</div>
+				</div>
+			</div>
+			<div class="row features_row">
+				<div class="col-lg-12 d-flex flex-column align-items-center order-lg-2 order-1">
+					<div class="external_list features_image">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- partner -->
+	<div class="features features_footer">
 		<div class="container">
 			<div class="row">
 				<div class="col text-center">
@@ -250,24 +271,6 @@
 		</div>
 	</div>
 
-	<!-- Top-up way -->
-	<div class="features">
-		<div class="container">
-			<div class="row">
-				<div class="col text-center">
-					<div class="section_title">
-						<h1 data-localize="base.externalLinks">EXTERNAL LINKS</h1>
-					</div>
-				</div>
-			</div>
-			<div class="row features_row">
-				<div class="col-lg-12 d-flex flex-column align-items-center order-lg-2 order-1">
-					<div class="external_list features_image">
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 	<!-- hr -->
 	<hr>
 	<!-- commonality Footer -->
@@ -304,7 +307,6 @@ function infoContentWhiteBook(languageType){
 				$(".whiteBook").html(info.title);
 				$(".div_white_book").html(info.content);
 			}
-
 		}
 	})
 }
@@ -331,7 +333,8 @@ function infoContentCharacteristic(languageType){
 				var tips;
 				$(".cardItemContent").on("mouseenter",function () {
 					tips = layer.tips($(this).attr("content"), $(this),{
-						tips: [2, '#9f88be']
+						tips: [2, '#9f88be'],
+						time:100000
 					});
 				}).on("mouseleave",function (){
 					layer.close(tips);
@@ -363,7 +366,7 @@ function infoContentPartners(){
 			//充值途径
 			var partner_obj = $(".partners_list");
 			$.each(result,function(index,partners){
-				partner_obj.append("<img style='cursor: pointer;' onclick='open_url(\""+partners.linkAddress+"\")' src='/apiauthorization/base/authorization/v1/lsimage/getImg?id="+partners.imgId+"'>");
+				partner_obj.append("<img class='img_margin' style='cursor: pointer;' onclick='open_url(\""+partners.linkAddress+"\")' src='/apiauthorization/base/authorization/v1/lsimage/getImg?id="+partners.imgId+"'>");
 			})
 		}
 	})
@@ -377,7 +380,7 @@ function infoContentExternal(){
 			//合作伙伴
 			var external_obj = $(".external_list");
 			$.each(result,function(index,external){
-				external_obj.append("<img style='cursor: pointer;' onclick='open_url(\""+external.linkAddress+"\")' src=/apiauthorization/base/authorization/v1/lsimage/getImg?id="+external.imgId+">");
+				external_obj.append("<img class='img_margin' style='cursor: pointer;' onclick='open_url(\""+external.linkAddress+"\")' src=/apiauthorization/base/authorization/v1/lsimage/getImg?id="+external.imgId+">");
 			})
 		}
 	})
@@ -392,7 +395,7 @@ function open_url(url){
 var canvas = document.getElementById('canvas'),
 		ctx = canvas.getContext('2d'),
 		w = canvas.width = window.innerWidth,
-		h = canvas.height = window.innerHeight,
+		h = canvas.height = window.innerHeight - 300,
 
 		hue = 217,
 		stars = [],

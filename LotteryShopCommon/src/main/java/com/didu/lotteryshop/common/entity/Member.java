@@ -49,6 +49,10 @@ public class Member{
     private Integer generalizeType;//推广类型，0：散户：1：推广商
     @TableField("payment_code_wallet")
     private String paymentCodeWallet;//生成钱包文件的秘钥
+    @TableField("login_time")
+    private Date loginTime;//上次登录时间
+    @TableField("login_ip")
+    private String loginIp;//上次登录Ip
 
     @TableField(exist = false)
     private Set<Role> roles;//角色

@@ -48,12 +48,12 @@ public class ZuulFilterConfig  extends ZuulFilter {
             String name = headers.nextElement();
             System.out.println(name + ":"+ request.getHeader(name));
         }
-        System.out.println(request.getSession().getId());
+        /*System.out.println(request.getSession().getId());
         System.out.println(RequestContext.getCurrentContext().getRequest().getSession().getId());
         System.out.println(request.getSession().getAttribute("CHJ"));
         System.out.println(request.getSession().getAttribute(Constants.SESSION_LOGIN_TOKEN));
         System.out.println(request.getContextPath());
-        System.out.println(request.getRequestURI());
+        System.out.println(request.getRequestURI());*/
         String  requestURI =  request.getRequestURI();
         if(StringUtils.isNotBlank(requestURI) && requestURI.indexOf("api/") >= 0){
             String accessToken =  (String)request.getSession().getAttribute(Constants.SESSION_LOGIN_TOKEN);

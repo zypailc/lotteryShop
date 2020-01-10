@@ -212,17 +212,35 @@ include("../../../common/common.js.html"){}
                    </div>
                </div>
            </div>-->
-
+            <% if(type == 'wallet_eth' || type == 'wallet_flat'){ %>
            <div class="wallet_extract_cathOrRecharge_1">
+                <% if(type == 'wallet_eth'){ %>
+               <div class="wallet_address_self">
+                   <!--<p><span class="title_span_1">ETH </span></p>-->
+                   <div class="div_withdrawCash wallet_address_self_eth_withdrawCash">
+                       <p><span class="title_span_2" data-localize="base.withdrawCash">Withdraw cash</span></p>
+                       <p><span data-localize="base.rules">规则</span></p>
+                       <!--<p>
+                           <span class="title_span_3" data-localize="base.total">total</span> : <span class="wallet_span_total">0ETH</span>
+                           <span class="title_span_3" data-localize="base.balance1">balance</span> : <span class="balance">0ETH </span>
+                           <span class="title_span_3" data-localize="base.freeze">freeze</span> : <span class="freeze">0ETH</span>
+                       </p>-->
+                       <input class="input_class_2 wallet_password_input " type="text" placeholder="Extract the number">
+                       <div class="div_btn">
+                           <a class="wallet_button button_display" href="#" propertyType="1" onclick="withdrawCashEth(this)" ><span data-localize="base.withdrawCash">withdraw cash</span></a>
+                       </div>
+                   </div>
+                   <div class="div_recharge">
+                       <p><span class="title_span_2" data-localize="base.recharge">Recharge</span></p>
+                       <p><span class="title_span_3" data-localize="base.address">address</span> : <span>${loginUser.PAddress!"error"}</span></p>
+                   </div>
+               </div>
+               <% } %>
+               <% if( type == 'wallet_flat'){ %>
                <div class="wallet_address_self">
                    <!--<p><span class="title_span_1" data-localize="base.flat">flat</span></p>-->
                    <div class="div_withdrawCash wallet_address_self_flat_withdrawCash">
                        <p><span class="title_span_2" data-localize="base.withdrawCash">Withdraw cash</span></p>
-                       <!--<p>
-                           <span class="title_span_3" data-localize="base.total">total</span> : <span class="wallet_span_total"></span>
-                           <span class="title_span_3" data-localize="base.balance1">balance</span> : <span class="balance"></span>
-                           <span class="title_span_3" data-localize="base.freeze">freeze</span> : <span class="freeze"></span>
-                       </p>-->
                        <p><span data-localize="base.exchange">exchange</span> : <span class="lsbToEth"></span> = 1 ETH</p>
                        <input class="input_class_2 wallet_password_input" type="text" placeholder="Extract the number">
                        <div class="div_btn">
@@ -238,8 +256,9 @@ include("../../../common/common.js.html"){}
                        </div>
                    </div>
                </div>
+                <% } %>
            </div>
-
+           <% } %>
            <div class="div_record">
                <img src="../images/wallet_record.jpg">
                <a href="../web/personWalletRecord?type=${type!''}" data-localize="base.record">record</a>

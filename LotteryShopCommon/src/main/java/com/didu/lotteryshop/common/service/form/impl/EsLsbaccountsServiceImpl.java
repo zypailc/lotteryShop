@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -27,6 +28,8 @@ import java.util.List;
 public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, EsLsbaccounts> implements IEsLsbaccountsService {
     @Autowired
     private EsLsbwalletServiceImpl esLsbwalletService;
+    @Autowired
+    private EsLsbaccountsMapper lsbaccountsMapper;
 
     /** dic_type 在sys_dic字段值*/
     public static String DIC_TYPE = "lsbaccounts_dictype";
@@ -371,8 +374,8 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
      * @param status
      * @return
      */
-    public Page<EsLsbaccounts> findLsbRecordPagination(String memberId,Integer currentPage,Integer pageSize,String startTime,String endTime,String status) {
-        Wrapper<EsLsbaccounts> wrapper = new EntityWrapper<EsLsbaccounts>();
+    public Page<Map<String,Object>> findLsbRecordPagination(String memberId,Integer currentPage,Integer pageSize,String startTime,String endTime,String status) {
+       /* Wrapper<EsLsbaccounts> wrapper = new EntityWrapper<EsLsbaccounts>();
         wrapper.where("1=1");
         if(startTime != null && !"".equals(startTime)){
             wrapper.and(" status_time < {0}",startTime);
@@ -386,9 +389,10 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
         if(status != null && !"".equals(status)){
             wrapper.in("status",status);
         }
-        wrapper.orderBy("create_time",false);
-        Page<EsLsbaccounts> pageLsbRecord = new Page<EsLsbaccounts>(currentPage,pageSize);
-        return super.selectPage(pageLsbRecord,wrapper);
+        wrapper.orderBy("create_time",false);*/
+        Page<Map<String,Object>> pageLsbRecord = new Page<Map<String,Object>>();
+        pageLsbRecord.setRecords(lsbaccountsMapper.findLsbRecordPagination(currentPage,pageSize,memberId,startTime,endTime,status));
+        return pageLsbRecord;
     }
 
     /**

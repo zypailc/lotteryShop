@@ -122,5 +122,12 @@ public class BaseInfoService extends BaseBaseService {
     }
 
 
-
+    /**
+     * 查询推广说明
+     * @param languageType
+     * @return
+     */
+    public List<Map<String, Object>> infoContentGenerlize(String languageType) {
+        return  findMintro(languageType, MIntroServiceImpl.TYPE_GENERALIZE,null);
+    }
 }

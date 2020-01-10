@@ -116,7 +116,15 @@
             var columns_s = [];
             var fild = "";
             $.each(language.split(","),function(index,data){
-                columns_s.push({field: 'title_'+data, title: 'title_'+data},{field:'content_'+data,title:'content_'+data});
+                columns_s.push(
+                    {field: 'title_'+data, title: 'title_'+data},
+                    {field:'content_'+data,title:'content_'+data,formatter:function(value, row, index){
+                            if(value){
+                                return "<div class='content_"+data+"'>"+value+"</div>";
+                            }
+                        }
+                    }
+                    );
             })
 
             columns_s.push({
@@ -132,7 +140,7 @@
                 field:"operation",
                 title:"operation",
                 formatter: function (value, row, index){
-                    return " <button class='btn'data-toggle='modal' onclick='update_Id("+row.id+",\""+(row.title_zh || "")+"\",\""+ (row.content_zh || "") +"\",\""+(row.title_en || "")+"\",\""+ (row.content_en || "") +"\",\""+(row.sort || 0)+"\")' data-target='#update_sort'>updateSort</button>";
+                    return " <button class='btn'data-toggle='modal' onclick='update_Id(this,"+row.id+",\""+(row.title_zh || "")+"\",\""+(row.title_en || "")+"\",\""+(row.sort || 0)+"\")' data-target='#update_sort'>updateSort</button>";
                 }
             })
             $(".table_partner").bootstrapTable({
@@ -183,13 +191,12 @@
             $("#file_upload").val(file.name);
         }
 
-        function update_Id(id,title_zh,content_zh,title_en,content_en,sort){
+        function update_Id(e,id,title_zh,title_en,sort){
             $("#update_title_zh").attr("dataId",id);
             $("#update_title_zh").val(title_zh);
-            $("#update_content_zh").val(content_zh);
+            $("#update_content_zh").val($(e).parent().parent().find(".content_zh").html());
             $("#update_title_en").val(title_en);
-            $("#update_content_en").val(content_en);
-
+            $("#update_content_en").val($(e).parent().parent().find(".content_en").html());
         }
 
     </script>

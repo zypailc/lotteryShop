@@ -584,8 +584,8 @@ section
 .icon_boxes
 {
 	width: 100%;
-	padding-top: 123px;
-	padding-bottom: 129px;
+	padding-top: 50px;
+	padding-bottom: 30px;
 }
 .icon_box_title
 {
@@ -636,8 +636,8 @@ section
 .services
 {
 	width: 100%;
-	padding-top: 130px;
-	padding-bottom: 184px;
+	padding-top: 20px;
+	padding-bottom: 30px;
 }
 .section_title h1
 {
@@ -969,8 +969,8 @@ section
 
 .features
 {
-	padding-top: 120px;
-	padding-bottom: 130px;
+	padding-top: 20px;
+	padding-bottom: 30px;
 	background: #fafbfb;
 }
 .features_row
@@ -1122,6 +1122,16 @@ section
 .service_col{
 	top: 15px;
 }
-
-
+.img_margin{
+	margin: 5px;
+}
+.img_margin:hover{
+	box-shadow: 0 0 15px;
+}
+.icon_box_title_white_book{
+	text-align: center;
+}
+.features_footer{
+	padding-bottom:100px;
+}
 

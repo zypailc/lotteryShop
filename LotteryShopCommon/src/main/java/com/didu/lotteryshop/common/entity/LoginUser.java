@@ -21,6 +21,7 @@ public class LoginUser implements Serializable {
     private String generalizeType;// 推广类型
     private String moneyView;//金额是否显示
     private String noticeView;//公告是否已读
+    private String loginDate;//上次登录时间
 
     public String getId() {
         return id;
@@ -124,5 +125,13 @@ public class LoginUser implements Serializable {
 
     public void setNoticeView(String noticeView) {
         this.noticeView = noticeView;
+    }
+
+    public String getLoginDate() {
+        return loginDate;
+    }
+
+    public void setLoginDate(String loginDate) {
+        this.loginDate = loginDate;
     }
 }

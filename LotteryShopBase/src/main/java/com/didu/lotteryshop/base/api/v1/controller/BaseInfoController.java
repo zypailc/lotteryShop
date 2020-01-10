@@ -37,6 +37,16 @@ public class BaseInfoController extends BaseBaseController {
         return baseInfoService.infoContentWhiteBook(languageType);
     }
 
+
+    @ResponseBody
+    @RequestMapping("/infoContentGenerlize")
+    public List<Map<String,Object>> infoContentGenerlize(String languageType){
+        if(languageType == null || "".equals(languageType)){
+            return null;
+        }
+        return baseInfoService.infoContentGenerlize(languageType);
+    }
+
     /**
      * 查询项目特点
      * @param languageType

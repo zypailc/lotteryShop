@@ -36,4 +36,6 @@ public class MIntroServiceImpl extends ServiceImpl<MIntroMapper, MIntro> impleme
      */
     public static  final  Integer TYPE_NOTICE = 4;
 
+    public static final  Integer TYPE_GENERALIZE = 5;
+
 }

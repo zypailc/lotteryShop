@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.entity.EsEthaccounts;
 import com.didu.lotteryshop.common.mapper.EsEthaccountsMapper;
+import com.didu.lotteryshop.common.mapper.EsEthwalletMapper;
 import com.didu.lotteryshop.common.service.form.IEsEthaccountsService;
 import com.github.abel533.sql.SqlMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +37,8 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
     private MemberServiceImpl memberService;
     @Autowired
     private SysTaskServiceImpl sysTaskService;
+    @Autowired
+    private EsEthaccountsMapper esEthaccountsMapper;
 
     /** dic_type 在sys_dic字段值*/
     public static String DIC_TYPE = "ethaccounts_dictype";
@@ -406,8 +409,8 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      * @param status  状态 1,2
      * @return
      */
-    public Page<EsEthaccounts> findEthRecordPagination(String memberId,Integer currentPage,Integer pageSize,String startTime,String endTime,String status){
-        Wrapper<EsEthaccounts> wrapper = new EntityWrapper<EsEthaccounts>();
+    public Page<Map<String,Object>> findEthRecordPagination(String memberId,Integer currentPage,Integer pageSize,String startTime,String endTime,String status){
+       /* Wrapper<EsEthaccounts> wrapper = new EntityWrapper<EsEthaccounts>();
         wrapper.where("1=1");
         if(startTime != null && !"".equals(startTime)){
             wrapper.and(" status_time < {0}",startTime);
@@ -421,9 +424,12 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
         if(status != null && !"".equals(status)){
             wrapper.in("status",status);
         }
-        wrapper.orderBy("create_time",false);
-        Page<EsEthaccounts> pageEthRecord = new Page<EsEthaccounts>(currentPage,pageSize);
-        return super.selectPage(pageEthRecord,wrapper);
+        wrapper.orderBy("create_time",false);*/
+        //Page<EsEthaccounts> pageEthRecord = new Page<EsEthaccounts>(currentPage,pageSize);
+        Page<Map<String,Object>> pageEthRecord = new Page<>();
+        currentPage = (currentPage - 1) * pageSize;
+        pageEthRecord.setRecords(esEthaccountsMapper.findEthRecordPagination(currentPage,pageSize,startTime,endTime,memberId,status));
+        return pageEthRecord;
     }
 
 }

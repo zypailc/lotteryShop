@@ -24,7 +24,7 @@
     "lotteryPlay": "Guess",
     "rules": "Rules",
     "drawArchive": "Draw Archive",
-    "logOut": "Log out",
+    "logOut": "[Log out]",
     "spendAFewBefore": "You select the",
     "spendAFewLater": "Multiple",
     "purchase": "&nbsp;purchase&nbsp;",
@@ -51,6 +51,10 @@
     "passwordManagement": "Password management",
     "netAssets": "Net assets",
     "gdEth": "GdEth",
-    "record": "record"
+    "record": "record",
+    "lastTime": "last time",
+    "notice": "notice",
+    "loginPassword" : "login password",
+    "paymentCode": "payment code"
   }
 }

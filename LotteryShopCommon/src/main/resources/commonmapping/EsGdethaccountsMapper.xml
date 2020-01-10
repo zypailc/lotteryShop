@@ -19,4 +19,24 @@
 		<result column="status_msg" property="statusMsg" />
 	</resultMap>
 
+	<select id="findGdethRecordPagination" parameterType="java.lang.String" resultType="java.util.Map">
+		select ROUND(eg_.amount,6),ROUND(eg_.balance,6),eg_.type,sd_.r_envalue,sd_.r_zhvalue,eg_.status_time as statusTime,eg_.status,ROUND(eg_.gas_fee,6) as gasFee
+		from es_gdethaccounts eg_
+		left join sys_dic sd_ on (eg_.dic_type = sd_.key_value)
+		where sd_.group_type = 'gdethaccounts_dictype'
+		<if test="startTime != null and startTime != ''">
+			and eg_.status_time &gt;= #{startTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and eg_.status_time &lt;= #{endTime}
+		</if>
+		<if test="memberId != null and memberId != '' ">
+			and eg_.member_id = #{memberId}
+		</if>
+		order  by eg_.create_time desc
+		<if test="currentPage != null and currentPage != '' and pageSize != null and pageSize != '' ">
+			limit #{currentPage},#{pageSize}
+		</if>
+	</select>
+
 </mapper>
