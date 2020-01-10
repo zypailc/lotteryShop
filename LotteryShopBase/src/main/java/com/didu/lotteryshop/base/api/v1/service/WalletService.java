@@ -80,7 +80,7 @@ public class WalletService extends BaseBaseService {
         sum = sum.subtract(serviceCharge);
         //需要转两笔账
         Map<String,Object> map1 = ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),loginUser.getBAddress(),sum);//转到外部钱包
-        if(map1 == null ){
+        if(map1 == null  || map1.isEmpty()){
             return ResultUtil.errorJson("Transfer failed !");
         }
         //新增出账明细
@@ -89,7 +89,7 @@ public class WalletService extends BaseBaseService {
             return ResultUtil.errorJson("Transfer failed !");
         }
         Map<String,Object> map2 = ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),sysConfig.getManagerAddress(),serviceCharge);//提取手续费
-        if(map2 == null){
+        if(map2 == null || map1.isEmpty()){
             return ResultUtil.errorJson("Transfer failed !");
         }
         b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE,serviceCharge,"-1",map1.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map1.get(web3jService.TRANSACTION_HASHVALUE).toString());
@@ -155,7 +155,7 @@ public class WalletService extends BaseBaseService {
             return ResultUtil.errorJson("not sufficient funds !");
         }
         Map<String,Object> map = ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),sysConfig.getLsbAddress(),EthToLsb);
-        if(map == null){
+        if(map == null && map.isEmpty()){
             return ResultUtil.errorJson("Top-up failure !");
         }
         //新新增充值记录

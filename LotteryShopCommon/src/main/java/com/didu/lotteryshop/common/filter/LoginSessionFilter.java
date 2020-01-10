@@ -107,7 +107,7 @@ public class LoginSessionFilter extends OncePerRequestFilter {
                     String update_date = "";
                     String update_date_old = (String) httpServletRequest.getSession().getAttribute(Constants.LOGIN_SESSION_UPDATE_KEY);
                     if(list_1 != null && list_1.size() > 0){
-                        if(list_1.get(0) != null && list_1.get(0).isEmpty()) {
+                        if(list_1.get(0) != null && !list_1.get(0).isEmpty()) {
                             update_date = list_1.get(0).get("updateTime").toString();
                         }
                     }
