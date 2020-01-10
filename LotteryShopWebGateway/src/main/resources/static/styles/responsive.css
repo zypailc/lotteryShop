@@ -418,7 +418,8 @@
 		background: #ddd;
 		padding-left: 15px;
 		padding-right: 15px;
-		width: 98%;
+		width: 60% !important;
+		height: 350px !important;
 	}
 	.service_item_button
 	{

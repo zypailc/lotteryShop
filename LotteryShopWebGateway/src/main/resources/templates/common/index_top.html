@@ -63,7 +63,7 @@
                 <div class="top_center_span">
                     <span class="span_personal"><span data-localize="base.lastTime"></span> ：${loginUser.loginDate!"error"}</span> <br/>
                     <span>
-                        <a class="a_person" href="../web/personalCenter">${loginUser.memberName!"without"}</a>
+                        <a class="a_person" href="../web/personalCenter"><span data-localize="base.personalCenter"> Personal Center</span></a>
                         <a class="a_logout" onclick="logOut()" data-localize="base.logOut">[log out]</a>
                     </span>
                 </div>
@@ -168,7 +168,7 @@
             <option class="select_option" value="da">Danish</option>
         </select>-->
     </div>
-    <div class="hero_side_text_container_button">
+    <!--<div class="hero_side_text_container_button">
         <span data-localize="base.notice">notice</span>
     </div>
     <div class="hero_side_text_container">
@@ -178,7 +178,7 @@
                 <p>1.It hasn't been announced yet !</p>
             </div>
         </div>
-    </div>
+    </div>-->
 
     <!-- Hamburger -->
     <div class="hamburger_container">
@@ -194,7 +194,7 @@
             <li><a href="../web/authIndex" data-localize="base.home">Home</a></li>
             <!--<li><a href="../web/authPlayTheLottery" data-localize="base.playTheLottery">Play The Lottery</a></li>-->
             <% if(has(whetherLogin) && whetherLogin){ %>
-            <li><a href="../web/personalCenter">${loginUser.memberName!"without"}<!-- , <span data-localize="base.personalCenter"> Personal Center</span>--></a></li>
+            <li><a href="../web/personalCenter"><span data-localize="base.personalCenter"> Personal Center</span></a></li>
             <li><a class="a_logout" onclick="logOut()" data-localize="base.logOut">log out</a></li>
             <% } else { %>
                 <% if(has(type) && type == 'register'){ %>
