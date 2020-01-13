@@ -55,6 +55,12 @@
     "lastTime": "上次登录",
     "notice": "公告",
     "loginPassword" : "登陆密码",
-    "paymentCode": "支付密码"
+    "paymentCode": "支付密码",
+    "allTypes": "全部类型",
+    "all":"全部",
+    "Winning": "中奖",
+    "onWinning": "未中奖",
+    "search":"查询",
+    "walletAddress": "钱包地址"
   }
 }

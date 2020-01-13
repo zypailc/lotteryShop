@@ -32,7 +32,7 @@ include("../../common/common.js.html"){}
                 viewH =$(this).height() - 90,//可见高度
                 contentH =$(this).get(0).scrollHeight,//内容高度
                 scrollTop =$(this).scrollTop();//滚动高度
-            if(scrollTop/(contentH - viewH) >= 0.95){ //当滚动到距离底部5%时
+            if(scrollTop/(contentH - viewH) >= 0.90){ //当滚动到距离底部5%时
                 findLotteryRecord(false,"lottery_record_phone");
             }
         });

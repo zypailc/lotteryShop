@@ -368,6 +368,7 @@ function findLotteryRecord(flag,classProperty){
                         new_li.find(".luckTotal").html(data.luck_total || 0);
                         new_li.find(".startTime").html(data.startTime);
                         new_li.find(".endTime").html(data.endTime);
+                        new_li.show();
                         ul.append( new_li);
                     });
                     walletETH.attr("currentPage", (parseInt(currentPage) + 1));

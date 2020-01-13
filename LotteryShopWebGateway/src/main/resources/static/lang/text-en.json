@@ -55,6 +55,12 @@
     "lastTime": "last time",
     "notice": "notice",
     "loginPassword" : "login password",
-    "paymentCode": "payment code"
+    "paymentCode": "payment code",
+    "allTypes": "All Types",
+    "all":"All",
+    "Winning": "Winning",
+    "onWinning": "On Winning",
+    "search":"Search",
+    "walletAddress": "Wallet address"
   }
 }

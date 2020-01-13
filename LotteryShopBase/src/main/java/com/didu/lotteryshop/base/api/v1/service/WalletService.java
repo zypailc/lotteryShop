@@ -1,12 +1,10 @@
 package com.didu.lotteryshop.base.api.v1.service;
 
 import com.didu.lotteryshop.base.service.BaseBaseService;
+import com.didu.lotteryshop.base.service.WalletEthService;
 import com.didu.lotteryshop.base.service.Web3jService;
 import com.didu.lotteryshop.common.config.Constants;
-import com.didu.lotteryshop.common.entity.EsEthwallet;
-import com.didu.lotteryshop.common.entity.EsLsbwallet;
-import com.didu.lotteryshop.common.entity.LoginUser;
-import com.didu.lotteryshop.common.entity.SysConfig;
+import com.didu.lotteryshop.common.entity.*;
 import com.didu.lotteryshop.common.service.form.impl.*;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
@@ -27,8 +25,7 @@ public class WalletService extends BaseBaseService {
 
     @Autowired
     private SysConfigServiceImpl sysConfigService;
-    @Autowired
-    private OAuth2RestTemplate oAuth2RestTemplate;
+
     @Autowired
     private EsEthwalletServiceImpl esEthwalletService;
     @Autowired
@@ -39,7 +36,8 @@ public class WalletService extends BaseBaseService {
     private EsLsbaccountsServiceImpl esLsbaccountsService;
     @Autowired
     private Web3jService web3jService;
-
+    @Autowired
+    private WalletEthService walletEthService;
 
     /**
      * 获取钱包配置信息
@@ -79,21 +77,21 @@ public class WalletService extends BaseBaseService {
         //本次可提现实际金额
         sum = sum.subtract(serviceCharge);
         //转平台手续费
-        Map<String,Object> map2 = this.ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),sysConfig.getManagerAddress(),serviceCharge);//提取手续费
-        if(map2 == null || map2.isEmpty()){
+        EthTransfer ethTransfer = walletEthService.ethTransferAccounts(playCode,loginUser.getPAddress(),sysConfig.getManagerAddress(),serviceCharge);//提取手续费
+        if(ethTransfer == null){
             return ResultUtil.errorJson("Transfer failed !");
         }
-       boolean b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE,serviceCharge,"-1",map2.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map2.get(web3jService.TRANSACTION_HASHVALUE).toString());
+       boolean b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE,serviceCharge,"-1",ethTransfer.getTransactionHashvalue());
         if(!b){
             return ResultUtil.errorJson("Transfer failed !");
         }
         //转账到用用户外部钱包
-        Map<String,Object> map1 = this.ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),loginUser.getBAddress(),sum);//转到外部钱包
-        if(map1 == null  || map1.isEmpty()){
+        EthTransfer ethTransfer1 = walletEthService.ethTransferAccounts(playCode,loginUser.getPAddress(),loginUser.getBAddress(),sum);//转到外部钱包
+        if(ethTransfer1 == null){
             return ResultUtil.errorJson("Transfer failed !");
         }
         //新增出账明细
-        b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",map1.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map1.get(web3jService.TRANSACTION_HASHVALUE).toString());
+        b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",ethTransfer.getTransactionHashvalue());
         if(!b){
             return ResultUtil.errorJson("Transfer failed !");
         }
@@ -127,7 +125,6 @@ public class WalletService extends BaseBaseService {
             //新增平台币转Eth处理中信息
              b = esLsbaccountsService.addOutBeingProcessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",map.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map.get(web3jService.TRANSACTION_HASHVALUE).toString());
         }else{
-            // TODO 後台開發需要做預警處理
             esLsbaccountsService.addOutFail(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",EsLsbaccountsServiceImpl.STATUS_MSG_FAIL);
         }
         if(!b){
@@ -156,56 +153,16 @@ public class WalletService extends BaseBaseService {
         if(!esEthwalletService.judgeBalance(loginUser.getId(),EthToLsb)){
             return ResultUtil.errorJson("not sufficient funds !");
         }
-        Map<String,Object> map = ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),sysConfig.getLsbAddress(),EthToLsb);
-        if(map == null && map.isEmpty()){
+        EthTransfer ethTransfer = walletEthService.ethTransferAccounts(playCode,loginUser.getPAddress(),sysConfig.getLsbAddress(),EthToLsb);
+        if(ethTransfer == null){
             return ResultUtil.errorJson("Top-up failure !");
         }
         //新新增充值记录
-        boolean b = esLsbaccountsService.addInBeingprocessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_IN,sum,"-1",map.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map.get(web3jService.TRANSACTION_HASHVALUE).toString());
+        boolean b = esLsbaccountsService.addInBeingprocessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_IN,sum,"-1",ethTransfer.getTransactionHashvalue());
         if(!b){
             return ResultUtil.errorJson("Transfer failed !");
         }
         return  ResultUtil.successJson("Transfer successful !");
     }
-//
-//    public Map<String,Object> loginUserEthTransferAccounts(String toAddress,BigDecimal etherValue){
-//        LoginUser loginUser = super.getLoginUser();
-//        return this.ethTransferAccounts(loginUser.getWalletName(),);
-//    }
 
-
-    /**
-     * ETh转账
-     * @param walletFileName 钱包名称
-     * @param payPassword 支付密码
-     * @param formAddress 出账地址
-     * @param toAddress 入账地址
-     * @param etherValue 金额
-     * @return
-     */
-    private Map<String,Object> ethTransferAccounts(String walletFileName,String payPassword,String formAddress,String toAddress,BigDecimal etherValue){
-        try {
-            //转账
-            Map<String,Object> map = new HashMap<String,Object>();
-            map.put("walletFileName",walletFileName);
-            map.put("payPassword",payPassword);
-            map.put("formAddress",formAddress);//出
-            map.put("toAddress",toAddress);//入
-            map.put("etherValue",etherValue);
-            String reStr = oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/transfer", super.getEncryptRequestHttpEntity(map), String.class);
-
-//            if (reStr == null || "".equals(reStr)) {
-//                return null;
-//            }
-//            ResultUtil  result = super.getDecryptResponseToResultUtil(reStr); //解密
-//            //判斷是否成功
-//            if (result != null && result.getCode() != ResultUtil.SUCCESS_CODE) {
-//                return null;
-//            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-       // return (Map<String, Object>) result.getExtend().get(ResultUtil.DATA_KEY);
-        return null;
-    }
 }

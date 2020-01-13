@@ -614,7 +614,7 @@ include("../common/common.js.html"){}
 						</div>
 						<% if(generalizeType){ %>
 						<div class="personal_wallet personal_wallet_detail">
-							<p class="wallet_title p_margin" data-localize="base.putMoney">GdEth</p>
+							<p class="wallet_title p_margin" data-localize="base.gdEth">GdEth</p>
 							<p class="wallet_content p_margin">
 							<p class="p_money_main"><span class="walletGdEth"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
 							<p class="p_money_dollar">
@@ -630,15 +630,15 @@ include("../common/common.js.html"){}
 				<input type="text" class="input_class startDateInput layui-input" placeholder="start：yyyy-MM-dd">
 				<input type="text" class="input_class endDateInput layui-input" placeholder="end：yyyy-MM-dd">
 				<select class="select_search lotteryTypeSelect">
-					<option value="-1">全部类型</option>
+					<option value="-1" data-localize="base.allTypes">All types</option>
 					<option value="1">A</option>
 				</select>
                 <select class="select_search lotteryWinningSelect">
-                    <option value="-1">全部</option>
-                    <option value="1">中奖</option>
-                    <option value="0">未中奖</option>
+                    <option value="-1" data-localize="base.all">All</option>
+                    <option value="1" data-localize="base.Winning">中奖</option>
+                    <option value="0" data-localize="base.onWinning">未中奖</option>
                 </select>
-				<button class="btn search_lottery_record">查询</button>
+				<button class="btn search_lottery_record" data-localize="base.search">查询</button>
 				<hr>
 			</div>
 			<hr class="web_design">
@@ -649,9 +649,9 @@ include("../common/common.js.html"){}
 							<div>
 								<p><span class="lotteryType lottery_span_right">Lottery type</span><span class="lotteryIssue"></span></p>
 								<p>
-									<span>幸运号 : </span><span class="lottery_span_right selfLuckNum"></span>
-									<span>开奖号 : </span><span class="lottery_span_right luckNum"></span>
-									<span>幸运金 : </span><span class="luckTotal"></span>
+									<span class="luckNumStr">幸运号 : </span><span class="lottery_span_right selfLuckNum"></span>
+									<span class="winningNumStr">开奖号 : </span><span class="lottery_span_right luckNum"></span>
+									<span class="luckAmountStr">幸运金 : </span><span class="luckTotal"></span>
 								</p>
 								<p><span class="startTime">00:00:00 00:00:00</span> ~ <span class="endTime">00:00:00 00:00:00</span></p>
 							</div>
@@ -861,7 +861,7 @@ include("../common/common.js.html"){}
 					%>
 						<div class="wallet_extract wallet_extract_wallet ">
 							<div class="wallet_address_self">
-								<p><span class="title_span_1">wallet address</span></p>
+								<p><span class="title_span_1" data-localize="base.walletAddress">wallet address</span></p>
 								<p><span>${loginUser.BAddress!"error"}</span></p>
 								<input class="input_class_2 wallet_password_input" type="text" name="update_bAddress" placeholder="wallet address">
 								<div class="div_btn">

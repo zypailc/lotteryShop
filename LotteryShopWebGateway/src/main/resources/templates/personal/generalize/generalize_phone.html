@@ -30,6 +30,7 @@ include("../../common/common.js.html"){}
             languageType = 'en'
         }
         infoContentGenerlize(languageType);
+        generalizeInitRegisterUrl();
     })
 </script>
 <style>
@@ -53,12 +54,6 @@ include("../../common/common.js.html"){}
 
     <div class="base_head">
         <div class="wallet_phone">
-            <div class="wallet_extract wallet_extract_generalize">
-                <img class="generalize_img" src="../api/base/v1/member/generalizeInit">
-            </div>
-            <div class="wallet_extract wallet_extract_generalize">
-                <p><span class="generalizeEwmUrl"></span></p>
-            </div>
             <div class="generalizeContent wallet_extract  wallet_extract_generalize">
                 <!--<p>推广游戏可获得推广佣金，推广佣金层级为7层，包含消费佣金和中奖佣金两部分。</p>
                 <p>1.当用户7层内下级产生消费时，该消费用户消费金额的5%作为消费佣金，回馈给该消费用户的7层内上级。</p>
@@ -66,9 +61,10 @@ include("../../common/common.js.html"){}
                 <p>注：中奖佣金由平台单独支付，不影响中奖用户奖金金额。</p>-->
             </div>
             <div class="wallet_extract wallet_extract_generalize">
-                <img src="../images/wallet_record.jpg">
-                <a href="../web/personalGeneralizeRecord" >generalize record</a>
-                <span class="span_entrance"> > </span>
+                <p><span class="generalizeEwmUrl"></span></p>
+            </div>
+            <div class="wallet_extract wallet_extract_generalize">
+                <img class="generalize_img" src="../api/base/v1/member/generalizeInit">
             </div>
         </div>
     </div>
