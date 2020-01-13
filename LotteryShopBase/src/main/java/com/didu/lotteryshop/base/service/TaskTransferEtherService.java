@@ -80,17 +80,19 @@ public class TaskTransferEtherService extends BaseBaseService {
                                     bool = esLsbaccountsService.updateSuccess(esLsbaccounts.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_IN,new BigDecimal(gasUsed));
                                     if(! bool ) return;
                                     //记录一条成功的ETH账目记录(出账)
-                                    bool = esEthaccountsService.addOutSuccess(esLsbaccounts.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,esLsbaccounts.getAmount().multiply(sysConfig.getEthToLsb()),esLsbaccounts.getId().toString(),new BigDecimal(gasUsed));
+                                    bool = esEthaccountsService.addOutSuccess(esLsbaccounts.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,esLsbaccounts.getAmount().divide(sysConfig.getEthToLsb(),4,BigDecimal.ROUND_DOWN),esLsbaccounts.getId().toString(),new BigDecimal(gasUsed));
                                 }else{
                                     bool = esLsbaccountsService.updateSuccess(esLsbaccounts.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,new BigDecimal(gasUsed));
                                     if(! bool ) return;
                                     //记录一条成功的ETH账目记录(入账)
-                                    bool = esEthaccountsService.addInBeingprocessed(esLsbaccounts.getMemberId(), EsEthaccountsServiceImpl.DIC_TYPE_LSBTOETH,esLsbaccounts.getAmount().multiply(sysConfig.getLsbToEth()),esLsbaccounts.getId().toString());
+                                    //bool = esEthaccountsService.addInBeingprocessed(esLsbaccounts.getMemberId(), EsEthaccountsServiceImpl.DIC_TYPE_LSBTOETH,esLsbaccounts.getAmount().multiply(sysConfig.getLsbToEth()),esLsbaccounts.getId().toString());
+                                    bool = esEthaccountsService.addInSuccess(esLsbaccounts.getMemberId(), EsEthaccountsServiceImpl.DIC_TYPE_LSBTOETH,esLsbaccounts.getAmount().divide(sysConfig.getLsbToEth(),4,BigDecimal.ROUND_DOWN),esLsbaccounts.getId().toString());
 
                                 }
                             }
                             if(status.equals("2")){
                                 fail++;
+                                esLsbaccountsService.updateFail(esLsbaccounts.getId());
                                 //修改记录为失败
                                 //添加一条失败的ETH账目记录
                                 continue;

@@ -3,16 +3,16 @@ package com.didu.lotteryshop.base.api.v1.service;
 import com.didu.lotteryshop.base.service.BaseBaseService;
 import com.didu.lotteryshop.base.service.Web3jService;
 import com.didu.lotteryshop.common.config.Constants;
-import com.didu.lotteryshop.common.entity.EsEthwallet;
-import com.didu.lotteryshop.common.entity.EsLsbwallet;
-import com.didu.lotteryshop.common.entity.LoginUser;
-import com.didu.lotteryshop.common.entity.SysConfig;
+import com.didu.lotteryshop.common.entity.*;
 import com.didu.lotteryshop.common.service.form.impl.*;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
+import com.didu.lotteryshop.common.utils.CodeUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.common.utils.Web3jUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 import sun.rmi.runtime.Log;
@@ -23,12 +23,8 @@ import java.util.Map;
 
 @Service
 public class WalletService extends BaseBaseService {
-
-
     @Autowired
     private SysConfigServiceImpl sysConfigService;
-    @Autowired
-    private OAuth2RestTemplate oAuth2RestTemplate;
     @Autowired
     private EsEthwalletServiceImpl esEthwalletService;
     @Autowired
@@ -39,7 +35,11 @@ public class WalletService extends BaseBaseService {
     private EsLsbaccountsServiceImpl esLsbaccountsService;
     @Autowired
     private Web3jService web3jService;
+    @Autowired
+    private MemberServiceImpl memberService;
 
+    @Autowired
+    private KafkaTemplate kafkaTemplate;
 
     /**
      * 获取钱包配置信息
@@ -63,10 +63,6 @@ public class WalletService extends BaseBaseService {
         if(!playCode.equals(loginUser.getPaymentCode())){
             return ResultUtil.errorJson(" wrong password !");
         }
-//        EsEthwallet ethwallet = esEthwalletService.findByMemberId(loginUser.getId());
-//        if(ethwallet == null){//查询到的Eth数据为空
-//            return ResultUtil.errorJson(" The system is busy, please try again later !");
-//        }
         SysConfig sysConfig = sysConfigService.getSysConfig();
         //判断余额是否充足
         //提现一次所需要的燃气费
@@ -78,27 +74,64 @@ public class WalletService extends BaseBaseService {
         BigDecimal serviceCharge = sum.divide(new BigDecimal("100")).multiply(sysConfig.getWithdrawRatio());
         //本次可提现实际金额
         sum = sum.subtract(serviceCharge);
-        //转平台手续费
-        Map<String,Object> map2 = this.ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),sysConfig.getManagerAddress(),serviceCharge);//提取手续费
-        if(map2 == null || map2.isEmpty()){
+        String uuId = CodeUtil.getUuid();
+        boolean bool = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE,serviceCharge,uuId);
+        if(bool){
+            //kafka 执行公链转账操作
+            kafkaTemplate.send("kafkaWithdrawCashEth","operId",uuId);
+        }else{
             return ResultUtil.errorJson("Transfer failed !");
         }
-       boolean b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE,serviceCharge,"-1",map2.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map2.get(web3jService.TRANSACTION_HASHVALUE).toString());
-        if(!b){
+        uuId = CodeUtil.getUuid();
+        bool = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_DRAW,sum,uuId);
+        if(bool){
+            //kafka 执行公链转账操作
+            kafkaTemplate.send("kafkaWithdrawCashEth","operId",uuId);
+        }else{
             return ResultUtil.errorJson("Transfer failed !");
         }
-        //转账到用用户外部钱包
-        Map<String,Object> map1 = this.ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),loginUser.getBAddress(),sum);//转到外部钱包
-        if(map1 == null  || map1.isEmpty()){
-            return ResultUtil.errorJson("Transfer failed !");
-        }
-        //新增出账明细
-        b = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",map1.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map1.get(web3jService.TRANSACTION_HASHVALUE).toString());
-        if(!b){
-            return ResultUtil.errorJson("Transfer failed !");
-        }
-
         return  ResultUtil.successJson("Transfer successful !");
+    }
+
+    /**
+     * kafka 用户提现转账
+     * @param operId
+     */
+    public void kafkaWithdrawCashEth(String operId){
+        EsEthaccounts esEthaccounts = esEthaccountsService.findEsEthaccountsByOperId(operId);
+        if(esEthaccounts != null && esEthaccounts.getId() != null){
+           Member  member =  memberService.selectById(esEthaccounts.getMemberId());
+           if(member != null && member.getId() != null){
+                SysConfig sysConfig = sysConfigService.getSysConfig();
+                Map<String,Object> rMap = null;
+                if(esEthaccounts.getDicType() == EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE){
+                    rMap = web3jService.ethTransferAccounts(member.getWalletName(),member.getPaymentCodeWallet(),member.getPAddress(),sysConfig.getManagerAddress(),esEthaccounts.getAmount());
+                }
+                if(esEthaccounts.getDicType() == EsEthaccountsServiceImpl.DIC_TYPE_DRAW){
+                    rMap = web3jService.ethTransferAccounts(member.getWalletName(),member.getPaymentCodeWallet(),member.getPAddress(),member.getBAddress(),esEthaccounts.getAmount());
+                }
+               if(rMap != null && !rMap.isEmpty()){
+                   if(rMap.get(Web3jService.TRANSACTION_HASHVALUE) != null){
+                      String tHValue = rMap.get(Web3jService.TRANSACTION_HASHVALUE).toString();
+                      if(StringUtils.isNotBlank(tHValue)){
+                          esEthaccounts.setTransferHashValue(tHValue);
+                          esEthaccountsService.updateById(esEthaccounts);
+                      }
+                   }
+
+                   if(Integer.valueOf(rMap.get(Web3jService.TRANSACTION_STATUS).toString()) == 0){
+                       //等待确认
+
+                   }else if(Integer.valueOf(rMap.get(Web3jService.TRANSACTION_STATUS).toString()) == 1){
+                       //成功
+                       esEthaccountsService.updateSuccess(esEthaccounts.getId(),new BigDecimal(rMap.get(Web3jService.TRANSACTION_GASUSED).toString()));
+                   }else if(Integer.valueOf(rMap.get(Web3jService.TRANSACTION_STATUS).toString()) == 2){
+                       //失败
+                       esEthaccountsService.updateFail(esEthaccounts.getId());
+                   }
+               }
+           }
+        }
     }
 
     /**
@@ -107,25 +140,34 @@ public class WalletService extends BaseBaseService {
      * @return
      */
     public ResultUtil withdrawCashLsbToEth(BigDecimal sum){
-
-        LoginUser loginUser = getLoginUser();//查询人员信息
-        EsLsbwallet esLsbwallet = esLsbwalletService.findByMemberId(loginUser.getId());//查询平台币钱包信息
         SysConfig sysConfig = sysConfigService.getSysConfig();
+        //判断最低兑换限制
+        if(sysConfig.getLsbwithdrawMin().compareTo(sum) < 0 ){
+            return ResultUtil.errorJson("The minimum exchange limit is "+sysConfig.getLsbwithdrawMin().toPlainString()+"!");
+        }
+        LoginUser loginUser = getLoginUser();//查询人员信息
         //判断平台币可用余额是否足够
         if(!esLsbwalletService.judgeBalance(loginUser.getId(),sum)){
             return ResultUtil.errorJson("not sufficient funds !");
         }
         //计算可提现ETH
-        BigDecimal lsbToEth = sum.divide(sysConfig.getLsbToEth(),50,BigDecimal.ROUND_DOWN);
+        BigDecimal lsbToEth = sum.divide(sysConfig.getLsbToEth(),4,BigDecimal.ROUND_DOWN);
         Map<String, Object> map = null;
         boolean b = false;
         if(web3jService.getLsbManagerBalanceByEther().compareTo(lsbToEth) >= 0){
-            map = web3jService.lsbManagerSendToETH(loginUser.getPAddress(), lsbToEth);
-            if (map == null) {
-                return ResultUtil.errorJson("Transfer failed !");
-            }
-            //新增平台币转Eth处理中信息
-             b = esLsbaccountsService.addOutBeingProcessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",map.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map.get(web3jService.TRANSACTION_HASHVALUE).toString());
+//            map = web3jService.lsbManagerSendToETH(loginUser.getPAddress(), lsbToEth);
+//            if (map == null) {
+//                return ResultUtil.errorJson("Transfer failed !");
+//            }
+//            //新增平台币转Eth处理中信息
+//             b = esLsbaccountsService.addOutBeingProcessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",map.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map.get(web3jService.TRANSACTION_HASHVALUE).toString());
+
+              String uuId = CodeUtil.getUuid();
+              b = esLsbaccountsService.addOutBeingProcessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,sum,uuId);
+              if(b){
+                  //kafka 执行公链转账操作
+                  kafkaTemplate.send("withdrawCashLsbToEth","operId",uuId);
+              }
         }else{
             // TODO 後台開發需要做預警處理
             esLsbaccountsService.addOutFail(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",EsLsbaccountsServiceImpl.STATUS_MSG_FAIL);
@@ -135,6 +177,47 @@ public class WalletService extends BaseBaseService {
         }
         return ResultUtil.successJson("Transfer successful !");
     }
+    /**
+     * kafka 平台币转Eth
+     * @param operId
+     */
+    public void kafkaWithdrawCashLsbToEth(String operId){
+        EsLsbaccounts esLsbaccounts = esLsbaccountsService.findEsLsbaccountsByOperId(operId);
+        if(esLsbaccounts != null && esLsbaccounts.getId() != null){
+            Member  member =  memberService.selectById(esLsbaccounts.getMemberId());
+            if(member != null && member.getId() != null){
+                SysConfig sysConfig = sysConfigService.getSysConfig();
+                BigDecimal lsbToEth = esLsbaccounts.getAmount().divide(sysConfig.getLsbToEth(),4,BigDecimal.ROUND_DOWN);
+                if(web3jService.getLsbManagerBalanceByEther().compareTo(lsbToEth) >= 0){
+                    Map<String, Object>  rMap = web3jService.lsbManagerSendToETH(member.getPAddress(), lsbToEth);
+                    if(rMap != null && !rMap.isEmpty()){
+                        if(rMap.get(Web3jService.TRANSACTION_HASHVALUE) != null){
+                            String tHValue = rMap.get(Web3jService.TRANSACTION_HASHVALUE).toString();
+                            if(StringUtils.isNotBlank(tHValue)){
+                                esLsbaccounts.setTransferHashValue(tHValue);
+                                esLsbaccountsService.updateById(esLsbaccounts);
+                            }
+                        }
+                        if(Integer.valueOf(rMap.get(Web3jService.TRANSACTION_STATUS).toString()) == 0){
+                            //等待确认
+
+                        }else if(Integer.valueOf(rMap.get(Web3jService.TRANSACTION_STATUS).toString()) == 1){
+                            //成功
+                            esLsbaccountsService.updateSuccess(esLsbaccounts.getId(),new BigDecimal(rMap.get(Web3jService.TRANSACTION_GASUSED).toString()));
+                            //记录一条成功的ETH账目记录(入账)
+                            esEthaccountsService.addInSuccess(esLsbaccounts.getMemberId(), EsEthaccountsServiceImpl.DIC_TYPE_LSBTOETH,lsbToEth,esLsbaccounts.getId().toString());
+                        }else if(Integer.valueOf(rMap.get(Web3jService.TRANSACTION_STATUS).toString()) == 2){
+                            //失败
+                            esLsbaccountsService.updateFail(esLsbaccounts.getId());
+                        }
+                    }
+                }else{
+                    esLsbaccountsService.updateFail(esLsbaccounts.getId());
+                }
+            }
+        }
+    }
+
 
     /**
      * Eth转平台币
@@ -144,29 +227,74 @@ public class WalletService extends BaseBaseService {
      */
     public ResultUtil withdrawCashEthToLsb(BigDecimal sum,String playCode){
         LoginUser loginUser = getLoginUser();
-        EsEthwallet esEthwallet = esEthwalletService.findByMemberId(loginUser.getId());
-        SysConfig sysConfig = sysConfigService.getSysConfig();
         //验证支付密码
         playCode = AesEncryptUtil.encrypt_code(playCode, Constants.KEY_TOW);
         if(!playCode.equals(loginUser.getPaymentCode())){
             return  ResultUtil.errorJson(" wrong password !");
         }
-        BigDecimal EthToLsb = sum.divide(sysConfig.getEthToLsb(),50,BigDecimal.ROUND_DOWN);
+        SysConfig sysConfig = sysConfigService.getSysConfig();
+        BigDecimal ethToLsb = sum.divide(sysConfig.getEthToLsb(),4,BigDecimal.ROUND_DOWN);
         //判断余额是否可支付
-        if(!esEthwalletService.judgeBalance(loginUser.getId(),EthToLsb)){
+        if(!esEthwalletService.judgeBalance(loginUser.getId(),ethToLsb)){
             return ResultUtil.errorJson("not sufficient funds !");
         }
-        Map<String,Object> map = ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),sysConfig.getLsbAddress(),EthToLsb);
-        if(map == null && map.isEmpty()){
-            return ResultUtil.errorJson("Top-up failure !");
-        }
-        //新新增充值记录
-        boolean b = esLsbaccountsService.addInBeingprocessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_IN,sum,"-1",map.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map.get(web3jService.TRANSACTION_HASHVALUE).toString());
-        if(!b){
+//        Map<String,Object> map = ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),sysConfig.getLsbAddress(),EthToLsb);
+//        if(map == null && map.isEmpty()){
+//            return ResultUtil.errorJson("Top-up failure !");
+//        }
+//        //新新增充值记录
+//        boolean b = esLsbaccountsService.addInBeingprocessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_IN,sum,"-1",map.get(web3jService.TRANSACTION_HASHVALUE) == null ? "" : map.get(web3jService.TRANSACTION_HASHVALUE).toString());
+//        if(!b){
+//            return ResultUtil.errorJson("Transfer failed !");
+//        }
+        String uuId = CodeUtil.getUuid();
+        boolean b = esLsbaccountsService.addInBeingprocessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_IN,sum,uuId);
+        if(b) {
+            //kafka 执行公链转账操作
+            kafkaTemplate.send("withdrawCashEthToLsb","operId",uuId);
+        }else{
             return ResultUtil.errorJson("Transfer failed !");
         }
+
         return  ResultUtil.successJson("Transfer successful !");
     }
+    /**
+     * kafka Eth转平台币
+     * @param operId
+     */
+    public void kafkaWithdrawCashEthToLsb(String operId){
+        EsLsbaccounts esLsbaccounts = esLsbaccountsService.findEsLsbaccountsByOperId(operId);
+        if(esLsbaccounts != null && esLsbaccounts.getId() != null){
+            Member  member =  memberService.selectById(esLsbaccounts.getMemberId());
+            if(member != null && member.getId() != null){
+                SysConfig sysConfig = sysConfigService.getSysConfig();
+                BigDecimal ethToLsb = esLsbaccounts.getAmount().divide(sysConfig.getEthToLsb(),4,BigDecimal.ROUND_DOWN);
+                Map<String, Object>  rMap = web3jService.ethTransferAccounts(member.getWalletName(),member.getPaymentCodeWallet(),member.getPAddress(),sysConfig.getLsbAddress(),ethToLsb);
+                if(rMap != null && !rMap.isEmpty()){
+                    if(rMap.get(Web3jService.TRANSACTION_HASHVALUE) != null){
+                        String tHValue = rMap.get(Web3jService.TRANSACTION_HASHVALUE).toString();
+                        if(StringUtils.isNotBlank(tHValue)){
+                            esLsbaccounts.setTransferHashValue(tHValue);
+                            esLsbaccountsService.updateById(esLsbaccounts);
+                        }
+                    }
+                    if(Integer.valueOf(rMap.get(Web3jService.TRANSACTION_STATUS).toString()) == 0){
+                        //等待确认
+
+                    }else if(Integer.valueOf(rMap.get(Web3jService.TRANSACTION_STATUS).toString()) == 1){
+                        //成功
+                        esLsbaccountsService.updateSuccess(esLsbaccounts.getId(),new BigDecimal(rMap.get(Web3jService.TRANSACTION_GASUSED).toString()));
+                        //记录一条成功的ETH账目记录(出账)
+                        esEthaccountsService.addOutSuccess(esLsbaccounts.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,ethToLsb,esLsbaccounts.getId().toString(),new BigDecimal(rMap.get(Web3jService.TRANSACTION_GASUSED).toString()));
+                    }else if(Integer.valueOf(rMap.get(Web3jService.TRANSACTION_STATUS).toString()) == 2){
+                        //失败
+                        esLsbaccountsService.updateFail(esLsbaccounts.getId());
+                    }
+                }
+            }
+        }
+    }
+
 //
 //    public Map<String,Object> loginUserEthTransferAccounts(String toAddress,BigDecimal etherValue){
 //        LoginUser loginUser = super.getLoginUser();
@@ -174,38 +302,5 @@ public class WalletService extends BaseBaseService {
 //    }
 
 
-    /**
-     * ETh转账
-     * @param walletFileName 钱包名称
-     * @param payPassword 支付密码
-     * @param formAddress 出账地址
-     * @param toAddress 入账地址
-     * @param etherValue 金额
-     * @return
-     */
-    private Map<String,Object> ethTransferAccounts(String walletFileName,String payPassword,String formAddress,String toAddress,BigDecimal etherValue){
-        try {
-            //转账
-            Map<String,Object> map = new HashMap<String,Object>();
-            map.put("walletFileName",walletFileName);
-            map.put("payPassword",payPassword);
-            map.put("formAddress",formAddress);//出
-            map.put("toAddress",toAddress);//入
-            map.put("etherValue",etherValue);
-            String reStr = oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/transfer", super.getEncryptRequestHttpEntity(map), String.class);
 
-//            if (reStr == null || "".equals(reStr)) {
-//                return null;
-//            }
-//            ResultUtil  result = super.getDecryptResponseToResultUtil(reStr); //解密
-//            //判斷是否成功
-//            if (result != null && result.getCode() != ResultUtil.SUCCESS_CODE) {
-//                return null;
-//            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-       // return (Map<String, Object>) result.getExtend().get(ResultUtil.DATA_KEY);
-        return null;
-    }
 }

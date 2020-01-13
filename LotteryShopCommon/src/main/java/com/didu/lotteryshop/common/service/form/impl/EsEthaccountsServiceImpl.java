@@ -238,6 +238,15 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
     public boolean updateSuccess(Integer id,String dicTypeValue,BigDecimal gasFee){
         return  this.update(null,dicTypeValue,null,STATUS_SUCCESS,gasFee,id);
     }
+    /**
+     * 修改账目记录（成功）
+     * @param id 账目记录Id
+     * @param gasFee 燃气费
+     * @return
+     */
+    public boolean updateSuccess(Integer id,BigDecimal gasFee){
+        return  this.update(null,null,null,STATUS_SUCCESS,gasFee,id);
+    }
 
     /**
      * 修改账目记录（失败）
@@ -258,6 +267,14 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      */
     public boolean updateFail(Integer id,String dicTypeValue){
         return this.update(null,dicTypeValue,null,STATUS_FAIL,BigDecimal.ZERO,id);
+    }
+    /**
+     * 修改账目记录（失败）
+     * @param id 账目记录Id
+     * @return
+     */
+    public boolean updateFail(Integer id){
+        return this.update(null,null,null,STATUS_FAIL,BigDecimal.ZERO,id);
     }
 
 
@@ -324,7 +341,8 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      */
     public List<EsEthaccounts> findSATransferStatusWait(){
         Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
-        wrapper.and().eq("type",TYPE_OUT).eq("status",STATUS_BEINGPROCESSED);
+        wrapper.and("transfer_hash_value is not null and transfer_hash_value<>''")
+                .and().eq("type",TYPE_OUT).eq("status",STATUS_BEINGPROCESSED);
         return super.selectList(wrapper);
     }
 
@@ -430,6 +448,17 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
         currentPage = (currentPage - 1) * pageSize;
         pageEthRecord.setRecords(esEthaccountsMapper.findEthRecordPagination(currentPage,pageSize,startTime,endTime,memberId,status));
         return pageEthRecord;
+    }
+
+    /**
+     * 根据operId查询数据
+     * @param operId
+     * @return
+     */
+    public EsEthaccounts findEsEthaccountsByOperId(String operId){
+        Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
+        wrapper.eq("oper_id",operId);
+        return super.selectOne(wrapper);
     }
 
 }
