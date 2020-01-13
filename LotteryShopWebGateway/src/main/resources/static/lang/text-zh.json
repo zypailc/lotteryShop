@@ -61,6 +61,8 @@
     "Winning": "中奖",
     "onWinning": "未中奖",
     "search":"查询",
-    "walletAddress": "钱包地址"
+    "walletAddress": "钱包地址",
+    "last":"上一个",
+    "next":"下一个"
   }
 }

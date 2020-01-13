@@ -48,7 +48,7 @@ public class EsMemberPropertiesServiceImpl extends ServiceImpl<EsMemberPropertie
      * @param memberId
      * @return
      */
-    public ResultUtil updateNoticeIsView(String memberId){
+    public ResultUtil updateNoticeIsView(String memberId,String noticeId){
         boolean b = this.update(null,memberId,"0",EsMemberPropertiesServiceImpl.TYPE_NOTICE,null);
         if(b){
             return ResultUtil.successJson("success");

@@ -61,6 +61,8 @@
     "Winning": "Winning",
     "onWinning": "On Winning",
     "search":"Search",
-    "walletAddress": "Wallet address"
+    "walletAddress": "Wallet address",
+    "last":"Last",
+    "next":"Next"
   }
 }

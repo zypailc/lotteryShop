@@ -192,12 +192,13 @@ public class MemberController extends BaseBaseController {
 
     /**
      * 修改公告为已读
+     * @param noticeId
      * @return
      */
     @ResponseBody
     @RequestMapping("/updateNoticeIsRead")
-    public ResultUtil updateNoticeIsRead(){
-        return memberService.updateNoticeIsRead();
+    public ResultUtil updateNoticeIsRead(String noticeId){
+        return memberService.updateNoticeIsRead(noticeId);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.didu.lotteryshop.base.api.v1.service;
 
 import com.didu.lotteryshop.base.service.BaseBaseService;
+import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.entity.MIntro;
 import com.didu.lotteryshop.common.entity.MPartner;
 import com.didu.lotteryshop.common.entity.SysConfig;
@@ -107,15 +108,35 @@ public class BaseInfoService extends BaseBaseService {
      * @return
      */
     private List<Map<String,Object>> findMintro(String languageType,Integer type,Integer playType){
-        String sql = "select li_.id as imgId, i_"+languageType+".title as title,i_"+languageType+".content as content " +
-                " from m_intro mi_ " +
-                " left join ls_image li_ on (mi_.ls_image_id = li_.id)"+
-                " left join intro_"+languageType + " i_"+languageType + " on (mi_.language_id = i_"+languageType+".id) where 1=1 " ;
+        LoginUser loginUser = getLoginUser();
+        String sql = "select mi_.id,li_.id as imgId, i_"+languageType+".title as title,i_"+languageType+".content as content " +
+                "  , DATE_FORMAT(mi_.create_time,'%Y-%m-%d') as createTime";
+        //当用户在登陆状态
+        if(loginUser != null){
+            if(loginUser.getId() != null && !"".equals(loginUser.getId())){
+                sql += ", case when emp_.id is null then '1' else '0' end as isView";
+            }
+        }
+        sql+=" from m_intro mi_ " +
+        " left join ls_image li_ on (mi_.ls_image_id = li_.id)"+
+        " left join intro_"+languageType + " i_"+languageType + " on (mi_.language_id = i_"+languageType+".id) ";
+        if(loginUser != null){
+            if(loginUser.getId() != null && !"".equals(loginUser.getId())){
+                        sql +=" left join es_member_properties emp_ on (emp_.relevance_id = mi_.id)";
+
+            }
+        }
+        sql+="where 1=1 " ;
         if(type != null){
             sql +=" and mi_.type = " + type;
         }
         if(playType != null){
             sql +=" and mi_.play_type = " + playType;
+        }
+        if(loginUser != null){
+            if(loginUser.getId() != null && !"".equals(loginUser.getId())){
+                sql += " and emp_.member_id = '" + loginUser.getId() + "'";
+            }
         }
         sql += " order by mi_.sort,mi_.create_time ";
         return getSqlMapper().selectList(sql);

@@ -358,12 +358,15 @@ public class MemberService extends BaseBaseService {
      * 修改公告已被查看
      * @return
      */
-    public ResultUtil updateNoticeIsRead(){
+    public ResultUtil updateNoticeIsRead(String noticeId){
         LoginUser loginUser = getLoginUser();
         if(loginUser == null && loginUser.getId() == null ){
             return null;
         }
-        return memberPropertiesService.updateNoticeIsView(loginUser.getId());
+        if(noticeId != null && !"".equals(noticeId)){
+
+        }
+        return memberPropertiesService.updateNoticeIsView(loginUser.getId(),noticeId);
     }
 
 }
