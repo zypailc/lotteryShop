@@ -43,17 +43,17 @@ public class ZuulFilterConfig  extends ZuulFilter {
         //获取当前请求
         RequestContext requestContext = RequestContext.getCurrentContext();
         HttpServletRequest request = requestContext.getRequest();
-        Enumeration<String> headers = request.getHeaderNames();
-        while (headers.hasMoreElements()){
-            String name = headers.nextElement();
-            System.out.println(name + ":"+ request.getHeader(name));
-        }
-        /*System.out.println(request.getSession().getId());
-        System.out.println(RequestContext.getCurrentContext().getRequest().getSession().getId());
-        System.out.println(request.getSession().getAttribute("CHJ"));
-        System.out.println(request.getSession().getAttribute(Constants.SESSION_LOGIN_TOKEN));
-        System.out.println(request.getContextPath());
-        System.out.println(request.getRequestURI());*/
+//        Enumeration<String> headers = request.getHeaderNames();
+//        while (headers.hasMoreElements()){
+//            String name = headers.nextElement();
+//            System.out.println(name + ":"+ request.getHeader(name));
+//        }
+//        System.out.println(request.getSession().getId());
+//        System.out.println(RequestContext.getCurrentContext().getRequest().getSession().getId());
+//        System.out.println(request.getSession().getAttribute("CHJ"));
+//        System.out.println(request.getSession().getAttribute(Constants.SESSION_LOGIN_TOKEN));
+//        System.out.println(request.getContextPath());
+//        System.out.println(request.getRequestURI());
         String  requestURI =  request.getRequestURI();
         if(StringUtils.isNotBlank(requestURI) && requestURI.indexOf("api/") >= 0){
             String accessToken =  (String)request.getSession().getAttribute(Constants.SESSION_LOGIN_TOKEN);
