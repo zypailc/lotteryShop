@@ -142,18 +142,40 @@ public class LotteryAService extends LotteryABaseService {
      */
     public ResultUtil ethBuyLottery(String luckNum,Integer multipleNumber,String payPasswod){
         //判断支付密码是否错误 //支付密码错
-        if(!super.getLoginUser().getPaymentCode().equals(AesEncryptUtil.encrypt_code(payPasswod, Constants.KEY_TOW) )) return ResultUtil.errorJson("Payment password error!");
+        if(!super.getLoginUser().getPaymentCode().equals(AesEncryptUtil.encrypt_code(payPasswod, Constants.KEY_TOW) )){
+            String msg = "Payment password error!";
+            if(super.isChineseLanguage()){
+                msg = "支付密碼錯誤!";
+            }
+            return ResultUtil.errorJson("Payment password error!");
+        }
         //判断是否正在开奖中 //正在开奖，禁止购买
         LotteryaIssue lotteryaIssue = lotteryaIssueService.findCurrentPeriodLotteryaIssue();
-        if(!lotteryAContractService.isBuyLotteryA()) return ResultUtil.errorJson("Lottery drawing in progress, no purchase!");
+        if(!lotteryAContractService.isBuyLotteryA()){
+            String msg = "Lottery drawing in progress, no purchase!\"";
+            if(super.isChineseLanguage()){
+                msg = "正在開獎，禁止購買!";
+            }
+            return ResultUtil.errorJson(msg);
+        }
         //判断倍数是否超出最高倍数限制 //该注幸运号码已经达到最高注数，请降低倍数或更换其它幸运号码！
-        if(lotteryAContractService.isBuyMultipleNumber(lotteryaIssue.getId(),luckNum,multipleNumber)) return ResultUtil.errorJson("This note lucky number has reached the highest note number, please lower the multiple or replace other lucky number!");
+        if(lotteryAContractService.isBuyMultipleNumber(lotteryaIssue.getId(),luckNum,multipleNumber)){
+            String msg = "This note lucky number has reached the highest note number, please lower the multiple or replace other lucky number!";
+            if(super.isChineseLanguage()){
+                msg = "該幸運號碼已達到最高倍數限制，請降低倍數或更換其他幸運號碼！";
+            }
+            return ResultUtil.errorJson(msg);
+        }
         //判断账户余额是否充足
         LotteryaInfo lotteryaInfo = lotteryaInfoService.findLotteryaInfo();
         BigDecimal eValue = lotteryaInfo.getPrice().multiply(BigDecimal.valueOf(multipleNumber));
         if(!esEthwalletService.judgeBalance(super.getLoginUser().getId(),eValue)){
+            String msg = "Account balance is insufficient, please recharge first!";
+            if(super.isChineseLanguage()){
+                msg = "賬戶余額不足，請先充值！";
+            }
             //账户余额不足，请先充值！
-            return ResultUtil.errorJson("Account balance is insufficient, please recharge first!");
+            return ResultUtil.errorJson(msg);
         }
         //LotteryAContractResultEntity lacre = lotteryAContractService.buyLotterA(luckNum,multipleNumber,eValue);
         //存入购买记录
@@ -200,10 +222,20 @@ public class LotteryAService extends LotteryABaseService {
 //                    bool = lotteryaPmDetailService.buyPM(lotteryaBuy,lotteryaInfo);
 //                }
 //            }
-            return bool ? ResultUtil.successJson("Purchase succeeds!") :  ResultUtil.errorJson("Execution error, please contact administrator!");
+            if(bool){
+                String msg = "Purchase succeeds!";
+                if(super.isChineseLanguage()){
+                    msg = "購買成功!";
+                }
+                return ResultUtil.successJson(msg);
+            }
+        }
+        String msg = "Execution error, please contact administrator!";
+        if(super.isChineseLanguage()){
+            msg = "執行錯誤，請聯系管理員";
         }
         //执行错误，请联系管理员！
-       return ResultUtil.errorJson("Execution error, please contact administrator!");
+       return ResultUtil.errorJson(msg);
     }
 
     /**

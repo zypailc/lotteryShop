@@ -35,11 +35,19 @@ public class LotteryAController extends LotteryABaseController {
         if(StringUtils.isBlank(luckNum) || multipleNumber == null || StringUtils.isBlank(payPasswod) ||
            luckNum.length() != 3 || !NumberValidationUtil.isNumeric(luckNum)
         ){
+            String msg = "parameter error !";
+            if(super.isChineseLanguage()){
+                msg = "參數錯誤!";
+            }
             //参数错误
-            return  ResultUtil.errorJson("parameter error !");
+            return  ResultUtil.errorJson(msg);
         }
         if(multipleNumber <= 0 || multipleNumber > 100){
-            return ResultUtil.errorJson("If the multiple exceeds the maximum multiple, lower the multiple !");
+            String msg = "If the multiple exceeds the maximum multiple, lower the multiple !";
+            if(super.isChineseLanguage()){
+                msg = "如果倍數超過最大倍數，則降低倍數!";
+            }
+            return ResultUtil.errorJson(msg);
         }
         return lotteryAService.ethBuyLottery(luckNum,multipleNumber,payPasswod);
     }

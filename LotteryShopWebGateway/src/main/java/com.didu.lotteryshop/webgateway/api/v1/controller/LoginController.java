@@ -124,7 +124,11 @@ public class LoginController extends WebgatewayBaseController {
             //验证服务器删除TOken
             restTemplate.delete("http://auth-service/auth/api/exit?access_token="+accessToken);
         }
-        return ResultUtil.successJson("Exit the success！");
+        String msg = "Exit the success！";
+        if(super.isChineseLanguage()){
+            msg = "退出成功!";
+        }
+        return ResultUtil.successJson(msg);
     }
 
 
