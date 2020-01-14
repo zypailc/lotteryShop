@@ -57,14 +57,22 @@ public class WalletService extends BaseBaseService {
         //判断支付密码是否正确
         playCode = AesEncryptUtil.encrypt_code(playCode, Constants.KEY_TOW);
         if(!playCode.equals(loginUser.getPaymentCode())){
-            return ResultUtil.errorJson(" wrong password !");
+            String msg = "Payment password error!";
+            if(super.isChineseLanguage()){
+                msg = "支付密碼錯誤!";
+            }
+            return ResultUtil.errorJson(msg);
         }
         SysConfig sysConfig = sysConfigService.getSysConfig();
         //判断余额是否充足
         //提现一次所需要的燃气费
         BigDecimal gas = Web3jUtils.gasToEtherByBigDecimal(sysConfig.getGasPrice(),sysConfig.getGasLimit());
         if(!esEthwalletService.judgeBalance(loginUser.getId(),sum.add(gas))){
-            return ResultUtil.errorJson("The extracted ETH is not sufficient to support the GAS consumption !");
+            String msg = "If the balance is insufficient or the remaining balance is not enough to cover the GAS cost, please reduce the value of withdrawing ETH！";
+            if(super.isChineseLanguage()){
+                msg = "余額不足或剩余余額不夠GAS燃氣費用，請降低提現ETH數值";
+            }
+            return ResultUtil.errorJson(msg);
         }
         //本次提现手续费
         BigDecimal serviceCharge = sum.divide(new BigDecimal("100")).multiply(sysConfig.getWithdrawRatio());
@@ -76,7 +84,11 @@ public class WalletService extends BaseBaseService {
             //kafka 执行公链转账操作
             kafkaTemplate.send("kafkaWithdrawCashEth","operId",uuId);
         }else{
-            return ResultUtil.errorJson("Transfer failed !");
+            String msg = "Withdrawal failed, please try again !";
+            if(super.isChineseLanguage()){
+                msg = "提現失敗，請重試！";
+            }
+            return ResultUtil.errorJson(msg);
         }
         uuId = CodeUtil.getUuid();
         bool = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_DRAW,sum,uuId);
@@ -84,9 +96,17 @@ public class WalletService extends BaseBaseService {
             //kafka 执行公链转账操作
             kafkaTemplate.send("kafkaWithdrawCashEth","operId",uuId);
         }else{
-            return ResultUtil.errorJson("Transfer failed !");
+            String msg = "Withdrawal failed, please try again !";
+            if(super.isChineseLanguage()){
+                msg = "提現失敗，請重試！";
+            }
+            return ResultUtil.errorJson(msg);
         }
-        return  ResultUtil.successJson("Transfer successful !");
+        String msg = "Withdrawal successful !";
+        if(super.isChineseLanguage()){
+            msg = "提現成功！";
+        }
+        return  ResultUtil.successJson(msg);
     }
 
     /**
@@ -139,12 +159,20 @@ public class WalletService extends BaseBaseService {
         SysConfig sysConfig = sysConfigService.getSysConfig();
         //判断最低兑换限制
         if(sysConfig.getLsbwithdrawMin().compareTo(sum) < 0 ){
-            return ResultUtil.errorJson("The minimum exchange limit is "+sysConfig.getLsbwithdrawMin().toPlainString()+"!");
+            String msg = "The minimum exchange limit is "+sysConfig.getLsbwithdrawMin().toPlainString()+"!";
+            if(super.isChineseLanguage()){
+                msg = "最低兌換限額為 "+sysConfig.getLsbwithdrawMin().toPlainString()+"!";
+            }
+            return ResultUtil.errorJson(msg);
         }
         LoginUser loginUser = getLoginUser();//查询人员信息
         //判断平台币可用余额是否足够
         if(!esLsbwalletService.judgeBalance(loginUser.getId(),sum)){
-            return ResultUtil.errorJson("not sufficient funds !");
+            String msg = "not sufficient funds !";
+            if(super.isChineseLanguage()){
+                msg = "余額不足!";
+            }
+            return ResultUtil.errorJson(msg);
         }
         //计算可提现ETH
         BigDecimal lsbToEth = sum.divide(sysConfig.getLsbToEth(),4,BigDecimal.ROUND_DOWN);
@@ -169,9 +197,17 @@ public class WalletService extends BaseBaseService {
             esLsbaccountsService.addOutFail(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,sum,"-1",EsLsbaccountsServiceImpl.STATUS_MSG_FAIL);
         }
         if(!b){
-            return ResultUtil.errorJson("Transfer failed !");
+            String msg = "Exchange failed, please try again !";
+            if(super.isChineseLanguage()){
+                msg = "兌換失敗，請重試！";
+            }
+            return ResultUtil.errorJson(msg);
         }
-        return ResultUtil.successJson("Transfer successful !");
+        String msg = "Exchange successful !";
+        if(super.isChineseLanguage()){
+            msg = "兌換成功！";
+        }
+        return ResultUtil.successJson(msg);
     }
     /**
      * kafka 平台币转Eth
@@ -226,13 +262,21 @@ public class WalletService extends BaseBaseService {
         //验证支付密码
         playCode = AesEncryptUtil.encrypt_code(playCode, Constants.KEY_TOW);
         if(!playCode.equals(loginUser.getPaymentCode())){
-            return  ResultUtil.errorJson(" wrong password !");
+            String msg = "Payment password error!";
+            if(super.isChineseLanguage()){
+                msg = "支付密碼錯誤!";
+            }
+            return ResultUtil.errorJson(msg);
         }
         SysConfig sysConfig = sysConfigService.getSysConfig();
         BigDecimal ethToLsb = sum.divide(sysConfig.getEthToLsb(),4,BigDecimal.ROUND_DOWN);
         //判断余额是否可支付
         if(!esEthwalletService.judgeBalance(loginUser.getId(),ethToLsb)){
-            return ResultUtil.errorJson("not sufficient funds !");
+            String msg = "If the balance is insufficient or the remaining balance is not enough to cover the GAS cost, please reduce the value of ETH！";
+            if(super.isChineseLanguage()){
+                msg = "余額不足或剩余余額不夠GAS燃氣費用，請降低ETH數值";
+            }
+            return ResultUtil.errorJson(msg);
         }
 //        Map<String,Object> map = ethTransferAccounts(loginUser.getWalletName(),playCode,loginUser.getPAddress(),sysConfig.getLsbAddress(),EthToLsb);
 //        if(map == null && map.isEmpty()){
@@ -249,10 +293,17 @@ public class WalletService extends BaseBaseService {
             //kafka 执行公链转账操作
             kafkaTemplate.send("withdrawCashEthToLsb","operId",uuId);
         }else{
-            return ResultUtil.errorJson("Transfer failed !");
+            String msg = "Purchase failed, please try again !";
+            if(super.isChineseLanguage()){
+                msg = "購買失敗，請重試！";
+            }
+            return ResultUtil.errorJson(msg);
         }
-
-        return  ResultUtil.successJson("Transfer successful !");
+        String msg = "Purchase successful !";
+        if(super.isChineseLanguage()){
+            msg = "購買成功！";
+        }
+        return  ResultUtil.successJson(msg);
     }
     /**
      * kafka Eth转平台币

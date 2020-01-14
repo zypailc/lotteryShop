@@ -46,13 +46,25 @@ public class MemberController extends BaseBaseController {
     @RequestMapping("/bindWallet")
     public ResultUtil bindWallet(String paymentCode,String bAddress){
         if(paymentCode == null || "".equals(paymentCode)){
-            return ResultUtil.errorJson("Please enter your password!");
+            String msg = "Please fill in your payment password!";
+            if(super.isChineseLanguage()){
+                msg = "請填寫您的支付密碼!";
+            }
+            return ResultUtil.errorJson(msg);
         }
         if(bAddress == null || "".equals(bAddress)){
-            return ResultUtil.errorJson("Please enter your wallet address!");
+            String msg = "Please fill in your wallet address!";
+            if(super.isChineseLanguage()){
+                msg = "請填寫您的錢包地址!";
+            }
+            return ResultUtil.errorJson(msg);
         }
         if(!VerifyETHAddressUtil.isETHValidAddress(bAddress)){
-            return ResultUtil.errorJson("Please fill in your wallet address correctly!");
+            String msg = "Please fill in your wallet address correctly！";
+            if(super.isChineseLanguage()){
+                msg = "請正確填寫您的錢包地址";
+            }
+            return ResultUtil.errorJson(msg);
         }
         return memberService.bindWallet(paymentCode,bAddress);
     }
@@ -66,10 +78,18 @@ public class MemberController extends BaseBaseController {
     @RequestMapping("/updateBindWallet")
     public ResultUtil updateBindWallet(String bAddress){
         if(bAddress == null || "".equals(bAddress)){
-            return ResultUtil.errorJson("Please enter your wallet address !");
+            String msg = "Please fill in your wallet address!";
+            if(super.isChineseLanguage()){
+                msg = "請填寫您的錢包地址!";
+            }
+            return ResultUtil.errorJson(msg);
         }
         if(!VerifyETHAddressUtil.isETHValidAddress(bAddress)){
-            return ResultUtil.errorJson("Please fill in your wallet address correctly !");
+            String msg = "Please fill in your wallet address correctly！";
+            if(super.isChineseLanguage()){
+                msg = "請正確填寫您的錢包地址";
+            }
+            return ResultUtil.errorJson(msg);
         }
 
         return memberService.modifyBAddress(bAddress);
@@ -87,7 +107,11 @@ public class MemberController extends BaseBaseController {
         if(oldPassword == null || "".equals(oldPassword) ||
         newPassword == null || "".equals(newPassword) ||
         type == null || "".equals(type)){
-            return ResultUtil.errorJson("parameter error !");
+            String msg = "Parameter error !";
+            if(super.isChineseLanguage()){
+                msg = "參數錯誤";
+            }
+            return ResultUtil.errorJson(msg);
         }
         return  memberService.updatePassword(oldPassword,newPassword,type);
     }

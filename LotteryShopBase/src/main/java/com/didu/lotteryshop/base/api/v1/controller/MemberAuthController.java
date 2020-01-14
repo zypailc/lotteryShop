@@ -57,7 +57,11 @@ public class MemberAuthController extends BaseBaseController {
     public ResultUtil forgotPassword(String email){
         //验证邮箱格式
         if(!EmailUtil.verificationEmail(email)){
-            return ResultUtil.jsonObject("Please enter the correct email address !", ResultCode.FAILED.getCode());
+            String msg = "Please enter the correct email address !";
+            if(super.isChineseLanguage()){
+                msg = "請輸入正確的電子郵件地址";
+            }
+            return ResultUtil.errorJson(msg);
         }
         return memberService.forgotPassword(email);
     }

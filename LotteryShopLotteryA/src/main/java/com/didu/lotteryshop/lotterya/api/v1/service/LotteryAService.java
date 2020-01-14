@@ -147,7 +147,7 @@ public class LotteryAService extends LotteryABaseService {
             if(super.isChineseLanguage()){
                 msg = "支付密碼錯誤!";
             }
-            return ResultUtil.errorJson("Payment password error!");
+            return ResultUtil.errorJson(msg);
         }
         //判断是否正在开奖中 //正在开奖，禁止购买
         LotteryaIssue lotteryaIssue = lotteryaIssueService.findCurrentPeriodLotteryaIssue();

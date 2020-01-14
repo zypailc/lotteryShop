@@ -70,12 +70,20 @@ public class MemberService extends BaseBaseService {
         try {
             reStr = oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/generate", super.getEncryptRequestHttpEntity(map), String.class);
             if (reStr == null || "".equals(reStr)) {
-                return ResultUtil.errorJson("Wallet creation failed !");
+                String msg = "Wallet creation failed !";
+                if(super.isChineseLanguage()){
+                    msg = "錢包創建失敗!";
+                }
+                return ResultUtil.errorJson(msg);
             }
             result = super.getDecryptResponseToResultUtil(reStr); //解密
             //判斷是否成功
             if (result != null && result.getCode() != ResultUtil.SUCCESS_CODE) {
-                return ResultUtil.errorJson("Wallet creation failed !");
+                String msg = "Wallet creation failed !";
+                if(super.isChineseLanguage()){
+                    msg = "錢包創建失敗!";
+                }
+                return ResultUtil.errorJson(msg);
             }
             resultMap = (Map<String, Object>) result.getExtend().get(ResultUtil.DATA_KEY);
             if (resultMap != null) {
@@ -91,7 +99,11 @@ public class MemberService extends BaseBaseService {
                 member.setPaymentCodeWallet(paymentCodeWallet);
                 b = memberServiceImp.updateMember(member);
                 if(!b){
-                    return ResultUtil.errorJson("Failed to initialize wallet!");
+                    String msg = "Failed to initialize wallet!";
+                    if(super.isChineseLanguage()){
+                        msg = "錢包初始化失敗！";
+                    }
+                    return ResultUtil.errorJson(msg);
                 }
             }
         }catch (Exception e){
@@ -100,9 +112,17 @@ public class MemberService extends BaseBaseService {
         //初始化钱包
         EsEthwallet esEthwallet = esEthwalletService.initInsert(loginUser.getId());
         if (esEthwallet == null) {
-            return ResultUtil.errorJson("Failed to initialize wallet!");
+            String msg = "Failed to initialize wallet!";
+            if(super.isChineseLanguage()){
+                msg = "錢包初始化失敗！";
+            }
+            return ResultUtil.errorJson(msg);
         }
-        return ResultUtil.successJson("successfully !");
+        String msg = "Binding success !";
+        if(super.isChineseLanguage()){
+            msg = "綁定成功！";
+        }
+        return ResultUtil.successJson(msg);
     }
 
     /**
@@ -117,9 +137,17 @@ public class MemberService extends BaseBaseService {
         member.setBAddress(bAddress);
         boolean b = memberServiceImp.updateMember(member);
         if(b){
-            return ResultUtil.successJson("modify successfully !");
+            String msg = "modify successfully !";
+            if(super.isChineseLanguage()){
+                msg = "修改成功！";
+            }
+            return ResultUtil.successJson(msg);
         }
-        return ResultUtil.successJson("fail to modify !");
+        String msg = "fail to modify !";
+        if(super.isChineseLanguage()){
+            msg = "修改失敗！";
+        }
+        return ResultUtil.successJson(msg);
     }
 
     /**
@@ -145,7 +173,11 @@ public class MemberService extends BaseBaseService {
         wrapper.eq("email",member.getEmail());
         Member m = memberServiceImp.selectOne(wrapper);
         if(m != null && m.getEmail() != null){
-            return ResultUtil.errorJson("The email address has been registered !");
+            String msg = "The email address has been registered !";
+            if(super.isChineseLanguage()){
+                msg = "該郵箱已註冊，請使用其他郵箱";
+            }
+            return ResultUtil.errorJson(msg);
         }
         //随机生成一个秘钥jsonObjectjsonObject
         String secretKey = Constants.KEY_TOW;
@@ -174,8 +206,13 @@ public class MemberService extends BaseBaseService {
                 member.setGeneralizeMemberLevel(memberUp.getGeneralizeMemberLevel() == null ? 0:(memberUp.getGeneralizeMemberLevel()+1));
             }
         }
+        String subject = "ColourBall register password";
         String emailStr = "Your account number is : " + member.getEmail() + "<br/>　Your password is : "+ password;
-        mailService.sendSimpleMailMember(member,"password",emailStr);
+        if(super.isChineseLanguage()){
+            subject = "ColourBall 註冊密碼";
+            emailStr = "您的賬號是 : " + member.getEmail() + "<br/>　您的密码是 : "+ password;
+        }
+        mailService.sendSimpleMailMember(member,subject,emailStr);
         //保存用户信息
         boolean b = memberServiceImp.insert(member);
         if(b){
@@ -187,10 +224,19 @@ public class MemberService extends BaseBaseService {
             //注册送代领币
             if(b)
                b = sysTaskService.TaskRegister(member.getId());
-            if(b)
-                return ResultUtil.successJson("Registered successfully , please log in !");
+            if(b) {
+                String msg = "Registered successfully , please log in !";
+                if(super.isChineseLanguage()){
+                    msg = "註冊成功，請登錄!";
+                }
+                return ResultUtil.successJson(msg);
+            }
         }
-        return ResultUtil.errorJson("Registered error , please operate again !");
+        String msg = "Registration failed. Please try again !";
+        if(super.isChineseLanguage()){
+            msg = "註冊失敗，請再試壹次！";
+        }
+        return ResultUtil.errorJson(msg);
     }
 
     /**
@@ -217,11 +263,22 @@ public class MemberService extends BaseBaseService {
         wrapper.allEq(map);
         boolean b = memberServiceImp.update(member,wrapper);
         if(b) {
+            String subject = "ColourBall rnew password";
             String emailStr = "Your account number is : " + member.getEmail() + "<br/>　Your password is : "+ password;
-            mailService.sendSimpleMailMember(member, "new password", emailStr);
-            return ResultUtil.successJson("Your new password has been sent to your email !");
+            String msg = "Your new password has been sent to your email !";
+            if(super.isChineseLanguage()){
+                subject = "ColourBall 新密碼";
+                emailStr = "您的賬號是 : " + member.getEmail() + "<br/>　您的密码是 : "+ password;
+                msg = "您的新密碼已發送到您的電子郵件！";
+            }
+            mailService.sendSimpleMailMember(member, subject, emailStr);
+            return ResultUtil.successJson(msg);
         }
-        return  ResultUtil.errorJson("error , please operate again !");
+        String msg = "error , please operate again !";
+        if(super.isChineseLanguage()){
+            msg = "錯誤，請重新操作!";
+        }
+        return  ResultUtil.errorJson(msg);
     }
 
     /**
@@ -232,9 +289,17 @@ public class MemberService extends BaseBaseService {
     public ResultUtil headPortrait(Member member){
         boolean flag = memberServiceImp.updateById(member);
         if(flag) {
-            return ResultUtil.successJson("modify successfully !");
+            String msg = "modify successfully !";
+            if(super.isChineseLanguage()){
+                msg = "修改成功！";
+            }
+            return ResultUtil.successJson(msg);
         }else {
-            return ResultUtil.successJson("fail to modify !");
+            String msg = "fail to modify !";
+            if(super.isChineseLanguage()){
+                msg = "修改失敗！";
+            }
+            return ResultUtil.errorJson(msg);
         }
     }
 
@@ -324,7 +389,11 @@ public class MemberService extends BaseBaseService {
         if("1".equals(type)){
             //login
             if(!loginUser.getPassword().equals(oldPassword)){
-                return ResultUtil.errorJson("Original password error !");
+                String msg = "Original password error. Fail to modify !";
+                if(super.isChineseLanguage()){
+                    msg = "原始密碼錯誤,修改失敗！";
+                }
+                return ResultUtil.errorJson(msg);
             }
             member.setPassword(newPassword);
         }
@@ -332,16 +401,28 @@ public class MemberService extends BaseBaseService {
         if("2".equals(type)){
             //play code
             if(!loginUser.getPaymentCode().equals(oldPassword)){
-                return ResultUtil.errorJson("Original password error !");
+                String msg = "Original password error. Fail to modify !";
+                if(super.isChineseLanguage()){
+                    msg = "原始密碼錯誤,修改失敗！";
+                }
+                return ResultUtil.errorJson(msg);
             }
             member.setPaymentCode(newPassword);
         }
         member.setId(loginUser.getId());
         boolean b = memberServiceImp.updateById(member);
         if(!b){
-            return ResultUtil.errorJson("system error , please try again !");
+            String msg = "System error , please try again !";
+            if(super.isChineseLanguage()){
+                msg = "系統錯誤，請重試！";
+            }
+            return ResultUtil.errorJson(msg);
         }
-        return ResultUtil.successJson("modify successfully !");
+        String msg = "modify successfully !";
+        if(super.isChineseLanguage()){
+            msg = "修改成功！";
+        }
+        return ResultUtil.successJson(msg);
     }
 
     /**

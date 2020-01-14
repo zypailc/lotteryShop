@@ -40,7 +40,11 @@ public class WalletController extends BaseBaseController {
     @RequestMapping("/withdrawCashEth")
     public ResultUtil withdrawCashEth(BigDecimal num,String playCode){
         if(num == null || num.compareTo(BigDecimal.ZERO) <= 0 || StringUtils.isBlank(playCode)){
-            return ResultUtil.errorJson("Parameter error!");
+            String msg = "Parameter error !";
+            if(super.isChineseLanguage()){
+                msg = "參數錯誤";
+            }
+            return ResultUtil.errorJson(msg);
         }
         return walletService.withdrawCashEth(num,playCode);
     }
