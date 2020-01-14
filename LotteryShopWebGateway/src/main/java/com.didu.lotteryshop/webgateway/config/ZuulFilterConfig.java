@@ -55,13 +55,13 @@ public class ZuulFilterConfig  extends ZuulFilter {
 //        System.out.println(request.getSession().getAttribute(Constants.SESSION_LOGIN_TOKEN));
 //        System.out.println(request.getContextPath());
 //        System.out.println(request.getRequestURI());
-//        Cookie[] cookies = request.getCookies();
-//        for(Cookie c : cookies){
-//            if(c.getName() != null && "somoveLanguage".equals(c.getName())){
-//                requestContext.addZuulRequestHeader("somoveLanguage",c.getName());
-//                break;
-//            }
-//        }
+        Cookie[] cookies = request.getCookies();
+        for(Cookie c : cookies){
+            if(c.getName() != null && "somoveLanguage".equals(c.getName())){
+                requestContext.addZuulRequestHeader("somoveLanguage",c.getName());
+                break;
+            }
+        }
         String  requestURI =  request.getRequestURI();
         if(StringUtils.isNotBlank(requestURI) && requestURI.indexOf("api/") >= 0){
             String accessToken =  (String)request.getSession().getAttribute(Constants.SESSION_LOGIN_TOKEN);

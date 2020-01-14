@@ -83,7 +83,7 @@
             //     layer.msg("Please enter the correct email address !");
             //     return;
             // }
-			var index = layer.load(1);
+			var index = layer.load(3,{shade: [0.8, '#393D49']});
 			$.ajax({
 					type: "get",
 					url: "/apiauthorization/base/authorization/v1/member/register",

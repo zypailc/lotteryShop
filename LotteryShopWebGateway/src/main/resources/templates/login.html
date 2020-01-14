@@ -76,12 +76,14 @@
 
 	<script type="text/javascript">
 		function login(){
+			var index = layer.load(3,{shade: [0.8, '#393D49']});
 			$.ajax({
 				url:"${projectPath}/web/authUserLogin",
 				data:$('#reply_form').serializeArray(),
 				type:"post",
 				dataType:"json",
 				success:function(data){
+					layer.close(index);
 					layer.msg(data.extend.data.msg);
 					if(data.success){
 						window.location.href = data.extend.data.rdirectUrl;
