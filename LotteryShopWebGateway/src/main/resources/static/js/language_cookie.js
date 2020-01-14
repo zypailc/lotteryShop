@@ -13,7 +13,7 @@ function SetCookie(name, value ,setDay) {
     }
     var exp = new Date();    //new Date("December 31, 9998");
     exp.setTime(exp.getTime() + setDay * 24 * 60 * 60 * 1000);
-    document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+    document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString()+";path=/";
 }
 //删除谷歌翻译插件存储的cookie值
 function delCookie(name) {
@@ -64,13 +64,23 @@ function getLanguage(){
 $(function () {
     var uulanguage = (navigator.language || navigator.browserLanguage).toLowerCase();
     var languageType = "en";
+    var cookieLanguage = getCookie(name);
     //判断浏览器的语言
-    if (getCookie(name) && getCookie(name) != "") {
-        if (getCookie(name) == "zh") {
+    if (cookieLanguage && cookieLanguage != "") {
+        var v = getCookie("googtrans");
+        if((!v || v == null || v == "") && cookieLanguage != "zh" && cookieLanguage != "en" ){
+            if (uulanguage.indexOf("zh") > -1){
+                cookieLanguage = "zh";
+            }else{
+                cookieLanguage = "en";
+            }
+            SetCookie(name, cookieLanguage);
+        }
+        if (cookieLanguage == "zh") {
             languageType = "zh";
             $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "zh" });
         }
-        if (getCookie(name) == "en") {
+        if (cookieLanguage == "en") {
             $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
         }       
     }else{

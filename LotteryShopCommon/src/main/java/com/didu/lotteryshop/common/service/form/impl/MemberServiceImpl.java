@@ -135,4 +135,26 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> {
         return super.updateById(member);
     }
 
+    /**
+     *  更新用户的登录信息
+     * @param ip
+     * @return
+     */
+    public boolean updateMemberLoginInfoByEmail(String email,String ip){
+        Member member = this.findMemberByEmail(email);
+        member.setLoginTime(new Date());
+        member.setLoginIp(ip);
+        return super.updateById(member);
+    }
+
+    /**
+     * 根据邮箱查询用户
+     * @param email
+     * @return
+     */
+    public Member findMemberByEmail(String email){
+        Wrapper<Member> wrapper = new EntityWrapper<>();
+        wrapper.eq("email",email);
+        return super.selectOne(wrapper);
+    }
 }

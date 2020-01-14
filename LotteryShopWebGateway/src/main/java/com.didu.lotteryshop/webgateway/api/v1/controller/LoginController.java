@@ -41,6 +41,7 @@ public class LoginController extends WebgatewayBaseController {
     @RequestMapping("/web/authUserLogin")
     @ResponseBody
     public ResultUtil authUserLogin(String username,String password,String rdirectUrl){
+        Map<String,String> map = new HashMap<>();
         if(StringUtils.isBlank(rdirectUrl)) rdirectUrl = "/web/authIndex";
         if(StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)){
             MultiValueMap<String, Object> paramMap = new LinkedMultiValueMap<String, Object>();
@@ -49,10 +50,6 @@ public class LoginController extends WebgatewayBaseController {
             paramMap.add("grant_type","password");
             paramMap.add("client_id","browser");
             paramMap.add("client_secret","browser");
-            //HttpHeaders headers = new HttpHeaders();
-            //headers.setContentType(MediaType.valueOf("application/json;UTF-8"));
-           // HttpEntity<Map> httpEntity = new HttpEntity<Map>(paramMap,headers);
-           // ResponseEntity<Map> rMapList = restTemplate.postForEntity("http://auth-service/auth/oauth/token",httpEntity,Map.class);
             Map<String,String> rMap = restTemplate.postForObject("http://auth-service/auth/oauth/token",paramMap,Map.class);
             if(rMap != null && !rMap.isEmpty()){
                 String accessToken = rMap.get("access_token");
@@ -61,14 +58,23 @@ public class LoginController extends WebgatewayBaseController {
                     super.getRequest().getSession().setAttribute(Constants.SESSION_LOGIN_TOKEN,accessToken);
                     super.getRequest().getSession().setAttribute(Constants.SESSION_LOGIN_TOKEN_TYPE,tokenType);
                     super.getRequest().getSession().setAttribute("LoginUserName",username);
-                    Map<String,String> map = new HashMap<>();
-                    map.put("msg","Login the success！");
+                    memberService.updateMemberLoginInfoByEmail(username,super.getRequestIp());
+                    if(super.isChineseLanguage()){
+                        map.put("msg","登錄成功！");
+                    }else{
+                        map.put("msg","Login the success！");
+                    }
                     map.put("rdirectUrl",rdirectUrl);
                     return ResultUtil.successJson(map);
                 }
             }
         }
-        return ResultUtil.errorJson("User or password error!");
+        if(super.isChineseLanguage()){
+            map.put("msg","用戶或密碼錯誤！");
+        }else{
+            map.put("msg","User or password error!");
+        }
+        return ResultUtil.errorJson(map);
     }
 
     /**
@@ -78,24 +84,24 @@ public class LoginController extends WebgatewayBaseController {
      * @param accessToken
      * @param rdirectUrl
      */
-    @RequestMapping("/web/loginSession")
-    public String loginSession(Model model,HttpServletRequest request, HttpServletResponse response, String accessToken, String rdirectUrl, Principal user){
-        //try {
-            request.getSession().setAttribute(Constants.SESSION_LOGIN_TOKEN,accessToken);
-            //登陆之后只会有调到两个页面（主页和竞彩中心，个人中心只有登陆之后才可以进，如果是登陆注册直接跳转主页）
-            //解析需要跳转的地址，如果是需要跳转竞彩中心，不需要管，如果是其他，直接跳转主页
-            //rdirectUrl = rdirectUrl.substring(rdirectUrl.indexOf("/"),rdirectUrl.length());
-            model = getModel(model);
-            memberService.updateMemberLoginInfo(getLoginUser().getId(),getRequestIp(request));
-            if(Constants.PLAYTHELOTTERY_URL.equals(rdirectUrl)){
-                return Constants.PLAYTHELOTTERY;
-            }
-            return Constants.INDEX;
-            //response.sendRedirect(rdirectUrl);
-        /*} catch (IOException e) {
-            e.printStackTrace();
-        }*/
-    }
+//    @RequestMapping("/web/loginSession")
+//    public String loginSession(Model model,HttpServletRequest request, HttpServletResponse response, String accessToken, String rdirectUrl, Principal user){
+//        //try {
+//            request.getSession().setAttribute(Constants.SESSION_LOGIN_TOKEN,accessToken);
+//            //登陆之后只会有调到两个页面（主页和竞彩中心，个人中心只有登陆之后才可以进，如果是登陆注册直接跳转主页）
+//            //解析需要跳转的地址，如果是需要跳转竞彩中心，不需要管，如果是其他，直接跳转主页
+//            //rdirectUrl = rdirectUrl.substring(rdirectUrl.indexOf("/"),rdirectUrl.length());
+//            model = getModel(model);
+//            memberService.updateMemberLoginInfo(getLoginUser().getId(),getRequestIp(request));
+//            if(Constants.PLAYTHELOTTERY_URL.equals(rdirectUrl)){
+//                return Constants.PLAYTHELOTTERY;
+//            }
+//            return Constants.INDEX;
+//            //response.sendRedirect(rdirectUrl);
+//        /*} catch (IOException e) {
+//            e.printStackTrace();
+//        }*/
+//    }
 
     /**
      * 取消登录
@@ -121,29 +127,6 @@ public class LoginController extends WebgatewayBaseController {
         return ResultUtil.successJson("Exit the success！");
     }
 
-    /**
-     * 获取用户Ip
-     * @param request
-     * @return
-     */
-    private String getRequestIp(HttpServletRequest request){
-        String ip = request.getHeader("x-forwarded-for");
-             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                     ip = request.getHeader("Proxy-Client-IP");
-                 }
-             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                     ip = request.getHeader("WL-Proxy-Client-IP");
-                 }
-             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                     ip = request.getHeader("HTTP_CLIENT_IP");
-                 }
-             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                     ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-                 }
-             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                     ip = request.getRemoteAddr();
-                 }
-             return ip;
-    }
+
 
 }

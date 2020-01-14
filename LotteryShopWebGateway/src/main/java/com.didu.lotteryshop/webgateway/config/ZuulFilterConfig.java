@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
 import javax.servlet.ServletInputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
@@ -54,6 +55,13 @@ public class ZuulFilterConfig  extends ZuulFilter {
 //        System.out.println(request.getSession().getAttribute(Constants.SESSION_LOGIN_TOKEN));
 //        System.out.println(request.getContextPath());
 //        System.out.println(request.getRequestURI());
+        Cookie[] cookies = request.getCookies();
+        for(Cookie c : cookies){
+            if(c.getName() != null && "somoveLanguage".equals(c.getName())){
+                requestContext.addZuulRequestHeader("somoveLanguage",c.getName());
+                break;
+            }
+        }
         String  requestURI =  request.getRequestURI();
         if(StringUtils.isNotBlank(requestURI) && requestURI.indexOf("api/") >= 0){
             String accessToken =  (String)request.getSession().getAttribute(Constants.SESSION_LOGIN_TOKEN);

@@ -32,13 +32,22 @@ public class MemberAuthController extends BaseBaseController {
     @ResponseBody
     @RequestMapping("/register")//可不过验证访问
     public ResultUtil register(Member member){
+
         //判断昵称是否为空
         if(member.getMemberName() == null || "".equals(member.getMemberName())){
-            return ResultUtil.errorJson("pet name cannot be empty !");
+            String msg = "User name cannot be empty !";
+            if(super.isChineseLanguage()){
+                msg = "用戶名不能為空!";
+            }
+            return ResultUtil.errorJson(msg);
         }
         //验证邮箱格式
         if(!EmailUtil.verificationEmail(member.getEmail())){
-            return ResultUtil.errorJson("Please enter the correct email address !");
+            String msg = "Please enter the correct email address !";
+            if(super.isChineseLanguage()){
+                msg = "請輸入正確的電子郵件地址!";
+            }
+            return ResultUtil.errorJson(msg);
         }
         return memberService.register(member);
     }
