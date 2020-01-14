@@ -3,7 +3,7 @@
 
     <!-- Logo -->
     <div class="logo mr-auto">
-        <a class="back" href="#"><span>&lt; Back</span></a>
+        <a class="back" href="#">&lt; <span data-localize="base.back">Back</span></a>
     </div>
 
     <nav class="main_nav justify-self-end text-right">
@@ -16,15 +16,15 @@
 <!--<script src="../js/language_select.js"></script>-->
 <script src="https://translate.google.cn/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script src="../js/language_cookie.js"></script>
-<script type="text/javascript">
+<script>
     function googleTranslateElementInit() {
         new google.translate.TranslateElement(
             {
                 //这个是当前页面的原语言，便于插件精确翻译
                 pageLanguage: 'en',
                 //这个是你需要翻译的语言，比如你只需要翻译成越南和英语，这里就只写en,vi
-                //includedLanguages: 'en,zh-TW,hr,cs,da,nl,fr,de,el,iw,hu,ga,it,ja,ko,pt,ro,ru,sr,es,th,vi',
-                includedLanguages: 'ja,zh-TW,en,da',
+                //includedLanguages: 'ar,en,zh-TW,hr,cs,da,nl,fr,de,el,iw,hu,ga,it,ja,ko,pt,ro,ru,sr,es,th,vi',
+                includedLanguages: 'ja,zh-TW,en,da,ar,fr,ru,de',
                 //选择语言的样式，这个是面板，还有下拉框的样式，具体的记不到了，找不到api~~
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
                 //自动显示翻译横幅，就是翻译后顶部出现的那个，有点丑，这个属性没有用的话，请看文章底部的其他方法
@@ -38,14 +38,22 @@
         //初始化语言选择
         var language_navigator = getLanguage();
         //$(".language_select_onchange").prop('value',language_cookie);
-        var imgHtml = "<img class='language_img' src='../images/flags/"+ language_navigator +".png'> ";
+        var imgHtml = "<img class='language_img' src='../images/flags/view/"+ language_navigator +".png'> ";
         $(".a_language_select_onchange").html(imgHtml);
-        if(languageType != 'zh'){
-            languageType = 'en'
-        }
         var memberId = "${loginUser.id!''}";
         var languageType = getLanguage();
-        infoContentNotice(languageType);
+        infoContentNotice(languageType,memberId);
+        if(language_navigator && language_navigator != "zh" && language_navigator != "en"){
+            var yText =  $('.logo').find("a").html();
+            var  index =  layer.msg("Please wait while switching languages！",{icon: 16,shade: [0.8, '#393D49'],time:6000});
+            var setIntervalId = setInterval(function(){
+                var xText =  $('.logo').find("a").html();
+                if(yText != xText){
+                    layer.close(index);
+                    clearInterval(setIntervalId);
+                }
+            },1000);
+        }
     })
 
     function language_select_onchange(e,language_cookie){
@@ -58,15 +66,20 @@
             language_select = $(e).attr("data_value") || "en";
             language_select_1 = $(e).attr("data_value") || "en";
         }
+        if(getLanguage() == language_select ) return;
         //获取浏览器的语言
-        imgHtml = "<img class='language_img' src='../images/flags/"+ language_select +".png'> ";
+        imgHtml = "<img class='language_img' src='../images/flags/view/"+ language_select +".png'> ";
         $(".a_language_select_onchange").html(imgHtml);
         var browserLanguage = navigator.language.toLowerCase();
         var browserLanguage_array;
-        var langeage_zh = {ja:"日语",da:"丹麦语"};//中文繁体
-        var langeage_en = {ja:"Japanese",da:"Danish"};//英文
-        var language_ja = {ja:"日本語",da:"デンマーク語"};//日本
-        var language_da = {ja:"Japansk",da:"Dansk"};//丹麦
+        var langeage_zh = {ja:"日语",da:"丹麦语",ar:"阿拉伯语",de:"德语",fr:"法语",ru:"俄语"};//中文繁体
+        var langeage_en = {ja:"Japanese",da:"Danish",ar:"Arabic",de:"German",fr:"French",ru:"Russian"};//英文
+        var language_ja = {ja:"日本語",da:"デンマーク語",ar:"アラビア語",de:"ドイツ語",fr:"フランス語",ru:"ロシア語"};//日本
+        var language_da = {ja:"Japansk",da:"Dansk",ar:"Arabisk",de:"Tysk",fr:"Fransk",ru:"Russisk"};//丹麦
+        var language_ar = {ja:"اليابانية",da:"الدانماركية",ar:"العربية",de:"الألمانية",fr:"الفرنسية",ru:"الروسية"};//阿拉伯
+        var language_de = {ja:"Japanisch",da:"Dänisch",ar:"Arabisch",de:"Deutsch",fr:"Französisch",ru:"Russisch"};//德文
+        var language_ru = {ja:"японский",da:"датский",ar:"арабский",de:"немецкий",fr:"французский",ru:"русский"};//俄语
+        var language_fr = {ja:"Japonais",da:"Danois",ar:"Arabe",de:"Allemand",fr:"Français",ru:"Russe"};//丹麦
         var name = "somoveLanguage";
         SetCookie(name, language_select_1);
         var flag = true;
@@ -88,13 +101,38 @@
                     browserLanguage_array = language_da;
                     language_select = language_da[language_select];
                     break;
+                case 'ar':
+                    browserLanguage_array = language_da;
+                    language_select = language_ar[language_select];
+                    break;
+                case 'de':
+                    browserLanguage_array = language_da;
+                    language_select = language_de[language_select];
+                    break;
+                case 'ru':
+                    browserLanguage_array = language_da;
+                    language_select = language_ru[language_select];
+                    break;
+                case 'fr':
+                    browserLanguage_array = language_da;
+                    language_select = language_fr[language_select];
+                    break;
                 default:
             }
         }
         if((language_select_1 != 'zh' && language_select_1 != 'en')) {
             $("iframe.goog-te-menu-frame").contents().find("table").find("span.text").each(function (i, data) {
                 if ($(this).html() == language_select) {
+                    var yText =  $('.logo').find("a").html();
                     $(this).click();
+                    var  index =  layer.msg("Please wait while switching languages！",{icon: 16,shade: [0.8, '#393D49'],time:60000});
+                    var setIntervalId = setInterval(function(){
+                        var xText =  $('.logo').find("a").html();
+                        if(yText != xText){
+                            layer.close(index);
+                            clearInterval(setIntervalId);
+                        }
+                    },1000);
                 }
             })
         }else {
@@ -102,5 +140,25 @@
             delCookie("googtrans");
             location.reload();
         }
+    }
+    function logOut(){
+        var b = confirm("Determine the exit !")
+        if(!b){
+            return false;
+        }
+        $.ajax({
+            type: "get",
+            url: "/web/loginOut",
+            dataType: "json",
+            success:function (data){
+                if(data.code == '200'){
+                    layer.msg(data.extend.data);
+                    set_Time_out("../web/authIndex");
+                }
+                if(data == '500'){
+                    layui_open(data.msg)
+                }
+            }
+        })
     }
 </script>

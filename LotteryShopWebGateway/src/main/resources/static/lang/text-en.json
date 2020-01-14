@@ -63,6 +63,9 @@
     "search":"Search",
     "walletAddress": "Wallet address",
     "last":"Last",
-    "next":"Next"
+    "next":"Next",
+    "back": "Back",
+    "games":"Games",
+    "play": "Play"
   }
 }

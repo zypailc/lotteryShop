@@ -63,6 +63,9 @@
     "search":"查询",
     "walletAddress": "钱包地址",
     "last":"上一个",
-    "next":"下一个"
+    "next":"下一个",
+    "back": "返回",
+    "games":"游戏",
+    "play": "玩"
   }
 }

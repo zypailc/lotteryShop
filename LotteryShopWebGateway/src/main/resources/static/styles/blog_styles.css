@@ -302,7 +302,7 @@ section
 .home
 {
 	width: 100%;
-	height: 990px;
+	height: 796px;
 }
 .home_background_container
 {
@@ -310,7 +310,7 @@ section
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 88%;
+	height: 100%;
 }
 .home_background_container canvas {
     width:100%;
@@ -323,6 +323,7 @@ section
 .home_background_container .canvaszz{
     width:100%;
     background-image: url(../../images/bgpurper3.jpg);
+	background-size:100% 100%;
     height:100%;
     position:absolute;
     z-index:1;

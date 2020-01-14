@@ -93,13 +93,16 @@
     .notice_detail{
 
     }
+    .logo_class_before{
+        color: white !important;
+    }
 </style>
 <!-- Header -->
 <header id="header_load" class="header d-flex flex-row justify-content-end align-items-center trans_200">
 
     <!-- Logo -->
     <div class="logo mr-auto">
-        <a href="../web/authIndex">Ran<span>Lottery</span></a>
+        <a href="../web/authIndex"><span class="logo_class_before" data-localize="base.play">Play</span><span data-localize="base.games">Games</span></a>
     </div>
 
     <!-- Navigation -->
@@ -304,7 +307,7 @@
         infoContentNotice(languageType,memberId);
         if(language_navigator && language_navigator != "zh" && language_navigator != "en"){
             var yText =  $('.logo').find("a").html();
-            var  index =  layer.msg("Please wait while switching languages！",{icon: 16,shade: [0.8, '#393D49'],time:60000});
+            var  index =  layer.msg("Please wait while switching languages！",{icon: 16,shade: [0.8, '#393D49'],time:6000});
             var setIntervalId = setInterval(function(){
                 var xText =  $('.logo').find("a").html();
                 if(yText != xText){

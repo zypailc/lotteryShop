@@ -288,6 +288,12 @@
 	.hero_side_text p{
 		color: black;
 	}
+	.services_slider_container{
+		height: 450px!important;
+	}
+	.services_slider{
+		height: 450px !important;
+	}
 }
 
 /************
@@ -402,7 +408,7 @@
 	}
 	.services
 	{
-		padding-top: 100px;
+		padding-top: 20px;
 		padding-bottom: 0px;
 	}
 	.services_slider .owl-stage
