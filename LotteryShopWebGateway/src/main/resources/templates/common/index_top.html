@@ -132,7 +132,7 @@
             </div>
             <div>
                 <a class="a_language_select_onchange dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="language_img" src="../images/flags/zh.png"> <!--en-->
+                    <img class="language_img" src="../images/flags/en.png"> <!--en-->
                 </a>
 
                 <div class="dropdown-menu"  aria-labelledby="dropdownMenuLink">
@@ -167,7 +167,7 @@
 
     <div class="hamburger_container_language">
         <a class="a_language_select_onchange dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <!--<img class="language_img" src="../images/flags/zh.png"> en-->
+            <img class="language_img" src="../images/flags/en.png">
         </a>
 
         <div class="dropdown-menu"  aria-labelledby="dropdownMenuLink">
@@ -299,12 +299,20 @@
         //$(".language_select_onchange").prop('value',language_cookie);
         var imgHtml = "<img class='language_img' src='../images/flags/view/"+ language_navigator +".png'> ";
         $(".a_language_select_onchange").html(imgHtml);
-        if(languageType != 'zh'){
-            languageType = 'en'
-        }
         var memberId = "${loginUser.id!''}";
         var languageType = getLanguage();
         infoContentNotice(languageType,memberId);
+        if(language_navigator && language_navigator != "zh" && language_navigator != "en"){
+            var yText =  $('.logo').find("a").html();
+            var  index =  layer.msg("Please wait while switching languages！",{icon: 16,shade: [0.8, '#393D49'],time:60000});
+            var setIntervalId = setInterval(function(){
+                var xText =  $('.logo').find("a").html();
+                if(yText != xText){
+                    layer.close(index);
+                    clearInterval(setIntervalId);
+                }
+            },1000);
+        }
     })
 
     function language_select_onchange(e,language_cookie){
@@ -317,6 +325,7 @@
             language_select = $(e).attr("data_value") || "en";
             language_select_1 = $(e).attr("data_value") || "en";
         }
+        if(getLanguage() == language_select ) return;
         //获取浏览器的语言
         imgHtml = "<img class='language_img' src='../images/flags/view/"+ language_select +".png'> ";
         $(".a_language_select_onchange").html(imgHtml);
@@ -373,7 +382,16 @@
         if((language_select_1 != 'zh' && language_select_1 != 'en')) {
             $("iframe.goog-te-menu-frame").contents().find("table").find("span.text").each(function (i, data) {
                 if ($(this).html() == language_select) {
+                    var yText =  $('.logo').find("a").html();
                     $(this).click();
+                    var  index =  layer.msg("Please wait while switching languages！",{icon: 16,shade: [0.8, '#393D49'],time:60000});
+                    var setIntervalId = setInterval(function(){
+                        var xText =  $('.logo').find("a").html();
+                        if(yText != xText){
+                            layer.close(index);
+                            clearInterval(setIntervalId);
+                        }
+                    },1000);
                 }
             })
         }else {

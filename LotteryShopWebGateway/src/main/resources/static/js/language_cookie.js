@@ -49,11 +49,12 @@ function getCookie(name)//取cookies函数
 
 function getLanguage(){
     var language_navigator = (navigator.language || navigator.browserLanguage).toLowerCase();
-    var language_cookie = getCookie("somoveLanguage") || "";
     //中文瀏覽器取的語言簡寫是zh-cn錯誤
     if(language_navigator.indexOf("zh") > -1){
         language_navigator = "zh";
+
     }
+    var language_cookie = getCookie("somoveLanguage") || "";
     if(language_cookie){
         language_navigator = language_cookie;
     }
@@ -62,21 +63,27 @@ function getLanguage(){
 /*console.log("getCookie:"+getCookie(name));*/
 $(function () {
     var uulanguage = (navigator.language || navigator.browserLanguage).toLowerCase();
+    var languageType = "en";
     //判断浏览器的语言
-    if (uulanguage.indexOf("en") > -1) {
-        $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
-    } else if (uulanguage.indexOf("zh") > -1) {
-        $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "zh" });
-    } else {
-        //默认显示英文
-        $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
-    };
-    if (getCookie(name) != "") {
+    if (getCookie(name) && getCookie(name) != "") {
         if (getCookie(name) == "zh") {
+            languageType = "zh";
             $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "zh" });
         }
         if (getCookie(name) == "en") {
             $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
         }       
+    }else{
+        if (uulanguage.indexOf("en") > -1) {
+            $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
+        } else if (uulanguage.indexOf("zh") > -1) {
+            languageType = "zh";
+            $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "zh" });
+        } else {
+            //默认显示英文
+            $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
+        };
+        //
+        SetCookie(name, languageType);
     }
 });
