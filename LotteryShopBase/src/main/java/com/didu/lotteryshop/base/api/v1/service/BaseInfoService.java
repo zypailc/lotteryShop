@@ -33,7 +33,7 @@ public class BaseInfoService extends BaseBaseService {
      * @return
      */
     public List<Map<String,Object>> infoContentWhiteBook(String languageType){
-        return  findMintro(languageType, MIntroServiceImpl.TYPE_WHITE_BOOK,null);
+        return  findMintro(languageType, MIntroServiceImpl.TYPE_WHITE_BOOK,null,null);
     }
 
     /**
@@ -42,7 +42,7 @@ public class BaseInfoService extends BaseBaseService {
      * @return
      */
     public List<Map<String,Object>> infoContentCharacteristic(String languageType){
-        return  findMintro(languageType,MIntroServiceImpl.TYPE_CHARACTERISTIC_PROJECT,null);
+        return  findMintro(languageType,MIntroServiceImpl.TYPE_CHARACTERISTIC_PROJECT,null,null);
     }
 
     /**
@@ -68,7 +68,7 @@ public class BaseInfoService extends BaseBaseService {
      * @return
      */
     public List<Map<String,Object>> findPlayTypeRule(String playType,String languageType){
-        return  findMintro(languageType,MIntroServiceImpl.TYPE_ALLOCATION_FUNDS,Integer.parseInt(playType));
+        return  findMintro(languageType,MIntroServiceImpl.TYPE_ALLOCATION_FUNDS,Integer.parseInt(playType),null);
     }
 
     /**
@@ -76,8 +76,8 @@ public class BaseInfoService extends BaseBaseService {
      * @param languageType
      * @return
      */
-    public List<Map<String,Object>> findNotice(String languageType){
-        return  findMintro(languageType,MIntroServiceImpl.TYPE_NOTICE,null);
+    public List<Map<String,Object>> findNotice(String languageType,String memberId){
+        return  findMintro(languageType,MIntroServiceImpl.TYPE_NOTICE,null,memberId);
     }
 
     /**
@@ -107,24 +107,19 @@ public class BaseInfoService extends BaseBaseService {
      * @param type
      * @return
      */
-    private List<Map<String,Object>> findMintro(String languageType,Integer type,Integer playType){
-        LoginUser loginUser = getLoginUser();
+    private List<Map<String,Object>> findMintro(String languageType,Integer type,Integer playType,String memberId){
         String sql = "select mi_.id,li_.id as imgId, i_"+languageType+".title as title,i_"+languageType+".content as content " +
                 "  , DATE_FORMAT(mi_.create_time,'%Y-%m-%d') as createTime";
         //当用户在登陆状态
-        if(loginUser != null){
-            if(loginUser.getId() != null && !"".equals(loginUser.getId())){
-                sql += ", case when emp_.id is null then '1' else '0' end as isView";
-            }
+        if(memberId != null && !"".equals(memberId)){
+            sql += ", case when emp_.id is null then '1' else emp_.is_view end as isView";
         }
         sql+=" from m_intro mi_ " +
         " left join ls_image li_ on (mi_.ls_image_id = li_.id)"+
         " left join intro_"+languageType + " i_"+languageType + " on (mi_.language_id = i_"+languageType+".id) ";
-        if(loginUser != null){
-            if(loginUser.getId() != null && !"".equals(loginUser.getId())){
-                        sql +=" left join es_member_properties emp_ on (emp_.relevance_id = mi_.id)";
+        if(memberId != null && !"".equals(memberId)){
+                        sql +=" left join es_member_properties emp_ on (emp_.relevance_id = mi_.id and emp_.member_id = '"+memberId+"')";
 
-            }
         }
         sql+="where 1=1 " ;
         if(type != null){
@@ -132,11 +127,6 @@ public class BaseInfoService extends BaseBaseService {
         }
         if(playType != null){
             sql +=" and mi_.play_type = " + playType;
-        }
-        if(loginUser != null){
-            if(loginUser.getId() != null && !"".equals(loginUser.getId())){
-                sql += " and emp_.member_id = '" + loginUser.getId() + "'";
-            }
         }
         sql += " order by mi_.sort,mi_.create_time ";
         return getSqlMapper().selectList(sql);
@@ -149,6 +139,6 @@ public class BaseInfoService extends BaseBaseService {
      * @return
      */
     public List<Map<String, Object>> infoContentGenerlize(String languageType) {
-        return  findMintro(languageType, MIntroServiceImpl.TYPE_GENERALIZE,null);
+        return  findMintro(languageType, MIntroServiceImpl.TYPE_GENERALIZE,null,null);
     }
 }

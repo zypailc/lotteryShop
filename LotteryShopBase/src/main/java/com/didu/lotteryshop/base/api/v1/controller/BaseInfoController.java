@@ -106,11 +106,11 @@ public class BaseInfoController extends BaseBaseController {
      */
     @ResponseBody
     @RequestMapping("/findNotice")
-    public List<Map<String,Object>> find(String languageType){
+    public List<Map<String,Object>> find(String languageType,String memberId){
         if(languageType == null || "".equals(languageType)){
             return null;
         }
-        return baseInfoService.findNotice(languageType);
+        return baseInfoService.findNotice(languageType,memberId);
     }
 
     /**

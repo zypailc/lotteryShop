@@ -31,7 +31,7 @@
     }
     .hero_side_text_container_button{
         position: absolute;
-        top: 45px;
+        top: 50px;
         right: 50px;
         width: 60px;
         height: 30px;
@@ -42,14 +42,14 @@
         cursor: pointer;
     }
     .scrolledNotice{
-        top: 70px;
+        top: 75px;
         right: 50px;
     }
     .div_margin_notice_index{
         margin: 10px;
     }
     .div_button_back{
-
+        bottom: -230px;
     }
     .div_content_notice_detail{
 
@@ -299,7 +299,12 @@
         //$(".language_select_onchange").prop('value',language_cookie);
         var imgHtml = "<img class='language_img' src='../images/flags/view/"+ language_navigator +".png'> ";
         $(".a_language_select_onchange").html(imgHtml);
-
+        if(languageType != 'zh'){
+            languageType = 'en'
+        }
+        var memberId = "${loginUser.id!''}";
+        var languageType = getLanguage();
+        infoContentNotice(languageType,memberId);
     })
 
     function language_select_onchange(e,language_cookie){

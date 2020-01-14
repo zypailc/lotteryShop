@@ -40,6 +40,12 @@
         //$(".language_select_onchange").prop('value',language_cookie);
         var imgHtml = "<img class='language_img' src='../images/flags/"+ language_navigator +".png'> ";
         $(".a_language_select_onchange").html(imgHtml);
+        if(languageType != 'zh'){
+            languageType = 'en'
+        }
+        var memberId = "${loginUser.id!''}";
+        var languageType = getLanguage();
+        infoContentNotice(languageType);
     })
 
     function language_select_onchange(e,language_cookie){

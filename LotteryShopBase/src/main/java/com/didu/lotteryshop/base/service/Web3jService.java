@@ -3,9 +3,12 @@ package com.didu.lotteryshop.base.service;
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.service.GasProviderService;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
+import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.common.utils.Web3jUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
@@ -35,6 +38,8 @@ import java.util.Map;
  */
 @Service
 public class Web3jService extends BaseBaseService {
+    @Autowired
+    private OAuth2RestTemplate oAuth2RestTemplate;
     /** 主网络地址 */
     @Value("${ethwallet.web3j.url}")
     private String ethwalletWeb3jUrl;
@@ -216,6 +221,47 @@ public class Web3jService extends BaseBaseService {
             e.printStackTrace();
         }
         return reMap;
+    }
+
+
+    /**
+     * ETh转账
+     * @param walletFileName 钱包名称
+     * @param payPassword 支付密码
+     * @param formAddress 出账地址
+     * @param toAddress 入账地址
+     * @param etherValue 金额
+     * @return
+     */
+    public Map<String,Object> ethTransferAccounts(String walletFileName,String payPassword,String formAddress,String toAddress,BigDecimal etherValue){
+       Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put(TRANSACTION_STATUS,2);
+        resultMap.put(TRANSACTION_HASHVALUE,"");
+        resultMap.put(TRANSACTION_GASUSED,null);
+        try {
+            //转账
+            Map<String,Object> map = new HashMap<String,Object>();
+            map.put("walletFileName",walletFileName);
+            map.put("payPassword",payPassword);
+            map.put("formAddress",formAddress);//出
+            map.put("toAddress",toAddress);//入
+            map.put("etherValue",etherValue);
+            String reStr = oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/transfer", super.getEncryptRequestHttpEntity(map), String.class);
+            if(StringUtils.isNotBlank(reStr)){
+                ResultUtil result = super.getDecryptResponseToResultUtil(reStr);
+                if(result != null && result.getSuccess() && result.getExtend() != null){
+                    Map<String,Object> rMap = (Map<String,Object>) result.getExtend().get(ResultUtil.DATA_KEY);
+                    if(rMap != null && !rMap.isEmpty()){
+                        resultMap.put(TRANSACTION_STATUS,rMap.get("transaction_status").toString());
+                        resultMap.put(TRANSACTION_HASHVALUE,rMap.get("transaction_hashvalue").toString());
+                        resultMap.put(TRANSACTION_GASUSED,rMap.get("transaction_casUsed").toString());
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return resultMap;
     }
 
 }

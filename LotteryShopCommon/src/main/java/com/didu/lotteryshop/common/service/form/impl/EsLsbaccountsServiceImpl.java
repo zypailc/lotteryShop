@@ -280,6 +280,15 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
     public boolean updateSuccess(Integer id,String dicTypeValue,BigDecimal gasFee){
         return this.update(null,dicTypeValue,null,STATUS_SUCCESS,gasFee,id);
     }
+    /**
+     * 修改账目记录（成功）
+     * @param id 账目流水Id
+     * @param gasFee 燃气费
+     * @return
+     */
+    public boolean updateSuccess(Integer id,BigDecimal gasFee){
+        return this.update(null,null,null,STATUS_SUCCESS,gasFee,id);
+    }
 
     /**
      * 修改账目记录（失败）
@@ -300,6 +309,14 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
      */
     public boolean updateFail(Integer id,String dicTypeValue){
         return this.update(null,dicTypeValue,null,STATUS_FAIL,null,id);
+    }
+    /**
+     * 修改账目记录（失败）
+     * @param id 账目流水Id
+     * @return
+     */
+    public boolean updateFail(Integer id){
+        return this.update(null,null,null,STATUS_FAIL,null,id);
     }
 
 
@@ -401,8 +418,20 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
      */
     public List<EsLsbaccounts> findSATransferStatusWait(){
         Wrapper<EsLsbaccounts> wrapper = new EntityWrapper<>();
-        wrapper.and().eq("status",STATUS_BEINGPROCESSED);
+        wrapper.and("transfer_hash_value is not null and transfer_hash_value<>''")
+                .and().eq("status",STATUS_BEINGPROCESSED);
         return super.selectList(wrapper);
+    }
+
+    /**
+     * 根据operId查询数据
+     * @param operId
+     * @return
+     */
+    public EsLsbaccounts findEsLsbaccountsByOperId(String operId){
+        Wrapper<EsLsbaccounts> wrapper = new EntityWrapper<>();
+        wrapper.eq("oper_id",operId);
+        return super.selectOne(wrapper);
     }
 
 }

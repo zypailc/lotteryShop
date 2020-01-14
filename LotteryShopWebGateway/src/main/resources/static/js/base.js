@@ -12,11 +12,7 @@
     });
 })*/
 $(function(){
-    var languageType = getLanguage();
-    if(languageType != 'zh'){
-        languageType = 'en'
-    }
-    infoContentNotice(languageType);
+
     hero_side_text_container_button_click();
     hero_side_text_container_niticeHear_click();
 })
@@ -54,10 +50,10 @@ function hero_side_text_container_button_click(){
         //$(".hero_side_text_container_button").hide();
         //$(".hero_side_text_container").show();
         var width = document.body.clientWidth;
-        var area = ["30%","50%"];
+        var area = ["30%","400px"];
         if(width < 991){
             width = document.body.clientWidth;
-            area = ["95%","50%"]
+            area = ["95%","400px"]
         }
         layer.open({
             type: 1,
@@ -66,25 +62,23 @@ function hero_side_text_container_button_click(){
             area:area,
             content: $(".div_margin_notice").html()
         });
+        clearInterval(setIntervalNotice);
+        $(".noticeImg").show();
+        $(".noticeImg").find("img").attr("src","../images/notice/ld/notice_close.png");
         $(".notice_ul_li").click(function(){
             var li = $(this);
+            li.find(".notice_li_img").remove();
             var title = li.find(".notice_ul_li_title").html();
             var content = li.find(".notice_ul_li_title").attr("datacontent");
             var detail = $(this).parent().parent().parent().find(".div_content_notice_detail");
-            console.log(detail);
-            console.log(detail.find(".div_content_detail").find(".notice_title"));
-            console.log(detail.find(".div_content_detail").find(".notice_detail"));
             detail.find(".div_content_detail").find(".notice_title").html(title);
             detail.find(".div_content_detail").find(".notice_detail").html(content);
-            console.log( $(this).parent().parent().parent().find(".div_content_notice_list"));
-            console.log( $(this).parent().parent().parent().find(".div_content_notice_detail"));
             $(this).parent().parent().parent().find(".div_content_notice_list").hide();
             $(this).parent().parent().parent().find(".div_content_notice_detail").show();
             updateNoticeRead($(this).attr("dataid"));
         });
         $(".notice_detail_back").click(function(){
             var notice = $(this).parent().parent().parent().parent();
-            console.log(notice);
             notice.find(".div_content_notice_list").show();
             notice.find(".div_content_notice_detail").hide();
         });
@@ -95,7 +89,7 @@ function updateNoticeRead(id){
     $.ajax({
         url:'/api/base/v1/member/updateNoticeIsRead',
         type:'get',
-        data:{"id":id},
+        data:{"noticeId":id},
         dataType:"json",
         success:function (result) {
 
@@ -103,12 +97,11 @@ function updateNoticeRead(id){
     });
 }
 
-function infoContentNotice(languageType){
-    console.log("languageType:"+languageType);
+function infoContentNotice(languageType,memberId){
     $.ajax({
         url:'/apiauthorization/base/authorization/v1/baseInfo/findNotice',
         type:'get',
-        data:{"languageType":languageType},
+        data:{"languageType":languageType,"memberId":memberId},
         dataType:"json",
         success:function (result) {
             if(result.length > 0){
@@ -117,22 +110,36 @@ function infoContentNotice(languageType){
                 var ul = $(".notice_list_ul");
                 ul.html("");
                 $.each(result,function(index,data){
-                    console.log(data);
                     var li =
                         '<li class="notice_ul_li" dataId="'+data.id+'">';
-                        if(data.type != '0'){
+                        if(data.isView != '0'){
                          li +=   '<p class="notice_li_img"><img src="../images/notice/d.png"></p>';
+                            notice_remind();
                         }
                         li +='<p class="notice_ul_li_time">'+data.createTime+'</p>'+
                             '<p class="notice_ul_li_title" dataContent="'+data.content+'">'+data.title+'</p>'+
                             '</li>';
                     ul.append(li);
-                    console.log("我是")
                 })
-
-                console.log("你好，我玩了");
             }
         }
     })
 }
-
+var setIntervalNotice;
+function notice_remind(){
+    var img = $(".noticeImg").find("img");
+    img.attr("src","../images/notice/ld/notice_open.png")
+    img.src = "../images/notice/ld/notice_open.png";
+    setIntervalNotice = setInterval('changeColor()',500);
+}
+var colorFlag = 0;
+function changeColor() {
+    if (!colorFlag)
+    {
+        $(".noticeImg").show()
+        colorFlag = 1;
+    }else{
+        $(".noticeImg").hide();
+        colorFlag = 0;
+    }
+}

@@ -49,7 +49,7 @@ public class EsMemberPropertiesServiceImpl extends ServiceImpl<EsMemberPropertie
      * @return
      */
     public ResultUtil updateNoticeIsView(String memberId,String noticeId){
-        boolean b = this.update(null,memberId,"0",EsMemberPropertiesServiceImpl.TYPE_NOTICE,null);
+        boolean b = this.update(null,memberId,"0",EsMemberPropertiesServiceImpl.TYPE_NOTICE,noticeId);
         if(b){
             return ResultUtil.successJson("success");
         }
@@ -68,6 +68,19 @@ public class EsMemberPropertiesServiceImpl extends ServiceImpl<EsMemberPropertie
                 wrapper.and().eq("relevance_id",relevanceId);
             }
             esMemberProperties = super.selectOne(wrapper);
+            if(esMemberProperties == null){
+                esMemberProperties = new EsMemberProperties();
+                esMemberProperties.setIsView(Integer.parseInt(isView));
+                esMemberProperties.setType(EsMemberPropertiesServiceImpl.TYPE_NOTICE);
+                esMemberProperties.setMemberId(memberId);
+                esMemberProperties.setRelevanceId(relevanceId);
+                boolean b = super.insert(esMemberProperties);
+                if(b){
+                    return true;
+                }else {
+                    return false;
+                }
+            }
         }else {
             return false;
         }
