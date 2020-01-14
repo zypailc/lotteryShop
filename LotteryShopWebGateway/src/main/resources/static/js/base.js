@@ -109,18 +109,22 @@ function infoContentNotice(languageType,memberId){
                 info.html("");
                 var ul = $(".notice_list_ul");
                 ul.html("");
+                var flag = false;
                 $.each(result,function(index,data){
                     var li =
                         '<li class="notice_ul_li" dataId="'+data.id+'">';
-                        if(data.isView != '0'){
+                        if(!data.isView || data.isView != '0'){
                          li +=   '<p class="notice_li_img"><img src="../images/notice/d.png"></p>';
-                            notice_remind();
+                            flag = true;
                         }
                         li +='<p class="notice_ul_li_time">'+data.createTime+'</p>'+
                             '<p class="notice_ul_li_title" dataContent="'+data.content+'">'+data.title+'</p>'+
                             '</li>';
                     ul.append(li);
                 })
+                if(flag){
+                    notice_remind();
+                }
             }
         }
     })
@@ -128,17 +132,18 @@ function infoContentNotice(languageType,memberId){
 var setIntervalNotice;
 function notice_remind(){
     var img = $(".noticeImg").find("img");
-    img.attr("src","../images/notice/ld/notice_open.png")
-    img.src = "../images/notice/ld/notice_open.png";
-    setIntervalNotice = setInterval('changeColor()',500);
+    img.attr("src","../images/notice/ld/notice_open.png");
+    setIntervalNotice = setInterval("changeColor()",500);
 }
 var colorFlag = 0;
 function changeColor() {
-    if (!colorFlag)
+    if (colorFlag == 0)
     {
-        $(".noticeImg").show()
+        $(".noticeImg").attr("xx","xx");
+        $(".noticeImg").show();
         colorFlag = 1;
-    }else{
+    }else if(colorFlag == 1){
+        $(".noticeImg").attr("xx","vv");
         $(".noticeImg").hide();
         colorFlag = 0;
     }
