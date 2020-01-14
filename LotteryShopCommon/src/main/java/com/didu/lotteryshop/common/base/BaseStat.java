@@ -61,12 +61,12 @@ public class BaseStat {
                 }
             }
         }
-        if(!bool){
-           String somoveLanguage =  this.getRequest().getHeader("somoveLanguage");
-           if(StringUtils.isNotBlank(somoveLanguage) &&  "zh".equals(somoveLanguage)){
-               bool = true ;
-           }
-        }
+//        if(!bool){
+//           String somoveLanguage =  this.getRequest().getHeader("somoveLanguage");
+//           if(StringUtils.isNotBlank(somoveLanguage) &&  "zh".equals(somoveLanguage)){
+//               bool = true ;
+//           }
+//        }
         return bool;
     }
 }
