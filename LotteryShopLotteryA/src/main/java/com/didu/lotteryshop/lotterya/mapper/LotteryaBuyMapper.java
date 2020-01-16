@@ -26,4 +26,5 @@ public interface LotteryaBuyMapper extends BaseMapper<LotteryaBuy> {
      */
     public List<Map<String,Object>> getPageLotteryBuyAll(Integer currentPage, Integer pageSize,String mTransferStatus,LotteryaBuy lotteryaBuy);
 
+
 }

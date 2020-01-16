@@ -56,6 +56,21 @@ public class LotteryaPmServiceImpl extends ServiceImpl<LotteryaPmMapper, Lottery
     public static final String TRANSFER_STATUS_SUCCESS = "1";
     /** 失败 */
     public static final String TRANSFER_STATUS_FAIL = "2";
+
+    /**
+     * 待领取
+     */
+    public static final  Integer STATUS_TO_RECEIVE = 0;
+    /**
+     * 已领取
+     */
+    public static final  Integer STATUS_ALREADY_RECEIVE = 1;
+    /**
+     * 过期
+     */
+    public static final  Integer STATUS_PAST_DUE = 2;
+
+
     /**
      * 新增中奖提成
      * @param memberId

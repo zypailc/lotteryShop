@@ -30,7 +30,9 @@
 		<if test="mTransferStatus != null and  mTransferStatus != ''">
 			and lb_.transfer_status in(#{mTransferStatus})
 		</if>
-		 LIMIT #{currentPage},#{pageSize}
+		<if test="currentPage != null and currentPage != '' and pageSize != null and pageSize != ''">
+			LIMIT #{currentPage},#{pageSize}
+		</if>
 	</select>
 
 </mapper>

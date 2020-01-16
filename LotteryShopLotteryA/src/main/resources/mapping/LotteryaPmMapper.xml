@@ -19,4 +19,34 @@
 		<result column="total_ether" property="totalEther" />
 	</resultMap>
 
+	<select id="findLotteryAIssueReceiveStatistics" parameterType="java.lang.String" resultType="java.util.Map">
+		select SUM(lp_.total) as totalAll from lotterya_pm lp_ where 1=1 and lp_.status = 0
+		<if test="memberId != null and memberId != ''">
+			and lp_.member_id = #{memberId}
+		</if>
+
+	</select>
+
+	<select id="findLotteryAIssueReceive" parameterType="java.lang.String" resultType="java.util.Map">
+		select
+		li_.issue_num as issueNum,
+		DATE_FORMAT(li_.start_time,'%Y-%m-%d %T') as startTime,
+		DATE_FORMAT(li_.end_time,'%Y-%m-%d %T') as endTime
+		,sum(case when lp_.type = 1 then lp_.total else 0 end) as gTotal
+		,sum(case when lp_.type = 2 then lp_.total else 0 end) as zTotal
+		,lp_.status
+		from lotterya_pm lp_
+		left join lotterya_issue li_ on (lp_.lotterya_issue_id = li_.id)
+		where 1=1
+		<if test="memberId != null and memberId != ''">
+			and lp_.member_id = #{memberId}
+		</if>
+		<if test="status != null and status != ''">
+			and lp_.status in(#{status})
+		</if>
+		group by li_.issue_num,li_.start_time,li_.end_time,lp_.status
+		order by li_.issue_num desc
+		LIMIT #{currentPage},#{pageSize}
+	</select>
+
 </mapper>

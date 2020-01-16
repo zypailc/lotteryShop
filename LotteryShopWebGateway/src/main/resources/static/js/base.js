@@ -139,11 +139,9 @@ var colorFlag = 0;
 function changeColor() {
     if (colorFlag == 0)
     {
-        $(".noticeImg").attr("xx","xx");
         $(".noticeImg").show();
         colorFlag = 1;
     }else if(colorFlag == 1){
-        $(".noticeImg").attr("xx","vv");
         $(".noticeImg").hide();
         colorFlag = 0;
     }

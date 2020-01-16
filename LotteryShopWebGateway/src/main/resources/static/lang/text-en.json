@@ -65,7 +65,8 @@
     "last":"Last",
     "next":"Next",
     "back": "Back",
-    "games":"Games",
-    "play": "Play"
+    "games":"ball",
+    "play": "Color",
+    "dividendsReceive": "Dividends receive"
   }
 }

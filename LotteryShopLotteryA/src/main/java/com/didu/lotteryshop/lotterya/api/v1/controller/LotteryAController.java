@@ -71,4 +71,26 @@ public class LotteryAController extends LotteryABaseController {
         return lotteryAService.getLotteryBuy(currentPage,pageSize,isOneself,mTransferStatus,lotteryaBuy,type);
     }
 
+    /**
+     * 查询可领取的待领币统计
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/findLotteryAIssueReceiveStatistics")
+    public ResultUtil findLotteryAIssueReceiveStatistics(){
+        return lotteryAService.findLotteryAIssueReceiveStatistics();
+    }
+
+    /**
+     * 根据用户查询每期可领取的数据列表
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/findLotteryAIssueReceive")
+    public ResultUtil findLotteryAIssueReceive(Integer currentPage, Integer pageSize,String status){
+        currentPage = currentPage == null ? 1:currentPage;
+        pageSize = pageSize == null ? 20:pageSize;
+        return lotteryAService.findLotteryAIssueReceive(currentPage,pageSize,status);
+    }
+
 }

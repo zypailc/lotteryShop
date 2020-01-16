@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsEthaccountsServiceImpl;
+import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.lotterya.entity.LotteryaBuy;
 import com.didu.lotteryshop.lotterya.entity.LotteryaInfo;
 import com.didu.lotteryshop.lotterya.mapper.LotteryaBuyMapper;
+import com.didu.lotteryshop.lotterya.mapper.LotteryaPmMapper;
 import com.didu.lotteryshop.lotterya.service.LotteryABaseService;
 import com.didu.lotteryshop.lotterya.service.form.ILotteryaBuyService;
 import com.github.abel533.sql.SqlMapper;
@@ -40,6 +42,8 @@ public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, Lotte
     private LotteryABaseService lotteryABaseService;
     @Autowired
     private LotteryaBuyMapper lotteryaBuyMapper;
+    @Autowired
+    private LotteryaPmMapper lotteryaPmMapper;
 
     /** 等待确认 */
     public static final String TRANSFER_STATUS_WAIT = "0";
@@ -226,6 +230,21 @@ public class LotteryaBuyServiceImpl extends ServiceImpl<LotteryaBuyMapper, Lotte
                          " and (em_.generalize_member_ids like '%"+memberId+"%' or lab_.member_id='"+memberId+"')";
         SqlMapper sqlMapper = lotteryABaseService.getSqlMapper();
         return sqlMapper.selectOne(sql);
+    }
+
+    /**
+     * 根据用户查询可领取待领币统计信息
+     * @param memberId
+     * @param status
+     * @return
+     */
+    public Map<String,Object> findLotteryAIssueReceiveStatistics(String memberId,Integer status){
+        return  lotteryaPmMapper.findLotteryAIssueReceiveStatistics(memberId,status);
+    }
+
+    public List<Map<String,Object>> findLotteryAIssueReceive(String memberId,Integer currentPage, Integer pageSize,String status){
+        currentPage = (currentPage - 1) * pageSize;
+        return  lotteryaPmMapper.findLotteryAIssueReceive(memberId,currentPage,pageSize,status);
     }
 
 }

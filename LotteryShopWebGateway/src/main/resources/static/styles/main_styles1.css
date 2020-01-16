@@ -1123,17 +1123,17 @@ section
 	overflow: auto;
 }
 .services_item_inner-1::-webkit-scrollbar {/*滚动条整体样式*/
-	width: 5px;     /*高宽分别对应横竖滚动条的尺寸*/
+	width: 2px;     /*高宽分别对应横竖滚动条的尺寸*/
 	height: 1px;
 }
 .services_item_inner-1::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-	border-radius: 5px;
+	border-radius: 2px;
 	-webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
 	background: #dddddd;
 }
 .services_item_inner-1::-webkit-scrollbar-track {/*滚动条里面轨道*/
 	-webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
-	border-radius: 5px;
+	border-radius: 2px;
 	background: #EDEDED;
 }
 .service_item_content
@@ -1608,6 +1608,68 @@ section
 .service_col{
 	top: 15px;
 }
+.lottery_service_to_receive{
+	background: #d2d2d2;
+	border-radius: 3px;
+	margin-right: 20px;
+	margin-left: 20px;
+	background: linear-gradient(to right, red , yellow);
+}
 .div_to_receive{
-
+	font-weight: 600;
+	color: #333;
+}
+.div_to_receive marquee{
+	margin-top: 0px;
+	margin-bottom: -10px;
+}
+.to_receive_head p{
+	text-align: center;
+	font-size: 22px;
+	font-weight: 700;
+	color: #322445;
+}
+.receive_detail_left{
+	width: 48%;
+	float: left;
+	text-align: left;
+	margin: 5px;
+	padding-left: 15px;
+}
+.receive_detail_left p{
+	color: white;
+}
+.receive_detail_right{
+	width: 48%;
+	float: right;
+}
+.receive_detail_right p{
+	font-size: 18px;
+	font-weight: 600;
+	color: #fe6a09;
+}
+.receive_content_detail{
+	height: 90px;
+	background: #322445;
+	border-radius: 5px;
+	margin-bottom: 5px;
+}
+.explain{
+	text-align: right;
+}
+.span_right{
+	margin-right: 30px;
+}
+.time_period{
+	text-align: left;
+	padding-left: 5px;
+}
+.receive_content_list{
+	height: 335px;
+	overflow: auto;
+}
+.total{
+	width: 60px;
+	border: none;
+	background: #322445
 }

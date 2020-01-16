@@ -1,21 +1,16 @@
 package com.didu.lotteryshop.lotterya.api.v1.service;
 
 import com.didu.lotteryshop.common.config.Constants;
+import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.service.form.impl.EsEthaccountsServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsEthwalletServiceImpl;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
-import com.didu.lotteryshop.lotterya.entity.LotteryAContractResultEntity;
-import com.didu.lotteryshop.lotterya.entity.LotteryaBuy;
-import com.didu.lotteryshop.lotterya.entity.LotteryaInfo;
-import com.didu.lotteryshop.lotterya.entity.LotteryaIssue;
+import com.didu.lotteryshop.lotterya.entity.*;
 import com.didu.lotteryshop.lotterya.service.LotteryABaseService;
 import com.didu.lotteryshop.lotterya.service.LotteryAContractService;
 import com.didu.lotteryshop.lotterya.service.Web3jService;
-import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaBuyServiceImpl;
-import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaInfoServiceImpl;
-import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaIssueServiceImpl;
-import com.didu.lotteryshop.lotterya.service.form.impl.LotteryaPmDetailServiceImpl;
+import com.didu.lotteryshop.lotterya.service.form.impl.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -103,7 +98,9 @@ public class LotteryAService extends LotteryABaseService {
      * @param pageSize
      * @return
      */
-    public ResultUtil getLotteryIssue(int currentPage,int pageSize){
+    public ResultUtil getLotteryIssue(Integer currentPage,Integer pageSize){
+        currentPage = currentPage == null ? 1:currentPage;
+        pageSize = pageSize == null ? 20:pageSize;
         return ResultUtil.successJson(lotteryaIssueService.findPageLotteryaIssue(currentPage,pageSize));
     }
 
@@ -117,6 +114,8 @@ public class LotteryAService extends LotteryABaseService {
      * @return
      */
     public ResultUtil getLotteryBuy(Integer currentPage, Integer pageSize,Integer isOneself,String mTransferStatus, LotteryaBuy lotteryaBuy,Integer type){
+        currentPage = currentPage == null ? 1:currentPage;
+        pageSize = pageSize == null ? 20:pageSize;
         if(isOneself != null && isOneself == 1){
             if(super.getLoginUser() != null){
                 lotteryaBuy.setMemberId(super.getLoginUser().getId());
@@ -270,6 +269,31 @@ public class LotteryAService extends LotteryABaseService {
                 }
             }
         }
+    }
+
+    /**
+     * 查询待领币的统计
+     * @return
+     */
+    public ResultUtil findLotteryAIssueReceiveStatistics(){
+        LoginUser loginUser = getLoginUser();
+        if(loginUser == null){
+            return null;
+        }
+        return ResultUtil.successJson(lotteryaBuyService.findLotteryAIssueReceiveStatistics(loginUser.getId(), LotteryaPmServiceImpl.STATUS_TO_RECEIVE));
+    }
+
+    /**
+     * 查询待领币的统计
+     * @return
+     */
+    public ResultUtil findLotteryAIssueReceive(Integer currentPage, Integer pageSize,String status){
+
+        LoginUser loginUser = getLoginUser();
+        if(loginUser == null){
+            return null;
+        }
+        return ResultUtil.successJson(lotteryaBuyService.findLotteryAIssueReceive(loginUser.getId(),currentPage,pageSize,status));
     }
 
 }

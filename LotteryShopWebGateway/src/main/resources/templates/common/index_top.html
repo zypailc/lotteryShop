@@ -304,6 +304,9 @@
         $(".a_language_select_onchange").html(imgHtml);
         var memberId = "${loginUser.id!''}";
         var languageType = getLanguage();
+        if(languageType){
+
+        }
         infoContentNotice(languageType,memberId);
         if(language_navigator && language_navigator != "zh" && language_navigator != "en"){
             var yText =  $('.logo').find("a").html();
