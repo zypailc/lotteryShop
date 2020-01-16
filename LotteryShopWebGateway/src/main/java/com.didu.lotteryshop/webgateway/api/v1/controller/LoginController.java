@@ -50,23 +50,27 @@ public class LoginController extends WebgatewayBaseController {
             paramMap.add("grant_type","password");
             paramMap.add("client_id","browser");
             paramMap.add("client_secret","browser");
-            Map<String,String> rMap = restTemplate.postForObject("http://auth-service/auth/oauth/token",paramMap,Map.class);
-            if(rMap != null && !rMap.isEmpty()){
-                String accessToken = rMap.get("access_token");
-                String tokenType = rMap.get("token_type");
-                if(StringUtils.isNotBlank(accessToken) && StringUtils.isNotBlank(tokenType)){
-                    super.getRequest().getSession().setAttribute(Constants.SESSION_LOGIN_TOKEN,accessToken);
-                    super.getRequest().getSession().setAttribute(Constants.SESSION_LOGIN_TOKEN_TYPE,tokenType);
-                    super.getRequest().getSession().setAttribute("LoginUserName",username);
-                    memberService.updateMemberLoginInfoByEmail(username,super.getRequestIp());
-                    if(super.isChineseLanguage()){
-                        map.put("msg","登錄成功！");
-                    }else{
-                        map.put("msg","Login the success！");
+            try {
+                Map<String, String> rMap = restTemplate.postForObject("http://auth-service/auth/oauth/token", paramMap, Map.class);
+                if (rMap != null && !rMap.isEmpty()) {
+                    String accessToken = rMap.get("access_token");
+                    String tokenType = rMap.get("token_type");
+                    if (StringUtils.isNotBlank(accessToken) && StringUtils.isNotBlank(tokenType)) {
+                        super.getRequest().getSession().setAttribute(Constants.SESSION_LOGIN_TOKEN, accessToken);
+                        super.getRequest().getSession().setAttribute(Constants.SESSION_LOGIN_TOKEN_TYPE, tokenType);
+                        super.getRequest().getSession().setAttribute("LoginUserName", username);
+                        memberService.updateMemberLoginInfoByEmail(username, super.getRequestIp());
+                        if (super.isChineseLanguage()) {
+                            map.put("msg", "登錄成功！");
+                        } else {
+                            map.put("msg", "Login the success！");
+                        }
+                        map.put("rdirectUrl", rdirectUrl);
+                        return ResultUtil.successJson(map);
                     }
-                    map.put("rdirectUrl",rdirectUrl);
-                    return ResultUtil.successJson(map);
                 }
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
         if(super.isChineseLanguage()){

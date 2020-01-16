@@ -20,7 +20,7 @@
 	</resultMap>
 
 	<select id="findLsbRecordPagination" parameterType="java.lang.String" resultType="java.util.Map">
-		select ROUND(el_.amount,6),ROUND(el_.balance,6),el_.type,ROUND(el_.gas_fee,6) as gasFee,sd_.r_envalue,sd_.r_zhvalue,el_.status_time as statusTime,el_.status
+		select ROUND(el_.amount,6) as amount,ROUND(el_.balance,6) as balance,el_.type,ROUND(el_.gas_fee,6) as gasFee,sd_.r_envalue,sd_.r_zhvalue,el_.status_time as statusTime,el_.status
 		from es_lsbaccounts el_
 		left join sys_dic sd_ on (el_.dic_type = sd_.key_value)
 		where sd_.group_type = 'lsbaccounts_dictype'

@@ -35,7 +35,6 @@ include("../common/common.js.html"){}
 					viewH =$(this).height(),//可见高度
 					contentH =$(this).get(0).scrollHeight,//内容高度
 					scrollTop =$(this).scrollTop();//滚动高度
-			console.log(scrollTop/(contentH -viewH));
 			if(scrollTop/(contentH -viewH) >= 0.95){ //当滚动到距离底部5%时
 				findLotteryIssue("the_lottery_record_id",false);
 			}
@@ -597,7 +596,6 @@ include("../common/common.js.html"){}
 		})
 	}
 	function findLotteryAIssueReceiveStatistics(languageType){
-		console.log("我执行了")
 		$.ajax({
 			url: '/api/lotteryA/v1/lotteryA/findLotteryAIssueReceiveStatistics',
 			type: 'get',
