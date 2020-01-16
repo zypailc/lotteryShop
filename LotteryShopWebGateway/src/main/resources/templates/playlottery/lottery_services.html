@@ -597,6 +597,7 @@ include("../common/common.js.html"){}
 		})
 	}
 	function findLotteryAIssueReceiveStatistics(languageType){
+		console.log("我执行了")
 		$.ajax({
 			url: '/api/lotteryA/v1/lotteryA/findLotteryAIssueReceiveStatistics',
 			type: 'get',
@@ -604,13 +605,13 @@ include("../common/common.js.html"){}
 			success: function (result) {
 				var data = result.extend.data;
 				if(data){
-					if(languageType != 'zh'){
+					if(languageType == 'zh'){
 						$(".div_to_receive").find("marquee").html("待领取 " +data.totalAll);
 					}else{
 						$(".div_to_receive").find("marquee").html("To receive "+data.totalAll);
 					}
 				}else{
-					if(languageType != 'zh'){
+					if(languageType == 'zh'){
 						$(".div_to_receive").find("marquee").html("暂无领取");
 					}else{
 						$(".div_to_receive").find("marquee").html("No receive ");
@@ -656,7 +657,7 @@ include("../common/common.js.html"){}
 			<div class="lottery_item lotteryPlay ">
 				<div class="service_item_content">
 					<div class="service_item_title">
-						<% if(!has(loginUser)){ %>
+						<% if(loginUser != null && loginUser != ""){ %>
 						<div class="lottery_service_to_receive">
 							<div class="div_to_receive">
 								<a onclick="openToReceive()" href="#"><marquee></marquee></a>
