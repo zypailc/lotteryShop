@@ -67,6 +67,16 @@
     "back": "Back",
     "games":"ball",
     "play": "Color",
-    "dividendsReceive": "Dividends receive"
+    "dividendsReceive": "Dividends receive",
+    "generalizeStatistics": "Generalize statistics",
+    "level_1": "first floor",
+    "level_2": "two floor",
+    "level_3": "three floor",
+    "level_4": "four floor",
+    "level_5": "five floor",
+    "level_6": "six floor",
+    "winningBonus": "winning of bonus",
+    "purchaseBonus": "Purchase of bonus",
+    "numberPeople": "number of people"
   }
 }

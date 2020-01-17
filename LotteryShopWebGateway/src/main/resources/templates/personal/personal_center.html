@@ -321,6 +321,42 @@ include("../common/common.js.html"){}
 	.statusStr{
 		float: right;
 	}
+	.total{
+		border: none;
+		border: none;
+		background: #f8f9fa;
+	}
+	.generalize_statistics_ul{
+		background: #f8f9fa;
+		padding: 5px;
+        width: 100%;
+        border-radius: 5px;
+    }
+	.level{
+		float: left;
+		width: 18%;
+		height: 60px;
+        font-size: 22px;
+        font-weight: 600;
+	}
+	.generalize_left{
+		float: left;
+		width: 38%;
+		height: 60px;
+		text-align: left;
+		margin-left: 30px;
+	}
+    .generalize_left p{
+        font-weight: 600;
+	}
+	.generalize_right{
+		float: left;
+		width: 38%;
+		height: 60px;
+	}
+    .generalize_right p{
+        font-weight: 600;
+    }
 </style>
 <script>
 	$(function(){
@@ -405,6 +441,18 @@ include("../common/common.js.html"){}
 				elem: '.endDateInput'
 			});
 		});
+		layui.use('laydate', function(){
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: '.generalizeStartTime'
+			});
+		});
+		layui.use('laydate', function(){
+			var laydate = layui.laydate;
+			laydate.render({
+				elem: '.generalizeEndTime'
+			});
+		});
 
 		var height = document.body.clientHeight;
 		$(".wallet_left").height(height-50);
@@ -474,6 +522,7 @@ include("../common/common.js.html"){}
 		findLotteryRecord(true,"lottery_record");
 		getWalletConfig();
 		generalizeInitRegisterUrl();
+		findGeneralizeStatistics();
 		var languageType = getLanguage();
 		if(languageType != 'zh'){
 			languageType = 'en'
@@ -541,7 +590,8 @@ include("../common/common.js.html"){}
 							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".passwordManagement" data-localize="base.passwordManagement">Password management</li>
 							<hr>
 							<li class="portfolio_category draw_personal_lottery" data-filter=".generalize" data-localize="base.generalize">generalize</li>
-							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".generalizePersonal" data-localize="base.generalizePersonnel">generalize personnel</li>
+							<li class="portfolio_category draw_personal_lottery" data-filter=".generalizePersonal" data-localize="base.generalizePersonnel">generalize personnel</li>
+							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".generalize_statistics" data-localize="base.generalizeStatistics">Generalize statistics</li>
 						</ul>
 					</div>
 				</div>
@@ -627,8 +677,8 @@ include("../common/common.js.html"){}
 			</div>
 			<!-- 购买彩票记录和中奖记录 -->
 			<div class="search_div web_design">
-				<input type="text" class="input_class startDateInput layui-input" placeholder="start：yyyy-MM-dd">
-				<input type="text" class="input_class endDateInput layui-input" placeholder="end：yyyy-MM-dd">
+				<input type="text" class="input_class startDateInput  layui-input" placeholder="start：yyyy-MM-dd">
+				<input type="text" class="input_class endDateInput  layui-input" placeholder="end：yyyy-MM-dd">
 				<select class="select_search lotteryTypeSelect">
 					<option value="-1" data-localize="base.allTypes">All types</option>
 					<option value="1">A</option>
@@ -852,7 +902,89 @@ include("../common/common.js.html"){}
 					</ul>
 				</div>
 			</div>
+			<!-- generalize statistics -->
+			<div class="search_div generalize_statistics">
+				<input type="text" class="input_class generalizeStartTime layui-input" placeholder="start：yyyy-MM-dd">
+				<input type="text" class="input_class generalizeEndTime layui-input" placeholder="end：yyyy-MM-dd">
+				<button class="btn" onclick="findGeneralizeStatistics()" data-localize="base.search">查询</button>
+				<hr>
+			</div>
+			<hr class="generalize_statistics">
+			<div class="card generalize_statistics ">
+				<div class="card-body">
+					<ul class="generalize_statistics_ul">
+						<li class="generalize_statistics_1">
+							<div>
+								<div class="level level_1"><span data-localize="base.level_1">一楼</span></div>
+								<div class="generalize_left">
+									<p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
+									<p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
+								</div >
+                                <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
+							</div>
+						</li>
+						<hr>
+						<li class="generalize_statistics_2">
 
+							<div>
+								<div class="level level_2"><span data-localize="base.level_2">二楼</span></div>
+								<div class="generalize_left">
+									<p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
+									<p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
+								</div >
+                                <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
+							</div>
+						</li>
+						<hr>
+						<li class="generalize_statistics_3">
+
+							<div>
+								<div class="level level_3"><span data-localize="base.level_3">三楼</span></div>
+								<div class="generalize_left">
+									<p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
+									<p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
+								</div >
+                                <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
+							</div>
+						</li>
+						<hr>
+						<li class="generalize_statistics_4">
+
+							<div>
+								<div class="level level_4"><span data-localize="base.level_4">四楼</span></div>
+								<div class="generalize_left">
+									<p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
+									<p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
+								</div >
+                                <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
+							</div>
+						</li>
+						<hr>
+						<li class="generalize_statistics_5">
+
+							<div>
+								<div class="level level_5" ><span data-localize="base.level_5">五楼</span></div>
+								<div class="generalize_left">
+									<p><input class="total ztotal" value="0"><span data-localize="base.winningBonus"></span></p>
+									<p><input class="total gtotal" value="0"><span data-localize="base.purchaseBonus"></span></p>
+								</div >
+                                <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
+							</div>
+						</li>
+						<hr>
+						<li class="generalize_statistics_6">
+							<div>
+								<div  class="level level_6" ><span data-localize="base.level_6">六楼</span></div>
+								<div class="generalize_left">
+									<p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
+									<p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
+								</div >
+                                <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
 			<!-- 钱包 包括绑定地址和提现功能 -->
 			<div class="card wallet wallet_piece">
 				<div class="wallet_left">

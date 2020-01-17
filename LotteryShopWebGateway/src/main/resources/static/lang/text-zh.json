@@ -67,6 +67,16 @@
     "back": "返回",
     "games":"球",
     "play": "彩虹",
-    "dividendsReceive": "分红领取"
+    "dividendsReceive": "分红领取",
+    "generalizeStatistics": "推广统计",
+    "level_1": "一楼",
+    "level_2": "二楼",
+    "level_3": "三楼",
+    "level_4": "四楼",
+    "level_5": "五楼",
+    "level_6": "六楼",
+    "winningBonus": "中奖分红",
+    "purchaseBonus": "购买分红",
+    "numberPeople": "人数"
   }
 }

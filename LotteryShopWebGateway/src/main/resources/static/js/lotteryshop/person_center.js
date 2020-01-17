@@ -640,3 +640,28 @@ function infoContentGenerlize(languageType){
         }
     })
 }
+
+function findGeneralizeStatistics() {
+    var startTime = $(".generalizeStartTime").val() || "";
+    var endTime = $(".generalizeEndTime").val() || "";
+    $.ajax({
+        url:'/api/base/v1/member/findGeneralizeStatistics',
+        type:'get',
+        data:{"startTime":startTime,"endTime":endTime},
+        dataType:"json",
+        success:function (result) {
+            var data = result.extend.data;
+            var generalize = data.generalize;
+            var generalizePerson = data.generalizePerson;
+            $.each(generalize,function(index,info){
+                var obj = $(".generalize_statistics_"+(index+1));
+                obj.find(".ztotal").val(info.zTotal);
+                obj.find(".gtotal").val(info.gTotal);
+            })
+            $.each(generalizePerson,function(index,info){
+                var obj = $(".generalize_statistics_"+(index+1));
+                obj.find(".personNum").val(info.personNum);
+            })
+        }
+    })
+}

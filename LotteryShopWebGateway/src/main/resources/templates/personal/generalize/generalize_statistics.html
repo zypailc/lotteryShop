@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- commonality  meta and title -->
+    <%
+    include("../../common/common.meta.html"){}
+    %>
+    <!-- commonality style -->
+    <%
+    include("../../common/common.css.html"){}
+    %>
+    <link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_styles.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_responsive.css">
+</head>
+<!-- commonality js -->
+<%
+include("../../common/common.js.html"){}
+%>
+<script src="../js/portfolio_custom.js"></script>
+<script src="../js/lotteryshop/person_center.js"></script>
+<script>
+    $(function(){
+        $(".back").click(function(){
+            history.back();
+        });
+        layui.use('laydate', function(){
+            var laydate = layui.laydate;
+            laydate.render({
+                elem: '.generalizeStartTime'
+            });
+        });
+        layui.use('laydate', function(){
+            var laydate = layui.laydate;
+            laydate.render({
+                elem: '.generalizeEndTime'
+            });
+        });
+        findGeneralizeStatistics();
+    })
+
+</script>
+<style>
+.base_head{
+    padding-top: 80px;
+    padding-bottom:40px
+}
+.total{
+    border: none;
+    border: none;
+    background: #f8f9fa;
+}
+.generalize_statistics_ul{
+    background: #f8f9fa;
+    padding: 5px;
+    width: 100%;
+    border-radius: 5px;
+    overflow: auto;
+}
+.card{
+    height: auto;
+}
+.level{
+float: left;
+width: 18%;
+height: 60px;
+font-size: 22px;
+font-weight: 600;
+}
+.generalize_left{
+float: left;
+width: 38%;
+height: 60px;
+text-align: left;
+margin-left: 30px;
+}
+.generalize_left p{
+font-weight: 600;
+}
+.generalize_right{
+float: left;
+width: 35%;
+height: 60px;
+}
+.generalize_right p{
+font-weight: 600;
+}
+.input_class{
+width: 97%;
+border-radius: 5px;
+}
+.search_div{
+text-align: center;
+}
+.button_search{
+background: #b5aacd;
+color: white;
+width: 150px;
+}
+.card-body{
+margin-top: 0px;
+margin-left: 0px;
+}
+</style>
+<body class="body_top">
+
+<div class="super_container">
+
+    <!-- 引入头部文件 -->
+    <%
+    include("../../common/top.html"){}
+    %>
+    <!-- Home -->
+
+
+    <div class="base_head">
+        <div class="search_div">
+            <input type="text" class="input_class generalizeStartTime layui-input" placeholder="start：yyyy-MM-dd">
+            <input type="text" class="input_class generalizeEndTime layui-input" placeholder="end：yyyy-MM-dd">
+            <button class="btn button_search" onclick="findGeneralizeStatistics()" data-localize="base.search">查&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;询</button>
+            <hr>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <ul class="generalize_statistics_ul card-1 card-1_scroll">
+                    <li class="generalize_statistics_1">
+                        <div>
+                            <div class="level level_1"><span data-localize="base.level_1">一楼</span></div>
+                            <div class="generalize_left">
+                                <p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
+                                <p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
+                            </div >
+                            <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
+                        </div>
+                    </li>
+                    <hr>
+                    <li class="generalize_statistics_2">
+
+                        <div>
+                            <div class="level level_2"><span data-localize="base.level_2">二楼</span></div>
+                            <div class="generalize_left">
+                                <p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
+                                <p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
+                            </div >
+                            <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
+                        </div>
+                    </li>
+                    <hr>
+                    <li class="generalize_statistics_3">
+
+                        <div>
+                            <div class="level level_3"><span data-localize="base.level_3">三楼</span></div>
+                            <div class="generalize_left">
+                                <p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
+                                <p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
+                            </div >
+                            <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
+                        </div>
+                    </li>
+                    <hr>
+                    <li class="generalize_statistics_4">
+
+                        <div>
+                            <div class="level level_4"><span data-localize="base.level_4">四楼</span></div>
+                            <div class="generalize_left">
+                                <p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
+                                <p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
+                            </div >
+                            <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
+                        </div>
+                    </li>
+                    <hr>
+                    <li class="generalize_statistics_5">
+
+                        <div>
+                            <div class="level level_5" ><span data-localize="base.level_5">五楼</span></div>
+                            <div class="generalize_left">
+                                <p><input class="total ztotal" value="0"><span data-localize="base.winningBonus"></span></p>
+                                <p><input class="total gtotal" value="0"><span data-localize="base.purchaseBonus"></span></p>
+                            </div >
+                            <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
+                        </div>
+                    </li>
+                    <hr>
+                    <li class="generalize_statistics_6">
+                        <div>
+                            <div  class="level level_6" ><span data-localize="base.level_6">六楼</span></div>
+                            <div class="generalize_left">
+                                <p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
+                                <p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
+                            </div >
+                            <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- commonality footer -->
+    <%
+    include("../../common/bottom.html"){}
+    %>
+
+</div>
+</body>
+
+</html>

@@ -450,4 +450,47 @@ public class MemberService extends BaseBaseService {
         return memberPropertiesService.updateNoticeIsView(loginUser.getId(),noticeId);
     }
 
+    /**
+     * 查询推广的购买分红和中奖分红
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public ResultUtil findGeneralizeStatistics (String startTime,String endTime){
+        LoginUser loginUser = getLoginUser();
+        if(loginUser == null){
+            return null;
+        }
+        String sql = " select " +
+                " SUM(case when ed_.dic_type = 1 then lpd_.total else 0 end) gTotal," +
+                " SUM(case when ed_.dic_type = 2 then lpd_.total else 0 end) zTotal, " +
+                " lpd_.level,ed_.dic_type " +
+                " from es_dlbaccounts ed_ " +
+                " left join lotterya_pm lp_ on (ed_.oper_id = lp_.id) " +
+                " left join lotterya_pm_detail lpd_ on (lp_.id = lpd_.lotterya_pm_id) " +
+                " where ed_.member_id = '"+loginUser.getId()+"'  and ed_.type = '1'  and ed_.status = '1' and ed_.oper_id <> '-1' and ed_.dic_type in (1,2) " ;
+        if(startTime != null && !"".equals(startTime)){
+            sql += " and DATE_FORMAT(ed_.create_time,'%Y-%m-%d %T') >= '"+startTime+"' ";
+        }
+        if(endTime != null && !"".equals(endTime)){
+            sql += " and DATE_FORMAT(ed_.create_time,'%Y-%m-%d %T') <= '"+endTime+"' ";
+        }
+        sql +=" GROUP BY ed_.dic_type,lpd_.level " +
+        " order by lpd_.level";
+        List<Map<String,Object>> list = getSqlMapper().selectList(sql);
+
+        sql = " select sum(1) as personNum,em_.generalize_member_level " +
+                " from es_member em_ " +
+                " left join es_member em1_ on (em1_.id = '"+loginUser.getId()+"') " +
+                " where em_.generalize_member_ids like '%"+loginUser.getId()+"%' and em_.generalize_member_level > em1_.generalize_member_level  " +
+                " and em_.generalize_member_level <= (em1_.generalize_member_level + 6)" +
+                " GROUP BY em_.generalize_member_level " +
+                " ORDER BY em_.generalize_member_level ";
+        List<Map<String,Object>> list1 = getSqlMapper().selectList(sql);
+        Map<String,Object> map = new HashMap<>();
+        map.put("generalize",list);
+        map.put("generalizePerson",list1);
+        return ResultUtil.successJson(map);
+    }
+
 }

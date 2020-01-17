@@ -225,4 +225,16 @@ public class MemberController extends BaseBaseController {
         return memberService.updateNoticeIsRead(noticeId);
     }
 
+    /**
+     * 查询推广的中奖和购买分红
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/findGeneralizeStatistics")
+    public ResultUtil findGeneralizeStatistics(String startTime,String endTime){
+        return memberService.findGeneralizeStatistics(startTime,endTime);
+    }
+
 }

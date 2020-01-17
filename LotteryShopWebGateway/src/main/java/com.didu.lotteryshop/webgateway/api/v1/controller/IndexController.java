@@ -227,8 +227,18 @@ public class IndexController extends WebgatewayBaseController {
     @RequestMapping("/web/personalGeneralizeRecord")
     public String generalizeRecord(Model model,@Param(value = "type") String type){
         model = getModel(model);
-        model.addAttribute("title",walletType(type));
         return "personal/generalize/generalize_record";
+    }
+
+    /**
+     * 推广统计
+     * @param model
+     * @return
+     */
+    @RequestMapping("/web/generalizeStatistics")
+    public String generalizeStatistics(Model model){
+        model = getModel(model);
+        return "personal/generalize/generalize_statistics";
     }
 
     @RequestMapping("/web/personalPasswordManagement")
@@ -236,6 +246,7 @@ public class IndexController extends WebgatewayBaseController {
         model = getModel(model);
         return  "personal/wallet/phone/password_management";
     }
+
 
 
     /**
