@@ -77,6 +77,7 @@
     "level_6": "six floor",
     "winningBonus": "winning of bonus",
     "purchaseBonus": "Purchase of bonus",
-    "numberPeople": "number of people"
+    "numberPeople": "number of people",
+    "winningRecord": "Winning record"
   }
 }

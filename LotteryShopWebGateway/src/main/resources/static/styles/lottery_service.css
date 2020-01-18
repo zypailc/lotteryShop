@@ -371,3 +371,10 @@
     height: 60px;
     text-align: center;
 }
+.p_content_center_left{
+    float: left;
+}
+.p_content_center_right{
+    font-size: 20px;
+    font-weight: 700;
+}

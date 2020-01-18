@@ -172,8 +172,9 @@ include("../common/common.js.html"){}
 	}
 	.li_come{
 		padding: 5px;
-		background: #f8f8f8;
+		background: #f5f5f5;
 		border-radius: 5px;
+		margin-bottom: 3px;
 	}
 	.li_comeInto{
 		padding: 5px;
@@ -327,7 +328,7 @@ include("../common/common.js.html"){}
 		background: #f8f9fa;
 	}
 	.generalize_statistics_ul{
-		background: #f8f9fa;
+		/*background: #f8f9fa;*/
 		padding: 5px;
         width: 100%;
         border-radius: 5px;
@@ -357,6 +358,24 @@ include("../common/common.js.html"){}
     .generalize_right p{
         font-weight: 600;
     }
+	.generalize_statistics_ul li{
+		margin-bottom: 3px;
+		background: #f8f8f8;
+		height: 60px;
+	}
+	.wallet_span_title_net_asset{
+		font-size: 15px;
+		font-weight: 800;
+	}
+	.money_input_usd{
+		font-size: 11px;
+	}
+	.active{
+		background:  #ddd;
+	}
+	.li_come_0{
+		background: aliceblue;
+	}
 </style>
 <script>
 	$(function(){
@@ -610,7 +629,7 @@ include("../common/common.js.html"){}
 							<div><input class="input_class_2 wallet_password_input" type="password" name="newPassword" placeholder="new password"><span datavalue="2" class="eyeOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></div>
 							<div><input class="input_class_2 wallet_password_input" type="password" name="confirmPassword" placeholder="confirm password"><span datavalue="2" class="eyeOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></div>
 							<div class="div_btn">
-								<a onclick="updatePassword(this,1)" href="#" class="wallet_button button_display">confirm</a>
+								<a onclick="updatePassword(this,1)" href="#" class="wallet_button button_display" data-localize="base.confirm">confirm</a>
 							</div>
 						</div>
 
@@ -620,7 +639,7 @@ include("../common/common.js.html"){}
 							<div><input class="input_class_2 wallet_password_input" type="password" name="newPassword" placeholder="new password"><span datavalue="2" class="eyeOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></div>
 							<div><input class="input_class_2 wallet_password_input" type="password" name="confirmPassword" placeholder="confirm password"><span datavalue="2" class="eyeOpenOrClose pointerClass pointerClass glyphicon glyphicon-eye-close"></span></div>
 							<div class="div_btn">
-								<a onclick="updatePassword(this,2)" href="#" class="wallet_button button_display">confirm</a>
+								<a onclick="updatePassword(this,2)" href="#" class="wallet_button button_display" data-localize="base.confirm">confirm</a>
 							</div>
 						</div>
 					</div>
@@ -716,8 +735,9 @@ include("../common/common.js.html"){}
 				<div class="card-body">
 					<div class="eth_record">
 						<div class="wallet_head">
-							<p class="p_margin"><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span><span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
+							<p class="p_margin"><span class="wallet_span_title wallet_span_title_net_asset" data-localize="base.netAssets">Net assets</span><span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
 							<p class="p_margin"><span class="wallet_span_total"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+							<p class="p_margin"><span class="wallet_span_total_eth_usd"><input readonly="readonly" class="money_input money_input_usd" value="0.00"/></span></p>
 							<p class="p_margin">
 								<span data-localize="base.balance1">balance</span><span class="span_right balance"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
 								<span data-localize="base.freeze">freeze</span><span class="freeze"><input readonly="readonly" class="money_input_1" value="0.00"/></span></p>
@@ -755,7 +775,7 @@ include("../common/common.js.html"){}
 										<span class="ethGas ethGasStr" data-localize="base.ethGas">燃气费 : </span><span class="ethGas ethGasStrInfo">0.00298507</span>
 									</p>
 								</div>
-								<hr class="hrEth">
+								<!--<hr class="hrEth">-->
 							</li>
 						</ul>
 					</div>
@@ -766,8 +786,9 @@ include("../common/common.js.html"){}
 				<div class="card-body">
 					<div class="dlb_record">
 						<div class="wallet_head">
-							<p class="p_margin"><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span><span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
+							<p class="p_margin"><span class="wallet_span_title wallet_span_title_net_asset" data-localize="base.netAssets">Net assets</span><span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
 							<p class="p_margin"><span class="wallet_span_total"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+							<p class="p_margin"><span class="wallet_span_total_dlb_usd"><input readonly="readonly" class="money_input money_input_usd" value="0.00"/></span></p>
 							<p class="p_margin">
 								<span data-localize="base.balance1">balance</span><span class="span_right balance"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
 								<span data-localize="base.freeze">freeze</span><span class="freeze"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
@@ -783,7 +804,7 @@ include("../common/common.js.html"){}
 										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
 									</p>
 								</div>
-								<hr class="hrEth">
+								<!--<hr class="hrEth">-->
 							</li>
 						</ul>
 					</div>
@@ -794,8 +815,9 @@ include("../common/common.js.html"){}
 				<div class="card-body">
 					<div class="gdEth_record">
 						<div class="wallet_head">
-							<p class="p_margin"><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span><span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
+							<p class="p_margin"><span class="wallet_span_title wallet_span_title_net_asset" data-localize="base.netAssets">Net assets</span><span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
 							<p class="p_margin"><span class="wallet_span_total"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+							<p class="p_margin"><span class="wallet_span_total_gd_usd"><input readonly="readonly" class="money_input money_input_usd" value="0.00"/></span></p>
 							<p class="p_margin">
 								<span data-localize="base.balance1">balance</span><span class="span_right balance"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
 								<span data-localize="base.freeze">freeze</span><span class="freeze"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
@@ -811,7 +833,7 @@ include("../common/common.js.html"){}
 										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
 									</p>
 								</div>
-								<hr class="hrEth">
+								<!--<hr class="hrEth">-->
 							</li>
 						</ul>
 					</div>
@@ -822,8 +844,9 @@ include("../common/common.js.html"){}
 				<div class="card-body">
 					<div class="lsb_record">
 						<div class="wallet_head">
-							<p class="p_margin"><span class="wallet_span_title" data-localize="base.netAssets">Net assets</span><span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
+							<p class="p_margin"><span class="wallet_span_title wallet_span_title_net_asset" data-localize="base.netAssets">Net assets</span><span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
 							<p class="p_margin"><span class="wallet_span_total"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+							<p class="p_margin"><span class="wallet_span_total_lsb_usd"><input readonly="readonly" class="money_input money_input_usd" value="0.00"/></span></p>
 							<p class="p_margin">
 								<span data-localize="base.balance1">balance</span><span class="span_right balance"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
 								<span data-localize="base.freeze">freeze</span><span class="freeze"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
@@ -865,7 +888,7 @@ include("../common/common.js.html"){}
 										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
 									</p>
 								</div>
-								<hr class="hrEth">
+								<!--<hr class="hrEth">-->
 							</li>
 						</ul>
 					</div>
@@ -923,7 +946,6 @@ include("../common/common.js.html"){}
                                 <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
 							</div>
 						</li>
-						<hr>
 						<li class="generalize_statistics_2">
 
 							<div>
@@ -935,7 +957,6 @@ include("../common/common.js.html"){}
                                 <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
 							</div>
 						</li>
-						<hr>
 						<li class="generalize_statistics_3">
 
 							<div>
@@ -947,7 +968,6 @@ include("../common/common.js.html"){}
                                 <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
 							</div>
 						</li>
-						<hr>
 						<li class="generalize_statistics_4">
 
 							<div>
@@ -959,7 +979,6 @@ include("../common/common.js.html"){}
                                 <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
 							</div>
 						</li>
-						<hr>
 						<li class="generalize_statistics_5">
 
 							<div>
@@ -971,7 +990,6 @@ include("../common/common.js.html"){}
                                 <div class="generalize_right"><p><input class="total personNum"></input><span data-localize="base.numberPeople"></span></p></div>
 							</div>
 						</li>
-						<hr>
 						<li class="generalize_statistics_6">
 							<div>
 								<div  class="level level_6" ><span data-localize="base.level_6">六楼</span></div>

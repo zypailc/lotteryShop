@@ -30,9 +30,10 @@
 		<if test="mTransferStatus != null and  mTransferStatus != ''">
 			and lb_.transfer_status in(#{mTransferStatus})
 		</if>
-		<if test="currentPage != null and currentPage != '' and pageSize != null and pageSize != ''">
-			LIMIT #{currentPage},#{pageSize}
+		<if test="lotteryaBuy.isLuck != null and lotteryaBuy.isLuck != ''">
+			and lb_.is_luck = #{lotteryaBuy.isLuck}
 		</if>
+		LIMIT #{currentPage},#{pageSize}
 	</select>
 
 </mapper>

@@ -299,10 +299,18 @@ function infoContentCharacteristic(languageType){
 			var left = "";
 			var characteristicProject = $(".div_characteristicProject");
 			$.each(result,function(index,data){
-				left += '<div class="cardItemContent card trans_200" content="'+data.content+'" aria-hidden="true">'+
-						'<div class="card-title"><a href="blog_post.html">'+data.title+'</a></div>'+
-						'<img class="card-img-top" src="/apiauthorization/base/authorization/v1/lsimage/getImg?id='+(data.imgId || "")+'">'+
-						'</div>';
+				if((index + 1) == result.length){
+					left += '<div class="cardItemContent card trans_200" style="margin-bottom: 5px;" content="'+data.content+'" aria-hidden="true">'+
+							'<div class="card-title"><a href="blog_post.html">'+data.title+'</a></div>'+
+							'<img class="card-img-top" src="/apiauthorization/base/authorization/v1/lsimage/getImg?id='+(data.imgId || "")+'">'+
+							'</div>';
+				}else {
+					left += '<div class="cardItemContent card trans_200" content="'+data.content+'" aria-hidden="true">'+
+							'<div class="card-title"><a href="blog_post.html">'+data.title+'</a></div>'+
+							'<img class="card-img-top" src="/apiauthorization/base/authorization/v1/lsimage/getImg?id='+(data.imgId || "")+'">'+
+							'</div>';
+				}
+
 			})
 			characteristicProject.html(left);
 			var width = document.body.clientWidth;

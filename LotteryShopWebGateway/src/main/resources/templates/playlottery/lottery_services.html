@@ -355,6 +355,10 @@ include("../common/common.js.html"){}
 		var isFind = dataObj.attr("pageSize") || "true";
 		var ul = dataObj.find("ul");
 		var li = dataObj.find("ul").find("li:first-child");
+		var languageType = getLanguage();
+		if(languageType != 'zh'){
+			languageType = 'en';
+		}
 		if(flag){
 			ul.html("");
 		}
@@ -378,6 +382,13 @@ include("../common/common.js.html"){}
 								new_li = li.clone();
 							}else {
 								new_li = dataObj.find("ul").find("li:first-child").clone();
+							}
+							if(languageType == 'zh'){
+								new_li.find(".luckNumStr").html("幸运号");
+								new_li.find(".luckTotalStr").html("开奖金额");
+							}else {
+								new_li.find(".luckNumStr").html("Luck number");
+								new_li.find(".luckTotalStr").html("Winning amount");
 							}
 							new_li.find(".lotteryIssue").html("#"+data.issueNum);
 							new_li.find(".luckNum_1").addClass("span_element_num_"+luckNum[0]);
@@ -411,9 +422,12 @@ include("../common/common.js.html"){}
 		var currentPage = dataObj.attr("currentPage") || 1;
 		var pageSize = dataObj.attr("pageSize") || 20;
 		var isFind = dataObj.attr("pageSize") || "true";
-		issue = dataObj.attr("issus") || issue;
 		var ul = dataObj;
 		var li = dataObj.find("li:first-child");
+		var languageType = getLanguage();
+		if(languageType != 'zh'){
+			languageType = 'en';
+		}
 		if(flag){
 			issue = issue;
 			dataObj.attr("currentPage",'1');
@@ -421,13 +435,17 @@ include("../common/common.js.html"){}
 			dataObj.attr("issus",issue);
 			currentPage = 1;
 			ul.html("");
+		}else {
+			issue = dataObj.attr("issus") || issue;
 		}
+		var index_record = layer.load(3,{shade: [0.8, '#393D49']});
 		$.ajax({
 			url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryBuy',
 			type:'get',
-			data:{"currentPage":currentPage,"pageSize":pageSize,"lotteryaIssueId":issue,"type":2},
+			data:{"currentPage":currentPage,"pageSize":pageSize,"lotteryaIssueId":issue,"type":2,"isLuck":1},
 			dataType:"json",
 			success:function (result) {
+				layer.close(index_record);
 				var dataInfo = result.extend.data;
 				isFind = dataObj.attr("isFind") || 'true';
 				if(isFind == 'true') {
@@ -441,15 +459,27 @@ include("../common/common.js.html"){}
 						}else {
 							new_li = dataObj.find("li:first-child").clone();
 						}
-						new_li.find(".memberName").html(data.memberName);
+						/*new_li.find(".memberName").html(data.memberName);*/
 						new_li.find(".email").html(data.email);
 						new_li.find(".luckNum").html(data.luckTotal + " ETH");
-						new_li.find(".multiples").html(data.multipleNum + " Multiples");
+						if(languageType == 'zh'){
+							new_li.find(".multiples").html(data.multipleNum + " Multiples");
+						}else {
+							new_li.find(".multiples").html(data.multipleNum + " 倍");
+						}
+
+
+						new_li.show();
 						ul.append(new_li);
 					})
 					dataObj.attr("currentPage",parseInt(currentPage) + 1);
 					dataObj.attr("pageSize",pageSize);
 					if (dataInfo.length < pageSize) {
+						if(flag && dataInfo.length == 0){
+							li.hide();
+							ul.append(li);
+
+						}
 						ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
 					}
 				}
@@ -461,6 +491,12 @@ include("../common/common.js.html"){}
 
 	}
 	function open_lottery_issue_record(){
+		var width = document.body.clientWidth;
+		var area = ["30%","400px"];
+		if(width < 991){
+			width = document.body.clientWidth;
+			area = ["95%","400px"]
+		}
 		layer.open({
 			type: 1,
 			title: false,
@@ -468,7 +504,7 @@ include("../common/common.js.html"){}
 			shadeClose: true,
 			scrollbar:false,
 			skin: 'issue-record-class',
-			area:  ['auto','auto'],            //宽高自适应
+			area:  area,            //宽高自适应
 			content: $(".lottery_winning_record").html()
 		});
 
@@ -894,6 +930,9 @@ include("../common/common.js.html"){}
 							<div class="lotteryIssue">#0</div>
 							<div>
 								<div class="model_purchase_record">
+									<div class="lottery_play_div_element_4 lottery_play_div_Multiple lottery_record_str">
+										<span class="span_element_1 luckNumStr">幸运号</span>
+									</div>
 									<div class="lottery_play_div_element_4 lottery_play_div_element_border_0">
 										<!--<span class="span_element_1 luckNum_1">0</span>-->
                                         <div class="span_element_1 luckNum_1" ></div>
@@ -905,6 +944,9 @@ include("../common/common.js.html"){}
 									<div class="lottery_play_div_element_4 lottery_play_div_element_border_2">
 										<!--<span class="span_element_1 luckNum_3">0</span>-->
                                         <div class="span_element_1 luckNum_3"></div>
+									</div>
+									<div class="lottery_play_div_element_4 lottery_play_div_Multiple lottery_record_str">
+										<span class="span_element_1 luckTotalStr">开奖金额</span>
 									</div>
 									<div class="lottery_play_div_element_4 lottery_play_div_Multiple">
 										<span class="span_element_1 luckTotal">0 ETH</span>
@@ -924,13 +966,14 @@ include("../common/common.js.html"){}
 	<div class="lottery_winning_record" style="display: none;">
 		<div class="layer_open_lottery_issue services_item_inner-1">
 			<div class="lottery_winning_record_head">
-				<p class="p_content_center issue">#5</p>
+				<p class="p_content_center"><span class="issue p_content_center_left">#5</span> <span class="p_content_center_right" data-localize="base.drawArchive"></span></p>
 				<p class="p_content_center luckNum"> 1 2 3</p>
 				<p class="p_content_center time">00-00-00 00:00:00 ~ 00-00-00 00:00:00</p>
 			</div>
+			<hr>
 			<ul class="lottery_winning_record_ul">
 				<li>
-					<p><span class="memberName">on</span> </p>
+					<!--<p><span class="memberName">on</span> </p>-->
 					<p><span class="email">on@xx.xx</span></p>
 					<P><span class="luckNum span_right"> 0ETH</span> <span class="multiples"> 0 Multiples </span> </P>
 					<hr>
@@ -962,6 +1005,7 @@ include("../common/common.js.html"){}
 			<ul class="receive_content_list services_item_inner-1">
 				<li class="receive_content_detail">
 					<p class="time_period"><span class="issue span_right">#26</span> <span class="time">00-00-00 00:00:00 ~ 00-00-00 00:00:00</span></p>
+
 					<div class="receive_detail_left">
 						<p><input class="total total_1 span_right"><!--<span class="total_1 span_right">500</span>--> <span class="explain explain_1"></span></p>
 						<p><input class="total total_2 span_right"><!--<span class="total_2 span_right">500</span>--> <span class="explain explain_2"></span></p>

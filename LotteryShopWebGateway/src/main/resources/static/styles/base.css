@@ -33,6 +33,7 @@
     position: fixed;
     width: 100%;
     background: white;
+    z-index: 99999;
 }
 .a_border{
     /*border: solid;

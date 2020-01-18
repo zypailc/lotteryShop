@@ -173,6 +173,7 @@
 	.portfolio{
 		padding-left: 0px;
 		overflow: auto;
+		padding-top: 55px !important;
 	}
 	.container_left{
 		width: 100%;

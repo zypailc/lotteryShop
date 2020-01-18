@@ -260,10 +260,13 @@ function findWalletRecord(flag,classProperty,url){
                         if(data.type == '0'){
                             new_li.find(".recorded").hide();
                             new_li.find(".expend").show();
+                            new_li.removeClass("li_come_0")
+
                         }
                         if(data.type == '1'){
                             new_li.find(".expend").hide();
                             new_li.find(".recorded").show();
+                            new_li.addClass("li_come_0")
                         }
                         var languageStr = 'r_'+languageType+'value';
                         new_li.find(".divType").html(data[languageStr])
@@ -339,12 +342,14 @@ function findLotteryRecord(flag,classProperty){
         currentPage = 1;
     }
     if(isFind == 'true') {
+
         $.ajax({
             url: "/api/base/v1/member/findLotterPurchaseResord",
             type: 'post',
             data: {"currentPage": currentPage, "pageSize": pageSize, "type":type,"startTime":startTime,"endTime":endTime,"winning":winning},
             dataType: "json",
             success: function (result) {
+
                 var dataInfo = result.extend.data;
                 var record = dataInfo;
                 isFind = walletETH.attr("isFind") || 'true';
@@ -411,14 +416,19 @@ function findwalletTotal(exchangeRate,personal_wallet_center){
             personalWalletCenter.find(".ethTotalToUsd").find("input").val("≈$"+info.ethTotalToUsd);
             personalWalletCenter.find(".walletEth").find("input").val(info.eth);
             personalWalletCenter.find(".ethToUsd").find("input").val("≈$"+info.ethToUsd);
+            $(".wallet_span_total_eth_usd").find("input").val("≈$"+info.ethToUsd);
             personalWalletCenter.find(".walletGold").find("input").val(info.lsb);
             personalWalletCenter.find(".goldToEth").find("input").val("≈ETH"+info.lsbToEth);
             personalWalletCenter.find(".goldToUsd").find("input").val("≈$"+info.lsbToUsd);
+            $(".wallet_span_total_lsb_usd").find("input").val("≈$"+info.lsbToUsd);
             personalWalletCenter.find(".walletPutMoney").find("input").val(info.dlb);
             personalWalletCenter.find(".putMoneyToEth").find("input").val("≈ETH"+info.dlbToEtb);
             personalWalletCenter.find(".putMoneyToUsd").find("input").val("≈$"+info.dlbToUsd);
+            $(".wallet_span_total_dlb_usd").find("input").val("≈$"+info.dlbToUsd);
             personalWalletCenter.find(".walletGdEth").find("input").val(info.gdEth);
             personalWalletCenter.find(".gdEthToUsd").find("input").val("≈$"+info.gdEthToUsd);
+            personalWalletCenter.find(".wallet_span_total_gd_usd").find("input").val("≈$"+info.gdEthToUsd);
+            $(".wallet_span_total_gd_usd").find("input").val("≈$"+info.gdEthToUsd);
         }
     })
 }
