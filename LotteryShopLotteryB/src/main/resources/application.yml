@@ -1,0 +1,59 @@
+server:
+  port: 8097
+
+#启动服务名称
+spring:
+  application:
+    name: lotteryb-service
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    #序列化与反序列化禁止科学计数配置
+    serialization:
+      WRITE_BIGDECIMAL_AS_PLAIN: true
+      #USE_BIG_DECIMAL_FOR_FLOATS: true
+  datasource:
+    name: druidDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://47.108.140.142:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+      username: root
+      password: 123456
+      filters: stat,wall,4j,config
+      max-active: 100
+      initial-size: 1
+      max-wait: 60000
+      min-idle: 1
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: select 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 50
+      max-pool-prepared-statement-per-connection-size: 20
+#微服务注册服务配置
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8090/eureka/
+#mybatispluse
+mybatis-plus:
+  mapper-locations: classpath:mapping/*.xml,classpath*:/commonmapping/*.xml
+  type-aliases-package: com.didu.lotteryshop
+#security&oauth2 配置
+security:
+  oauth2:
+    resource:
+      id: lotterya-service
+      user-info-uri: http://localhost:8083/auth/api/member # 资源服务认证
+      prefer-token-info: false
+    client:
+      client-id: browser # 认证服务ID
+      client-secret: browser # 认证服务密码
+      grantType: password
+      access-token-uri: http://localhost:8083/auth/oauth/token # 获取token
+      user-authorization-uri: http://localhost:8083/auth/oauth/authorize # 获取授权码
+

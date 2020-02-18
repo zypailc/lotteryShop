@@ -8,6 +8,8 @@
 ## LotteryShopWebGateway 页面网关服务；端口：8080
 ## LotteryShopAPIGateway API网关服务；端口：8082
 ## LotteryShopManage 后台管理服务；端口：8085
+## LoteryShopLotteryA 玩法A 端口 ：8096
+## LoteryShopLotteryB 玩法B端口 ：8097
 
 
 * 项目启动顺序

@@ -13,6 +13,7 @@
         <module>LotteryShopBase</module>
         <module>LotteryShopManage</module>
         <module>LotteryShopLotteryA</module>
+        <module>LotteryShopLotteryB</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
