@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.didu.lotteryshop.lotteryb.mapper.LotterybIssueMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.didu.lotteryshop.lotteryb.entity.LotterybIssue">
+		<id column="id" property="id" />
+		<result column="start_time" property="startTime" />
+		<result column="end_time" property="endTime" />
+		<result column="create_time" property="createTime" />
+		<result column="issue_num" property="issueNum" />
+		<result column="by_status" property="byStatus" />
+		<result column="bs_time" property="bsTime" />
+		<result column="luck_total" property="luckTotal" />
+		<result column="luck_num" property="luckNum" />
+		<result column="bonus_status" property="bonusStatus" />
+		<result column="bonus_status_time" property="bonusStatusTime" />
+		<result column="bonus_grant" property="bonusGrant" />
+		<result column="lotteryb_info_id" property="lotterybInfoId" />
+	</resultMap>
+
+</mapper>

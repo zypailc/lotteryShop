@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.didu.lotteryshop.lotteryb.mapper.LotterybPmMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.didu.lotteryshop.lotteryb.entity.LotterybPm">
+		<id column="id" property="id" />
+		<result column="member_id" property="memberId" />
+		<result column="lotteryb_issue_id" property="lotterybIssueId" />
+		<result column="total" property="total" />
+		<result column="status" property="status" />
+		<result column="status_time" property="statusTime" />
+		<result column="create_time" property="createTime" />
+		<result column="type" property="type" />
+	</resultMap>
+
+</mapper>

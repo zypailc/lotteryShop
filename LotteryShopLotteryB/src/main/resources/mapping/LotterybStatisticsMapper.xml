@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.didu.lotteryshop.lotteryb.mapper.LotterybStatisticsMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.didu.lotteryshop.lotteryb.entity.LotterybStatistics">
+		<id column="id" property="id" />
+		<result column="lotteryb_config_type" property="lotterybConfigType" />
+		<result column="lotteryb_issue_id" property="lotterybIssueId" />
+		<result column="amount" property="amount" />
+		<result column="lotteryb_info_id" property="lotterybInfoId" />
+	</resultMap>
+
+</mapper>
