@@ -30,5 +30,13 @@ public class LotterybInfoServiceImpl extends ServiceImpl<LotterybInfoMapper, Lot
      */
     public static final String TYPE_ID_5 = "3";
 
+    /**
+     * 根据玩法id查询
+     * @param lotterybInfoId
+     * @return
+     */
+    public LotterybInfo find(Integer lotterybInfoId){
+        return super.selectById(lotterybInfoId);
+    }
 
 }

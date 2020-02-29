@@ -54,6 +54,12 @@ public class LotterybPm extends Model<LotterybPm> {
      */
 	private Integer type;
 
+	/**
+	 * 玩法Id
+	 */
+	@TableField("lotteryb_info_id")
+	private Integer lotterybInfoId;
+
 
 	public Integer getId() {
 		return id;
@@ -119,6 +125,14 @@ public class LotterybPm extends Model<LotterybPm> {
 		this.type = type;
 	}
 
+	public Integer getLotterybInfoId() {
+		return lotterybInfoId;
+	}
+
+	public void setLotterybInfoId(Integer lotterybInfoId) {
+		this.lotterybInfoId = lotterybInfoId;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -135,6 +149,7 @@ public class LotterybPm extends Model<LotterybPm> {
 			", statusTime=" + statusTime +
 			", createTime=" + createTime +
 			", type=" + type +
+			", lotterybInfoId=" + lotterybInfoId +
 			"}";
 	}
 }

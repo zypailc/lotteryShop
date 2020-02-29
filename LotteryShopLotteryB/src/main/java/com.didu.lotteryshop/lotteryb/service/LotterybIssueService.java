@@ -24,6 +24,28 @@ public class LotterybIssueService {
     @Autowired
     private LotterybInfoServiceImpl lotterybInfoService;
 
+
+    /**
+     * 计算；两个期数之间相差多少期
+     * @param nowIssueNum
+     * @param issueNum
+     * @return
+     */
+    public Integer getIssueNumDifference(String nowIssueNum,String issueNum){
+        Integer newIssueDate = lotterybIssueService.parseIssueNum(nowIssueNum,LotterybIssueServiceImpl.TYPE_DATE);
+        Integer newIssuenum = lotterybIssueService.parseIssueNum(nowIssueNum,LotterybIssueServiceImpl.TYPE_NUM);
+        Integer issueDate = lotterybIssueService.parseIssueNum(issueNum,LotterybIssueServiceImpl.TYPE_DATE);
+        Integer issuenum = lotterybIssueService.parseIssueNum(issueNum,LotterybIssueServiceImpl.TYPE_NUM);
+        //判断是否是在同一天期数
+        if(newIssueDate == issueDate){
+            return newIssuenum - issuenum;
+        }else {
+            //获取期数日期到现日期的日期数组
+
+        }
+        return Integer.MAX_VALUE;
+    }
+
     /**
      * 根据Lotteryb玩法Id生成下一期
      * @param lotterybInfoId

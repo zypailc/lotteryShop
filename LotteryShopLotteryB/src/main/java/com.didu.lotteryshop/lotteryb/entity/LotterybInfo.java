@@ -57,6 +57,20 @@ public class LotterybInfo extends Model<LotterybInfo> {
 	@TableField("interval_date")
 	private Integer intervalDate;
 
+	/**
+	 * 提成的有效期数
+	 * pm_vnum
+	 * @return
+	 */
+	@TableField("pm_vnum")
+	public Integer pmVnum;
+
+    /**
+     * 提成补签数
+     */
+	@TableField("pm_rnum")
+    public Integer pmRnum;
+
 
 	public Integer getId() {
 		return id;
@@ -115,7 +129,23 @@ public class LotterybInfo extends Model<LotterybInfo> {
 		this.maxMoney = maxMoney;
 	}
 
-	@Override
+    public Integer getPmVnum() {
+        return pmVnum;
+    }
+
+    public void setPmVnum(Integer pmVnum) {
+        this.pmVnum = pmVnum;
+    }
+
+    public Integer getPmRnum() {
+        return pmRnum;
+    }
+
+    public void setPmRnum(Integer pmRnum) {
+        this.pmRnum = pmRnum;
+    }
+
+    @Override
 	protected Serializable pkVal() {
 		return this.id;
 	}
@@ -130,6 +160,8 @@ public class LotterybInfo extends Model<LotterybInfo> {
 			", maxMoney=" + maxMoney +
 			", periodDate=" + periodDate +
 			", intervalDate=" + intervalDate +
+			", pmVnum=" + pmVnum +
+			", pmRnum=" + pmRnum +
 			"}";
 	}
 }

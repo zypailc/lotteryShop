@@ -2,14 +2,21 @@ package com.didu.lotteryshop.lotteryb.service.form.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.didu.lotteryshop.common.entity.SysConfig;
+import com.didu.lotteryshop.common.service.form.impl.EsDlbaccountsServiceImpl;
+import com.didu.lotteryshop.lotteryb.entity.LotterybInfo;
+import com.didu.lotteryshop.lotteryb.entity.LotterybIssue;
 import com.didu.lotteryshop.lotteryb.entity.LotterybPm;
 import com.didu.lotteryshop.lotteryb.mapper.LotterybPmMapper;
+import com.didu.lotteryshop.lotteryb.service.LotterybIssueService;
 import com.didu.lotteryshop.lotteryb.service.form.ILotterybPmService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -21,6 +28,12 @@ import java.util.Date;
  */
 @Service
 public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, LotterybPm> implements ILotterybPmService {
+
+
+    @Autowired
+    private LotterybIssueServiceImpl lotterybIssueService;
+    @Autowired
+    private LotterybInfoServiceImpl lotterybInfoService;
 
     /**
      * 类型 中奖
@@ -86,6 +99,69 @@ public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, Lottery
         return lotterybPm;
     }
 
+
+    /**
+     * 查询所有待领取的提成
+     * @return
+     */
+    public List<LotterybPm> findToReceive(Integer lotterybInfoId){
+        Wrapper<LotterybPm> wrapper = new EntityWrapper<>();
+        wrapper.and().eq("lotteryb_info_id",lotterybInfoId).eq("status",LotterybPmServiceImpl.STATUS_TO_RECEIVE);
+        return super.selectList(wrapper);
+    }
+
+    /**
+     * 领取提成
+     * @param lotterybInfoId
+     * @return
+     */
+    public boolean updateStatus(Integer lotterybInfoId){
+        boolean bool = false;
+        List<LotterybPm> lotterybPmList = this.findToReceive(lotterybInfoId);
+        //本期
+        LotterybIssue nowLotterybIssue = lotterybIssueService.getLotterybIssue(lotterybInfoId.toString());
+        //上期
+        //LotteryaIssue upLotteryaIssue = lotteryaIssueService.findUpLotteryaIssue();
+        LotterybInfo lotterybInfo =  lotterybInfoService.find(lotterybInfoId);
+        if(lotterybPmList != null && lotterybPmList.size() > 0){
+            for(LotterybPm lbpm : lotterybPmList){
+                //提成当期
+                LotterybIssue lotterybIssue = lotterybIssueService.selectById(lbpm.getLotterybIssueId());
+                /*if(nowLotterybIssue.getIssueNum() - lotterybIssue.getIssueNum() <= lotterybInfo.getPmVnum()){
+                    //有效提成数据
+                    int cnt =  lotteryaBuyService.getBuyCount(lapm.getMemberId(),nowLotteryaIssue.getId());
+                    if((cnt >= 1 && lapm.getLotteryaIssueId() == nowLotteryaIssue.getId()) || (cnt >= lotteryaInfo.getPmRnum())){
+
+                        //领取提成
+                        lapm.setStatus("1");
+                        lapm.setStatusTime(new Date());
+                        //增加转账状态
+                        SysConfig sysConfig = sysConfigService.getSysConfig();
+                        lapm.setTransferStatus("-1");
+                        lapm.setTotalEther(lapm.getTotal().divide(sysConfig.getLsbToEth(),25,BigDecimal.ROUND_DOWN));
+                        bool = super.updateById(lapm);
+                        if(bool){
+                            //增加待领币
+                            String dicType = lapm.getType() == 1 ? EsDlbaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA_PM : EsDlbaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA_PM;
+                            bool = esDlbaccountsService.addInSuccess(lapm.getMemberId(),dicType,lapm.getTotal(),lapm.getId().toString());
+                        }
+                        if(!bool) return bool;
+                    }
+                }else{
+                    //作废数据
+                    /*lapm.setStatus("2");
+                    lapm.setStatusTime(new Date());
+                    bool = super.updateById(lapm);
+                    if(!bool) return bool;
+                }*/
+            }
+            bool = true;
+        }else{
+            bool = true;
+        }
+        return bool;
+    }
+
     /**
      * 查询提成数据
      * @param memberId
@@ -121,4 +197,7 @@ public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, Lottery
         boolean bool = super.insert(lotteryaPm);
         return bool ? lotteryaPm : null;
     }
+
+
+
 }

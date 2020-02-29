@@ -88,6 +88,8 @@ public class LotterybIssue extends Model<LotterybIssue> {
 	@TableField("lotteryb_proportion_id")
 	private Integer lotterybProportionId;
 
+
+
 	public Integer getId() {
 		return id;
 	}
@@ -199,6 +201,8 @@ public class LotterybIssue extends Model<LotterybIssue> {
 	public void setLotterybProportionId(Integer lotterybProportionId) {
 		this.lotterybProportionId = lotterybProportionId;
 	}
+
+
 
 	@Override
 	protected Serializable pkVal() {

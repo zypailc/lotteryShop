@@ -31,6 +31,16 @@ public class LotterybIssueServiceImpl extends ServiceImpl<LotterybIssueMapper, L
     public static final  int BY_STATUS_OFF = 1;
 
     /**
+     * 解析期数返回日期数字
+     */
+    public static final  int TYPE_DATE = 1;
+
+    /**
+     * 解析期数返回数字
+     */
+    public static final  int TYPE_NUM = 2;
+
+    /**
      * 根据玩法Id获取期数
      * @return
      */
@@ -71,5 +81,23 @@ public class LotterybIssueServiceImpl extends ServiceImpl<LotterybIssueMapper, L
             return issueDate + String.format("%04d", num);
         }
         return "";
+    }
+
+    /**
+     * 解析期数Id
+     * @param issueNum
+     * @param type type == 1 return 日期数字 type == 2 return 数字
+     * @return
+     */
+    public Integer  parseIssueNum(String issueNum,Integer type){
+        String issueDate = issueNum.substring(0,8);
+        String issueNumber = issueNum.substring(8,issueNum.length());
+        if(type == TYPE_DATE){
+            return Integer.parseInt(issueDate);
+        }
+        if(type == TYPE_NUM){
+            return Integer.parseInt(issueNumber);
+        }
+        return null;
     }
 }

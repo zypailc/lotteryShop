@@ -1,16 +1,14 @@
 package com.didu.lotteryshop.common.utils;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DateUtil {
 
     /**
-     * 获取时间字符串
+     * 获取当前时间字符串
      * @param dateFormat  转换格式"yyyyMMdd"
      * @return
      */
@@ -33,6 +31,31 @@ public class DateUtil {
         nowTime.add(Calendar.MINUTE, 5);
         System.out.println(format.format(nowTime.getTime()));
         return nowTime.getTime();
+    }
+
+    /**
+     * 根据开始日期和结束日期返回两个日期之间的日期字符集
+     * @param startDate
+     * @param endDate
+     * @param dataFormat 参数的时间格式
+     * @return
+     * @throws ParseException
+     */
+    public static List<String> getDates(String startDate, String endDate,String dataFormat) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat(dataFormat);
+        List<String> list = new ArrayList<String>(); //保存日期的集合 
+        Date date_start = format.parse(startDate);
+        Date date_end = format.parse(endDate);
+        Date date =date_start;
+        Calendar cd = Calendar.getInstance();//用Calendar 进行日期比较判断
+        while (date.getTime() <= date_end.getTime()){
+        list.add(format.format(date));
+        cd.setTime(date);
+        cd.add(Calendar.DATE, 1);//增加一天 放入集合
+        date=cd.getTime();
+        }
+        return list;
+
     }
 
     public static void main(String [] args){
