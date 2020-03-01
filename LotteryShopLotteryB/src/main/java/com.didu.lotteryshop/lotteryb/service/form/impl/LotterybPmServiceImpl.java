@@ -8,6 +8,7 @@ import com.didu.lotteryshop.lotteryb.entity.LotterybInfo;
 import com.didu.lotteryshop.lotteryb.entity.LotterybIssue;
 import com.didu.lotteryshop.lotteryb.entity.LotterybPm;
 import com.didu.lotteryshop.lotteryb.mapper.LotterybPmMapper;
+import com.didu.lotteryshop.lotteryb.service.LotterybBuyService;
 import com.didu.lotteryshop.lotteryb.service.LotterybIssueService;
 import com.didu.lotteryshop.lotteryb.service.form.ILotterybPmService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -31,9 +32,15 @@ public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, Lottery
 
 
     @Autowired
-    private LotterybIssueServiceImpl lotterybIssueService;
+    private LotterybIssueServiceImpl lotterybIssueServiceIml;
     @Autowired
-    private LotterybInfoServiceImpl lotterybInfoService;
+    private LotterybInfoServiceImpl lotterybInfoServiceIml;
+    @Autowired
+    private LotterybIssueService lotterybIssueService;
+    @Autowired
+    private LotterybBuyService lotterybBuyService;
+    @Autowired
+    private EsDlbaccountsServiceImpl esDlbaccountsService;
 
     /**
      * 类型 中奖
@@ -65,8 +72,8 @@ public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, Lottery
      * @param total
      * @return
      */
-    public LotterybPm updateOrInsertTotalWinning(String memberId, Integer lotteryAIssueId,BigDecimal total){
-        return this.updateOrInsertTotal(memberId,lotteryAIssueId,total,LotterybPmServiceImpl.TYPE_WINNING);
+    public LotterybPm updateOrInsertTotalWinning(String memberId, Integer lotteryAIssueId,Integer lotterybInfoId,BigDecimal total){
+        return this.updateOrInsertTotal(memberId,lotteryAIssueId,lotterybInfoId,total,LotterybPmServiceImpl.TYPE_WINNING);
     }
 
     /**
@@ -76,8 +83,8 @@ public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, Lottery
      * @param total
      * @return
      */
-    public LotterybPm updateOrInsertTotalBuy(String memberId, Integer lotteryAIssueId,BigDecimal total){
-        return this.updateOrInsertTotal(memberId,lotteryAIssueId,total,LotterybPmServiceImpl.TYPE_BUY);
+    public LotterybPm updateOrInsertTotalBuy(String memberId, Integer lotteryAIssueId,Integer lotterybInfoId,BigDecimal total){
+        return this.updateOrInsertTotal(memberId,lotteryAIssueId,lotterybInfoId,total,LotterybPmServiceImpl.TYPE_BUY);
     }
 
     /**
@@ -88,13 +95,13 @@ public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, Lottery
      * @param type
      * @return
      */
-    public LotterybPm updateOrInsertTotal(String memberId, Integer lotterybIssueId, BigDecimal total, Integer type) {
+    public LotterybPm updateOrInsertTotal(String memberId, Integer lotterybIssueId, Integer lotterybInfoId,BigDecimal total, Integer type) {
         LotterybPm lotterybPm = this.find(memberId,lotterybIssueId,type);
         if(lotterybPm != null && lotterybPm.getId() != null){
             lotterybPm.setTotal(lotterybPm.getTotal().add(total));
             lotterybPm = super.updateAllColumnById(lotterybPm) ? lotterybPm : null;
         }else{
-            lotterybPm = this.add(memberId,lotterybIssueId,total,type);
+            lotterybPm = this.add(memberId,lotterybIssueId,lotterybInfoId,total,type);
         }
         return lotterybPm;
     }
@@ -119,41 +126,36 @@ public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, Lottery
         boolean bool = false;
         List<LotterybPm> lotterybPmList = this.findToReceive(lotterybInfoId);
         //本期
-        LotterybIssue nowLotterybIssue = lotterybIssueService.getLotterybIssue(lotterybInfoId.toString());
+        LotterybIssue nowLotterybIssue = lotterybIssueServiceIml.getLotterybIssue(lotterybInfoId.toString());
         //上期
         //LotteryaIssue upLotteryaIssue = lotteryaIssueService.findUpLotteryaIssue();
-        LotterybInfo lotterybInfo =  lotterybInfoService.find(lotterybInfoId);
+        LotterybInfo lotterybInfo =  lotterybInfoServiceIml.find(lotterybInfoId);
         if(lotterybPmList != null && lotterybPmList.size() > 0){
             for(LotterybPm lbpm : lotterybPmList){
                 //提成当期
-                LotterybIssue lotterybIssue = lotterybIssueService.selectById(lbpm.getLotterybIssueId());
-                /*if(nowLotterybIssue.getIssueNum() - lotterybIssue.getIssueNum() <= lotterybInfo.getPmVnum()){
+                LotterybIssue lotterybIssue = lotterybIssueServiceIml.selectById(lbpm.getLotterybIssueId());
+                if(lotterybIssueService.getIssueNumDifference(lotterybInfoId,nowLotterybIssue.getIssueNum(),lotterybIssue.getIssueNum()) <= lotterybInfo.getPmVnum()){
                     //有效提成数据
-                    int cnt =  lotteryaBuyService.getBuyCount(lapm.getMemberId(),nowLotteryaIssue.getId());
-                    if((cnt >= 1 && lapm.getLotteryaIssueId() == nowLotteryaIssue.getId()) || (cnt >= lotteryaInfo.getPmRnum())){
-
+                    int cnt =  lotterybBuyService.getBuyCount(lbpm.getMemberId(),lotterybInfoId,nowLotterybIssue.getId());
+                    if((cnt >= 1 && lbpm.getLotterybIssueId() == nowLotterybIssue.getId()) || (cnt >= lotterybInfo.getPmRnum())){
                         //领取提成
-                        lapm.setStatus("1");
-                        lapm.setStatusTime(new Date());
-                        //增加转账状态
-                        SysConfig sysConfig = sysConfigService.getSysConfig();
-                        lapm.setTransferStatus("-1");
-                        lapm.setTotalEther(lapm.getTotal().divide(sysConfig.getLsbToEth(),25,BigDecimal.ROUND_DOWN));
-                        bool = super.updateById(lapm);
+                        lbpm.setStatus(1);
+                        lbpm.setStatusTime(new Date());
+                        bool = super.updateById(lbpm);
                         if(bool){
                             //增加待领币
-                            String dicType = lapm.getType() == 1 ? EsDlbaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA_PM : EsDlbaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA_PM;
-                            bool = esDlbaccountsService.addInSuccess(lapm.getMemberId(),dicType,lapm.getTotal(),lapm.getId().toString());
+                            String dicType = lbpm.getType() == 1 ? EsDlbaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA_PM : EsDlbaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA_PM;
+                            bool = esDlbaccountsService.addInSuccess(lbpm.getMemberId(),dicType,lbpm.getTotal(),lbpm.getId().toString());
                         }
                         if(!bool) return bool;
                     }
                 }else{
                     //作废数据
-                    /*lapm.setStatus("2");
-                    lapm.setStatusTime(new Date());
-                    bool = super.updateById(lapm);
+                    lbpm.setStatus(2);
+                    lbpm.setStatusTime(new Date());
+                    bool = super.updateById(lbpm);
                     if(!bool) return bool;
-                }*/
+                }
             }
             bool = true;
         }else{
@@ -185,17 +187,18 @@ public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, Lottery
      * @param type
      * @return
      */
-    private LotterybPm add(String memberId, Integer lotterybIssueId, BigDecimal total, Integer type) {
-        LotterybPm lotteryaPm = new LotterybPm();
-        lotteryaPm.setMemberId(memberId);
-        lotteryaPm.setLotterybIssueId(lotterybIssueId);
-        lotteryaPm.setTotal(total);
-        lotteryaPm.setStatus(0);
-        lotteryaPm.setStatusTime(new Date());
-        lotteryaPm.setCreateTime(new Date());
-        lotteryaPm.setType(type);
-        boolean bool = super.insert(lotteryaPm);
-        return bool ? lotteryaPm : null;
+    private LotterybPm add(String memberId, Integer lotterybIssueId,Integer lotterybInfoId,BigDecimal total, Integer type) {
+        LotterybPm lotterybPm = new LotterybPm();
+        lotterybPm.setMemberId(memberId);
+        lotterybPm.setLotterybIssueId(lotterybIssueId);
+        lotterybPm.setTotal(total);
+        lotterybPm.setStatus(0);
+        lotterybPm.setStatusTime(new Date());
+        lotterybPm.setCreateTime(new Date());
+        lotterybPm.setType(type);
+        lotterybPm.setLotterybInfoId(lotterybIssueId);
+        boolean bool = super.insert(lotterybPm);
+        return bool ? lotterybPm : null;
     }
 
 

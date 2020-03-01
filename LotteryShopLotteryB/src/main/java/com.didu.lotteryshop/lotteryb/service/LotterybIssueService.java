@@ -15,9 +15,10 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
-public class LotterybIssueService {
+public class LotterybIssueService extends LotteryBBaseService{
 
     @Autowired
     private LotterybIssueServiceImpl lotterybIssueService;
@@ -31,7 +32,7 @@ public class LotterybIssueService {
      * @param issueNum
      * @return
      */
-    public Integer getIssueNumDifference(String nowIssueNum,String issueNum){
+    public Integer getIssueNumDifference(Integer lotterybInfoId,String nowIssueNum,String issueNum){
         Integer newIssueDate = lotterybIssueService.parseIssueNum(nowIssueNum,LotterybIssueServiceImpl.TYPE_DATE);
         Integer newIssuenum = lotterybIssueService.parseIssueNum(nowIssueNum,LotterybIssueServiceImpl.TYPE_NUM);
         Integer issueDate = lotterybIssueService.parseIssueNum(issueNum,LotterybIssueServiceImpl.TYPE_DATE);
@@ -40,10 +41,12 @@ public class LotterybIssueService {
         if(newIssueDate == issueDate){
             return newIssuenum - issuenum;
         }else {
-            //获取期数日期到现日期的日期数组
+            //获取期数日期到现日期的日期数组(简单处理，写一个查询，直接查期数之间的)
+            String sql = "select count(1) as num  from lotteryb_issue where between '"+issueNum+"' and '"+nowIssueNum+"'";
+            Map<String,Object> m = getSqlMapper().selectOne(sql);
+            return Integer.parseInt(m.get("num").toString());
 
         }
-        return Integer.MAX_VALUE;
     }
 
     /**

@@ -36,8 +36,8 @@ public class LotterybPmDetailServiceImpl extends ServiceImpl<LotterybPmDetailMap
      * @param ratio
      * @return
      */
-    public boolean addWinning(String memberId,Integer lotterybIssueId,Integer lotterybBuyId, BigDecimal total, Integer level, BigDecimal ratio){
-        return this.add(memberId,lotterybIssueId,lotterybBuyId,total,level,ratio,2);
+    public boolean addWinning(String memberId,Integer lotterybIssueId,Integer lotterybInfoId,Integer lotterybBuyId, BigDecimal total, Integer level, BigDecimal ratio){
+        return this.add(memberId,lotterybIssueId,lotterybInfoId,lotterybBuyId,total,level,ratio,2);
     }
 
     /**
@@ -50,8 +50,8 @@ public class LotterybPmDetailServiceImpl extends ServiceImpl<LotterybPmDetailMap
      * @param ratio
      * @return
      */
-    public boolean addBuy(String memberId,Integer lotterybIssueId,Integer lotterybBuyId, BigDecimal total, Integer level, BigDecimal ratio){
-        return this.add(memberId,lotterybIssueId,lotterybBuyId,total,level,ratio,1);
+    public boolean addBuy(String memberId,Integer lotterybIssueId,Integer lotterybInfoId,Integer lotterybBuyId, BigDecimal total, Integer level, BigDecimal ratio){
+        return this.add(memberId,lotterybIssueId,lotterybInfoId,lotterybBuyId,total,level,ratio,1);
     }
 
     /**
@@ -65,12 +65,12 @@ public class LotterybPmDetailServiceImpl extends ServiceImpl<LotterybPmDetailMap
      * @param type
      * @return
      */
-    public boolean add(String memberId, Integer lotterybIssueId, Integer lotterybBuyId, BigDecimal total, Integer level, BigDecimal ratio, Integer type){
+    public boolean add(String memberId, Integer lotterybIssueId, Integer lotterybInfoId ,Integer lotterybBuyId, BigDecimal total, Integer level, BigDecimal ratio, Integer type){
         boolean bool = false;
         if(StringUtils.isBlank(memberId) || lotterybIssueId == null || lotterybIssueId == null || total == null || level == null || ratio == null || type == null){
             return bool;
         }
-        LotterybPm lotterybPm = lotterybPmService.updateOrInsertTotal(memberId,lotterybIssueId,total,type);
+        LotterybPm lotterybPm = lotterybPmService.updateOrInsertTotal(memberId,lotterybIssueId,lotterybInfoId,total,type);
         if(lotterybPm != null){
             LotterybPmDetail lotterybPmDetail = new LotterybPmDetail();
             lotterybPmDetail.setLotterybPmId(lotterybPm.getId());

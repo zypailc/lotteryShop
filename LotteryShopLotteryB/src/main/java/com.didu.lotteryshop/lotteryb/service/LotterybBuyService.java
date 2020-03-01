@@ -1,5 +1,6 @@
 package com.didu.lotteryshop.lotteryb.service;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.LoginUser;
@@ -127,6 +128,22 @@ public class LotterybBuyService extends LotteryBBaseService{
      */
     public boolean updateBuyInfo(String lotterybInfoId,String lotterybIssueId,String lotterybConfigId){
         return  false;
+    }
+
+
+    /**
+     * 查询购买总笔数
+     * @param memberId
+     * @param lotterybIssueId
+     * @param lotterybInfoId
+     * @return
+     */
+    public int getBuyCount(String memberId,Integer lotterybInfoId,Integer lotterybIssueId){
+        Wrapper<LotterybBuy> wrapper = new EntityWrapper<>();
+        wrapper.and().eq("lotteryb_issue_id",lotterybIssueId)
+                .and().eq("member_id",memberId)
+                .and().eq("lotteryb_info_id",lotterybInfoId);
+        return lotterybBuyService.selectCount(wrapper);
     }
 
     /**

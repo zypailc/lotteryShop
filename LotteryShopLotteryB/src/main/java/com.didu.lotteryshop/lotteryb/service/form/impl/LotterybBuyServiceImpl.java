@@ -18,4 +18,5 @@ import org.springframework.stereotype.Service;
 public class LotterybBuyServiceImpl extends ServiceImpl<LotterybBuyMapper, LotterybBuy> implements ILotterybBuyService {
 
 
+
 }
