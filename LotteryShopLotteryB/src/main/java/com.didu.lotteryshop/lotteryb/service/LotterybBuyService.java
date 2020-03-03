@@ -14,12 +14,15 @@ import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybBuyServiceImpl;
 import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybInfoServiceImpl;
 import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybPmDetailServiceImpl;
 import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybPmServiceImpl;
+import com.github.abel533.sql.SqlMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class LotterybBuyService extends LotteryBBaseService{
@@ -177,5 +180,28 @@ public class LotterybBuyService extends LotteryBBaseService{
         wrapper.and().eq("lotteryb_issue_id",lotteryaIssueId)
         .eq("lotteryb_config_id",lotterybConfigId);
         return lotterybBuyService.selectList(wrapper);
+    }
+
+    /**
+     * 推广账户，核算自己和下级（无限层级）A彩票消费情况
+     * 明细：total：购买总金额
+     *       counts：购买总注数
+     *       luckCounts：中奖总注数
+     *       luckTotal：中奖总金额
+     * @param lotterybIssueId
+     * @param memberId
+     * @return
+     */
+    public Map<String,Object> calculateLowerLevelBuyTotal(Integer lotterybIssueId, String memberId){
+        if(lotterybIssueId == null || StringUtils.isBlank(memberId)) return null;
+        String sql = "select " +
+                " sum(lab_.total) as total," + //购买总金额
+                " sum(lab_.luck_total) as luckTotal " + //中奖总金额
+                " from lotterya_buy lab_ " +
+                " left join es_member em_ on(lab_.member_id = em_.id) " +
+                " where lab_.lotterya_issue_id="+lotterybIssueId+" and lab_.transfer_status='1' " +
+                " and (em_.generalize_member_ids like '%"+memberId+"%' or lab_.member_id='"+memberId+"')";
+        SqlMapper sqlMapper = super.getSqlMapper();
+        return sqlMapper.selectOne(sql);
     }
 }

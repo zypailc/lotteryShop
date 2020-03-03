@@ -108,17 +108,29 @@ public class IndexController extends WebgatewayBaseController {
     }
 
     /**
-     * 竞彩详细页面
+     * 竞猜A详细页面
      * @param model
      * @return
      */
     @RequestMapping("/web/authLotteryServices")
-    public String services(Model model,String playType){
+    public String lotteryaServices(Model model,String playType){
         model = getModel(model);
         model.addAttribute("playType",playType);
         return "playlottery/lottery_services";
     }
 
+    /**
+     * 竞猜B详细页面
+     * @param model
+     * @param playTypeId 玩法类型Id
+     * @return
+     */
+    @RequestMapping("/web/authLotterybServices")
+    public String lotterybService(Model model,String playTypeId){
+        model = getModel(model);
+        model.addAttribute("playTypeId",playTypeId);
+        return "playlottery/lotteryb_services";
+    }
 
     /**
      * 找回密码

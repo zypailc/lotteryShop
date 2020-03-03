@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- commonality  meta and title -->
+    <%
+    include("../common/common.meta.html"){}
+    %>
+    <!-- commonality style -->
+    <%
+    include("../common/common.css.html"){}
+    %>
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_styles1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_responsive1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/lottery_service.css">
+</head>
+<!-- commonality js -->
+<%
+include("../common/common.js.html"){}
+%>
+<script src="../js/portfolio_custom.js"></script>
+<script>
+
+</script>
+<body class="body_top" data-spy="scroll" data-target=".services_item_inner">
+
+<div class="super_container">
+
+    <!-- commonality head -->
+    <%
+    include("../common/top.html"){}
+    %>
+    <div class="home">
+        <div class="home_title">
+            <div class="next_section_scroll">
+                <div class="next_section nav_links" data-scroll-to=".service_boxes">
+                    <i class="fas fa-chevron-down trans_200"></i>
+                    <i class="fas fa-chevron-down trans_200"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- play list -->
+
+    <div class="services">
+
+        <div class="portfolio_categories button-group filters-button-group">
+            <ul>
+                <li class="portfolio_category lotteryPlay_li" data-filter=".lotteryPlay" data-localize="base.lotteryPlay">Lottery Play</li>
+                <li class="portfolio_category" data-filter=".rules" data-localize="base.rules">Rules</li>
+                <li class="portfolio_category" data-filter=".drawArchive" data-localize="base.drawArchive">Draw Archive</li>
+            </ul>
+        </div>
+
+        <div class="product-grid">
+            <!-- play -->
+            <div class="lottery_item lotteryPlay ">
+            </div>
+            <!-- rule -->
+            <div class="lottery_item rules">
+
+            </div>
+            <!-- Lottery record -->
+            <div class="lottery_item drawArchive">
+
+            </div>
+        </div>
+    </div>
+    <div class="lottery_winning_record" style="display: none;">
+        <div class="layer_open_lottery_issue services_item_inner-1">
+            <div class="lottery_winning_record_head">
+                <p class="p_content_center"><span class="issue p_content_center_left">#5</span> <span class="p_content_center_right" data-localize="base.drawArchive"></span></p>
+                <p class="p_content_center luckNum"> 1 2 3</p>
+                <p class="p_content_center time">00-00-00 00:00:00 ~ 00-00-00 00:00:00</p>
+            </div>
+            <hr>
+            <ul class="lottery_winning_record_ul">
+                <li>
+                    <!--<p><span class="memberName">on</span> </p>-->
+                    <p><span class="email">on@xx.xx</span></p>
+                    <P><span class="luckNum span_right"> 0ETH</span> <span class="multiples"> 0 Multiples </span> </P>
+                    <hr>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- commonality fotter -->
+    <%
+    include("../common/bottom.html"){}
+    %>
+    <div id="playPassword" style="display: none;">
+        <div style="margin: 30px;">
+            <div>
+                <input type="password" class="paymentCode" placeholder="payment code">
+            </div>
+            <div class="model_purchase_button">
+                <div class="button_purchase confirm" onclick="paymentCodeConfirm()"><span data-localize="base.confirm">confirm</span></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
