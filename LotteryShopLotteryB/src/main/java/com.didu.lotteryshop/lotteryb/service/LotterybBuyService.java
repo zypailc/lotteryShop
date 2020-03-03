@@ -9,13 +9,17 @@ import com.didu.lotteryshop.common.service.form.impl.EsLsbwalletServiceImpl;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.lotteryb.entity.LotterybBuy;
+import com.didu.lotteryshop.lotteryb.entity.LotterybPm;
 import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybBuyServiceImpl;
 import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybInfoServiceImpl;
+import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybPmDetailServiceImpl;
+import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybPmServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class LotterybBuyService extends LotteryBBaseService{
@@ -30,6 +34,10 @@ public class LotterybBuyService extends LotteryBBaseService{
     private LotterybBuyServiceImpl lotterybBuyService;
     @Autowired
     private LotterybStatisticsService lotterybStatisticsService;
+    @Autowired
+    private LotterybPmServiceImpl lotterybPmService;
+    @Autowired
+    private LotterybPmDetailServiceImpl lotterybPmDetailServiceIml;
 
     /**
      * 购买
@@ -101,7 +109,7 @@ public class LotterybBuyService extends LotteryBBaseService{
         lotterybBuy.setMemberId(loginUser.getId());
         lotterybBuy.setLotterybInfoId(Integer.parseInt(lotterybInfoId));
         lotterybBuy.setLotterybConfigId(Integer.parseInt(lotteryConfigId));
-        lotterybBuy.setLotterybIssueId(issueNum);
+        lotterybBuy.setLotterybIssueId(Integer.parseInt(issueNum));
         lotterybBuy.setTotal(totalBigdecimal);
         lotterybBuy.setIsLuck(0);
         lotterybBuy.setLuckTotal(BigDecimal.ZERO);
@@ -119,6 +127,8 @@ public class LotterybBuyService extends LotteryBBaseService{
         if(super.isChineseLanguage()){
             msg = "购买成功！";
         }
+        //购买提成计算
+        lotterybPmDetailServiceIml.buyPM(lotterybBuy,lotterybInfoService.find(Integer.parseInt(lotterybInfoId)));
         return ResultUtil.successJson(msg);
     }
 
@@ -127,6 +137,7 @@ public class LotterybBuyService extends LotteryBBaseService{
      * @return
      */
     public boolean updateBuyInfo(String lotterybInfoId,String lotterybIssueId,String lotterybConfigId){
+
         return  false;
     }
 
@@ -164,4 +175,16 @@ public class LotterybBuyService extends LotteryBBaseService{
         return "";
     }
 
+    /**
+     * 查询中奖数据
+     * @param lotteryaIssueId
+     * @param lotterybConfigId
+     * @return
+     */
+    public List<LotterybBuy> findLuckLotteryaBuy(Integer lotteryaIssueId, Integer lotterybConfigId) {
+        Wrapper<LotterybBuy> wrapper = new EntityWrapper<>();
+        wrapper.and().eq("lotteryb_issue_id",lotteryaIssueId)
+        .eq("lotteryb_config_id",lotterybConfigId);
+        return lotterybBuyService.selectList(wrapper);
+    }
 }

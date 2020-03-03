@@ -41,7 +41,7 @@ public class LotterybBuy extends Model<LotterybBuy> {
      * 竞猜期数Id
      */
 	@TableField("lotteryb_issue_id")
-	private String lotterybIssueId;
+	private Integer lotterybIssueId;
     /**
      * 是否中奖；0：否；1：是
      */
@@ -99,11 +99,11 @@ public class LotterybBuy extends Model<LotterybBuy> {
 		this.lotterybInfoId = lotterybInfoId;
 	}
 
-	public String getLotterybIssueId() {
+	public Integer getLotterybIssueId() {
 		return lotterybIssueId;
 	}
 
-	public void setLotterybIssueId(String lotterybIssueId) {
+	public void setLotterybIssueId(Integer lotterybIssueId) {
 		this.lotterybIssueId = lotterybIssueId;
 	}
 

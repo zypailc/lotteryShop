@@ -2,6 +2,7 @@ package com.didu.lotteryshop.lotteryb.service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.didu.lotteryshop.lotteryb.entity.LotterybInfo;
 import com.didu.lotteryshop.lotteryb.entity.LotterybIssue;
 import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybBuyServiceImpl;
 import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybInfoServiceImpl;
@@ -31,6 +32,15 @@ public class LotterybInfoService extends LotteryBBaseService {
             }
         }
         return false;
+    }
+
+    /**
+     * 查询竞猜玩法
+     * @param lotterybInfoId
+     * @return
+     */
+    public LotterybInfo find(Integer lotterybInfoId){
+        return lotterybInfoService.selectById(lotterybInfoId);
     }
 
 }

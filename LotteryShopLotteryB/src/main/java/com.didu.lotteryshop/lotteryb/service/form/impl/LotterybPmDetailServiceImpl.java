@@ -1,7 +1,8 @@
 package com.didu.lotteryshop.lotteryb.service.form.impl;
 
-import com.didu.lotteryshop.lotteryb.entity.LotterybPm;
-import com.didu.lotteryshop.lotteryb.entity.LotterybPmDetail;
+import com.didu.lotteryshop.common.entity.SysConfig;
+import com.didu.lotteryshop.common.service.form.impl.MemberServiceImpl;
+import com.didu.lotteryshop.lotteryb.entity.*;
 import com.didu.lotteryshop.lotteryb.mapper.LotterybPmDetailMapper;
 import com.didu.lotteryshop.lotteryb.service.form.ILotterybPmDetailService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -25,6 +27,10 @@ public class LotterybPmDetailServiceImpl extends ServiceImpl<LotterybPmDetailMap
 
     @Autowired
     private LotterybPmServiceImpl lotterybPmService;
+    @Autowired
+    private LotterybInfoPcServiceImpl lotterybInfoPcServiceIml;
+    @Autowired
+    private MemberServiceImpl memberService;
 
     /**
      * 新增中奖提成明细
@@ -80,6 +86,57 @@ public class LotterybPmDetailServiceImpl extends ServiceImpl<LotterybPmDetailMap
             lotterybPmDetail.setRatio(ratio);
             lotterybPmDetail.setCreateTime(new Date());
             bool = super.insert(lotterybPmDetail);
+        }
+        return bool;
+    }
+
+    /**
+     * 中奖提成
+     * @param lotterybBuy
+     * @param lotterybInfo
+     * @return
+     */
+    public boolean drawPM(LotterybBuy lotterybBuy, LotterybInfo lotterybInfo){
+        boolean bool = false;
+        List<LotterybInfoPc> LotterybInfoPcList = lotterybInfoPcServiceIml.findWinning(lotterybInfo.getId());
+        BigDecimal totalDlb = lotterybBuy.getLuckTotal();
+        //中奖提成 10%
+        totalDlb = totalDlb.divide(new BigDecimal("100")).multiply(lotterybInfo.getWinningPm());
+        //转换为平台币
+        if(LotterybInfoPcList != null && LotterybInfoPcList.size() > 0){
+            for(LotterybInfoPc laipc:LotterybInfoPcList){
+                String upMemberId  = memberService.findLevelMemberId(lotterybBuy.getMemberId(),laipc.getLevel());
+                if(StringUtils.isBlank(upMemberId)) return true;
+                BigDecimal total = (totalDlb.divide(new BigDecimal("100")).multiply(laipc.getRatio())).setScale(4,BigDecimal.ROUND_DOWN);
+                bool = this.addWinning(upMemberId,lotterybBuy.getLotterybIssueId(),lotterybBuy.getLotterybInfoId(),lotterybBuy.getId(),total,laipc.getLevel(),laipc.getRatio());
+                if(!bool) return bool;
+            }
+        }
+        return bool;
+    }
+
+
+    /**
+     * 购买提成
+     * @param lotterybBuy
+     * @param lotterybInfo
+     * @return
+     */
+    public boolean buyPM(LotterybBuy lotterybBuy, LotterybInfo lotterybInfo){
+        boolean bool = false;
+        List<LotterybInfoPc> LotterybInfoPcList = lotterybInfoPcServiceIml.findBuy(lotterybInfo.getId());
+        BigDecimal totalDlb = lotterybBuy.getTotal();
+        //购买提成 5%
+        totalDlb = totalDlb.divide(new BigDecimal("100")).multiply(lotterybInfo.getBuyPm());
+        //转换为平台币
+        if(LotterybInfoPcList != null && LotterybInfoPcList.size() > 0){
+            for(LotterybInfoPc laipc:LotterybInfoPcList){
+                String upMemberId  = memberService.findLevelMemberId(lotterybBuy.getMemberId(),laipc.getLevel());
+                if(StringUtils.isBlank(upMemberId)) return true;
+                BigDecimal total = (totalDlb.divide(new BigDecimal("100")).multiply(laipc.getRatio())).setScale(4,BigDecimal.ROUND_DOWN);
+                bool = this.addBuy(upMemberId,lotterybBuy.getLotterybIssueId(),lotterybInfo.getId(),lotterybBuy.getId(),total,laipc.getLevel(),laipc.getRatio());
+                if(!bool) return bool;
+            }
         }
         return bool;
     }

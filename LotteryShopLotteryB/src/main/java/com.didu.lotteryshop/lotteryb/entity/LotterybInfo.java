@@ -71,6 +71,20 @@ public class LotterybInfo extends Model<LotterybInfo> {
 	@TableField("pm_rnum")
     public Integer pmRnum;
 
+	/**
+	 * 购买提成比例
+	 * @return
+	 */
+	@TableField("buy_pm")
+	public BigDecimal buyPm;
+
+	/**
+	 * 中奖提成比例
+	 * @return
+	 */
+	@TableField("winning_pm")
+	public BigDecimal winningPm;
+
 
 	public Integer getId() {
 		return id;
@@ -145,7 +159,23 @@ public class LotterybInfo extends Model<LotterybInfo> {
         this.pmRnum = pmRnum;
     }
 
-    @Override
+	public BigDecimal getBuyPm() {
+		return buyPm;
+	}
+
+	public void setBuyPm(BigDecimal buyPm) {
+		this.buyPm = buyPm;
+	}
+
+	public BigDecimal getWinningPm() {
+		return winningPm;
+	}
+
+	public void setWinningPm(BigDecimal winningPm) {
+		this.winningPm = winningPm;
+	}
+
+	@Override
 	protected Serializable pkVal() {
 		return this.id;
 	}
@@ -162,6 +192,8 @@ public class LotterybInfo extends Model<LotterybInfo> {
 			", intervalDate=" + intervalDate +
 			", pmVnum=" + pmVnum +
 			", pmRnum=" + pmRnum +
+			", buyPm=" + buyPm +
+			", winningPm=" + winningPm +
 			"}";
 	}
 }
