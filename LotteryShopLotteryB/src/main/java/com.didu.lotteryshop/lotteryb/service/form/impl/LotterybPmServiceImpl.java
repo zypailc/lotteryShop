@@ -4,9 +4,8 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.didu.lotteryshop.common.entity.SysConfig;
 import com.didu.lotteryshop.common.service.form.impl.EsDlbaccountsServiceImpl;
-import com.didu.lotteryshop.lotteryb.entity.LotterybInfo;
-import com.didu.lotteryshop.lotteryb.entity.LotterybIssue;
-import com.didu.lotteryshop.lotteryb.entity.LotterybPm;
+import com.didu.lotteryshop.common.service.form.impl.EsEthaccountsServiceImpl;
+import com.didu.lotteryshop.lotteryb.entity.*;
 import com.didu.lotteryshop.lotteryb.mapper.LotterybPmMapper;
 import com.didu.lotteryshop.lotteryb.service.LotterybBuyService;
 import com.didu.lotteryshop.lotteryb.service.LotterybIssueService;
@@ -163,6 +162,9 @@ public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, Lottery
         }
         return bool;
     }
+
+
+
 
     /**
      * 查询提成数据

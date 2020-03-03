@@ -132,15 +132,6 @@ public class LotterybBuyService extends LotteryBBaseService{
         return ResultUtil.successJson(msg);
     }
 
-    /**
-     * 更新中奖信息
-     * @return
-     */
-    public boolean updateBuyInfo(String lotterybInfoId,String lotterybIssueId,String lotterybConfigId){
-
-        return  false;
-    }
-
 
     /**
      * 查询购买总笔数
