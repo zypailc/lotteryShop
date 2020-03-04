@@ -1,10 +1,14 @@
 package com.didu.lotteryshop.lotteryb.service.form.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.didu.lotteryshop.lotteryb.entity.LotterybInfo;
 import com.didu.lotteryshop.lotteryb.mapper.LotterybInfoMapper;
 import com.didu.lotteryshop.lotteryb.service.form.ILotterybInfoService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -39,4 +43,13 @@ public class LotterybInfoServiceImpl extends ServiceImpl<LotterybInfoMapper, Lot
         return super.selectById(lotterybInfoId);
     }
 
+    /**
+     * 查询所有玩法
+     * @return
+     */
+    public List<LotterybInfo> findLotterybAllInfo() {
+        Wrapper<LotterybInfo> wrapper = new EntityWrapper<>();
+        wrapper.orderBy("type",true);
+        return super.selectList(wrapper);
+    }
 }
