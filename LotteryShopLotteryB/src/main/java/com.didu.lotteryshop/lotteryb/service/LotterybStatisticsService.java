@@ -16,7 +16,7 @@ import java.util.Map;
 
 
 @Service
-public class LotterybStatisticsService {
+public class LotterybStatisticsService extends LotteryBBaseService {
 
 
     @Autowired

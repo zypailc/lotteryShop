@@ -62,38 +62,41 @@ function getLanguage(){
 }
 /*console.log("getCookie:"+getCookie(name));*/
 $(function () {
-    var uulanguage = (navigator.language || navigator.browserLanguage).toLowerCase();
-    var languageType = "en";
-    var cookieLanguage = getCookie(name);
-    //判断浏览器的语言
-    if (cookieLanguage && cookieLanguage != "") {
-        var v = getCookie("googtrans");
-        if((!v || v == null || v == "") && cookieLanguage != "zh" && cookieLanguage != "en" ){
-            if (uulanguage.indexOf("zh") > -1){
-                cookieLanguage = "zh";
-            }else{
-                cookieLanguage = "en";
+    setTimeout(function () {
+        var uulanguage = (navigator.language || navigator.browserLanguage).toLowerCase();
+        var languageType = "en";
+        var cookieLanguage = getCookie(name);
+        //判断浏览器的语言
+        if (cookieLanguage && cookieLanguage != "") {
+            var v = getCookie("googtrans");
+            if((!v || v == null || v == "") && cookieLanguage != "zh" && cookieLanguage != "en" ){
+                if (uulanguage.indexOf("zh") > -1){
+                    cookieLanguage = "zh";
+                }else{
+                    cookieLanguage = "en";
+                }
+                SetCookie(name, cookieLanguage);
             }
-            SetCookie(name, cookieLanguage);
+            if (cookieLanguage == "zh") {
+                languageType = "zh";
+                $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "zh" });
+            }
+            if (cookieLanguage == "en") {
+                $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
+            }
+        }else{
+            if (uulanguage.indexOf("en") > -1) {
+                $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
+            } else if (uulanguage.indexOf("zh") > -1) {
+                languageType = "zh";
+                $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "zh" });
+            } else {
+                //默认显示英文
+                $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
+            };
+            //
+            SetCookie(name, languageType);
         }
-        if (cookieLanguage == "zh") {
-            languageType = "zh";
-            $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "zh" });
-        }
-        if (cookieLanguage == "en") {
-            $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
-        }       
-    }else{
-        if (uulanguage.indexOf("en") > -1) {
-            $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
-        } else if (uulanguage.indexOf("zh") > -1) {
-            languageType = "zh";
-            $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "zh" });
-        } else {
-            //默认显示英文
-            $("[data-localize]").localize("text", { pathPrefix: ctx_1 + "/lang", language: "en" });
-        };
-        //
-        SetCookie(name, languageType);
-    }
+    },500);
+    //TODO Language switch load file due to browser version
 });

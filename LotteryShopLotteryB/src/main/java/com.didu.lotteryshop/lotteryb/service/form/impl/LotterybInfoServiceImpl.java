@@ -49,7 +49,7 @@ public class LotterybInfoServiceImpl extends ServiceImpl<LotterybInfoMapper, Lot
      */
     public List<LotterybInfo> findLotterybAllInfo() {
         Wrapper<LotterybInfo> wrapper = new EntityWrapper<>();
-        wrapper.orderBy("type",true);
+        wrapper.orderBy("id",true);
         return super.selectList(wrapper);
     }
 }

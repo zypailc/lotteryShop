@@ -116,7 +116,7 @@ public class IndexController extends WebgatewayBaseController {
     public String lotteryaServices(Model model,String playType){
         model = getModel(model);
         model.addAttribute("playType",playType);
-        return "playlottery/lottery_services";
+        return "playlottery/lotterya_service";
     }
 
     /**
@@ -129,7 +129,7 @@ public class IndexController extends WebgatewayBaseController {
     public String lotterybService(Model model,String playTypeId){
         model = getModel(model);
         model.addAttribute("playTypeId",playTypeId);
-        return "playlottery/lotteryb_services";
+        return "playlottery/lotteryb_service";
     }
 
     /**

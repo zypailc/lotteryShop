@@ -189,7 +189,7 @@ function findETHWallet(classProperty,url){
                     walletdetail = $(".wallet_address_self_eth_withdrawCash");
                 }
                 if(classProperty == 'walletPutMoney'){
-                    ethHead = $(".wallet_head");
+                    ethHead = $(".dlb_record");
                 }
                 if(classProperty == 'walletFLAT'){
                     ethHead = $(".lsb_record");

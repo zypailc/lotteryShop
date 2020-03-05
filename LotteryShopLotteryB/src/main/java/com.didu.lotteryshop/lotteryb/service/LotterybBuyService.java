@@ -61,7 +61,7 @@ public class LotterybBuyService extends LotteryBBaseService{
             return ResultUtil.errorJson(msg);
         }
         //判断是否可购买
-        boolean b = lotterybInfoService.isBuyLotteryB(lotterybInfoId);
+        boolean b = lotterybInfoService.isBuyLotteryB(Integer.parseInt(lotterybInfoId));
         if(!b){
             String msg = "This time is closed. No purchase allowed !";
             if(super.isChineseLanguage()){

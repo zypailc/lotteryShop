@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class LotterybProportionService {
+public class LotterybProportionService extends LotteryBBaseService {
 
     @Autowired
     private LotterybProportionServiceImpl lotterybProportionService;

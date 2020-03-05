@@ -78,6 +78,14 @@
     "winningBonus": "winning of bonus",
     "purchaseBonus": "Purchase of bonus",
     "numberPeople": "number of people",
-    "winningRecord": "Winning record"
+    "winningRecord": "Winning record",
+    "sumValue": "Sum value",
+    "threeSameNumberThroughSelection": "Three same number through selection",
+    "threeWithASingle": "Three with a single",
+    "threeDifferentNo": "Three different no",
+    "threeCompaniesThroughSelection": "Three companies through selection",
+    "twoIdenticalCheck": "Two identical check",
+    "twoOnTheSameSign": "Two on the same sign",
+    "theTwoDifferent": "The two different"
   }
 }

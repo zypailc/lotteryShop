@@ -19,7 +19,7 @@ import java.util.Map;
  * 竞猜B类开奖
  */
 @Service
-public class LotterybService {
+public class LotterybStartService extends LotteryBBaseService {
 
     @Autowired
     private LotterybInfoServiceImpl lotterybInfoService;
@@ -119,10 +119,11 @@ public class LotterybService {
             //计算开奖号
             String luckNum = lotterybConfigService.getLuckNum(Integer.parseInt(lotterybConfigId));
             lotterybIssue.setLuckNum(luckNum);
+            lotterybIssue.setLotterybProportionId(lotterybProportion.getId());
             //保存中奖信息
         }
         //}else {
-        lotterybIssueService.createNextLotterybIssue(lotterybInfoId);//生成下一期数据
+        lotterybIssueService.createNextLotterybIssue(Integer.parseInt(lotterybInfoId));//生成下一期数据
         //}
     }
 
@@ -131,7 +132,7 @@ public class LotterybService {
      * @return
      */
     private List<Map<String,Object>> calculateSum(List<LotterybStatistics> lotterybStatistics){
-        Map<String,Object> map = lotterybConfigService.getConfigMap();
+        Map<String,Object> map = lotterybConfigService.getConfigMap(null);
         List<Map<String,Object>> list = new ArrayList<>();
         BigDecimal allAmount = BigDecimal.ZERO;
         for (LotterybStatistics s : lotterybStatistics) {

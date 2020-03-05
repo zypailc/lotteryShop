@@ -24,7 +24,7 @@ public class LotterybInfoService extends LotteryBBaseService {
      * @param lotteryInfoId
      * @return
      */
-    public boolean isBuyLotteryB(String lotteryInfoId){
+    public boolean isBuyLotteryB(Integer lotteryInfoId){
         LotterybIssue lotterybIssue = lotterybIssueService.getLotterybIssue(lotteryInfoId);
         if(lotterybIssue != null){
             if(lotterybIssue.getByStatus() == LotterybIssueServiceImpl.BY_STATUS_START){

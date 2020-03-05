@@ -4,7 +4,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+import org.springframework.context.annotation.Primary;
+
 import java.io.Serializable;
 
 /**
@@ -20,6 +24,7 @@ public class LotterybIssue extends Model<LotterybIssue> {
 
     private static final long serialVersionUID = 1L;
 
+	@TableId(value="id", type= IdType.AUTO)
 	private Integer id;
     /**
      * 开始时间
@@ -65,7 +70,7 @@ public class LotterybIssue extends Model<LotterybIssue> {
      * 奖金状态，0：未发放；1：已发放
      */
 	@TableField("bonus_status")
-	private String bonusStatus;
+	private Integer bonusStatus;
     /**
      * 奖金状态操作时间
      */
@@ -162,11 +167,11 @@ public class LotterybIssue extends Model<LotterybIssue> {
 		this.luckNum = luckNum;
 	}
 
-	public String getBonusStatus() {
+	public Integer getBonusStatus() {
 		return bonusStatus;
 	}
 
-	public void setBonusStatus(String bonusStatus) {
+	public void setBonusStatus(Integer bonusStatus) {
 		this.bonusStatus = bonusStatus;
 	}
 

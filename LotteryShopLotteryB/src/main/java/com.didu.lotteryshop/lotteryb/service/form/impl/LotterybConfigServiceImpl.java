@@ -136,8 +136,9 @@ public class LotterybConfigServiceImpl extends ServiceImpl<LotterybConfigMapper,
      * 获取玩法配置
      * @return
      */
-    public List<LotterybConfig> getConfig(){
+    public List<LotterybConfig> getConfig(Integer type){
         Wrapper<LotterybConfig> wrapper = new EntityWrapper<>();
+        wrapper.and().eq("type",type);
         wrapper.orderBy("sort",true);
         return super.selectList(wrapper);
     }
@@ -146,8 +147,8 @@ public class LotterybConfigServiceImpl extends ServiceImpl<LotterybConfigMapper,
      * 获取玩法配置 返回一个Map 键值是玩法ID
      * @return
      */
-    public Map<String,Object> getConfigMap(){
-        List<LotterybConfig> list = getConfig();
+    public Map<String,Object> getConfigMap(Integer type){
+        List<LotterybConfig> list = getConfig(type);
         Map<String,Object> map = new HashMap<>();
         for (LotterybConfig c : list) {
             map.put(c.getId().toString(),c.getLines());
@@ -161,7 +162,7 @@ public class LotterybConfigServiceImpl extends ServiceImpl<LotterybConfigMapper,
      * @return
      */
     public String getLuckNum(Integer lotterybConfigId){
-        LotterybConfig lotterybConfig = super.selectById(lotterybConfigId);
+       /* LotterybConfig lotterybConfig = super.selectById(lotterybConfigId);
         Random random = new Random();
         if(lotterybConfig.getType() == LotterybConfigServiceImpl.TYPE_1){
 
@@ -222,7 +223,7 @@ public class LotterybConfigServiceImpl extends ServiceImpl<LotterybConfigMapper,
         }
         if(lotterybConfig.getType() == LotterybConfigServiceImpl.TYPE_20){
             return LotterybConfigServiceImpl.TYPE_COMBINATION_20[random.nextInt(LotterybConfigServiceImpl.TYPE_COMBINATION_20.length + 1)];
-        }
+        }*/
         return "";
     }
 

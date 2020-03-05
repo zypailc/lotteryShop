@@ -54,7 +54,7 @@ public class LotterybIssueService extends LotteryBBaseService{
      * @param lotterybInfoId
      * @return
      */
-    public LotterybIssue createNextLotterybIssue(String lotterybInfoId){
+    public LotterybIssue createNextLotterybIssue(Integer lotterybInfoId){
 
         //查询是否有本玩法期数
         Wrapper<LotterybIssue> wrapper = new EntityWrapper<>();
@@ -62,14 +62,7 @@ public class LotterybIssueService extends LotteryBBaseService{
         wrapper.orderBy("issue_num",false);
         wrapper.last("limit 1");
         LotterybIssue lotterybIssue = lotterybIssueService.selectOne(wrapper);
-        LotterybInfo lotterybInfo = lotterybInfoService.selectById(Integer.parseInt(lotterybInfoId));
-        lotterybIssue.setCreateTime(new Date());
-        lotterybIssue.setByStatus(0);
-        lotterybIssue.setBsTime(new Date());
-        lotterybIssue.setLuckTotal(BigDecimal.ZERO);
-        lotterybIssue.setByStatus(0);
-        lotterybIssue.setBonusStatusTime(new Date());
-        lotterybIssue.setBonusGrant(0);
+        LotterybInfo lotterybInfo = lotterybInfoService.selectById(lotterybInfoId);
         boolean b = false;
         if(lotterybIssue == null){
             //生成新的数据
@@ -78,7 +71,7 @@ public class LotterybIssueService extends LotteryBBaseService{
             lotterybIssue.setStartTime(date);
             lotterybIssue.setEndTime(DateUtil.getDateAddMinute(date,lotterybInfo.getPeriodDate()));
             lotterybIssue.setIssueNum(lotterybIssueService.createIssueNum(lotterybInfoId,null));
-            lotterybIssue.setLotterybInfoId(Integer.parseInt(lotterybInfoId));
+            lotterybIssue.setLotterybInfoId(lotterybInfoId);
         }else {
             //生成数据
             lotterybIssue.setId(null);
@@ -87,6 +80,14 @@ public class LotterybIssueService extends LotteryBBaseService{
             lotterybIssue.setEndTime(DateUtil.getDateAddMinute(date,lotterybInfo.getPeriodDate()));
             lotterybIssue.setIssueNum(lotterybIssueService.createIssueNum(lotterybInfoId,lotterybIssue.getIssueNum()));
         }
+        lotterybIssue.setCreateTime(new Date());
+        lotterybIssue.setByStatus(0);
+        lotterybIssue.setBsTime(new Date());
+        lotterybIssue.setLuckTotal(BigDecimal.ZERO);
+        lotterybIssue.setByStatus(0);
+        lotterybIssue.setBonusStatus(0);
+        lotterybIssue.setBonusStatusTime(new Date());
+        lotterybIssue.setBonusGrant(0);
         lotterybIssueService.insert(lotterybIssue);
         return lotterybIssue;
     }

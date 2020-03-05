@@ -53,7 +53,7 @@ public class LotterybWinningService extends LotteryBBaseService {
             boolean isLuckMmber = lotterybIssue.getLuckTotal().compareTo(BigDecimal.ZERO) > 0;
             //要有中奖者，才进行发放
             if(isLuckMmber){
-                lotterybIssue.setBonusStatus("1");
+                lotterybIssue.setBonusStatus(1);
                 lotterybIssue.setBonusStatusTime(new Date());
                 bool = lotterybIssueService.updateAllColumnById(lotterybIssue);
                 //新增账单记录和中奖平台币分成；

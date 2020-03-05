@@ -114,10 +114,10 @@ zuul:
 #      user-authorization-uri: http://localhost:${server.port}/authservice/auth/oauth/authorize # 获取授权码
 
 # 提高延时设置 elevate timeout settings, 避免因为延时造成失败
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 3000
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 6000
 # 负载均衡工具配置
 ribbon:
-  ConnectTimeout: 3000
+  ConnectTimeout: 6000
   ReadTimeout: 60000
   MaxConnectionsPerHost: 50
   MaxTotalConnections: 200

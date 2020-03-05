@@ -3,10 +3,12 @@ package com.didu.lotteryshop.common.service.form.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.didu.lotteryshop.common.entity.EsMemberProperties;
+import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.mapper.EsMemberPropertiesMapper;
 import com.didu.lotteryshop.common.service.form.IEsMemberPropertiesService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.common.utils.ResultUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,6 +21,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class EsMemberPropertiesServiceImpl extends ServiceImpl<EsMemberPropertiesMapper, EsMemberProperties> implements IEsMemberPropertiesService {
+
+    @Autowired
+    private MemberServiceImpl memberService;
 
     /**
      * 钱
@@ -37,9 +42,16 @@ public class EsMemberPropertiesServiceImpl extends ServiceImpl<EsMemberPropertie
      */
     public ResultUtil updateMoneyIsView(String memberId,String isView){
        boolean b = update(null,memberId,isView,EsMemberPropertiesServiceImpl.TYPE_MONEY,null);
+
        if(b){
             return ResultUtil.successJson("success");
        }
+       //更新用户的最后修改时间
+        Member member = memberService.selectById(memberId);
+        b = memberService .updateMember(member);
+        if(b){
+            return ResultUtil.successJson("success");
+        }
         return ResultUtil.errorJson("error");
     }
 

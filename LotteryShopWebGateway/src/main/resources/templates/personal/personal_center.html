@@ -506,25 +506,12 @@ include("../common/common.js.html"){}
 
 		var moneyIsView = '${loginUser.moneyView!"0"}'
 		$(".moneyOpenOrClose").attr("datavalue",moneyIsView);
+		moneyOpenOrClose();
 		$(".moneyOpenOrClose").click(function(){
-			var isView = $(".moneyOpenOrClose").attr("datavalue");
-			if(isView == '0'){
-				$(".moneyOpenOrClose").removeClass("glyphicon-eye-open");
-				$(".moneyOpenOrClose").addClass("glyphicon-eye-close");
-				$(".moneyOpenOrClose").attr("dataValue",'1');
-				$(".money_input").prop("type","password");
-				$(".money_input_1").prop("type","password");
-			}
-			if(isView == '1'){
-				$(".moneyOpenOrClose").removeClass("glyphicon-eye-close");
-				$(".moneyOpenOrClose").addClass("glyphicon-eye-open");
-				$(".moneyOpenOrClose").attr("dataValue",'0');
-				$(".money_input").prop("type","text");
-				$(".money_input_1").prop("type","text");
-			}
+			var isView =  $(".moneyOpenOrClose").attr("datavalue");
+			moneyOpenOrClose();
 			updateMoneyIsView(isView);
-		})
-		$(".moneyOpenOrClose").click();
+		});
 
 		gengeralizeMemberInit(true,'generalizeRecord');
 		findETHWallet( 'walletETH','/api/base/v1/ethWallet/findEthWallet');//eth
@@ -548,6 +535,25 @@ include("../common/common.js.html"){}
 		}
 		infoContentGenerlize(languageType);
 	})
+	function moneyOpenOrClose(isView){
+		$(".moneyOpenOrClose").click(function(){
+			//var isView = $(".moneyOpenOrClose").attr("datavalue");
+			if(isView == '0'){
+				$(".moneyOpenOrClose").removeClass("glyphicon-eye-open");
+				$(".moneyOpenOrClose").addClass("glyphicon-eye-close");
+				$(".moneyOpenOrClose").attr("dataValue",'1');
+				$(".money_input").prop("type","password");
+				$(".money_input_1").prop("type","password");
+			}
+			if(isView == '1'){
+				$(".moneyOpenOrClose").removeClass("glyphicon-eye-close");
+				$(".moneyOpenOrClose").addClass("glyphicon-eye-open");
+				$(".moneyOpenOrClose").attr("dataValue",'0');
+				$(".money_input").prop("type","text");
+				$(".money_input_1").prop("type","text");
+			}
+		})
+	}
 </script>
 <body class="body_top">
 <div class="super_container">
@@ -771,8 +777,9 @@ include("../common/common.js.html"){}
 									<p>
 										<span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
 										<span class="span_right expendOrReceipts">0.1</span>
-										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
-										<span class="ethGas ethGasStr" data-localize="base.ethGas">燃气费 : </span><span class="ethGas ethGasStrInfo">0.00298507</span>
+										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">0.0</span>
+										<span class="ethGas ethGasStr" data-localize="base.ethGas">燃气费 : </span><span class="ethGas ethGasStrInfo">0.0</span>
+										<span class="ethGas ethGasStr" data-localize="base.ethGas">燃气费 : </span><span class="ethGas ethGasStrInfo">0.0</span>
 									</p>
 								</div>
 								<!--<hr class="hrEth">-->
@@ -800,8 +807,8 @@ include("../common/common.js.html"){}
 									<p><span class="statusTime span_right">2019-12-13 15:15:07</span><span class="divType"></span><span class="statusStr"></span></p>
 									<p>
 										<span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
-										<span class="span_right expendOrReceipts">0.1</span>
-										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
+										<span class="span_right expendOrReceipts">0.0</span>
+										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">0.0</span>
 									</p>
 								</div>
 								<!--<hr class="hrEth">-->
@@ -829,8 +836,8 @@ include("../common/common.js.html"){}
 									<p><span class="statusTime span_right">2019-12-13 15:15:07</span><span class="divType"></span><span class="statusStr"></span></p>
 									<p>
 										<span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
-										<span class="span_right expendOrReceipts">0.1</span>
-										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
+										<span class="span_right expendOrReceipts">0.0</span>
+										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">0.0</span>
 									</p>
 								</div>
 								<!--<hr class="hrEth">-->
@@ -884,8 +891,8 @@ include("../common/common.js.html"){}
 									<p><span class="statusTime span_right">2019-12-13 15:15:07</span><span class="divType"></span><span class="statusStr"></span></p>
 									<p>
 										<span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
-										<span class="span_right expendOrReceipts">0.1</span>
-										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">19.391044789999572</span>
+										<span class="span_right expendOrReceipts">0.0</span>
+										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">0.0</span>
 									</p>
 								</div>
 								<!--<hr class="hrEth">-->

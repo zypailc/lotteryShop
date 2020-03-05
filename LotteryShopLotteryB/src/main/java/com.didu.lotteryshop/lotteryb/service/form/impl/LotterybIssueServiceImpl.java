@@ -44,7 +44,7 @@ public class LotterybIssueServiceImpl extends ServiceImpl<LotterybIssueMapper, L
      * 根据玩法Id获取期数
      * @return
      */
-    public LotterybIssue getLotterybIssue(String lotteryInfoId){
+    public LotterybIssue getLotterybIssue(Integer lotteryInfoId){
         Wrapper<LotterybIssue> wrapper = new EntityWrapper<>();
         wrapper.and().eq("lotteryb_info_id",lotteryInfoId);
         wrapper.orderBy("issue_num",false);
@@ -58,7 +58,7 @@ public class LotterybIssueServiceImpl extends ServiceImpl<LotterybIssueMapper, L
      * @param issueNum 期数
      * @return
      */
-    public String createIssueNum(String lotterybInfoId,String issueNum){
+    public String createIssueNum(Integer lotterybInfoId,String issueNum){
         String newDateStr = DateUtil.getDateFormat("yyyyMMdd");
         if(issueNum == null || "".equals(issueNum))
             return newDateStr + "00001";

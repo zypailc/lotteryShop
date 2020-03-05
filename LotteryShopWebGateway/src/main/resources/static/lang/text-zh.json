@@ -78,6 +78,14 @@
     "winningBonus": "中奖分红",
     "purchaseBonus": "购买分红",
     "numberPeople": "人数",
-    "winningRecord": "中奖记录"
+    "winningRecord": "中奖记录",
+    "sumValue": "和值",
+    "threeSameNumberThroughSelection": "三同号通选",
+    "threeWithASingle": "三同号单选",
+    "threeDifferentNo": "三不同号",
+    "threeCompaniesThroughSelection": "三连号通选",
+    "twoIdenticalCheck": "二同号复选",
+    "twoOnTheSameSign": "二同号单选",
+    "theTwoDifferent": "二不同号"
   }
 }

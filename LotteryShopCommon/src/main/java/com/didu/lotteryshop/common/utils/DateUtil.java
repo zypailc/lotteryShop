@@ -28,7 +28,7 @@ public class DateUtil {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd HHmmss");
         System.out.println(format.format(nowTime.getTime()));
         nowTime.setTime(date);
-        nowTime.add(Calendar.MINUTE, 5);
+        nowTime.add(Calendar.MINUTE, minute);
         System.out.println(format.format(nowTime.getTime()));
         return nowTime.getTime();
     }

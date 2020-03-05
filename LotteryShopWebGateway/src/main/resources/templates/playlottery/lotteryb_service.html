@@ -9,11 +9,111 @@
     <%
     include("../common/common.css.html"){}
     %>
-    <link rel="stylesheet" type="text/css" href="../styles/portfolio_styles1.css">
-    <link rel="stylesheet" type="text/css" href="../styles/portfolio_responsive1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_styles2.css">
+    <link rel="stylesheet" type="text/css" href="../styles/portfolio_responsive2.css">
     <link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
-    <link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
-    <link rel="stylesheet" type="text/css" href="../styles/lottery_service.css">
+    <link rel="stylesheet" type="text/css" href="../styles/responsive2.css">
+    <link rel="stylesheet" type="text/css" href="../styles/lottery_service_1.css">
+    <style>
+        .service_item_title{
+            width: 49%;
+            float: left;
+            border-radius: 5px;
+            margin: 2px;
+            background: #f1f1f1;
+        }
+        .service_item_title_left{
+            height: 110px;
+        }
+        .service_item_title_right{
+            height: 110px;
+            float: right!important;
+        }
+        .service_item_title_name{
+            width: 100%!important;
+        }
+        .service_item_content_body{
+            float: left;
+            width: 100%;
+            text-align: center;
+            background: #f1f1f1;
+            border-radius: 5px;
+        }
+
+        .item_block{
+            display: inline-block;
+            font-size: 28px;
+            border: solid 1px #ccc;
+            line-height: 75px;
+            border-radius: 5px;
+            margin: 3px;
+        }
+        .item_block_1{
+            width: 11%;
+            height: 80px;
+            min-width: 105px;
+        }
+        .item_block_2{
+            height: 80px;
+            min-width: 300px;
+        }
+        .item_block_3{
+            width: 11%;
+            height: 80px;
+            min-width: 105px;
+        }
+        .item_block_4{
+            width: 11%;
+            height: 80px;
+            min-width: 105px;
+        }
+        .item_block_5{
+            height: 80px;
+            min-width: 300px;
+        }
+        .item_block_6{
+            height: 80px;
+            min-width: 105px;
+        }
+        .item_block_7{
+            height: 80px;
+            min-width: 105px;
+        }
+        .item_block_8{
+            height: 80px;
+            min-width: 105px;
+        }
+        .item_block_font_size{
+            line-height: 70px;
+        }
+        .span_font_size{
+            font-size: 26px;
+        }
+        .service_item_content_type{
+            float: left;
+            background: #eee;
+            margin-bottom: 3px;
+            width: 100%;
+            border-radius: 5px;
+        }
+        .service_item_content_type_value{
+            border-radius: 3px;
+            margin-left: 3px;
+            margin-top: 3px;
+            background: #eee;
+        }
+        .item_block:hover{
+            background: #4E5465;
+        }
+        .item_block p:hover{
+            color: white;
+        }
+        .item_block_checked{
+
+        }
+
+
+    </style>
 </head>
 <!-- commonality js -->
 <%
@@ -21,6 +121,98 @@ include("../common/common.js.html"){}
 %>
 <script src="../js/portfolio_custom.js"></script>
 <script>
+
+    $(function(){
+        var language = getLanguage();
+        var lotterybInfoId = '${playTypeId!""}';
+        initInfo(lotterybInfoId,language);
+        initConfig(language,1);
+        countDown();
+    });
+
+    function initInfo(lotterybInfoId,language){
+        $.ajax({
+            url:'${projectPath}/apiauthorization/lotteryB/authorization/v1/findLotterybInfo',
+            type:'get',
+            data:{"lotterybInfoId":lotterybInfoId},
+            dataType:"json",
+            success:function (result) {
+                console.log(result);
+                var dataInfo = result.extend.data;
+                if(language == 'en'){
+                    $(".lottery_title").html(dataInfo.enTitle);
+                }
+                if(language == 'zh'){
+                    $(".lottery_title").html(dataInfo.zhTitle);
+                }
+                $(".lottery_service_time").attr("nowTime",dataInfo.newDate);
+                $(".lottery_service_time").attr("startTime",dataInfo.startDate);
+                $(".lottery_service_time").attr("endTime",dataInfo.endDate);
+                $(".now_number_of_periods").html(dataInfo.issueNum);
+            }
+        })
+    }
+
+    function initConfig(language,type){
+        $.ajax({
+            url:'${projectPath}/apiauthorization/lotteryB/authorization/v1/findLotterybConfig',
+            type:'get',
+            data:{"type":type},
+            dataType:"json",
+            success:function (result) {
+                var dataInfo = result.extend.data;
+                var subblock = $(".service_item_content_subblock");
+                subblock.html("");
+                $.each(dataInfo,function (index,data){
+                    var value = data.enTitle;
+                    if(language == 'zh'){
+                        value = data.zhTitle;
+                    }
+                    var div_ = '<div dataId = "'+data.id+'" lines="'+data.lines+'" class="item_block item_block_'+type+'">';
+                    if(type == 1){
+                        div_ += '<p><span class="span_font_size">'+value+'</span></p>' +
+                            '<p><span>'+data.lines+'</span></p>';
+                    }else {
+                        div_ += '<p><span class="item_block_font_size span_font_size">'+value+'</span></p>';
+                    }
+                    div_ += '</div>';
+                    subblock.append(div_);
+                })
+            }
+        })
+    }
+
+    function select_type(){
+        var select_obj = $(".service_item_content_type_value");
+        console.log(select_obj.val());
+        initConfig(getLanguage(),select_obj.val())
+    }
+
+    function countDown(){
+        var today=new Date(),h=today.getHours(),m=today.getMinutes(),s=today.getSeconds();
+        //var today=new Date($(".lottery_service_time").attr("nowTime")),h=today.getHours(),m=today.getMinutes(),s=today.getSeconds();
+        var startTime = new Date($(".lottery_service_time").attr("startTime"));
+        var stopTime=new Date($(".lottery_service_time").attr("endTime"));
+        if((today.getTime() - startTime.getTime()) > 0 && stopTime.getTime() - today.getTime() > 0){//start period
+            $(".timeIssueGiveOut").hide();
+            $(".timeIssueDraw").hide();
+            $(".timeIssueView").show();
+            var stopH=stopTime.getHours(),stopM=stopTime.getMinutes(),stopS=stopTime.getSeconds();
+            var shenyu=stopTime.getTime()-today.getTime(),//倒计时毫秒数
+                shengyuD=parseInt(shenyu/(60*60*24*1000)),//转换为天
+                D=parseInt(shenyu)-parseInt(shengyuD*60*60*24*1000),//除去天的毫秒数
+                shengyuH=parseInt(D/(60*60*1000)),//除去天的毫秒数转换成小时
+                H=D-shengyuH*60*60*1000,//除去天、小时的毫秒数
+                shengyuM=parseInt(H/(60*1000)),//除去天的毫秒数转换成分钟
+                M=H-shengyuM*60*1000;//除去天、小时、分的毫秒数
+            var shengyus = parseInt((shenyu-shengyuD*60*60*24*1000-shengyuH*60*60*1000-shengyuM*60*1000)/1000)//除去天、小时、分的毫秒数转化为秒
+            $(".time_hour").html((PrefixInteger(shengyuH,2))+":"+PrefixInteger(shengyuM,2)+":"+PrefixInteger(shengyus,2));
+        }
+        if(today.getTime() - startTime.getTime() < 0){
+            $(".time_hour").html("00:00:00");
+        }
+        setTimeout(countDown,500);
+    }
 
 </script>
 <body class="body_top" data-spy="scroll" data-target=".services_item_inner">
@@ -57,6 +249,52 @@ include("../common/common.js.html"){}
         <div class="product-grid">
             <!-- play -->
             <div class="lottery_item lotteryPlay ">
+
+                <div class="service_item_content">
+                    <div class="service_item_title service_item_title_name">
+                        <div class="lottery_service_title"> <span class="lottery_title"></span></div>
+                    </div>
+                    <div class="service_item_title service_item_title_left">
+                        <div class="lottery_service_title"> <span class="now_number_of_periods"></span></div>
+                        <div class="lottery_service_time">
+                            <span class="timeIssueView">
+                               <em class="em_time time_hour">00:00:00</em>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="service_item_title service_item_title_right">
+                        <div class="lottery_service_title"><span class="last_number_of_periods">2020030400001</span></div>
+                        <div>开奖号</div>
+                    </div>
+                </div>
+                <div class="service_item_content_type">
+                    <div class="service_item_content_type_subblock">
+                        <select onchange="select_type(this)" class="service_item_content_type_value">
+                            <option value="1"  class="sum_value" data-localize="base.sumValue"></option>
+                            <option value="2"  class="three_same_number_through_selection" data-localize="base.threeSameNumberThroughSelection"></option>
+                            <option value="3"  class="three_with_a_single" data-localize="base.threeWithASingle"></option>
+                            <option value="4"  class="three_different_no." data-localize="base.threeDifferentNo"></option>
+                            <option value="5"  class="three_companies_through_selection" data-localize="base.threeCompaniesThroughSelection"></option>
+                            <option value="6"  class="two_identical_check" data-localize="base.twoIdenticalCheck"></option>
+                            <option value="7"  class="two_on_the_same_sign" data-localize="base.twoOnTheSameSign"></option>
+                            <option value="8"  class="the_two_different" data-localize="base.theTwoDifferent"></option>
+                        </select>
+                        <!--<div class="service_item_content_type_value"><span class="sum_value" data-localize="base.sumValue">Sum value</span></div>
+                        <div class="service_item_content_type_value"><span class="three_same_number_through_selection" data-localize="base.threeSameNumberThroughSelection">Three same number through selection</span></div>
+                        <div class="service_item_content_type_value"><span class="three_with_a_single" data-localize="base.threeWithASingle">Three with a single</span></div>
+                        <div class="service_item_content_type_value"><span class="three_different_no." data-localize="base.threeDifferentNo.">Three different no.</span></div>
+                        <div class="service_item_content_type_value"><span class="three_companies_through_selection" data-localize="base.threeCompaniesThroughSelection">Three companies through selection</span></div>
+                        <div class="service_item_content_type_value"><span class="two_identical_check" data-localize="base.twoIdenticalCheck">Two identical check</span></div>
+                        <div class="service_item_content_type_value"><span class="two_on_the_same_sign" data-localize="base.twoOnTheSameSign">Two on the same sign</span></div>
+                        <div class="service_item_content_type_value"><span class="the_two_different" data-localize="base.theTwoDifferent">The two different</span></div>-->
+                    </div>
+                </div>
+                <div class="service_item_content_body">
+                    <div class="service_item_content_subblock">
+
+                    </div>
+                </div>
             </div>
             <!-- rule -->
             <div class="lottery_item rules">
