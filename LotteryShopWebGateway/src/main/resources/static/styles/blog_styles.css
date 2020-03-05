@@ -696,6 +696,7 @@ section
 .card-title
 {
 	margin-bottom: 16px;
+	text-align: center;
 }
 .card-title a
 {
