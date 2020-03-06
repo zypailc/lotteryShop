@@ -39,6 +39,10 @@ zuul:
       path: /lotteryA/**
       serviceId: lotterya-service
       sensitiveHeaders: "*"
+    api-d:
+      path: /lotteryB/**
+      serviceId: lotteryb-service
+      sensitiveHeaders: "*"
   #sensitive-headers: "*"
   #add-host-header: false
 

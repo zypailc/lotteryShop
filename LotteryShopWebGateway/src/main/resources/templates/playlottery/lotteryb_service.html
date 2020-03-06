@@ -102,6 +102,17 @@
             margin-top: 3px;
             background: #eee;
         }
+        .service_item_content_buyList{
+            float: left;
+            width: 100%;
+            background: #eee;
+            border-radius: 5px;
+            margin-top: 3px;
+        }
+        .service_item_content_btn{
+            float: left;
+            margin-bottom: 100px;
+        }
         .item_block:hover{
             background: #4E5465;
         }
@@ -109,10 +120,56 @@
             color: white;
         }
         .item_block_checked{
+            background: #4E5465;
+        }
+        .item_block_checked p{
+            color: white;
+        }
+        .service_item_content_buyList_ul{
+            padding: 5px;
+        }
+        .service_item_content_buyList_ul_li{
+            text-align: left;
+            margin-left: 3px;
+            border-bottom: solid 1px white
+        }
+        .service_item_content_buyList_ul_li_end{
+            text-align: left;
+            margin-left: 3px;
+        }
+        .span_right{
+            margin-right: 30px;
+        }
+        .li_item{
 
         }
+        .type_name{
+            width: 100%;
+        }
+        .li_item_block{
+            display: inline-block;
+        }
+        .type_other{
 
-
+        }
+        .type_num{
+            width: 20%;
+        }
+        .type_money{
+            width: 45%;
+        }
+        .input_money{
+            border-radius: 5px;
+            border: solid 1px;
+            width: 80px;
+            height: 25px;
+        }
+        .type_compensate{
+            width: 20%;
+        }
+        .type_btn{
+            width: 12%;
+        }
     </style>
 </head>
 <!-- commonality js -->
@@ -168,7 +225,7 @@ include("../common/common.js.html"){}
                     if(language == 'zh'){
                         value = data.zhTitle;
                     }
-                    var div_ = '<div dataId = "'+data.id+'" lines="'+data.lines+'" class="item_block item_block_'+type+'">';
+                    var div_ = '<div dataId = "'+data.id+'" lines = "'+data.lines+'" class="item_block item_block_'+type+'">';
                     if(type == 1){
                         div_ += '<p><span class="span_font_size">'+value+'</span></p>' +
                             '<p><span>'+data.lines+'</span></p>';
@@ -178,14 +235,44 @@ include("../common/common.js.html"){}
                     div_ += '</div>';
                     subblock.append(div_);
                 })
+                item_block_checked(type);
             }
         })
     }
 
+    function item_block_checked(type){
+        $(".item_block").on("click",function(){
+            var isChecked = $(this).attr("ischecked") || 'false';
+            if(isChecked == 'true'){
+                $(this).attr("ischecked",'false');
+                $(this).removeClass("item_block_checked");
+                //TODO
+            }else {
+                $(this).attr("ischecked",'true');
+                $(this).addClass("item_block_checked");
+                //TODO
+                if(type == '1'){
+                    create_list_1_add();
+                }
+            }
+        });
+    }
+
     function select_type(){
         var select_obj = $(".service_item_content_type_value");
-        console.log(select_obj.val());
-        initConfig(getLanguage(),select_obj.val())
+        initConfig(getLanguage(),select_obj.val());
+    }
+
+    function create_list_1_add(){
+        var type_val = $(".service_item_content_type_value").val();
+        var type_text = $(".service_item_content_type_value").find("option[value="+type_val+"]").html();
+        console.log("type_val:"+type_val);
+        console.log("type_text:"+type_text);
+        var lotterybConfigId = $(".service_item_content_subblock").find(".item_block_checked").attr("dataId");
+        var lines = $(".service_item_content_subblock").find(".item_block_checked").attr("lines");
+        console.log("lotterybConfigId:"+lotterybConfigId);
+        console.log("lines:"+lines);
+
     }
 
     function countDown(){
@@ -294,6 +381,43 @@ include("../common/common.js.html"){}
                     <div class="service_item_content_subblock">
 
                     </div>
+                </div>
+                <div class="service_item_content_buyList">
+                    <ul class="service_item_content_buyList_ul">
+                        <li class="service_item_content_buyList_ul_li">
+                            <div class="li_item type_name">Three same number through selection</div>
+                            <div class="li_item type_other">
+                                <div class="li_item_block type_num">共1注</div>
+                                <div class="li_item_block type_money"><input class="input_money" type="number" value="0"></div>
+                                <div class="li_item_block type_compensate">可中金额100元</div>
+                                <div class="li_item_block type_btn"><button class="btn">删除</button></div>
+                            </div>
+                        </li>
+                        <li class="service_item_content_buyList_ul_li_end">
+                            <div class="li_item type_name">Three same number through selection</div>
+                            <div class="li_item type_num">共1注</div>
+                            <div class="li_item type_money"><input class="input_money" type="number" value="0"></div>
+                            <div class="li_item">可中金额100元</div>
+                            <div class="li_item type_btn"><button class="btn">删除</button></div>
+                        </li>
+                        <li class="service_item_content_buyList_ul_li_end">
+                            <div class="li_item type_name">Three same number through selection</div>
+                            <div class="li_item type_num">共1注</div>
+                            <div class="li_item type_money"><input class="input_money" type="number" value="0"></div>
+                            <div class="li_item">可中金额100元</div>
+                            <div class="li_item type_btn"><button class="btn">删除</button></div>
+                        </li>
+                        <li class="service_item_content_buyList_ul_li_end">
+                            <div class="li_item type_name">Three same number through selection</div>
+                            <div class="li_item type_num">共1注</div>
+                            <div class="li_item type_money"><input class="input_money" type="number" value="0"></div>
+                            <div class="li_item">可中金额100元</div>
+                            <div class="li_item type_btn"><button class="btn">删除</button></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="service_item_content_btn">
+                    <button class="btn">确认</button>
                 </div>
             </div>
             <!-- rule -->
