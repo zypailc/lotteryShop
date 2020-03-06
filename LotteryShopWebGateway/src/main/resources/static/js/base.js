@@ -46,7 +46,7 @@ function hero_side_text_container_niticeHear_click(){
     })
 }
 function hero_side_text_container_button_click(){
-    $(".hero_side_text_container_button").click(function(){
+    $(".noticeImg").click(function(){
         //$(".hero_side_text_container_button").hide();
         //$(".hero_side_text_container").show();
         var width = document.body.clientWidth;
