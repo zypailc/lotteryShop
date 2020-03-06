@@ -663,6 +663,7 @@ section
 	border-radius: 5px;
 	border: 1px solid #dcdcdc;
 	margin: 5px;
+	padding: 5px;
 }
 .card:hover
 {
