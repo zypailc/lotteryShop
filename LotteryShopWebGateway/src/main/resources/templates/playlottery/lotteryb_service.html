@@ -47,6 +47,7 @@
             line-height: 75px;
             border-radius: 5px;
             margin: 3px;
+            cursor: pointer;
         }
         .item_block_1{
             width: 11%;
@@ -112,26 +113,49 @@
         .service_item_content_btn{
             float: left;
             margin-bottom: 100px;
+            width: 100%;
+            background: #f1f1f1;
+            margin-top: 3px;
+            border-radius: 5px;
         }
         .item_block:hover{
-            background: #4E5465;
+            background: #9f88be;
+            color: white!important;
         }
-        .item_block p:hover{
+        .item_block:hover p{
             color: white;
         }
         .item_block_checked{
-            background: #4E5465;
+            background: #9f88be;
         }
         .item_block_checked p{
             color: white;
         }
         .service_item_content_buyList_ul{
             padding: 5px;
+            min-height: 100px;
+            max-height: 190px;
+            overflow: auto;
+        }
+        .service_item_content_buyList_ul::-webkit-scrollbar {/*滚动条整体样式*/
+            width: 2px;     /*高宽分别对应横竖滚动条的尺寸*/
+            height: 1px;
+        }
+        .service_item_content_buyList_ul::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 2px;
+            -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+            background: #dddddd;
+        }
+        .service_item_content_buyList_ul::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+            border-radius: 2px;
+            background: #EDEDED;
         }
         .service_item_content_buyList_ul_li{
             text-align: left;
             margin-left: 3px;
-            border-bottom: solid 1px white
+            border-bottom: solid 1px white;
+            color: #9f88be;
         }
         .service_item_content_buyList_ul_li_end{
             text-align: left;
@@ -156,19 +180,42 @@
             width: 20%;
         }
         .type_money{
-            width: 45%;
+            width: 35%;
         }
         .input_money{
-            border-radius: 5px;
-            border: solid 1px;
+            border: none;
+            border-bottom: solid 1px;
             width: 80px;
             height: 25px;
+            background: #eee;
+            text-align: center;
+
+        }
+        .input_money::-webkit-outer-spin-button,
+        .input_money::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+        .input_money[type="number"]{
+            -moz-appearance: textfield;
         }
         .type_compensate{
-            width: 20%;
+            width: 30%;
         }
         .type_btn{
             width: 12%;
+        }
+        .a_delete{
+            cursor: pointer;
+            /*color: red!important;*/
+        }
+        .model_purchase_button_1{
+            top: 0!important;
+        }
+        .button_purchase{
+            width: inherit;
+        }
+        .compensate_value{
+            color: red;
         }
     </style>
 </head>
@@ -225,7 +272,7 @@ include("../common/common.js.html"){}
                     if(language == 'zh'){
                         value = data.zhTitle;
                     }
-                    var div_ = '<div dataId = "'+data.id+'" lines = "'+data.lines+'" class="item_block item_block_'+type+'">';
+                    var div_ = '<div dataId = "'+data.id+'" lines = "'+data.lines+'" dataValue="'+value+'" class="item_block item_block_'+type+'">';
                     if(type == 1){
                         div_ += '<p><span class="span_font_size">'+value+'</span></p>' +
                             '<p><span>'+data.lines+'</span></p>';
@@ -240,19 +287,25 @@ include("../common/common.js.html"){}
         })
     }
 
-    function item_block_checked(type){
+    function item_block_checked(type,){
         $(".item_block").on("click",function(){
             var isChecked = $(this).attr("ischecked") || 'false';
             if(isChecked == 'true'){
                 $(this).attr("ischecked",'false');
                 $(this).removeClass("item_block_checked");
                 //TODO
+                if(type == "1"){
+                    list_1_delete($(this).attr("dataId"));
+                }
             }else {
                 $(this).attr("ischecked",'true');
                 $(this).addClass("item_block_checked");
                 //TODO
                 if(type == '1'){
-                    create_list_1_add();
+                    var lotterybConfigId = $(this).attr("dataId");
+                    var typeName = $(this).attr("dataValue");
+                    var lines = $(this).attr("lines");
+                    list_1_add(lotterybConfigId,typeName,lines);
                 }
             }
         });
@@ -263,16 +316,51 @@ include("../common/common.js.html"){}
         initConfig(getLanguage(),select_obj.val());
     }
 
-    function create_list_1_add(){
+    function list_1_add(lotterybConfigId,typeName,lines){
         var type_val = $(".service_item_content_type_value").val();
         var type_text = $(".service_item_content_type_value").find("option[value="+type_val+"]").html();
-        console.log("type_val:"+type_val);
-        console.log("type_text:"+type_text);
-        var lotterybConfigId = $(".service_item_content_subblock").find(".item_block_checked").attr("dataId");
-        var lines = $(".service_item_content_subblock").find(".item_block_checked").attr("lines");
-        console.log("lotterybConfigId:"+lotterybConfigId);
-        console.log("lines:"+lines);
+        var ul = $(".service_item_content_buyList_ul");
+        var li = ul.find("li").first().clone();
+        li.show();
+        li.attr("lines",lines);
+        li.find(".type_name").html("["+type_text+"]" + typeName);
+        li.attr("lotterybconfigid",lotterybConfigId);
+        li.find(".num_value").html(1);
+        ul.append(li);
+    }
 
+    function list_1_delete(lotterybConfigId){
+        var ul = $(".service_item_content_buyList_ul");
+        var li = ul.find("li[lotterybconfigid="+lotterybConfigId+"]");
+        li.remove();
+    }
+
+    function a_delete(e){
+        var li = $(e).parents("li");
+        var lotterybConfigId = li.attr("lotterybconfigid");
+        $(".service_item_content_subblock").find("div[dataId="+lotterybConfigId+"]").removeClass("item_block_checked");
+        li.remove();
+    }
+
+    function calculateMoney(e){
+        console.log($(e).parent().html());
+        console.log($(e).parent().parent().html());
+        var li = $(e).parents("li");
+        console.log(li.html());
+        var lines = li.attr("lines");
+        var money = $(e).val();
+        var compensate = li.find(".compensate_value");
+        lines = parseFloat(lines);
+        money = parseInt(money)
+        if(money < 1){
+            return;
+        }
+        $(e).val(money);
+        var total = lines * money;
+        if(!total){
+            total = 0;
+        }
+        compensate.html(total);
     }
 
     function countDown(){
@@ -383,41 +471,22 @@ include("../common/common.js.html"){}
                     </div>
                 </div>
                 <div class="service_item_content_buyList">
-                    <ul class="service_item_content_buyList_ul">
-                        <li class="service_item_content_buyList_ul_li">
-                            <div class="li_item type_name">Three same number through selection</div>
+                    <ul class="service_item_content_buyList_ul ">
+                        <li class="service_item_content_buyList_ul_li" style="display: none">
+                            <div class="li_item type_name">[sum value]</div>
                             <div class="li_item type_other">
-                                <div class="li_item_block type_num">共1注</div>
-                                <div class="li_item_block type_money"><input class="input_money" type="number" value="0"></div>
-                                <div class="li_item_block type_compensate">可中金额100元</div>
-                                <div class="li_item_block type_btn"><button class="btn">删除</button></div>
+                                <div class="li_item_block type_num"><span data-localize="base.number">[Number]</span> <span class="num_value">1</span> </div>
+                                <div class="li_item_block type_money"><span data-localize="base.buy">[Buy]</span><input class="input_money" onchange="calculateMoney(this)" type="number" value="0"></div>
+                                <div class="li_item_block type_compensate"><span data-localize="base.compensate">[Compensate]</span><span class="compensate_value"> 0 </span></div>
+                                <div class="li_item_block type_btn"><a class="a_delete" onclick="a_delete(this)" data-localize="base.delete">Delete</a></div>
                             </div>
-                        </li>
-                        <li class="service_item_content_buyList_ul_li_end">
-                            <div class="li_item type_name">Three same number through selection</div>
-                            <div class="li_item type_num">共1注</div>
-                            <div class="li_item type_money"><input class="input_money" type="number" value="0"></div>
-                            <div class="li_item">可中金额100元</div>
-                            <div class="li_item type_btn"><button class="btn">删除</button></div>
-                        </li>
-                        <li class="service_item_content_buyList_ul_li_end">
-                            <div class="li_item type_name">Three same number through selection</div>
-                            <div class="li_item type_num">共1注</div>
-                            <div class="li_item type_money"><input class="input_money" type="number" value="0"></div>
-                            <div class="li_item">可中金额100元</div>
-                            <div class="li_item type_btn"><button class="btn">删除</button></div>
-                        </li>
-                        <li class="service_item_content_buyList_ul_li_end">
-                            <div class="li_item type_name">Three same number through selection</div>
-                            <div class="li_item type_num">共1注</div>
-                            <div class="li_item type_money"><input class="input_money" type="number" value="0"></div>
-                            <div class="li_item">可中金额100元</div>
-                            <div class="li_item type_btn"><button class="btn">删除</button></div>
                         </li>
                     </ul>
                 </div>
                 <div class="service_item_content_btn">
-                    <button class="btn">确认</button>
+                    <div class="model_purchase_button model_purchase_button_1">
+                        <div class="button_purchase button_width_all" disabled="disabled" id="button_purchase"><span data-localize="base.confirm">confirm</span></div>
+                    </div>
                 </div>
             </div>
             <!-- rule -->

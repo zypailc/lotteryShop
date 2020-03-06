@@ -431,7 +431,8 @@
             success:function (data){
                 if(data.code == '200'){
                     layer.msg(data.extend.data);
-                    set_Time_out("../web/authIndex");
+                    window.location.href="../web/authIndex";
+                    //set_Time_out("../web/authIndex");
                 }
                 if(data == '500'){
                     layui_open(data.msg)

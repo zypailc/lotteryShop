@@ -88,6 +88,8 @@
     "twoOnTheSameSign": "二同号单选",
     "theTwoDifferent": "二不同号",
     "number": "[数量]",
-    "buy": "[购买]"
+    "buy": "[购买]",
+    "compensate": "[赔付]",
+    "delete": "删除"
   }
 }

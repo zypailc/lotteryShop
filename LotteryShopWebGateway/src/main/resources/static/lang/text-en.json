@@ -86,6 +86,10 @@
     "threeCompaniesThroughSelection": "Three companies through selection",
     "twoIdenticalCheck": "Two identical check",
     "twoOnTheSameSign": "Two on the same sign",
-    "theTwoDifferent": "The two different"
+    "theTwoDifferent": "The two different",
+    "number": "[Number]",
+    "buy": "[Buy]",
+    "compensate": "[Compensate]",
+    "delete": "Delete"
   }
 }

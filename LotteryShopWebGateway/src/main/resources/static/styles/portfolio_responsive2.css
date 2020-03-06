@@ -242,6 +242,18 @@
 	.item_block_5{
 		min-height: 130px;
 	}
+	.type_num{
+		width: 49% !important;
+	}
+	.type_money{
+		width: 49%!important;
+	}
+	.type_compensate{
+		width: 49%!important;
+	}
+	.type_btn{
+		width: 49%!important;
+	}
 }
 
 /************
