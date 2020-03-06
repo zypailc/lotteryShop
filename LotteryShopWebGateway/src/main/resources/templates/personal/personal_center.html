@@ -506,10 +506,10 @@ include("../common/common.js.html"){}
 
 		var moneyIsView = '${loginUser.moneyView!"0"}'
 		$(".moneyOpenOrClose").attr("datavalue",moneyIsView);
-		moneyOpenOrClose();
+		moneyOpenOrClose(moneyIsView);
 		$(".moneyOpenOrClose").click(function(){
 			var isView =  $(".moneyOpenOrClose").attr("datavalue");
-			moneyOpenOrClose();
+			moneyOpenOrClose(isView);
 			updateMoneyIsView(isView);
 		});
 
@@ -536,23 +536,21 @@ include("../common/common.js.html"){}
 		infoContentGenerlize(languageType);
 	})
 	function moneyOpenOrClose(isView){
-		$(".moneyOpenOrClose").click(function(){
-			//var isView = $(".moneyOpenOrClose").attr("datavalue");
-			if(isView == '0'){
-				$(".moneyOpenOrClose").removeClass("glyphicon-eye-open");
-				$(".moneyOpenOrClose").addClass("glyphicon-eye-close");
-				$(".moneyOpenOrClose").attr("dataValue",'1');
-				$(".money_input").prop("type","password");
-				$(".money_input_1").prop("type","password");
-			}
-			if(isView == '1'){
-				$(".moneyOpenOrClose").removeClass("glyphicon-eye-close");
-				$(".moneyOpenOrClose").addClass("glyphicon-eye-open");
-				$(".moneyOpenOrClose").attr("dataValue",'0');
-				$(".money_input").prop("type","text");
-				$(".money_input_1").prop("type","text");
-			}
-		})
+		//var isView = $(".moneyOpenOrClose").attr("datavalue");
+		if(isView == '0'){
+			$(".moneyOpenOrClose").removeClass("glyphicon-eye-open");
+			$(".moneyOpenOrClose").addClass("glyphicon-eye-close");
+			$(".moneyOpenOrClose").attr("dataValue",'1');
+			$(".money_input").prop("type","password");
+			$(".money_input_1").prop("type","password");
+		}
+		if(isView == '1'){
+			$(".moneyOpenOrClose").removeClass("glyphicon-eye-close");
+			$(".moneyOpenOrClose").addClass("glyphicon-eye-open");
+			$(".moneyOpenOrClose").attr("dataValue",'0');
+			$(".money_input").prop("type","text");
+			$(".money_input_1").prop("type","text");
+		}
 	}
 </script>
 <body class="body_top">
