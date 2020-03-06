@@ -132,8 +132,9 @@ function infoContentNotice(languageType,memberId){
 var setIntervalNotice;
 function notice_remind(){
     var img = $(".noticeImg").find("img");
-    img.attr("src","../images/notice/ld/notice_open.png");
-    setIntervalNotice = setInterval("changeColor()",500);
+    img.attr("src","../images/notice/notice.gif");
+    //img.attr("src","../images/notice/ld/notice_open.png");
+    // setIntervalNotice = setInterval("changeColor()",500);
 }
 var colorFlag = 0;
 function changeColor() {
