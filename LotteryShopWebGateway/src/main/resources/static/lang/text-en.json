@@ -90,6 +90,7 @@
     "number": "[Number]",
     "buy": "[Buy]",
     "compensate": "[Compensate]",
-    "delete": "Delete"
+    "delete": "Delete",
+    "select": "select"
   }
 }

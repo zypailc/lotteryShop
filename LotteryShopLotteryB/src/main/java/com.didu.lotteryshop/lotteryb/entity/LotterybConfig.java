@@ -41,7 +41,15 @@ public class LotterybConfig extends Model<LotterybConfig> {
      */
 	@TableField("en_title")
 	private String enTitle;
+	/**
+	 * 排序
+	 */
 	private Integer sort;
+
+	/**
+	 * 分组
+	 */
+	private Integer group;
 
 
 	public Integer getId() {
@@ -90,6 +98,14 @@ public class LotterybConfig extends Model<LotterybConfig> {
 
 	public void setSort(Integer sort) {
 		this.sort = sort;
+	}
+
+	public Integer getGroup() {
+		return group;
+	}
+
+	public void setGroup(Integer group) {
+		this.group = group;
 	}
 
 	@Override
