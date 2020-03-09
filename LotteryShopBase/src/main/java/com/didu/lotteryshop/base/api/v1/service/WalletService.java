@@ -120,10 +120,10 @@ public class WalletService extends BaseBaseService {
            if(member != null && member.getId() != null){
                 SysConfig sysConfig = sysConfigService.getSysConfig();
                 Map<String,Object> rMap = null;
-                if(esEthaccounts.getDicType() == EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE){
+                if(esEthaccounts.getDicType().equals(EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE)){
                     rMap = web3jService.ethTransferAccounts(member.getWalletName(),member.getPaymentCodeWallet(),member.getPAddress(),sysConfig.getManagerAddress(),esEthaccounts.getAmount());
                 }
-                if(esEthaccounts.getDicType() == EsEthaccountsServiceImpl.DIC_TYPE_DRAW){
+                if(esEthaccounts.getDicType().equals(EsEthaccountsServiceImpl.DIC_TYPE_DRAW)){
                     rMap = web3jService.ethTransferAccounts(member.getWalletName(),member.getPaymentCodeWallet(),member.getPAddress(),member.getBAddress(),esEthaccounts.getAmount());
                 }
                if(rMap != null && !rMap.isEmpty()){

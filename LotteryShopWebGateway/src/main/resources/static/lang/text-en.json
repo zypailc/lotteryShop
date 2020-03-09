@@ -91,6 +91,7 @@
     "buy": "[Buy]",
     "compensate": "[Compensate]",
     "delete": "Delete",
-    "select": "select"
+    "select": "select",
+    "allMoney": "[All money]"
   }
 }

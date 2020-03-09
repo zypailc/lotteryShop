@@ -215,6 +215,12 @@
             width: inherit;
         }
         .compensate_value{
+
+        }
+        .service_item_content_btn_all_data{
+            text-align: center;
+        }
+        .color_red{
             color: red;
         }
     </style>
@@ -234,6 +240,9 @@ include("../common/common.js.html"){}
         countDown();
         $("#subbutton_confirm").click(function(){
             subbutton_confirm();
+        });
+        $("#button_purchase").click(function(){
+            button_purchase();
         });
     });
 
@@ -289,7 +298,7 @@ include("../common/common.js.html"){}
                     writeBack(type);
                     $(".service_item_content_subbutton").hide();
                 }
-                if(type == 3 || type == 6 || type == 7){
+                if(type == 3 || type == 4 ||  type == 6 || type == 7 || type == 8){
                     $(".service_item_content_subbutton").show();
                     $("#subbutton_confirm").attr("lotterybcofigids","");
                     $("#subbutton_confirm").attr("lotterybcofigname","");
@@ -318,7 +327,7 @@ include("../common/common.js.html"){}
                 if(type == "1" || type == "2" || type == "5"){
                     list_1_delete($(this).attr("dataId"));
                 }
-                if(type == '3' || type == '6' || type == '7'){
+                if(type == '3' || type == '4' || type == '6' || type == '7' || type == '8'){
                     //replace
                     var oldLotterybConfigIds = $("#subbutton_confirm").attr("lotterybcofigids");
                     var oldLotterybConfigNames = $("#subbutton_confirm").attr("lotterybcofigname");
@@ -328,31 +337,29 @@ include("../common/common.js.html"){}
                     oldLotterybConfigNames = oldLotterybConfigNames.replace(","+typeName,"");
                     $("#subbutton_confirm").attr("lotterybcofigids",oldLotterybConfigIds);
                     $("#subbutton_confirm").attr("lotterybcofigname",oldLotterybConfigNames);
-
                     if(type == '7'){
+                        var groupId = $(this).attr("group");
                         if(typeName.length > 1){
                             var oldNum = $("#subbutton_confirm").attr("num") || 0;
-                            console.log(oldNum);
                             $("#subbutton_confirm").attr("num",oldNum > 1 ? oldNum - 1:0);
                         }else {
                             var oldNum_2 = $("#subbutton_confirm").attr("num_2") || 0;
-                            console.log(oldNum_2);
                             $("#subbutton_confirm").attr("num_2",oldNum_2 > 1 ? oldNum_2 - 1:0);
                         }
+                        $("#subbutton_confirm").attr("group_"+groupId,"");
+                        $("#subbutton_confirm").attr("group_config_"+groupId,"");
                     }
-                    if(type == '3'){
+                    if(type == '3' || type == '4' || type == '8'){
                         $("#subbutton_confirm").attr("num",oldNum > 1 ? oldNum - 1:0);
                     }
                 }
             }else {
                 $(this).attr("ischecked",'true');
                 $(this).addClass("item_block_checked");
-                //TODO
-                console.log(type);
                 if(type == '1' || type == '2' || type == '5'){
                     list_1_add(lotterybConfigId,typeName,lines,type,num,num_2);
                 }
-                if(type == '3' || type == '6' || type == '7'){
+                if(type == '3' || type == '4' || type == '6' || type == '7' || type == '8'){
                     $("#subbutton_confirm").attr("lines",lines);
                     $("#subbutton_confirm").attr("type",type);
                     if(type == '7'){
@@ -360,11 +367,17 @@ include("../common/common.js.html"){}
                         var oldGroupId = $("#subbutton_confirm").attr("group_"+groupId) || "";
                         if(oldGroupId != ""){
                             var oldLotterybConfigId = $("#subbutton_confirm").attr("group_config_"+groupId);
-                            console.log("oldLotterybConfigId:"+oldLotterybConfigId);
                             $("#subbutton_confirm").attr("group"+"_"+groupId,groupId);
                             $("#subbutton_confirm").attr("group_config_"+groupId,lotterybConfigId);
                             $(".service_item_content_subblock").find("div[dataid="+oldLotterybConfigId+"]").removeClass("item_block_checked");
                             $(".service_item_content_subblock").find("div[dataid="+oldLotterybConfigId+"]").attr("ischecked",'false');
+                            if(typeName.length > 1){
+                                var oldNum_2 = $("#subbutton_confirm").attr("num_2") || 0;
+                                $("#subbutton_confirm").attr("num_2",(parseInt(oldNum_2) - 1));
+                            }else {
+                                var oldNum = $("#subbutton_confirm").attr("num") || 0;
+                                $("#subbutton_confirm").attr("num",(parseInt(oldNum) - 1));
+                            }
                         }else {
                             $("#subbutton_confirm").attr("group_"+groupId,groupId);
                             $("#subbutton_confirm").attr("group_config_"+groupId,lotterybConfigId);
@@ -377,7 +390,7 @@ include("../common/common.js.html"){}
                             $("#subbutton_confirm").attr("num_2",(parseInt(oldNum_2) + 1));
                         }
                     }
-                    if(type == '3' || type == '6'){
+                    if(type == '3' || type == '4' || type == '6' || type == '8'){
                         var oldLotterybConfigIds = $("#subbutton_confirm").attr("lotterybcofigids") || "";
                         var oldLotterybConfigNames = $("#subbutton_confirm").attr("lotterybcofigname") || "";
                         $("#subbutton_confirm").attr("lotterybcofigids",oldLotterybConfigIds+","+lotterybConfigId);
@@ -385,7 +398,6 @@ include("../common/common.js.html"){}
                         var oldNum = $("#subbutton_confirm").attr("num") || 0;
                         $("#subbutton_confirm").attr("num",(parseInt(oldNum) + 1));
                     }
-
                 }
             }
         });
@@ -406,10 +418,14 @@ include("../common/common.js.html"){}
         li.find(".type_name").html("["+type_text+"]" + typeName);
         li.attr("lotterybconfigid",lotterybConfigId);
         li.attr("type",type);
+        li.find(".input_money").val("0");
+        li.find(".compensate_value").html("0.0");
         if(type == '7'){
-            li.find(".num_value").html(parseInt(num) * parseInt(num_2));
+            li.find(".num_value").html(new Decimal(num).mul(new Decimal(num_2)));
+            calculateNumberAll();
         }else {
             li.find(".num_value").html(num);
+            calculateNumberAll();
         }
         ul.prepend(li);
     }
@@ -417,6 +433,10 @@ include("../common/common.js.html"){}
     function list_1_delete(lotterybConfigId){
         var ul = $(".service_item_content_buyList_ul");
         var li = ul.find("li[lotterybconfigid="+lotterybConfigId+"]");
+        var total = li.find(".compensate_value").html() || "0";
+        var number = li.find(".num_value").html() || "0";
+        calculateMoneyAll(total,'2');
+        calculateNumberAll();
         li.remove();
     }
 
@@ -426,6 +446,10 @@ include("../common/common.js.html"){}
         if(lotterybConfigId.indexOf(",") == -1){
             $(".service_item_content_subblock").find("div[dataId="+lotterybConfigId+"]").removeClass("item_block_checked");
         }
+        var total = li.find(".compensate_value").html().replace(/\s+/g,"") || "0";
+        var number = li.find(".num_value").html().replace(/\s+/g,"") || "0";
+        calculateMoneyAll(total,'2');
+        calculateNumberAll();
         li.remove();
     }
 
@@ -443,6 +467,13 @@ include("../common/common.js.html"){}
         }
     }
 
+    function button_purchase(){
+        var ul = $(".service_item_content_buyList_ul ");
+        ul.find("li").each(function(index,data){
+
+        })
+    }
+
     function calculateMoney(e){
         var li = $(e).parents("li");
         var lines = li.attr("lines");
@@ -454,20 +485,46 @@ include("../common/common.js.html"){}
             return;
         }
         $(e).val(money);
-        var total = lines * money;
+        var total = new Decimal(lines).mul(new Decimal(money)).toNumber();
         if(!total){
-            total = 0;
+            total = "0.0";
         }
         compensate.html(total);
+        calculateMoneyAll(total.toString(),'1');
+    }
+
+    function calculateMoneyAll(total,type){
+        var dataAllInfo = $(".service_item_content_btn_all_data");
+        var oldTotal = dataAllInfo.find(".all_total").html() || "0";
+        if(type == '1'){
+            oldTotal = new Decimal(oldTotal).add(new Decimal(total)).toNumber().toFixed(4);
+        }
+        if(type == '2'){
+            oldTotal = new Decimal(oldTotal).sub(new Decimal(total)).toNumber().toFixed(4);
+        }
+        dataAllInfo.find(".all_total").html(oldTotal.toString());
+    }
+
+    function calculateNumberAll(){
+        var dataAllInfo = $(".service_item_content_btn_all_data");
+        var oldNumber = dataAllInfo.find(".number").html().replace(/\s+/g,"") || "0";
+
+        var ul = $(".service_item_content_buyList_ul");
+        ul.find("li").each(function(){
+
+        });
+
+        dataAllInfo.find(".number").html(oldNumber.toString());
     }
 
     function subbutton_confirm(){
+        var language = getLanguage();
         var type_val = $(".service_item_content_type_value").val();
         var type_text = $(".service_item_content_type_value").find("option[value="+type_val+"]").html();
         var lotterybcofigids = $("#subbutton_confirm").attr("lotterybcofigids") || "";
         var lotterybcofignames = $("#subbutton_confirm").attr("lotterybcofigname") || "";
-        var num = $("#subbutton_confirm").attr("num") || 0;
-        var num_2 = $("#subbutton_confirm").attr("num_2") || 0;
+        var num = $("#subbutton_confirm").attr("num").replace(/\s+/g,"") || 0;
+        var num_2 = $("#subbutton_confirm").attr("num_2").replace(/\s+/g,"") || 0;
         var type = $("#subbutton_confirm").attr("type");
         if(type == '7'){
             lotterybcofigids = "";
@@ -488,6 +545,39 @@ include("../common/common.js.html"){}
             lotterybcofigids = lotterybcofigids.substring(1);
             lotterybcofignames = lotterybcofignames.substring(1);
         }
+        if(type == '4' || type == '7' || type == '8'){
+            var length = lotterybcofigids.split(",");
+            if(type == '4'){
+                if(length.length < 3){
+                    if(language == 'zh'){
+                        layui_open("号码不完整，请重新选择！");
+                    }else {
+                        layui_open("The number is not complete, please choose again !");
+                    }
+                    return;
+                }
+            }
+            if(type == "8"){
+                if(length.length < 2){
+                    if(language == 'zh'){
+                        layui_open("号码不完整，请重新选择！");
+                    }else {
+                        layui_open("The number is not complete, please choose again !");
+                    }
+                    return;
+                }
+            }
+            if(type == '7'){
+                if(parseInt(num) == 0 || parseInt(num_2) == 0){
+                    if(language == 'zh'){
+                        layui_open("号码不完整，请重新选择！");
+                    }else {
+                        layui_open("The number is not complete, please choose again !");
+                    }
+                    return;
+                }
+            }
+        }
         var lines = $("#subbutton_confirm").attr("lines");
         var ul = $(".service_item_content_buyList_ul");
         var li = ul.find("li").first().clone();
@@ -496,10 +586,14 @@ include("../common/common.js.html"){}
         li.find(".type_name").html("["+type_text+"]" + lotterybcofignames);
         li.attr("lotterybconfigid",lotterybcofigids);
         li.attr("type",type);
+        li.find(".input_money").val("0");
+        li.find(".compensate_value").html("0.0");
         if(type == '7'){
             li.find(".num_value").html(parseInt(num)*parseInt(num_2));
+            calculateNumberAll();
         }else {
             li.find(".num_value").html(num);
+            calculateNumberAll();
         }
         ul.prepend(li);
         $(".service_item_content_subblock").find(".item_block").removeClass("item_block_checked");
@@ -510,9 +604,11 @@ include("../common/common.js.html"){}
         $("#subbutton_confirm").attr("type","");
         $("#subbutton_confirm").attr("num","");
         $("#subbutton_confirm").attr("num_2","");
-        for(var i = 0; i < 7 ; i++){
-            $("#subbutton_confirm").attr("group_config_"+i,"");
-            $("#subbutton_confirm").attr("group_"+i,"");
+        if(type == '7'){
+            for(var i = 0; i < 7 ; i++){
+                $("#subbutton_confirm").attr("group_config_"+i,"");
+                $("#subbutton_confirm").attr("group_"+i,"");
+            }
         }
     }
 
@@ -635,13 +731,17 @@ include("../common/common.js.html"){}
                             <div class="li_item type_other">
                                 <div class="li_item_block type_num"><span data-localize="base.number">[Number]</span> <span class="num_value">1</span> </div>
                                 <div class="li_item_block type_money"><span data-localize="base.buy">[Buy]</span><input class="input_money" onchange="calculateMoney(this)" type="number" value="0"></div>
-                                <div class="li_item_block type_compensate"><span data-localize="base.compensate">[Compensate]</span><span class="compensate_value"> 0 </span></div>
+                                <div class="li_item_block type_compensate"><span data-localize="base.compensate">[Compensate]</span><span class="color_red compensate_value"> 0 </span></div>
                                 <div class="li_item_block type_btn"><a class="a_delete" onclick="a_delete(this)" data-localize="base.delete">Delete</a></div>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div class="service_item_content_btn">
+                    <div class="service_item_content_btn_all_data">
+                        <p> <span class="span_right" data-localize="base.number"></span> <span class="number span_right color_red">0</span>
+                            <span class="span_right" data-localize="base.allMoney"></span><span class="all_total color_red">0.0</span></p>
+                    </div>
                     <div class="model_purchase_button model_purchase_button_1">
                         <div class="button_purchase button_width_all" disabled="disabled" id="button_purchase"><span data-localize="base.confirm">confirm</span></div>
                     </div>
