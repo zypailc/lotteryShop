@@ -86,6 +86,11 @@
     "threeCompaniesThroughSelection": "三连号通选",
     "twoIdenticalCheck": "二同号复选",
     "twoOnTheSameSign": "二同号单选",
-    "theTwoDifferent": "二不同号"
+    "theTwoDifferent": "二不同号",
+    "number": "[数量]",
+    "buy": "[购买]",
+    "compensate": "[赔付]",
+    "delete": "删除",
+    "select": "选择"
   }
 }

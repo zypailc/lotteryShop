@@ -47,6 +47,7 @@
             line-height: 75px;
             border-radius: 5px;
             margin: 3px;
+            cursor: pointer;
         }
         .item_block_1{
             width: 11%;
@@ -112,26 +113,49 @@
         .service_item_content_btn{
             float: left;
             margin-bottom: 100px;
+            width: 100%;
+            background: #f1f1f1;
+            margin-top: 3px;
+            border-radius: 5px;
         }
         .item_block:hover{
-            background: #4E5465;
+            background: #9f88be;
+            color: white!important;
         }
-        .item_block p:hover{
+        .item_block:hover p{
             color: white;
         }
         .item_block_checked{
-            background: #4E5465;
+            background: #9f88be;
         }
         .item_block_checked p{
             color: white;
         }
         .service_item_content_buyList_ul{
             padding: 5px;
+            min-height: 100px;
+            max-height: 190px;
+            overflow: auto;
+        }
+        .service_item_content_buyList_ul::-webkit-scrollbar {/*滚动条整体样式*/
+            width: 2px;     /*高宽分别对应横竖滚动条的尺寸*/
+            height: 1px;
+        }
+        .service_item_content_buyList_ul::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 2px;
+            -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+            background: #dddddd;
+        }
+        .service_item_content_buyList_ul::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+            border-radius: 2px;
+            background: #EDEDED;
         }
         .service_item_content_buyList_ul_li{
             text-align: left;
             margin-left: 3px;
-            border-bottom: solid 1px white
+            border-bottom: solid 1px white;
+            color: #9f88be;
         }
         .service_item_content_buyList_ul_li_end{
             text-align: left;
@@ -156,19 +180,42 @@
             width: 20%;
         }
         .type_money{
-            width: 45%;
+            width: 35%;
         }
         .input_money{
-            border-radius: 5px;
-            border: solid 1px;
+            border: none;
+            border-bottom: solid 1px;
             width: 80px;
             height: 25px;
+            background: #eee;
+            text-align: center;
+
+        }
+        .input_money::-webkit-outer-spin-button,
+        .input_money::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+        .input_money[type="number"]{
+            -moz-appearance: textfield;
         }
         .type_compensate{
-            width: 20%;
+            width: 30%;
         }
         .type_btn{
             width: 12%;
+        }
+        .a_delete{
+            cursor: pointer;
+            /*color: red!important;*/
+        }
+        .model_purchase_button_1{
+            top: 0!important;
+        }
+        .button_purchase{
+            width: inherit;
+        }
+        .compensate_value{
+            color: red;
         }
     </style>
 </head>
@@ -185,6 +232,9 @@ include("../common/common.js.html"){}
         initInfo(lotterybInfoId,language);
         initConfig(language,1);
         countDown();
+        $("#subbutton_confirm").click(function(){
+            subbutton_confirm();
+        });
     });
 
     function initInfo(lotterybInfoId,language){
@@ -194,7 +244,6 @@ include("../common/common.js.html"){}
             data:{"lotterybInfoId":lotterybInfoId},
             dataType:"json",
             success:function (result) {
-                console.log(result);
                 var dataInfo = result.extend.data;
                 if(language == 'en'){
                     $(".lottery_title").html(dataInfo.enTitle);
@@ -225,7 +274,7 @@ include("../common/common.js.html"){}
                     if(language == 'zh'){
                         value = data.zhTitle;
                     }
-                    var div_ = '<div dataId = "'+data.id+'" lines = "'+data.lines+'" class="item_block item_block_'+type+'">';
+                    var div_ = '<div dataId = "'+data.id+'" lines = "'+data.lines+'" dataValue="'+value+'" group="'+(data.group || "")+'" class="item_block item_block_'+type+'">';
                     if(type == 1){
                         div_ += '<p><span class="span_font_size">'+value+'</span></p>' +
                             '<p><span>'+data.lines+'</span></p>';
@@ -235,6 +284,20 @@ include("../common/common.js.html"){}
                     div_ += '</div>';
                     subblock.append(div_);
                 })
+                if(type == 1 || type == 2 || type == 5){
+                    var ur = $(".service_item_content_buyList_ul");
+                    writeBack(type);
+                    $(".service_item_content_subbutton").hide();
+                }
+                if(type == 3 || type == 6 || type == 7){
+                    $(".service_item_content_subbutton").show();
+                    $("#subbutton_confirm").attr("lotterybcofigids","");
+                    $("#subbutton_confirm").attr("lotterybcofigname","");
+                    $("#subbutton_confirm").attr("lines","");
+                    $("#subbutton_confirm").attr("type","");
+                    $("#subbutton_confirm").attr("num","");
+                    $("#subbutton_confirm").attr("num_2","");
+                }
                 item_block_checked(type);
             }
         })
@@ -242,17 +305,87 @@ include("../common/common.js.html"){}
 
     function item_block_checked(type){
         $(".item_block").on("click",function(){
+            var lotterybConfigId = $(this).attr("dataId");
+            var typeName = $(this).attr("dataValue");
+            var lines = $(this).attr("lines");
             var isChecked = $(this).attr("ischecked") || 'false';
+            var num = $(this).attr("num") || 1;
+            var num_2 = $(this).attr("num_2") || 1;
             if(isChecked == 'true'){
                 $(this).attr("ischecked",'false');
                 $(this).removeClass("item_block_checked");
                 //TODO
+                if(type == "1" || type == "2" || type == "5"){
+                    list_1_delete($(this).attr("dataId"));
+                }
+                if(type == '3' || type == '6' || type == '7'){
+                    //replace
+                    var oldLotterybConfigIds = $("#subbutton_confirm").attr("lotterybcofigids");
+                    var oldLotterybConfigNames = $("#subbutton_confirm").attr("lotterybcofigname");
+                    var oldNum = $("#subbutton_confirm").attr("num");
+                    var oldNum_2 = $("#subbutton_confirm").attr("num_2");
+                    oldLotterybConfigIds = oldLotterybConfigIds.replace(","+lotterybConfigId,"");
+                    oldLotterybConfigNames = oldLotterybConfigNames.replace(","+typeName,"");
+                    $("#subbutton_confirm").attr("lotterybcofigids",oldLotterybConfigIds);
+                    $("#subbutton_confirm").attr("lotterybcofigname",oldLotterybConfigNames);
+
+                    if(type == '7'){
+                        if(typeName.length > 1){
+                            var oldNum = $("#subbutton_confirm").attr("num") || 0;
+                            console.log(oldNum);
+                            $("#subbutton_confirm").attr("num",oldNum > 1 ? oldNum - 1:0);
+                        }else {
+                            var oldNum_2 = $("#subbutton_confirm").attr("num_2") || 0;
+                            console.log(oldNum_2);
+                            $("#subbutton_confirm").attr("num_2",oldNum_2 > 1 ? oldNum_2 - 1:0);
+                        }
+                    }
+                    if(type == '3'){
+                        $("#subbutton_confirm").attr("num",oldNum > 1 ? oldNum - 1:0);
+                    }
+                }
             }else {
                 $(this).attr("ischecked",'true');
                 $(this).addClass("item_block_checked");
                 //TODO
-                if(type == '1'){
-                    create_list_1_add();
+                console.log(type);
+                if(type == '1' || type == '2' || type == '5'){
+                    list_1_add(lotterybConfigId,typeName,lines,type,num,num_2);
+                }
+                if(type == '3' || type == '6' || type == '7'){
+                    $("#subbutton_confirm").attr("lines",lines);
+                    $("#subbutton_confirm").attr("type",type);
+                    if(type == '7'){
+                        var groupId = $(this).attr("group");
+                        var oldGroupId = $("#subbutton_confirm").attr("group_"+groupId) || "";
+                        if(oldGroupId != ""){
+                            var oldLotterybConfigId = $("#subbutton_confirm").attr("group_config_"+groupId);
+                            console.log("oldLotterybConfigId:"+oldLotterybConfigId);
+                            $("#subbutton_confirm").attr("group"+"_"+groupId,groupId);
+                            $("#subbutton_confirm").attr("group_config_"+groupId,lotterybConfigId);
+                            $(".service_item_content_subblock").find("div[dataid="+oldLotterybConfigId+"]").removeClass("item_block_checked");
+                            $(".service_item_content_subblock").find("div[dataid="+oldLotterybConfigId+"]").attr("ischecked",'false');
+                        }else {
+                            $("#subbutton_confirm").attr("group_"+groupId,groupId);
+                            $("#subbutton_confirm").attr("group_config_"+groupId,lotterybConfigId);
+                        }
+                        if(typeName.length > 1){
+                            var oldNum = $("#subbutton_confirm").attr("num") || 0;
+                            $("#subbutton_confirm").attr("num",(parseInt(oldNum) + 1));
+                        }else {
+                            var oldNum_2 = $("#subbutton_confirm").attr("num_2") || 0;
+                            $("#subbutton_confirm").attr("num_2",(parseInt(oldNum_2) + 1));
+                        }
+                    }
+                    if(type == '3' || type == '6'){
+                        var oldLotterybConfigIds = $("#subbutton_confirm").attr("lotterybcofigids") || "";
+                        var oldLotterybConfigNames = $("#subbutton_confirm").attr("lotterybcofigname") || "";
+                        $("#subbutton_confirm").attr("lotterybcofigids",oldLotterybConfigIds+","+lotterybConfigId);
+                        $("#subbutton_confirm").attr("lotterybcofigname",oldLotterybConfigNames+","+typeName);
+                        var oldNum = $("#subbutton_confirm").attr("num") || 0;
+                        $("#subbutton_confirm").attr("num",(parseInt(oldNum) + 1));
+                    }
+
                 }
             }
         });
@@ -263,16 +396,124 @@ include("../common/common.js.html"){}
         initConfig(getLanguage(),select_obj.val());
     }
 
-    function create_list_1_add(){
+    function list_1_add(lotterybConfigId,typeName,lines,type,num,num_2){
         var type_val = $(".service_item_content_type_value").val();
         var type_text = $(".service_item_content_type_value").find("option[value="+type_val+"]").html();
-        console.log("type_val:"+type_val);
-        console.log("type_text:"+type_text);
-        var lotterybConfigId = $(".service_item_content_subblock").find(".item_block_checked").attr("dataId");
-        var lines = $(".service_item_content_subblock").find(".item_block_checked").attr("lines");
-        console.log("lotterybConfigId:"+lotterybConfigId);
-        console.log("lines:"+lines);
+        var ul = $(".service_item_content_buyList_ul");
+        var li = ul.find("li").first().clone();
+        li.show();
+        li.attr("lines",lines);
+        li.find(".type_name").html("["+type_text+"]" + typeName);
+        li.attr("lotterybconfigid",lotterybConfigId);
+        li.attr("type",type);
+        if(type == '7'){
+            li.find(".num_value").html(parseInt(num) * parseInt(num_2));
+        }else {
+            li.find(".num_value").html(num);
+        }
+        ul.prepend(li);
+    }
 
+    function list_1_delete(lotterybConfigId){
+        var ul = $(".service_item_content_buyList_ul");
+        var li = ul.find("li[lotterybconfigid="+lotterybConfigId+"]");
+        li.remove();
+    }
+
+    function a_delete(e){
+        var li = $(e).parents("li");
+        var lotterybConfigId = li.attr("lotterybconfigid");
+        if(lotterybConfigId.indexOf(",") == -1){
+            $(".service_item_content_subblock").find("div[dataId="+lotterybConfigId+"]").removeClass("item_block_checked");
+        }
+        li.remove();
+    }
+
+    function writeBack(type){
+        var ur = $(".service_item_content_buyList_ul");
+        var subblock = $(".service_item_content_subblock");
+        if(type == '1' || type == 1 ||
+        type == '2' || type == 2 ||
+        type == '5' || type == 5){
+            ur.find("li[type="+type+"]").each(function(index,data){
+                var lotterybConfigId = $(data).attr("lotterybconfigid");
+                subblock.find("div[dataid="+lotterybConfigId+"]").addClass("item_block_checked");
+                subblock.find("div[dataid="+lotterybConfigId+"]").attr("ischecked",'true');
+            })
+        }
+    }
+
+    function calculateMoney(e){
+        var li = $(e).parents("li");
+        var lines = li.attr("lines");
+        var money = $(e).val();
+        var compensate = li.find(".compensate_value");
+        lines = parseFloat(lines);
+        money = parseInt(money)
+        if(money < 1){
+            return;
+        }
+        $(e).val(money);
+        var total = lines * money;
+        if(!total){
+            total = 0;
+        }
+        compensate.html(total);
+    }
+
+    function subbutton_confirm(){
+        var type_val = $(".service_item_content_type_value").val();
+        var type_text = $(".service_item_content_type_value").find("option[value="+type_val+"]").html();
+        var lotterybcofigids = $("#subbutton_confirm").attr("lotterybcofigids") || "";
+        var lotterybcofignames = $("#subbutton_confirm").attr("lotterybcofigname") || "";
+        var num = $("#subbutton_confirm").attr("num") || 0;
+        var num_2 = $("#subbutton_confirm").attr("num_2") || 0;
+        var type = $("#subbutton_confirm").attr("type");
+        if(type == '7'){
+            lotterybcofigids = "";
+            lotterybcofignames = "";
+            $(".service_item_content_subblock").find(".item_block_checked").each(function(index,data){
+                if(lotterybcofigids){
+                    lotterybcofigids += ","+$(data).attr("dataid");
+                }else {
+                    lotterybcofigids = $(data).attr("dataid");
+                }
+                if(lotterybcofignames){
+                    lotterybcofignames += "," + $(data).attr("datavalue");
+                }else {
+                    lotterybcofignames =$(data).attr("datavalue");
+                }
+            });
+        }else {
+            lotterybcofigids = lotterybcofigids.substring(1);
+            lotterybcofignames = lotterybcofignames.substring(1);
+        }
+        var lines = $("#subbutton_confirm").attr("lines");
+        var ul = $(".service_item_content_buyList_ul");
+        var li = ul.find("li").first().clone();
+        li.show();
+        li.attr("lines",lines);
+        li.find(".type_name").html("["+type_text+"]" + lotterybcofignames);
+        li.attr("lotterybconfigid",lotterybcofigids);
+        li.attr("type",type);
+        if(type == '7'){
+            li.find(".num_value").html(parseInt(num)*parseInt(num_2));
+        }else {
+            li.find(".num_value").html(num);
+        }
+        ul.prepend(li);
+        $(".service_item_content_subblock").find(".item_block").removeClass("item_block_checked");
+        $(".service_item_content_subblock").find(".item_block").attr("ischecked",'false');
+        $("#subbutton_confirm").attr("lotterybcofigids","");
+        $("#subbutton_confirm").attr("lotterybcofigname","");
+        $("#subbutton_confirm").attr("lines","");
+        $("#subbutton_confirm").attr("type","");
+        $("#subbutton_confirm").attr("num","");
+        $("#subbutton_confirm").attr("num_2","");
+        for(var i = 0; i < 7 ; i++){
+            $("#subbutton_confirm").attr("group_config_"+i,"");
+            $("#subbutton_confirm").attr("group_"+i,"");
+        }
     }
 
     function countDown(){
@@ -381,43 +622,29 @@ include("../common/common.js.html"){}
                     <div class="service_item_content_subblock">
 
                     </div>
+                    <div class="service_item_content_subbutton">
+                        <div class="model_purchase_button model_purchase_button_1">
+                            <div class="button_purchase button_width_all" disabled="disabled" id="subbutton_confirm"><span data-localize="base.select">confirm</span></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="service_item_content_buyList">
-                    <ul class="service_item_content_buyList_ul">
-                        <li class="service_item_content_buyList_ul_li">
-                            <div class="li_item type_name">Three same number through selection</div>
+                    <ul class="service_item_content_buyList_ul ">
+                        <li class="service_item_content_buyList_ul_li" style="display: none">
+                            <div class="li_item type_name">[sum value]</div>
                             <div class="li_item type_other">
-                                <div class="li_item_block type_num">共1注</div>
-                                <div class="li_item_block type_money"><input class="input_money" type="number" value="0"></div>
-                                <div class="li_item_block type_compensate">可中金额100元</div>
-                                <div class="li_item_block type_btn"><button class="btn">删除</button></div>
+                                <div class="li_item_block type_num"><span data-localize="base.number">[Number]</span> <span class="num_value">1</span> </div>
+                                <div class="li_item_block type_money"><span data-localize="base.buy">[Buy]</span><input class="input_money" onchange="calculateMoney(this)" type="number" value="0"></div>
+                                <div class="li_item_block type_compensate"><span data-localize="base.compensate">[Compensate]</span><span class="compensate_value"> 0 </span></div>
+                                <div class="li_item_block type_btn"><a class="a_delete" onclick="a_delete(this)" data-localize="base.delete">Delete</a></div>
                             </div>
-                        </li>
-                        <li class="service_item_content_buyList_ul_li_end">
-                            <div class="li_item type_name">Three same number through selection</div>
-                            <div class="li_item type_num">共1注</div>
-                            <div class="li_item type_money"><input class="input_money" type="number" value="0"></div>
-                            <div class="li_item">可中金额100元</div>
-                            <div class="li_item type_btn"><button class="btn">删除</button></div>
-                        </li>
-                        <li class="service_item_content_buyList_ul_li_end">
-                            <div class="li_item type_name">Three same number through selection</div>
-                            <div class="li_item type_num">共1注</div>
-                            <div class="li_item type_money"><input class="input_money" type="number" value="0"></div>
-                            <div class="li_item">可中金额100元</div>
-                            <div class="li_item type_btn"><button class="btn">删除</button></div>
-                        </li>
-                        <li class="service_item_content_buyList_ul_li_end">
-                            <div class="li_item type_name">Three same number through selection</div>
-                            <div class="li_item type_num">共1注</div>
-                            <div class="li_item type_money"><input class="input_money" type="number" value="0"></div>
-                            <div class="li_item">可中金额100元</div>
-                            <div class="li_item type_btn"><button class="btn">删除</button></div>
                         </li>
                     </ul>
                 </div>
                 <div class="service_item_content_btn">
-                    <button class="btn">确认</button>
+                    <div class="model_purchase_button model_purchase_button_1">
+                        <div class="button_purchase button_width_all" disabled="disabled" id="button_purchase"><span data-localize="base.confirm">confirm</span></div>
+                    </div>
                 </div>
             </div>
             <!-- rule -->

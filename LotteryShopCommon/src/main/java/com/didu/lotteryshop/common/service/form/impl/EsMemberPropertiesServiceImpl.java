@@ -42,9 +42,8 @@ public class EsMemberPropertiesServiceImpl extends ServiceImpl<EsMemberPropertie
      */
     public ResultUtil updateMoneyIsView(String memberId,String isView){
        boolean b = update(null,memberId,isView,EsMemberPropertiesServiceImpl.TYPE_MONEY,null);
-
-       if(b){
-            return ResultUtil.successJson("success");
+       if(!b){
+            return ResultUtil.successJson("error");
        }
        //更新用户的最后修改时间
         Member member = memberService.selectById(memberId);
