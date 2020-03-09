@@ -8,8 +8,10 @@ import com.didu.lotteryshop.common.utils.Web3jUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
@@ -40,6 +42,8 @@ import java.util.Map;
 public class Web3jService extends BaseBaseService {
     @Autowired
     private OAuth2RestTemplate oAuth2RestTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
     /** 主网络地址 */
     @Value("${ethwallet.web3j.url}")
     private String ethwalletWeb3jUrl;
@@ -222,8 +226,6 @@ public class Web3jService extends BaseBaseService {
         }
         return reMap;
     }
-
-
     /**
      * ETh转账
      * @param walletFileName 钱包名称
@@ -234,6 +236,20 @@ public class Web3jService extends BaseBaseService {
      * @return
      */
     public Map<String,Object> ethTransferAccounts(String walletFileName,String payPassword,String formAddress,String toAddress,BigDecimal etherValue){
+        return ethTransferAccounts(walletFileName,payPassword,formAddress,toAddress,etherValue,null);
+    }
+
+    /**
+     * ETh转账
+     * @param walletFileName 钱包名称
+     * @param payPassword 支付密码
+     * @param formAddress 出账地址
+     * @param toAddress 入账地址
+     * @param etherValue 金额
+     * @param   authorizationStr 验证令牌
+     * @return
+     */
+    public Map<String,Object> ethTransferAccounts(String walletFileName,String payPassword,String formAddress,String toAddress,BigDecimal etherValue,String authorizationStr){
        Map<String,Object> resultMap = new HashMap<>();
         resultMap.put(TRANSACTION_STATUS,2);
         resultMap.put(TRANSACTION_HASHVALUE,"");
@@ -246,7 +262,12 @@ public class Web3jService extends BaseBaseService {
             map.put("formAddress",formAddress);//出
             map.put("toAddress",toAddress);//入
             map.put("etherValue",etherValue);
-            String reStr = oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/transfer", super.getEncryptRequestHttpEntity(map), String.class);
+            String reStr = null;
+            if(StringUtils.isBlank(authorizationStr)){
+                reStr = oAuth2RestTemplate.postForObject("http://wallet-service/v1/wallet/transfer", super.getEncryptRequestHttpEntity(map), String.class);
+            }else{
+                reStr  = restTemplate.postForObject("http://wallet-service/v1/wallet/transfer",super.getEncryptRequestHttpEntity(map,authorizationStr), String.class);
+            }
             if(StringUtils.isNotBlank(reStr)){
                 ResultUtil result = super.getDecryptResponseToResultUtil(reStr);
                 if(result != null && result.getSuccess() && result.getExtend() != null){
@@ -254,7 +275,7 @@ public class Web3jService extends BaseBaseService {
                     if(rMap != null && !rMap.isEmpty()){
                         resultMap.put(TRANSACTION_STATUS,rMap.get("transaction_status").toString());
                         resultMap.put(TRANSACTION_HASHVALUE,rMap.get("transaction_hashvalue").toString());
-                        resultMap.put(TRANSACTION_GASUSED,rMap.get("transaction_casUsed").toString());
+                        resultMap.put(TRANSACTION_GASUSED,rMap.get("transaction_casUsed") == null ? "" : rMap.get("transaction_casUsed").toString());
                     }
                 }
             }

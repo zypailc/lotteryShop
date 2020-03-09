@@ -82,7 +82,7 @@ public class WalletService extends BaseBaseService {
         boolean bool = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE,serviceCharge,uuId);
         if(bool){
             //kafka 执行公链转账操作
-            kafkaTemplate.send("kafkaWithdrawCashEth","operId",uuId);
+            kafkaTemplate.send("kafkaWithdrawCashEth","operId",uuId+"##-##"+super.getRequest().getHeader("Authorization"));
         }else{
             String msg = "Withdrawal failed, please try again !";
             if(super.isChineseLanguage()){
@@ -94,7 +94,7 @@ public class WalletService extends BaseBaseService {
         bool = esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_DRAW,sum,uuId);
         if(bool){
             //kafka 执行公链转账操作
-            kafkaTemplate.send("kafkaWithdrawCashEth","operId",uuId);
+            kafkaTemplate.send("kafkaWithdrawCashEth","operId",uuId+"##-##"+super.getRequest().getHeader("Authorization"));
         }else{
             String msg = "Withdrawal failed, please try again !";
             if(super.isChineseLanguage()){
@@ -111,20 +111,29 @@ public class WalletService extends BaseBaseService {
 
     /**
      * kafka 用户提现转账
-     * @param operId
+     * @param operIdStr
      */
-    public void kafkaWithdrawCashEth(String operId){
+    public void kafkaWithdrawCashEth(String operIdStr){
+        if(StringUtils.isBlank(operIdStr)) return;
+        String operId = operIdStr.substring(0,operIdStr.indexOf("##-##"));
+        String authorizationStr = operIdStr.substring(operIdStr.indexOf("##-##")+5,operIdStr.length());
         EsEthaccounts esEthaccounts = esEthaccountsService.findEsEthaccountsByOperId(operId);
         if(esEthaccounts != null && esEthaccounts.getId() != null){
            Member  member =  memberService.selectById(esEthaccounts.getMemberId());
            if(member != null && member.getId() != null){
-                SysConfig sysConfig = sysConfigService.getSysConfig();
+               String memberWalletName = null;
+               try {
+                   memberWalletName = AesEncryptUtil.decrypt(member.getWalletName(), Constants.KEY_THREE);
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
+               SysConfig sysConfig = sysConfigService.getSysConfig();
                 Map<String,Object> rMap = null;
                 if(esEthaccounts.getDicType().equals(EsEthaccountsServiceImpl.DIC_TYPE_PLATFEE)){
-                    rMap = web3jService.ethTransferAccounts(member.getWalletName(),member.getPaymentCodeWallet(),member.getPAddress(),sysConfig.getManagerAddress(),esEthaccounts.getAmount());
+                    rMap = web3jService.ethTransferAccounts(memberWalletName,member.getPaymentCodeWallet(),member.getPAddress(),sysConfig.getManagerAddress(),esEthaccounts.getAmount(),authorizationStr);
                 }
                 if(esEthaccounts.getDicType().equals(EsEthaccountsServiceImpl.DIC_TYPE_DRAW)){
-                    rMap = web3jService.ethTransferAccounts(member.getWalletName(),member.getPaymentCodeWallet(),member.getPAddress(),member.getBAddress(),esEthaccounts.getAmount());
+                    rMap = web3jService.ethTransferAccounts(memberWalletName,member.getPaymentCodeWallet(),member.getPAddress(),member.getBAddress(),esEthaccounts.getAmount(),authorizationStr);
                 }
                if(rMap != null && !rMap.isEmpty()){
                    if(rMap.get(Web3jService.TRANSACTION_HASHVALUE) != null){
