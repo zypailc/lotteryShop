@@ -422,10 +422,10 @@ include("../common/common.js.html"){}
         li.find(".compensate_value").html("0.0");
         if(type == '7'){
             li.find(".num_value").html(new Decimal(num).mul(new Decimal(num_2)));
-            calculateNumberAll();
+            calculateNumberAll(new Decimal(num).mul(new Decimal(num_2)),'1');
         }else {
             li.find(".num_value").html(num);
-            calculateNumberAll();
+            calculateNumberAll(num,'1');
         }
         ul.prepend(li);
     }
@@ -436,7 +436,7 @@ include("../common/common.js.html"){}
         var total = li.find(".compensate_value").html() || "0";
         var number = li.find(".num_value").html() || "0";
         calculateMoneyAll(total,'2');
-        calculateNumberAll();
+        calculateNumberAll(number,'2');
         li.remove();
     }
 
@@ -449,7 +449,7 @@ include("../common/common.js.html"){}
         var total = li.find(".compensate_value").html().replace(/\s+/g,"") || "0";
         var number = li.find(".num_value").html().replace(/\s+/g,"") || "0";
         calculateMoneyAll(total,'2');
-        calculateNumberAll();
+        calculateNumberAll(number,'2');
         li.remove();
     }
 
@@ -505,15 +505,15 @@ include("../common/common.js.html"){}
         dataAllInfo.find(".all_total").html(oldTotal.toString());
     }
 
-    function calculateNumberAll(){
+    function calculateNumberAll(number,type){
         var dataAllInfo = $(".service_item_content_btn_all_data");
         var oldNumber = dataAllInfo.find(".number").html().replace(/\s+/g,"") || "0";
-
-        var ul = $(".service_item_content_buyList_ul");
-        ul.find("li").each(function(){
-
-        });
-
+        if(type == '1'){
+            oldNumber = new Decimal(oldNumber).add(new Decimal(number));
+        }
+        if(type == '2'){
+            oldNumber = new Decimal(oldNumber).sub(new Decimal(number));
+        }
         dataAllInfo.find(".number").html(oldNumber.toString());
     }
 
@@ -590,10 +590,10 @@ include("../common/common.js.html"){}
         li.find(".compensate_value").html("0.0");
         if(type == '7'){
             li.find(".num_value").html(parseInt(num)*parseInt(num_2));
-            calculateNumberAll();
+            calculateNumberAll(parseInt(num)*parseInt(num_2),'1');
         }else {
             li.find(".num_value").html(num);
-            calculateNumberAll();
+            calculateNumberAll(num,'1');
         }
         ul.prepend(li);
         $(".service_item_content_subblock").find(".item_block").removeClass("item_block_checked");
