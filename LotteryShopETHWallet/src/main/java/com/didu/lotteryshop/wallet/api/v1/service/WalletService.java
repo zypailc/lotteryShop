@@ -108,6 +108,7 @@ public class WalletService extends WalletBaseService {
      * @param walletFileName 钱包名字
      * @param payPassword 支付密码
      * @param formAddress 出账地址
+     * @param formAddress 出账地址
      * @param toAddress  入账地址
      * @param etherValue etherValue
      * @return
@@ -128,13 +129,13 @@ public class WalletService extends WalletBaseService {
                 //交易确认状态，0-未确认；1-已确认，2-失败
                 reMap.put(Web3jService.TRANSACTION_STATUS,0);
                 Map<String,Object> sMap = web3jService.findTransactionStatus(transactionHashValue);
-                if(sMap != null && sMap.isEmpty()){
-                    if(sMap.get(Web3jService.TRANSACTION_STATUS).equals("1")){
+                if(sMap != null && !sMap.isEmpty()){
+                    if(sMap.get(Web3jService.TRANSACTION_STATUS).toString().equals("1")){
                         reMap.put(Web3jService.TRANSACTION_STATUS,1);
                         //实际产生得到燃气费
                         reMap.put(Web3jService.TRANSACTION_CASUSED,sMap.get(Web3jService.TRANSACTION_CASUSED));
                     }
-                    if(sMap.get(Web3jService.TRANSACTION_STATUS).equals("2")){
+                    if(sMap.get(Web3jService.TRANSACTION_STATUS).toString().equals("2")){
                         reMap.put(Web3jService.TRANSACTION_STATUS,2);
                     }
                 }
@@ -165,12 +166,12 @@ public class WalletService extends WalletBaseService {
             reMap.put("transactionStatus",0);
             Map<String,Object> sMap = web3jService.findTransactionStatus(transactionHashValue);
             if(sMap != null && sMap.isEmpty()){
-                if(sMap.get(Web3jService.TRANSACTION_STATUS).equals("1")){
+                if(sMap.get(Web3jService.TRANSACTION_STATUS).toString().equals("1")){
                     reMap.put("transactionStatus",1);
                     //实际产生得到燃气费
                     reMap.put("transactionCasUsed",sMap.get(Web3jService.TRANSACTION_CASUSED));
                 }
-                if(sMap.get(Web3jService.TRANSACTION_STATUS).equals("2")){
+                if(sMap.get(Web3jService.TRANSACTION_STATUS).toString().equals("2")){
                     reMap.put("transactionStatus",2);
                 }
             }
