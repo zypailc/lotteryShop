@@ -1,5 +1,7 @@
 package com.didu.lotteryshop.lotteryb.service;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.didu.lotteryshop.common.config.Constants;
@@ -44,22 +46,13 @@ public class LotterybBuyService extends LotteryBBaseService{
 
     /**
      * 购买
-     * @param lotterybInfoId
-     * @param lotteryConfigId
-     * @param issueNum
-     * @param playCode
-     * @param total
+     * @param lotterybInfoId 玩法Id
+     * @param issueNum 期数
+     * @param dataInfo 购买的数据
+     * @param total 购买总金额
      * @return
      */
-    public ResultUtil lsbBuyLottery(String lotterybInfoId, String lotteryConfigId, String issueNum, String playCode ,String total) {
-        //判断支付密码是否错误 //支付密码错
-        if(!super.getLoginUser().getPaymentCode().equals(AesEncryptUtil.encrypt_code(playCode, Constants.KEY_TOW) )){
-            String msg = "Payment password error!";
-            if(super.isChineseLanguage()){
-                msg = "支付密碼錯誤!";
-            }
-            return ResultUtil.errorJson(msg);
-        }
+    public ResultUtil lsbBuyLottery(String lotterybInfoId,String issueNum, String dataInfo,BigDecimal total) {
         //判断是否可购买
         boolean b = lotterybInfoService.isBuyLotteryB(Integer.parseInt(lotterybInfoId));
         if(!b){
@@ -69,10 +62,9 @@ public class LotterybBuyService extends LotteryBBaseService{
             }
             return ResultUtil.errorJson(msg);
         }
-        BigDecimal totalBigdecimal = new BigDecimal(total);
         LoginUser loginUser = getLoginUser();
         //判断平台币可用余额是否足够
-        if(!esLsbwalletService.judgeBalance(loginUser.getId(),totalBigdecimal)){
+        if(!esLsbwalletService.judgeBalance(loginUser.getId(),total)){
             String msg = "not sufficient funds !";
             if(super.isChineseLanguage()){
                 msg = "余額不足!";
@@ -88,16 +80,17 @@ public class LotterybBuyService extends LotteryBBaseService{
             }
             return  ResultUtil.errorJson(msg);
         }
+        JSONArray jsonArray =  JSONObject.parseArray(dataInfo);
         //新增平台币购买记录（出账成功记录）
-        b = lsbaccountsService.addOutSuccess(loginUser.getId(),getGuessDicTypeValue(lotterybInfoId),totalBigdecimal,"-1");
+        //b = lsbaccountsService.addOutSuccess(loginUser.getId(),getGuessDicTypeValue(lotterybInfoId),totalBigdecimal,"-1");
         String msg = "";
-        if(!b){
+        /*if(!b){
             msg = "operation failure !";
             if(super.isChineseLanguage()){
                 msg = "操作失败！";
             }
             return ResultUtil.errorJson(msg);
-        }
+        }*/
         //购买成功之后计入购买统计
         b = lotterybStatisticsService.lotteryStatistice(lotteryConfigId,lotterybInfoId,issueNum,totalBigdecimal);
         if(!b){
