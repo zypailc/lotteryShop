@@ -33,17 +33,28 @@ public class BaseService extends BaseStat {
         }
         return eRStr;
     }
-
     /**
      * 获取加密请求HttpEntity
      * @param map
      * @return
      */
     public HttpEntity<String> getEncryptRequestHttpEntity(Map<String,Object> map){
+        return getEncryptRequestHttpEntity(map,null);
+    }
+    /**
+     * 获取加密请求HttpEntity
+     * @param map
+     * @param  authorizationStr 验证令牌参数
+     * @return
+     */
+    public HttpEntity<String> getEncryptRequestHttpEntity(Map<String,Object> map,String authorizationStr){
         String str = new org.springframework.boot.configurationprocessor.json.JSONObject(map).toString();
         str = this.getEncryptRequest(str);//加密
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf("application/json;UTF-8"));
+        if(StringUtils.isNotBlank(authorizationStr)){
+            headers.set("Authorization",authorizationStr);
+        }
         HttpEntity<String> strEntity = new HttpEntity<String>(str,headers);
         return strEntity;
     }

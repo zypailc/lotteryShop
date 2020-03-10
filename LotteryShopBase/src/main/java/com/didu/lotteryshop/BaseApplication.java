@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.web.client.RestTemplate;
 
 
 @SpringBootApplication
@@ -32,6 +33,11 @@ public class BaseApplication extends SpringBootServletInitializer  {
     @Bean
     public OAuth2RestTemplate loadBalancedRestTemplate(OAuth2ProtectedResourceDetails details, OAuth2ClientContext context) {
         return new OAuth2RestTemplate(details, context);
+    }
+    @LoadBalanced
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
     }
 
     public static void main(String [] args){
