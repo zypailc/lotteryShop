@@ -21,7 +21,7 @@ public class CombinationTest {
 //      }, 2);
 //    C(5, 3) = 10
         combinationSelect(new String[] {
-                "1", "2","3","4","5","6"
+                "1", "2","3"
         }, 2);
     }
 
