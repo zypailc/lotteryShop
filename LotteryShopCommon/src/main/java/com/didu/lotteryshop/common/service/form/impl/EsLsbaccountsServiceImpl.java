@@ -408,6 +408,7 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
         }
         wrapper.orderBy("create_time",false);*/
         Page<Map<String,Object>> pageLsbRecord = new Page<Map<String,Object>>();
+        currentPage = (currentPage - 1) * pageSize;
         pageLsbRecord.setRecords(lsbaccountsMapper.findLsbRecordPagination(currentPage,pageSize,memberId,startTime,endTime,status));
         return pageLsbRecord;
     }

@@ -383,6 +383,8 @@ include("../common/common.js.html"){}
 		//初始化方法
 		var li = $(".personal_center");
 		li.click();
+
+
 		$(".walletETH").scroll(function(){
 			var viewH = $(this).height();
 			var contentH = $(this).get(0).scrollHeight;
@@ -391,6 +393,29 @@ include("../common/common.js.html"){}
 				findWalletRecord(false,'walletETH','/api/base/v1/ethWallet/findEthRecord')
 			}
 		});
+		$('.wallet_ETH_li').click(function(){
+		    $('.wallet_password_input').val(null);
+			findETHWallet( 'walletETH','/api/base/v1/ethWallet/findEthWallet');//eth
+			findWalletRecord(true,'walletETH','/api/base/v1/ethWallet/findEthRecord');//eth
+		});
+
+
+
+        $(".walletFLAT").scroll(function(){
+            var viewH = $(this).height();
+            var contentH = $(this).get(0).scrollHeight;
+            var scrollTop =$(this).scrollTop();
+            if(scrollTop/(contentH -viewH) >= 0.95){
+                findWalletRecord(false,'walletFLAT','/api/base/v1/lsbWallet/findLsbRecord');//lsb
+            }
+        });
+        $('.wallet_FLAT_li').click(function(){
+            $('.walletFLAT').find("input").val(null);
+            findETHWallet( 'walletFLAT','/api/base/v1/lsbWallet/findLsbWallet');
+            findWalletRecord(true,'walletFLAT','/api/base/v1/lsbWallet/findLsbRecord');//lsb
+        });
+
+
 
 		$(".lottery_record").scroll(function(){
 			var viewH = $(this).height();
@@ -514,17 +539,19 @@ include("../common/common.js.html"){}
 		});
 
 		gengeralizeMemberInit(true,'generalizeRecord');
-		findETHWallet( 'walletETH','/api/base/v1/ethWallet/findEthWallet');//eth
+		//findETHWallet( 'walletETH','/api/base/v1/ethWallet/findEthWallet');//eth
 		findETHWallet( 'walletPutMoney','/api/base/v1/dlbWallet/findDlbWallet');//dlb
-		findETHWallet( 'walletFLAT','/api/base/v1/lsbWallet/findLsbWallet');//lsb
+		//findETHWallet( 'walletFLAT','/api/base/v1/lsbWallet/findLsbWallet');//lsb
 		findETHWallet( 'walletGdEth','/api/base/v1/gdethWallet/findGdethWallet');//gdEth
 
-		findWalletRecord(true,'walletETH','/api/base/v1/ethWallet/findEthRecord');//eth
+		//findWalletRecord(true,'walletETH','/api/base/v1/ethWallet/findEthRecord');//eth
 		findWalletRecord(true,'walletPutMoney','/api/base/v1/dlbWallet/findDlbRecord');//dbl
-		findWalletRecord(true,'walletFLAT','/api/base/v1/lsbWallet/findLsbRecord');//lsb
+		//findWalletRecord(true,'walletFLAT','/api/base/v1/lsbWallet/findLsbRecord');//lsb
 		findWalletRecord(true,'walletGdEth','/api/base/v1/gdethWallet/findGdethRecord');//gdEth
 		getEthToUsd("personal_wallet_center");
-		div_head_images();//heard
+		//div_head_images();//heard
+
+
 		findLotteryRecord(true,"lottery_record");
 		getWalletConfig();
 		generalizeInitRegisterUrl();
@@ -569,7 +596,7 @@ include("../common/common.js.html"){}
 						<div class="person_center card">
 							<div class="person_center_module">
 								<div class="card-title">
-									<img onclick="changePicture()" class="img_head" src="${loginUser.headPortraitUrl!defaultHeadImg}">
+									<img onclick="changePicture()" style="cursor: pointer;" class="img_head" src="${loginUser.headPortraitUrl!defaultHeadImg}">
 									<div class="person_center_info">
 										<div class="person_center_info_div">
 											<span class="span_title_member" title="${loginUser.memberName!''}">${loginUser.memberName!""}</span>
@@ -600,8 +627,8 @@ include("../common/common.js.html"){}
 					<div class="portfolio_categories button-group filters-button-group">
 						<ul class="personal_li">
 							<li class="portfolio_category draw_personal_lottery personal_center" data-filter=".personalCenter" data-localize="base.personalCenter">personal center</li>
-							<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".walletETH">ETH</li>
-							<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".walletFLAT" data-localize="base.flat">Flat</li>
+							<li class="portfolio_category draw_personal_lottery wallet_li wallet_ETH_li" data-filter=".walletETH">ETH</li>
+							<li class="portfolio_category draw_personal_lottery wallet_li wallet_FLAT_li" data-filter=".walletFLAT" data-localize="base.flat">Flat</li>
 							<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".walletPutMoney" data-localize="base.putMoney">Put money</li>
 							<% if(generalizeType){ %>
 								<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".walletGdEth" data-localize="base.gdEth">dividend</li>
@@ -757,7 +784,7 @@ include("../common/common.js.html"){}
 										<span class="title_span_3" data-localize="base.balance1">balance</span> : <span class="balance">0ETH </span>
 										<span class="title_span_3" data-localize="base.freeze">freeze</span> : <span class="freeze">0ETH</span>
 									</p>-->
-									<input class="input_class_2 wallet_password_input " type="text" placeholder="Extract the number">
+									<input class="input_class_2 wallet_password_input " autocomplete="off" type="text" placeholder="Extract the number">
 									<div class="div_btn">
 										<a class="wallet_button button_display" href="#" propertyType="1" onclick="withdrawCashEth(this)" ><span data-localize="base.withdrawCash">withdraw cash</span></a>
 									</div>
@@ -776,7 +803,6 @@ include("../common/common.js.html"){}
 										<span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
 										<span class="span_right expendOrReceipts">0.1</span>
 										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">0.0</span>
-										<span class="ethGas ethGasStr" data-localize="base.ethGas">燃气费 : </span><span class="ethGas ethGasStrInfo">0.0</span>
 										<span class="ethGas ethGasStr" data-localize="base.ethGas">燃气费 : </span><span class="ethGas ethGasStrInfo">0.0</span>
 									</p>
 								</div>

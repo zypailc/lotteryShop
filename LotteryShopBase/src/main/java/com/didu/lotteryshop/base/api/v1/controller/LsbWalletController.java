@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/v1/lsbWallet")
-public class LsbController extends BaseBaseController {
+public class LsbWalletController extends BaseBaseController {
 
     @Autowired
     private LsbWalletService lsbWalletService;

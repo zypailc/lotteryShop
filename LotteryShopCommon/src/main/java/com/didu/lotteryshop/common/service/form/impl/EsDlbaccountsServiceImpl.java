@@ -233,6 +233,7 @@ public class EsDlbaccountsServiceImpl extends ServiceImpl<EsDlbaccountsMapper, E
         }
         wrapper.orderBy("create_time",false);
         Page<Map<String,Object>> pageDlbRecord = new Page<Map<String,Object>>();
+        currentPage = (currentPage - 1) * pageSize;
         pageDlbRecord.setRecords(dlbaccountsMapper.findDlbRecordPagination(currentPage,pageSize,memberId,startTime,endTime,status));
         return pageDlbRecord;
     }

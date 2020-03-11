@@ -300,7 +300,7 @@ public class WalletService extends BaseBaseService {
         boolean b = esLsbaccountsService.addInBeingprocessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_IN,sum,uuId);
         if(b) {
             //kafka 执行公链转账操作
-            kafkaTemplate.send("withdrawCashEthToLsb","operId",uuId);
+            kafkaTemplate.send("withdrawCashEthToLsb","operId",uuId+"##-##"+super.getRequest().getHeader("Authorization"));
         }else{
             String msg = "Purchase failed, please try again !";
             if(super.isChineseLanguage()){
@@ -316,16 +316,25 @@ public class WalletService extends BaseBaseService {
     }
     /**
      * kafka Eth转平台币
-     * @param operId
+     * @param operIdStr
      */
-    public void kafkaWithdrawCashEthToLsb(String operId){
+    public void kafkaWithdrawCashEthToLsb(String operIdStr){
+        if(StringUtils.isBlank(operIdStr)) return;
+        String operId = operIdStr.substring(0,operIdStr.indexOf("##-##"));
+        String authorizationStr = operIdStr.substring(operIdStr.indexOf("##-##")+5,operIdStr.length());
         EsLsbaccounts esLsbaccounts = esLsbaccountsService.findEsLsbaccountsByOperId(operId);
         if(esLsbaccounts != null && esLsbaccounts.getId() != null){
             Member  member =  memberService.selectById(esLsbaccounts.getMemberId());
             if(member != null && member.getId() != null){
+                String memberWalletName = null;
+                try {
+                    memberWalletName = AesEncryptUtil.decrypt(member.getWalletName(), Constants.KEY_THREE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 SysConfig sysConfig = sysConfigService.getSysConfig();
                 BigDecimal ethToLsb = esLsbaccounts.getAmount().divide(sysConfig.getEthToLsb(),4,BigDecimal.ROUND_DOWN);
-                Map<String, Object>  rMap = web3jService.ethTransferAccounts(member.getWalletName(),member.getPaymentCodeWallet(),member.getPAddress(),sysConfig.getLsbAddress(),ethToLsb);
+                Map<String, Object>  rMap = web3jService.ethTransferAccounts(memberWalletName,member.getPaymentCodeWallet(),member.getPAddress(),sysConfig.getLsbAddress(),ethToLsb,authorizationStr);
                 if(rMap != null && !rMap.isEmpty()){
                     if(rMap.get(Web3jService.TRANSACTION_HASHVALUE) != null){
                         String tHValue = rMap.get(Web3jService.TRANSACTION_HASHVALUE).toString();

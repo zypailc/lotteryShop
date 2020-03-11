@@ -10,10 +10,12 @@ $(function(){
 // head portrait layer
 var img_head_layer;
 function changePicture(){
+    div_head_images();
     img_head_layer = layer.open({
         type: 1,
         title: false,
         shadeClose: true,
+        area:['380px','430px'],
         content: $(".layui_head")
     });
 }
@@ -49,13 +51,15 @@ function img_change_button(){
     })
 }
 
-//Get a list of head portrait
+//Geemptyt a list of head portrait
 function div_head_images(){
     var divImages = $(".div_head_images");
+    divImages.empty();
     $.ajax({
         type: "post",
         url: "/api/base/v1/lsimage/imageType?type=1",
         dataType: "json",
+        async:false,
         success:function (result){
             $.each(result,function(index,data){
                 var div_image = '<div  class="head_img head_img_width">' +
@@ -559,6 +563,15 @@ function walletOperation(url,dataJson){
                 layui_open(result.msg);
             }else {
                 layer.msg(result.msg);
+                layer.closeAll();
+            }
+            if(url == "/api/base/v1/baseWallet/withdrawCashEth"){
+                findETHWallet(  'walletETH','/api/base/v1/ethWallet/findEthWallet');
+                findWalletRecord(true,'walletETH','/api/base/v1/ethWallet/findEthRecord');
+            }
+            if(url == "/api/base/v1/baseWallet/withdrawCashEthToLsb"){
+                findETHWallet( 'walletFLAT','/api/base/v1/lsbWallet/findLsbWallet');
+                findWalletRecord(true,'walletFLAT','/api/base/v1/lsbWallet/findLsbRecord');//lsb
             }
         }
     })
