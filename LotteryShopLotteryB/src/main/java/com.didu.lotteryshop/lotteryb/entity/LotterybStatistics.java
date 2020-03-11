@@ -24,8 +24,8 @@ public class LotterybStatistics extends Model<LotterybStatistics> {
     /**
      * 玩法配置Id
      */
-	@TableField("lotteryb_config_id")
-	private Integer lotterybConfigId;
+	@TableField("lotteryb_number")
+	private Integer lotterybNumber;
     /**
      * 期数Id
      */
@@ -57,12 +57,12 @@ public class LotterybStatistics extends Model<LotterybStatistics> {
 		this.id = id;
 	}
 
-	public Integer getLotterybConfigId() {
-		return lotterybConfigId;
+	public Integer getLotterybNumber() {
+		return lotterybNumber;
 	}
 
-	public void setLotterybConfigId(Integer lotterybConfigId) {
-		this.lotterybConfigId = lotterybConfigId;
+	public void setLotterybNumber(Integer lotterybNumber) {
+		this.lotterybNumber = lotterybNumber;
 	}
 
 	public Integer getLotterybIssueId() {
@@ -106,7 +106,7 @@ public class LotterybStatistics extends Model<LotterybStatistics> {
 	public String toString() {
 		return "LotterybStatistics{" +
 			", id=" + id +
-			", lotterybConfigId=" + lotterybConfigId +
+			", lotterybNumber=" + lotterybNumber +
 			", lotterybIssueId=" + lotterybIssueId +
 			", amount=" + amount +
 			", createDate=" + createDate +

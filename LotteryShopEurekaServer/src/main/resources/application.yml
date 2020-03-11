@@ -12,6 +12,8 @@ spring:
 eureka:
   instance:
     hostname: localhost
+    prefer-ip-address: true
+    #instance-id: ${spring.cloud.client.ipAddress}:${server.port}
   # Configure to turn off self-protection and configure the interval at which Eureka Server cleans up invalid nodes as needed. Production environment is not recommended to close
   server:
     enable-self-preservation: false

@@ -8,6 +8,9 @@ import com.didu.lotteryshop.lotteryb.service.LotterybBuyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.math.BigDecimal;
 
 /**
  * <p>
@@ -26,19 +29,19 @@ public class LotteryBController extends LotteryBBaseController {
 
     /**
      * 平台币购买LotteryB
-     * @param lotterybInfoId LotteryB 玩法Id
-     * @param lotteryConfigId LotteryB 可购买的配置Id
-     * @param issueNum 购买期数
-     * @param total 购买金额
-     * @param playCode 支付密码
+     * @param dataInfo 数据格式[{'lotterybInfoId':'1'},{'issue':'2020030400001'},{'dataInfo':,'[{'lotterybConfig':'5','type':'1','money':'2','number':'1'}]']
+     * @param  issueNum 期数
+     * @param lotterybInfoId 玩法Id
+     * @param total 购买总金额
      * @return
      */
-    public ResultUtil lsbBuyLottery(String lotterybInfoId,String lotteryConfigId,String issueNum,String total,String playCode){
+    @ResponseBody
+    @RequestMapping("/buyLotteryb")
+    public ResultUtil lsbBuyLottery(String dataInfo, String issueNum, String lotterybInfoId, BigDecimal total){
         if(lotterybInfoId == null || "".equals(lotterybInfoId) ||
-        lotteryConfigId == null || "".equals(lotteryConfigId) ||
-        issueNum == null || "".equals(issueNum) ||
-        playCode == null || "".equals(playCode) ||
-        total == null || "".equals(total)){
+            issueNum == null || "".equals(issueNum) ||
+            dataInfo == null || "".equals(dataInfo) ||
+        total.compareTo(BigDecimal.ZERO) < 1){
             String msg = "parameter error !";
             if(super.isChineseLanguage()){
                 msg = "參數錯誤!";
@@ -46,7 +49,7 @@ public class LotteryBController extends LotteryBBaseController {
             //参数错误
             return  ResultUtil.errorJson(msg);
         }
-        return lotterybBuyService.lsbBuyLottery(lotterybInfoId,lotteryConfigId,issueNum,playCode,total);
+        return lotterybBuyService.lsbBuyLottery(lotterybInfoId,issueNum,dataInfo,total);
     }
 
 

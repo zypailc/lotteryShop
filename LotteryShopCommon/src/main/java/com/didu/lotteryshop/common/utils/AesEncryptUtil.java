@@ -1,6 +1,9 @@
 package com.didu.lotteryshop.common.utils;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.apache.commons.lang3.time.DateUtils;
 
 import javax.crypto.Cipher;
@@ -10,6 +13,8 @@ import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 //import org.apache.tomcat.util.codec.binary.Base64;
 
@@ -161,7 +166,7 @@ public class AesEncryptUtil {
         System.out.println("mima:"+AesEncryptUtil.decrypt("icx44PKACC5WOJke8+U53Q==",Constants.KEY_TOW));*/
 
 
-        Date nowDate = new Date();
+        /*Date nowDate = new Date();
         //彩票结束时间
         Date endTime = new Date(1577507100);//"2019-12-28 12:25:00"
 
@@ -175,7 +180,23 @@ public class AesEncryptUtil {
         endTime = DateUtils.addMinutes(new Date(),-11);
         Date endAndIntervalDate = DateUtils.addMinutes(endTime,intervalDate.intValue());
         System.out.println(nowDate.after(delayEndTime));
-        System.out.println(nowDate.before(endAndIntervalDate));
+        System.out.println(nowDate.before(endAndIntervalDate));*/
+
+        //String str = "[{\"lotterybInfoId\":\"1\"},{\"issue\":\"2020030400001\"}," +
+                //"{\"dataInfo\":\"{\"lotterybConfig\":\"5\",\"type\":\"1\",\"money\":\"2\",\"number\":\"1\"}\"}]";
+        //JSONObject.parseArray(str);
+        String str1 = "[{\"lotterybConfig\":\"13\",\"type\":\"1\",\"money\":\"1\",\"number\":\"1\"},{\"lotterybConfig\":\"5\",\"type\":\"1\",\"money\":\"1\",\"number\":\"1\"}]";
+        List<String> list = JSONObject.parseArray(str1, String.class);
+        for(String s : list){
+            Map<String,Object> map = (Map<String, Object>) JSONObject.parse(s);
+            System.out.println("number:"+map.get("number"));
+            System.out.println("lotterybConfig:"+map.get("lotterybConfig"));
+            System.out.println("type:"+map.get("type"));
+        }
+         /* Map<String,Object> m = (Map<String, Object>)
+                System.out.println(m.get("lotterybInfoId"));
+        System.out.println(m.get("issue"));
+        System.out.println(m.get("lotterybConfig"));*/
 
 
 
