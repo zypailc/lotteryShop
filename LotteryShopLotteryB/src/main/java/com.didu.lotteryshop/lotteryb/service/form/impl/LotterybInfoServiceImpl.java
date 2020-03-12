@@ -24,15 +24,15 @@ public class LotterybInfoServiceImpl extends ServiceImpl<LotterybInfoMapper, Lot
     /**
      * 玩法 竞猜-B1
      */
-    public static final String TYPE_ID_1 = "1";
+    public static final Integer TYPE_ID_1 = 1;
     /**
      * 玩法 竞猜-B3
      */
-    public static final String TYPE_ID_3 = "2";
+    public static final Integer TYPE_ID_3 = 2;
     /**
      * 玩法 竞猜-B5
      */
-    public static final String TYPE_ID_5 = "3";
+    public static final Integer TYPE_ID_5 = 3;
 
     /**
      * 根据玩法id查询

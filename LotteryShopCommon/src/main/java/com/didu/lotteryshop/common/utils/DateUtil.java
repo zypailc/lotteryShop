@@ -58,7 +58,22 @@ public class DateUtil {
 
     }
 
-    public static void main(String [] args){
+    /**
+     * 获取两个时间的之间的毫秒差
+     * @param date_1 开始时间
+     * @param date_2 结束时间
+     * @return 2020-03-11 17:03:36  2020-03-11 17:02:36 2020-03-11 17:11:13
+     */
+    public static Long getTimestamp(Date date_1,Date date_2){
+        return  date_2.getTime() - date_1.getTime();
+    }
+
+    public static void main(String [] args) throws ParseException {
+        Calendar nowTime = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date_1 = format.parse("2020-03-11 17:03:36");
+        Date date_2 = format.parse("2020-03-11 17:02:36");
+        System.out.println("xxx:"+getTimestamp(date_2 , date_1)); //-59842
         /*String s = getDateFormat("yyyyMMdd");
         System.out.println(s);
         Map<String,Object> map = new HashMap<>();

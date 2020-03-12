@@ -1,13 +1,12 @@
 package com.didu.lotteryshop.lotteryb.entity;
 
+import com.baomidou.mybatisplus.enums.IdType;
 import java.math.BigDecimal;
 import java.util.Date;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
-
 import java.io.Serializable;
 
 /**
@@ -16,7 +15,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author ${author}
- * @since 2020-03-03
+ * @since 2020-03-12
  */
 @TableName("lotteryb_di")
 public class LotterybDi extends Model<LotterybDi> {
@@ -41,30 +40,10 @@ public class LotterybDi extends Model<LotterybDi> {
 	@TableField("buy_total")
 	private BigDecimal buyTotal;
     /**
-     * 中奖总金额
-     */
-	@TableField("luck_total")
-	private BigDecimal luckTotal;
-    /**
-     * 活跃总人数
-     */
-	@TableField("active_mcnts")
-	private Integer activeMcnts;
-    /**
-     * 中奖上级提成比例（%）
-     */
-	@TableField("luck_ratio")
-	private BigDecimal luckRatio;
-    /**
      * 推广分成比例(%)
      */
 	@TableField("di_ratio")
 	private BigDecimal diRatio;
-    /**
-     * 中奖上级提成总额(lsb)
-     */
-	@TableField("luck_di_total")
-	private BigDecimal luckDiTotal;
     /**
      * 推广分成总额(lsb)
      */
@@ -85,6 +64,11 @@ public class LotterybDi extends Model<LotterybDi> {
      */
 	@TableField("operation_total")
 	private BigDecimal operationTotal;
+
+	/**
+	 * 结算状态 : 0 已结算 ；1 未结算
+	 */
+	private Integer status;
 
 
 	public Integer getId() {
@@ -119,44 +103,12 @@ public class LotterybDi extends Model<LotterybDi> {
 		this.buyTotal = buyTotal;
 	}
 
-	public BigDecimal getLuckTotal() {
-		return luckTotal;
-	}
-
-	public void setLuckTotal(BigDecimal luckTotal) {
-		this.luckTotal = luckTotal;
-	}
-
-	public Integer getActiveMcnts() {
-		return activeMcnts;
-	}
-
-	public void setActiveMcnts(Integer activeMcnts) {
-		this.activeMcnts = activeMcnts;
-	}
-
-	public BigDecimal getLuckRatio() {
-		return luckRatio;
-	}
-
-	public void setLuckRatio(BigDecimal luckRatio) {
-		this.luckRatio = luckRatio;
-	}
-
 	public BigDecimal getDiRatio() {
 		return diRatio;
 	}
 
 	public void setDiRatio(BigDecimal diRatio) {
 		this.diRatio = diRatio;
-	}
-
-	public BigDecimal getLuckDiTotal() {
-		return luckDiTotal;
-	}
-
-	public void setLuckDiTotal(BigDecimal luckDiTotal) {
-		this.luckDiTotal = luckDiTotal;
 	}
 
 	public BigDecimal getDiTotal() {
@@ -191,6 +143,14 @@ public class LotterybDi extends Model<LotterybDi> {
 		this.operationTotal = operationTotal;
 	}
 
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -203,15 +163,12 @@ public class LotterybDi extends Model<LotterybDi> {
 			", memberId=" + memberId +
 			", lotterybIssueId=" + lotterybIssueId +
 			", buyTotal=" + buyTotal +
-			", luckTotal=" + luckTotal +
-			", activeMcnts=" + activeMcnts +
-			", luckRatio=" + luckRatio +
 			", diRatio=" + diRatio +
-			", luckDiTotal=" + luckDiTotal +
 			", diTotal=" + diTotal +
 			", createTime=" + createTime +
 			", operationRatio=" + operationRatio +
 			", operationTotal=" + operationTotal +
+			", status=" + status +
 			"}";
 	}
 }

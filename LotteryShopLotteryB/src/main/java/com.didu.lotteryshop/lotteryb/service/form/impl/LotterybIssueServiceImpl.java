@@ -2,6 +2,7 @@ package com.didu.lotteryshop.lotteryb.service.form.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.didu.lotteryshop.common.utils.DateUtil;
 import com.didu.lotteryshop.lotteryb.entity.LotterybIssue;
 import com.didu.lotteryshop.lotteryb.mapper.LotterybIssueMapper;
@@ -53,6 +54,32 @@ public class LotterybIssueServiceImpl extends ServiceImpl<LotterybIssueMapper, L
     }
 
     /**
+     * 查询期数信息
+     * @param lotterybInfoId 玩法Id
+     * @param issueNum 期数
+     * @return
+     */
+    public LotterybIssue getLotterybIssue(Integer lotterybInfoId,String issueNum){
+        Wrapper<LotterybIssue> wrapper = new EntityWrapper<>();
+        wrapper.and().eq("lotteryb_info_id",lotterybInfoId);
+        wrapper.eq("issue_num",issueNum);
+        wrapper.last("limit 1");
+        return super.selectOne(wrapper);
+    }
+
+    /**
+     * 查询上期基本信息
+     * @return
+     */
+    public LotterybIssue findUpLotteryaIssue(Integer lotterybInfoId){
+        Wrapper<LotterybIssue> wrapper = new EntityWrapper<>();
+        wrapper.and().eq("lotteryb_info_id",lotterybInfoId);
+        wrapper.orderBy("issue_num",false);
+        wrapper.last("limit 1 ,1");
+        return super.selectOne(wrapper);
+    }
+
+    /**
      * 生成下一期期数
      * @param lotterybInfoId 玩法Id
      * @param issueNum 期数
@@ -70,15 +97,16 @@ public class LotterybIssueServiceImpl extends ServiceImpl<LotterybIssueMapper, L
         // 判断时间和今天是否一致
         if(!newDateStr.equals(issueDate)){
             issueDate = newDateStr;
+            return  issueDate + "00001";
         }
-        if(lotterybInfoId.equals(LotterybInfoServiceImpl.TYPE_ID_1)){
-            return issueDate + String.format("%04d", num);
+        if(lotterybInfoId == LotterybInfoServiceImpl.TYPE_ID_1){
+            return issueDate + String.format("%05d", num);
         }
-        if(lotterybInfoId.equals(LotterybInfoServiceImpl.TYPE_ID_3)){
-            return issueDate + String.format("%04d", num);
+        if(lotterybInfoId == LotterybInfoServiceImpl.TYPE_ID_3){
+            return issueDate + String.format("%05d", num);
         }
-        if(lotterybInfoId.equals(LotterybInfoServiceImpl.TYPE_ID_5)){
-            return issueDate + String.format("%04d", num);
+        if(lotterybInfoId == LotterybInfoServiceImpl.TYPE_ID_5){
+            return issueDate + String.format("%05d", num);
         }
         return "";
     }
@@ -100,4 +128,23 @@ public class LotterybIssueServiceImpl extends ServiceImpl<LotterybIssueMapper, L
         }
         return null;
     }
+
+    /**
+     * 查询期数表信息
+     * @param currentPage
+     * @param pageSize
+     * @param lotterybInfoId 玩法Id
+     * @return
+     */
+    public Object findPageLotteryaIssue(Integer currentPage, Integer pageSize,Integer lotterybInfoId) {
+        Wrapper<LotterybIssue> wrapper = new EntityWrapper<>();
+        wrapper.eq("bonus_status","1");
+        wrapper.eq("lotteryb_info_id",lotterybInfoId);
+        wrapper.orderBy("issueNum",false);
+        Page<LotterybIssue> pageLI = new Page<>(currentPage,pageSize);
+        return super.selectPage(pageLI,wrapper);
+    }
+
+
+
 }

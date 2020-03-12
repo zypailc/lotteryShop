@@ -36,4 +36,5 @@ public class LotteryBApplication extends SpringBootServletInitializer {
     public static void main(String [] args){
         SpringApplication.run(LotteryBApplication.class);
     }
+
 }

@@ -22,10 +22,10 @@ public class LotterybStatistics extends Model<LotterybStatistics> {
 
 	private String id;
     /**
-     * 玩法配置Id
+     * 号码组合
      */
 	@TableField("lotteryb_number")
-	private Integer lotterybNumber;
+	private String lotterybNumber;
     /**
      * 期数Id
      */
@@ -48,6 +48,18 @@ public class LotterybStatistics extends Model<LotterybStatistics> {
 	@TableField("create_date")
 	public Date createDate;
 
+	/**
+	 * 玩法配置Ids
+	 */
+	@TableField("lotteryb_config_ids")
+	private String lotterybConfigIds;
+
+	/**
+	 * 购买的Ids
+	 */
+	@TableField("lotteryb_buy_ids")
+	private String lotterybBuyIds;
+
 
 	public String getId() {
 		return id;
@@ -57,11 +69,11 @@ public class LotterybStatistics extends Model<LotterybStatistics> {
 		this.id = id;
 	}
 
-	public Integer getLotterybNumber() {
+	public String getLotterybNumber() {
 		return lotterybNumber;
 	}
 
-	public void setLotterybNumber(Integer lotterybNumber) {
+	public void setLotterybNumber(String lotterybNumber) {
 		this.lotterybNumber = lotterybNumber;
 	}
 
@@ -97,6 +109,22 @@ public class LotterybStatistics extends Model<LotterybStatistics> {
 		this.createDate = createDate;
 	}
 
+	public String getLotterybConfigIds() {
+		return lotterybConfigIds;
+	}
+
+	public void setLotterybConfigIds(String lotterybConfigIds) {
+		this.lotterybConfigIds = lotterybConfigIds;
+	}
+
+	public String getLotterybBuyIds() {
+		return lotterybBuyIds;
+	}
+
+	public void setLotterybBuyIds(String lotterybBuyIds) {
+		this.lotterybBuyIds = lotterybBuyIds;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -110,7 +138,8 @@ public class LotterybStatistics extends Model<LotterybStatistics> {
 			", lotterybIssueId=" + lotterybIssueId +
 			", amount=" + amount +
 			", createDate=" + createDate +
-			", lotterybInfoId=" + lotterybInfoId +
+			", lotterybConfigIds=" + lotterybConfigIds +
+			", lotterybBuyIds=" + lotterybBuyIds +
 			"}";
 	}
 }

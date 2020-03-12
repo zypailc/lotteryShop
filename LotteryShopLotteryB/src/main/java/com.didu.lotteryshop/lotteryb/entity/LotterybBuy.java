@@ -30,8 +30,8 @@ public class LotterybBuy extends Model<LotterybBuy> {
      */
 	@TableField("member_id")
 	private String memberId;
-	@TableField("lotteryb_config_id")
-	private Integer lotterybConfigId;
+	@TableField("lotteryb_config_ids")
+	private String lotterybConfigIds;
     /**
      * 购买金额（平台币）
      */
@@ -62,6 +62,12 @@ public class LotterybBuy extends Model<LotterybBuy> {
 	@TableField("create_time")
 	private Date createTime;
 
+	/**
+	 * 操作流水号
+	 */
+	@TableField("serial_number")
+	private String serialNumber;
+
 
 	public Integer getId() {
 		return id;
@@ -79,12 +85,12 @@ public class LotterybBuy extends Model<LotterybBuy> {
 		this.memberId = memberId;
 	}
 
-	public Integer getLotterybConfigId() {
-		return lotterybConfigId;
+	public String getLotterybConfigIds() {
+		return lotterybConfigIds;
 	}
 
-	public void setLotterybConfigId(Integer lotterybConfigId) {
-		this.lotterybConfigId = lotterybConfigId;
+	public void setLotterybConfigIds(String lotterybConfigIds) {
+		this.lotterybConfigIds = lotterybConfigIds;
 	}
 
 	public BigDecimal getTotal() {
@@ -135,6 +141,14 @@ public class LotterybBuy extends Model<LotterybBuy> {
 		this.createTime = createTime;
 	}
 
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -145,7 +159,7 @@ public class LotterybBuy extends Model<LotterybBuy> {
 		return "LotterybBuy{" +
 			", id=" + id +
 			", memberId=" + memberId +
-			", lotterybConfigId=" + lotterybConfigId +
+			", lotterybConfigIds=" + lotterybConfigIds +
 			", total=" + total +
 			", lotterybInfoId=" + lotterybInfoId +
 			", lotterybIssueId=" + lotterybIssueId +

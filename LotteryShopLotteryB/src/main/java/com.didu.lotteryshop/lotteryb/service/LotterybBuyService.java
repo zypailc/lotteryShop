@@ -9,13 +9,12 @@ import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.common.service.form.impl.EsLsbaccountsServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsLsbwalletServiceImpl;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
+import com.didu.lotteryshop.common.utils.CodeUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.lotteryb.entity.LotterybBuy;
+import com.didu.lotteryshop.lotteryb.entity.LotterybIssue;
 import com.didu.lotteryshop.lotteryb.entity.LotterybPm;
-import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybBuyServiceImpl;
-import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybInfoServiceImpl;
-import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybPmDetailServiceImpl;
-import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybPmServiceImpl;
+import com.didu.lotteryshop.lotteryb.service.form.impl.*;
 import com.github.abel533.sql.SqlMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +42,8 @@ public class LotterybBuyService extends LotteryBBaseService{
     private LotterybPmServiceImpl lotterybPmService;
     @Autowired
     private LotterybPmDetailServiceImpl lotterybPmDetailServiceIml;
+    @Autowired
+    private LotterybIssueServiceImpl lotterybIssueService;
 
     /**
      * 购买
@@ -52,9 +53,9 @@ public class LotterybBuyService extends LotteryBBaseService{
      * @param total 购买总金额
      * @return
      */
-    public ResultUtil lsbBuyLottery(String lotterybInfoId,String issueNum, String dataInfo,BigDecimal total) {
+    public ResultUtil lsbBuyLottery(Integer lotterybInfoId,String issueNum, String dataInfo,BigDecimal total) {
         //判断是否可购买
-        boolean b = lotterybInfoService.isBuyLotteryB(Integer.parseInt(lotterybInfoId));
+        boolean b = lotterybInfoService.isBuyLotteryB(lotterybInfoId);
         if(!b){
             String msg = "This time is closed. No purchase allowed !";
             if(super.isChineseLanguage()){
@@ -80,42 +81,50 @@ public class LotterybBuyService extends LotteryBBaseService{
             }
             return  ResultUtil.errorJson(msg);
         }
-        JSONArray jsonArray =  JSONObject.parseArray(dataInfo);
-        //新增平台币购买记录（出账成功记录）
-        //b = lsbaccountsService.addOutSuccess(loginUser.getId(),getGuessDicTypeValue(lotterybInfoId),totalBigdecimal,"-1");
+        //解析购买数据
+        List<String> list = JSONObject.parseArray(dataInfo, String.class);
         String msg = "";
-        /*if(!b){
+        String serialNumber = CodeUtil.getUuid();
+        LotterybIssue lotterybIssue = lotterybIssueService.getLotterybIssue(lotterybInfoId,issueNum);
+        for (String s : list) {
+            Map<String,Object> map = (Map<String, Object>) JSONObject.parse(s);
+            String number = map.get("number").toString();
+            String lotterybConfigIds = map.get("lotterybConfig").toString();
+            String type = map.get("type").toString();
+            String money = map.get("money").toString();
+
+            //新增购买记录
+            LotterybBuy lotterybBuy = new LotterybBuy();
+            lotterybBuy.setMemberId(loginUser.getId());
+            lotterybBuy.setLotterybInfoId(lotterybInfoId);
+            lotterybBuy.setLotterybConfigIds(lotterybConfigIds);
+            lotterybBuy.setLotterybIssueId(lotterybIssue.getId());
+            lotterybBuy.setTotal(new BigDecimal(money));
+            lotterybBuy.setIsLuck(0);
+            lotterybBuy.setLuckTotal(BigDecimal.ZERO);
+            lotterybBuy.setSerialNumber(serialNumber);
+            lotterybBuy.setCreateTime(new Date());
+            b = lotterybBuyService.insert(lotterybBuy);
+            if(!b){
+                msg = "purchase failed !";
+
+                if(super.isChineseLanguage()){
+                    msg = "购买失败！";
+                }
+                return ResultUtil.errorJson(msg);
+            }
+
+            b = lotterybStatisticsService.lotteryStatistice(lotterybBuy.getId(),lotterybConfigIds,lotterybInfoId,lotterybIssue.getId(),type,new BigDecimal(money));
+            //购买提成计算
+            lotterybPmDetailServiceIml.buyPM(lotterybBuy,lotterybInfoService.find(lotterybInfoId));
+        }
+        //这里一次性会购买多种组合 平台币出账只出一次账 因为只算购买了一次 在购买记录里面可查看购买的每种组合的明细
+        b = lsbaccountsService.addOutSuccess(loginUser.getId(),getGuessDicTypeValue(lotterybInfoId),total,serialNumber);
+        //新增平台币购买记录（出账成功记录）
+        if(!b){
             msg = "operation failure !";
             if(super.isChineseLanguage()){
                 msg = "操作失败！";
-            }
-            return ResultUtil.errorJson(msg);
-        }*/
-        //购买成功之后计入购买统计
-        b = lotterybStatisticsService.lotteryStatistice(lotteryConfigId,lotterybInfoId,issueNum,totalBigdecimal);
-        if(!b){
-            msg = "purchase failed !";
-            if(super.isChineseLanguage()){
-                msg = "购买失败！";
-            }
-            return ResultUtil.errorJson(msg);
-        }
-        //新增购买记录
-        LotterybBuy lotterybBuy = new LotterybBuy();
-        lotterybBuy.setMemberId(loginUser.getId());
-        lotterybBuy.setLotterybInfoId(Integer.parseInt(lotterybInfoId));
-        lotterybBuy.setLotterybConfigId(Integer.parseInt(lotteryConfigId));
-        lotterybBuy.setLotterybIssueId(Integer.parseInt(issueNum));
-        lotterybBuy.setTotal(totalBigdecimal);
-        lotterybBuy.setIsLuck(0);
-        lotterybBuy.setLuckTotal(BigDecimal.ZERO);
-        lotterybBuy.setCreateTime(new Date());
-        b = lotterybBuyService.insert(lotterybBuy);
-        if(!b){
-            msg = "purchase failed !";
-
-            if(super.isChineseLanguage()){
-                msg = "购买失败！";
             }
             return ResultUtil.errorJson(msg);
         }
@@ -123,8 +132,6 @@ public class LotterybBuyService extends LotteryBBaseService{
         if(super.isChineseLanguage()){
             msg = "购买成功！";
         }
-        //购买提成计算
-        lotterybPmDetailServiceIml.buyPM(lotterybBuy,lotterybInfoService.find(Integer.parseInt(lotterybInfoId)));
         return ResultUtil.successJson(msg);
     }
 
@@ -149,14 +156,14 @@ public class LotterybBuyService extends LotteryBBaseService{
      * @param lotteryInfoId
      * @return
      */
-    private String getGuessDicTypeValue(String lotteryInfoId){
-        if(lotteryInfoId.equals(LotterybInfoServiceImpl.TYPE_ID_1)){
+    private String getGuessDicTypeValue(Integer lotteryInfoId){
+        if(lotteryInfoId == LotterybInfoServiceImpl.TYPE_ID_1){
             return "4";
         }
-        if(lotteryInfoId.equals(LotterybInfoServiceImpl.TYPE_ID_3)){
+        if(lotteryInfoId == LotterybInfoServiceImpl.TYPE_ID_3){
             return "5";
         }
-        if(lotteryInfoId.equals(LotterybInfoServiceImpl.TYPE_ID_5)){
+        if(lotteryInfoId == LotterybInfoServiceImpl.TYPE_ID_5){
             return "6";
         }
         return "";
@@ -164,14 +171,12 @@ public class LotterybBuyService extends LotteryBBaseService{
 
     /**
      * 查询中奖数据
-     * @param lotteryaIssueId
-     * @param lotterybConfigId
+     * @param lotterybIssue
      * @return
      */
-    public List<LotterybBuy> findLuckLotteryaBuy(Integer lotteryaIssueId, Integer lotterybConfigId) {
+    public List<LotterybBuy> findLuckLotteryaBuy(LotterybIssue lotterybIssue) {
         Wrapper<LotterybBuy> wrapper = new EntityWrapper<>();
-        wrapper.and().eq("lotteryb_issue_id",lotteryaIssueId)
-        .eq("lotteryb_config_id",lotterybConfigId);
+        wrapper.where(" find_in_set( id,"+lotterybIssue.getLotterybBuyIds()+") and lotteryb_issue_id = "+lotterybIssue.getId()+"");
         return lotterybBuyService.selectList(wrapper);
     }
 
@@ -188,12 +193,12 @@ public class LotterybBuyService extends LotteryBBaseService{
     public Map<String,Object> calculateLowerLevelBuyTotal(Integer lotterybIssueId, String memberId){
         if(lotterybIssueId == null || StringUtils.isBlank(memberId)) return null;
         String sql = "select " +
-                " sum(lab_.total) as total," + //购买总金额
-                " sum(lab_.luck_total) as luckTotal " + //中奖总金额
-                " from lotterya_buy lab_ " +
-                " left join es_member em_ on(lab_.member_id = em_.id) " +
-                " where lab_.lotterya_issue_id="+lotterybIssueId+" and lab_.transfer_status='1' " +
-                " and (em_.generalize_member_ids like '%"+memberId+"%' or lab_.member_id='"+memberId+"')";
+                " sum(lbb_.total) as total," + //购买总金额
+                " sum(lbb_.luck_total) as luckTotal " + //中奖总金额
+                " from lotteryb_buy lbb_ " +
+                " left join es_member em_ on(lbb_.member_id = em_.id) " +
+                " where lbb_.lotterya_issue_id="+lotterybIssueId +
+                " and (em_.generalize_member_ids like '%"+memberId+"%' or lbb_.member_id='"+memberId+"')";
         SqlMapper sqlMapper = super.getSqlMapper();
         return sqlMapper.selectOne(sql);
     }

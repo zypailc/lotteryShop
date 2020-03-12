@@ -193,6 +193,11 @@ public class AesEncryptUtil {
             System.out.println("lotterybConfig:"+map.get("lotterybConfig"));
             System.out.println("type:"+map.get("type"));
         }
+
+        String str = "1,2,3#2,4,34,28,29,30,31,32,33,53,54,55,56,57,58,8";
+        String []s = str.split("#");
+        System.out.println(s[0]);
+        System.out.println(s[1]);
          /* Map<String,Object> m = (Map<String, Object>)
                 System.out.println(m.get("lotterybInfoId"));
         System.out.println(m.get("issue"));

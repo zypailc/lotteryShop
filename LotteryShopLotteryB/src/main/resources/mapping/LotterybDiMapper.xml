@@ -8,15 +8,12 @@
 		<result column="member_id" property="memberId" />
 		<result column="lotteryb_issue_id" property="lotterybIssueId" />
 		<result column="buy_total" property="buyTotal" />
-		<result column="luck_total" property="luckTotal" />
-		<result column="active_mcnts" property="activeMcnts" />
-		<result column="luck_ratio" property="luckRatio" />
 		<result column="di_ratio" property="diRatio" />
-		<result column="luck_di_total" property="luckDiTotal" />
 		<result column="di_total" property="diTotal" />
 		<result column="create_time" property="createTime" />
 		<result column="operation_ratio" property="operationRatio" />
 		<result column="operation_total" property="operationTotal" />
+		<result column="status" property="status" />
 	</resultMap>
 
 </mapper>

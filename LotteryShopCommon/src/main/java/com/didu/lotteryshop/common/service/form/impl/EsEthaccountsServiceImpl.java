@@ -53,7 +53,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
     /** 赢得A彩票*/
     public static String DIC_TYPE_WINLOTTERYA = "5";
     /** 赢得B彩票*/
-    public static String DIC_TYPE_WINLOTTERYB = "6";
+    public static String DIC_TYPE_WINLOTTERYB = "7";
     /** 平台手续费 */
     public static String DIC_TYPE_PLATFEE = "7";
     /** 推广结算账款 **/
