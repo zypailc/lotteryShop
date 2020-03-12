@@ -92,7 +92,7 @@ function create_confirm(){
         layer.msg("The password is inconsistent with the confirmation code !");
         return;
     }
-    var index = layer.load(1);
+    var index = layer.load();
     $.ajax({
         method: "post",
         url: "/api/base/v1/member/bindWallet",

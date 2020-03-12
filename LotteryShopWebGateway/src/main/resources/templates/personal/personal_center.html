@@ -415,6 +415,32 @@ include("../common/common.js.html"){}
             findWalletRecord(true,'walletFLAT','/api/base/v1/lsbWallet/findLsbRecord');//lsb
         });
 
+		$(".walletPutMoney").scroll(function(){
+			var viewH = $(this).height();
+			var contentH = $(this).get(0).scrollHeight;
+			var scrollTop =$(this).scrollTop();
+			if(scrollTop/(contentH -viewH) >= 0.95){
+				findWalletRecord(false,'walletPutMoney','/api/base/v1/dlbWallet/findDlbRecord');//dlb
+			}
+		});
+		$('.wallet_PUTMONEY_li').click(function(){
+			findETHWallet( 'walletPutMoney','/api/base/v1/dlbWallet/findDlbWallet');//dlb
+			findWalletRecord(true,'walletPutMoney','/api/base/v1/dlbWallet/findDlbRecord');//dlb
+		});
+
+		$(".walletGdEth").scroll(function(){
+			var viewH = $(this).height();
+			var contentH = $(this).get(0).scrollHeight;
+			var scrollTop =$(this).scrollTop();
+			if(scrollTop/(contentH -viewH) >= 0.95){
+				findWalletRecord(false,'walletGdEth','/api/base/v1/gdethWallet/findGdethRecord');//gdEth
+			}
+		});
+		$('.wallet_GDETH_li').click(function(){
+			$('.walletGdEth').find("input").val(null);
+			findETHWallet( 'walletGdEth','/api/base/v1/gdethWallet/findGdethWallet');
+			findWalletRecord(true,'walletGdEth','/api/base/v1/gdethWallet/findGdethRecord');//gdEth
+		});
 
 
 		$(".lottery_record").scroll(function(){
@@ -425,6 +451,11 @@ include("../common/common.js.html"){}
 				findLotteryRecord(false,"lottery_record");
 			}
 		});
+		$('.wallet_LOTTERYRECORD_li').click(function(){
+			findLotteryRecord(true,"lottery_record");
+		});
+
+
 		$(".generalizePersonal").scroll(function(){
 			var viewH = $(this).height();
 			var contentH = $(this).get(0).scrollHeight;
@@ -432,6 +463,13 @@ include("../common/common.js.html"){}
 			if(scrollTop/(contentH -viewH) >= 0.95){
 				gengeralizeMemberInit(false,'generalizeRecord');
 			}
+		});
+		$('.wallet_GENERALIZEPERSONAL_li').click(function(){
+			gengeralizeMemberInit(true,'generalizeRecord');
+		});
+
+		$('.wallet_GENERALIZE_STATISTICS_li').click(function(){
+			findGeneralizeStatistics();//Generalized structural statistics
 		});
 
 		$(".li_wallet_module").click(function(){
@@ -538,24 +576,25 @@ include("../common/common.js.html"){}
 			updateMoneyIsView(isView);
 		});
 
-		gengeralizeMemberInit(true,'generalizeRecord');
+		//gengeralizeMemberInit(true,'generalizeRecord');
 		//findETHWallet( 'walletETH','/api/base/v1/ethWallet/findEthWallet');//eth
-		findETHWallet( 'walletPutMoney','/api/base/v1/dlbWallet/findDlbWallet');//dlb
+		//findETHWallet( 'walletPutMoney','/api/base/v1/dlbWallet/findDlbWallet');//dlb
 		//findETHWallet( 'walletFLAT','/api/base/v1/lsbWallet/findLsbWallet');//lsb
-		findETHWallet( 'walletGdEth','/api/base/v1/gdethWallet/findGdethWallet');//gdEth
+		//findETHWallet( 'walletGdEth','/api/base/v1/gdethWallet/findGdethWallet');//gdEth
 
 		//findWalletRecord(true,'walletETH','/api/base/v1/ethWallet/findEthRecord');//eth
-		findWalletRecord(true,'walletPutMoney','/api/base/v1/dlbWallet/findDlbRecord');//dbl
+		//findWalletRecord(true,'walletPutMoney','/api/base/v1/dlbWallet/findDlbRecord');//dbl
 		//findWalletRecord(true,'walletFLAT','/api/base/v1/lsbWallet/findLsbRecord');//lsb
-		findWalletRecord(true,'walletGdEth','/api/base/v1/gdethWallet/findGdethRecord');//gdEth
-		getEthToUsd("personal_wallet_center");
+		//findWalletRecord(true,'walletGdEth','/api/base/v1/gdethWallet/findGdethRecord');//gdEth
+		getEthToUsd("personal_wallet_center");//Obtain third party ETH exchange rate to usd.
 		//div_head_images();//heard
 
 
-		findLotteryRecord(true,"lottery_record");
+		//findLotteryRecord(true,"lottery_record");
+
 		getWalletConfig();
 		generalizeInitRegisterUrl();
-		findGeneralizeStatistics();
+		//findGeneralizeStatistics();
 		var languageType = getLanguage();
 		if(languageType != 'zh'){
 			languageType = 'en'
@@ -629,19 +668,19 @@ include("../common/common.js.html"){}
 							<li class="portfolio_category draw_personal_lottery personal_center" data-filter=".personalCenter" data-localize="base.personalCenter">personal center</li>
 							<li class="portfolio_category draw_personal_lottery wallet_li wallet_ETH_li" data-filter=".walletETH">ETH</li>
 							<li class="portfolio_category draw_personal_lottery wallet_li wallet_FLAT_li" data-filter=".walletFLAT" data-localize="base.flat">Flat</li>
-							<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".walletPutMoney" data-localize="base.putMoney">Put money</li>
+							<li class="portfolio_category draw_personal_lottery wallet_li wallet_PUTMONEY_li" data-filter=".walletPutMoney" data-localize="base.putMoney">Put money</li>
 							<% if(generalizeType){ %>
-								<li class="portfolio_category draw_personal_lottery wallet_li" data-filter=".walletGdEth" data-localize="base.gdEth">dividend</li>
+								<li class="portfolio_category draw_personal_lottery wallet_li wallet_GDETH_li" data-filter=".walletGdEth" data-localize="base.gdEth">dividend</li>
 							<% } %>
 							<li class="portfolio_category portfolio_category_bottom" data-filter=".wallet" data-localize="base.wallet">Wallet address</li>
 							<hr>
-							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".web_design" data-localize="base.lotteryRecord">lottery record</li>
+							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom wallet_LOTTERYRECORD_li" data-filter=".web_design" data-localize="base.lotteryRecord">lottery record</li>
 							<hr>
 							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".passwordManagement" data-localize="base.passwordManagement">Password management</li>
 							<hr>
 							<li class="portfolio_category draw_personal_lottery" data-filter=".generalize" data-localize="base.generalize">generalize</li>
-							<li class="portfolio_category draw_personal_lottery" data-filter=".generalizePersonal" data-localize="base.generalizePersonnel">generalize personnel</li>
-							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom" data-filter=".generalize_statistics" data-localize="base.generalizeStatistics">Generalize statistics</li>
+							<li class="portfolio_category draw_personal_lottery wallet_GENERALIZEPERSONAL_li" data-filter=".generalizePersonal" data-localize="base.generalizePersonnel">generalize personnel</li>
+							<li class="portfolio_category draw_personal_lottery portfolio_category_bottom wallet_GENERALIZE_STATISTICS_li" data-filter=".generalize_statistics" data-localize="base.generalizeStatistics">Generalize statistics</li>
 						</ul>
 					</div>
 				</div>
@@ -1107,7 +1146,7 @@ include("../common/common.js.html"){}
 								<input class="input_class_2 wallet_password_input" type="password" id="paymentCode" name="paymentCode" placeholder="password">
 								<input class="input_class_2 wallet_password_input" type="password" id="paymentCodeConfirm" name="paymentCodeConfirm" placeholder="confirm password">
 								<div class="div_btn">
-									<a onclick="create_confirm()" href="#" class="wallet_button button_display">confirm</a>
+									<a onclick="create_confirm()" href="javascript:void(0)" class="wallet_button button_display" data-localize="base.walletBind">confirm</a>
 								</div>
 							</div>
 						</div>
