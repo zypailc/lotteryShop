@@ -784,7 +784,7 @@ include("../common/common.js.html"){}
 										<span class="title_span_3" data-localize="base.balance1">balance</span> : <span class="balance">0ETH </span>
 										<span class="title_span_3" data-localize="base.freeze">freeze</span> : <span class="freeze">0ETH</span>
 									</p>-->
-									<input class="input_class_2 wallet_password_input " autocomplete="off" type="text" placeholder="Extract the number">
+									<input class="input_class_2 wallet_password_input " autocomplete="off" type="number" placeholder="Extract the number">
 									<div class="div_btn">
 										<a class="wallet_button button_display" href="#" propertyType="1" onclick="withdrawCashEth(this)" ><span data-localize="base.withdrawCash">withdraw cash</span></a>
 									</div>
@@ -894,7 +894,7 @@ include("../common/common.js.html"){}
 										<span class="title_span_3" data-localize="base.freeze">freeze</span> : <span class="freeze"></span>
 									</p>-->
 									<p><span data-localize="base.exchange">exchange</span> : <span class="lsbToEth"></span> = 1 ETH</p>
-									<input class="input_class_2 wallet_password_input" type="number" placeholder="Extract the number">
+									<input class="input_class_2 wallet_password_input" type="number" placeholder="Extract the number"  onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
 									<div class="div_btn">
 										<a class="wallet_button button_display" href="#" propertyType="2" onclick="withdrawCashEth(this)" data-localize="base.withdrawCash">withdraw cash</a>
 									</div>
@@ -902,7 +902,7 @@ include("../common/common.js.html"){}
 								<div class="div_recharge wallet_address_self_flat_recharge">
 									<p><span class="title_span_2" data-localize="base.recharge">Recharge</span></p>
 									<p><span data-localize="base.exchange">exchange</span> : 1 ETH = <span class="ethToLsb"></span></p>
-									<input class="input_class_2 wallet_password_input" type="number" placeholder="Prepaid phone number">
+									<input class="input_class_2 wallet_password_input" type="number" placeholder="Prepaid phone number" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
 									<div class="div_btn">
 										<a class="wallet_button button_display" href="#" propertyType="3" onclick="withdrawCashEth(this)" data-localize="base.recharge">recharge</a>
 									</div>

@@ -3,6 +3,7 @@ package com.didu.lotteryshop.webgateway.api.v1.controller;
 import com.didu.lotteryshop.common.entity.LoginUser;
 import com.didu.lotteryshop.webgateway.config.Constants;
 import com.didu.lotteryshop.webgateway.controller.WebgatewayBaseController;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -70,9 +71,10 @@ public class IndexController extends WebgatewayBaseController {
      */
     @RequestMapping("/web/authLogin")
     public String login(Model model,String rdirectUrl){
-        //if(StringUtils.isBlank(rdirectUrl)){
-        //默认登录跳转页面 如果不固定页面跳转地址，地址错误之后，会过滤器截器，跳转到404页面
-        rdirectUrl = "/web/authIndex";
+        if(StringUtils.isBlank(rdirectUrl)) {
+            //默认登录跳转页面 如果不固定页面跳转地址，地址错误之后，会过滤器截器，跳转到404页面
+            rdirectUrl = "/web/authIndex";
+        }
         //}
         model = getModel(model);
         model.addAttribute("type","login");

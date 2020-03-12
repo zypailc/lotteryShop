@@ -64,6 +64,7 @@ public class TaskTransferEtherService extends BaseBaseService {
         List<EsLsbaccounts> esLsbaccountsList = esLsbaccountsService.findSATransferStatusWait();
         if(esLsbaccountsList != null && esLsbaccountsList.size() > 0){
             Map<String,Object> rWeb3jMap = null;
+            int statusValue= 0;
             boolean bool = false;
             SysConfig sysConfig = sysConfigService.getSysConfig();
             for (EsLsbaccounts esLsbaccounts:esLsbaccountsList) {
@@ -71,34 +72,74 @@ public class TaskTransferEtherService extends BaseBaseService {
                     rWeb3jMap = web3jService.findTransactionStatus(esLsbaccounts.getTransferHashValue());
                     if(rWeb3jMap != null && !rWeb3jMap.isEmpty()){
                         String status = rWeb3jMap.get(Web3jService.TRANSACTION_STATUS).toString();
-                        String gasUsed = rWeb3jMap.get(Web3jService.TRANSACTION_GASUSED).toString();
                         if(StringUtils.isNotBlank(status)){
+                            if(status.equals("0")){
+                                statusValue = 0;
+                            }
                             if(status.equals("1")){
-                                success++;
-                               //修改记录为成功
-                                if(esLsbaccounts.getType() == EsLsbaccountsServiceImpl.TYPE_IN){//lsbToEth(平台入账，ETH出账)
-                                    bool = esLsbaccountsService.updateSuccess(esLsbaccounts.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_IN,new BigDecimal(gasUsed));
-                                    if(! bool ) return;
-                                    //记录一条成功的ETH账目记录(出账)
-                                    bool = esEthaccountsService.addOutSuccess(esLsbaccounts.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,esLsbaccounts.getAmount().divide(sysConfig.getEthToLsb(),4,BigDecimal.ROUND_DOWN),esLsbaccounts.getId().toString(),new BigDecimal(gasUsed));
-                                }else{
-                                    bool = esLsbaccountsService.updateSuccess(esLsbaccounts.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,new BigDecimal(gasUsed));
-                                    if(! bool ) return;
-                                    //记录一条成功的ETH账目记录(入账)
-                                    //bool = esEthaccountsService.addInBeingprocessed(esLsbaccounts.getMemberId(), EsEthaccountsServiceImpl.DIC_TYPE_LSBTOETH,esLsbaccounts.getAmount().multiply(sysConfig.getLsbToEth()),esLsbaccounts.getId().toString());
-                                    bool = esEthaccountsService.addInSuccess(esLsbaccounts.getMemberId(), EsEthaccountsServiceImpl.DIC_TYPE_LSBTOETH,esLsbaccounts.getAmount().divide(sysConfig.getLsbToEth(),4,BigDecimal.ROUND_DOWN),esLsbaccounts.getId().toString());
-
-                                }
+                                statusValue = 1;
+//                                success++;
+//                               //修改记录为成功
+//                                if(esLsbaccounts.getType() == EsLsbaccountsServiceImpl.TYPE_IN){//lsbToEth(平台入账，ETH出账)
+//                                    bool = esLsbaccountsService.updateSuccess(esLsbaccounts.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_IN,new BigDecimal(gasUsed));
+//                                    if(! bool ) return;
+//                                    //记录一条成功的ETH账目记录(出账)
+//                                    bool = esEthaccountsService.addOutSuccess(esLsbaccounts.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,esLsbaccounts.getAmount().divide(sysConfig.getEthToLsb(),4,BigDecimal.ROUND_DOWN),esLsbaccounts.getId().toString(),new BigDecimal(gasUsed));
+//                                }else{
+//                                    bool = esLsbaccountsService.updateSuccess(esLsbaccounts.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_DRAW,new BigDecimal(gasUsed));
+//                                    if(! bool ) return;
+//                                    //记录一条成功的ETH账目记录(入账)
+//                                    //bool = esEthaccountsService.addInBeingprocessed(esLsbaccounts.getMemberId(), EsEthaccountsServiceImpl.DIC_TYPE_LSBTOETH,esLsbaccounts.getAmount().multiply(sysConfig.getLsbToEth()),esLsbaccounts.getId().toString());
+//                                    bool = esEthaccountsService.addInSuccess(esLsbaccounts.getMemberId(), EsEthaccountsServiceImpl.DIC_TYPE_LSBTOETH,esLsbaccounts.getAmount().divide(sysConfig.getLsbToEth(),4,BigDecimal.ROUND_DOWN),esLsbaccounts.getId().toString());
+//
+//                                }
                             }
                             if(status.equals("2")){
-                                fail++;
-                                esLsbaccountsService.updateFail(esLsbaccounts.getId());
-                                //修改记录为失败
-                                //添加一条失败的ETH账目记录
-                                continue;
+                                statusValue = 2;
+//                                fail++;
+//                                esLsbaccountsService.updateFail(esLsbaccounts.getId());
+//                                //修改记录为失败
+//                                //添加一条失败的ETH账目记录
+//                                continue;
                             }
-                            wait++;
+
                         }
+                    }
+                }else{
+                    //kafka服务出现问题时处理
+                    statusValue = 2;
+                }
+                if(statusValue == 0){
+                    wait++;
+                }
+                if(statusValue == 1){
+                    success++;
+                    //gas燃气费用
+                    String gasUsed = rWeb3jMap.get(Web3jService.TRANSACTION_GASUSED).toString();
+                    //成功解冻（增加&减少）LSB
+                    esLsbaccountsService.updateSuccess(esLsbaccounts.getId(),new BigDecimal(gasUsed));
+                    //充值ETH→LSB
+                    if(esLsbaccounts.getDicType().equals(EsLsbaccountsServiceImpl.DIC_TYPE_IN)){
+                        //成功解冻（消除）ETH
+                        esEthaccountsService.updateSuccess(esLsbaccounts.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,esLsbaccounts.getId().toString(),new BigDecimal(gasUsed));
+                    }
+                    //提现LSB→ETH
+                    if(esLsbaccounts.getDicType().equals(EsLsbaccountsServiceImpl.DIC_TYPE_DRAW)){
+                        //新增ETH入账记录
+                        esEthaccountsService.addInSuccess(esLsbaccounts.getMemberId(), EsEthaccountsServiceImpl.DIC_TYPE_LSBTOETH,esLsbaccounts.getAmount().divide(sysConfig.getLsbToEth(),4,BigDecimal.ROUND_DOWN),esLsbaccounts.getId().toString());
+                    }
+                }
+                if(statusValue == 2){
+                    fail++;
+                    //失败解冻(消除&增加)LSB
+                    esLsbaccountsService.updateFail(esLsbaccounts.getId());
+                    //充值ETH→LSB
+                    if(esLsbaccounts.getDicType().equals(EsLsbaccountsServiceImpl.DIC_TYPE_IN)){
+                        //失败解冻(增加)ETH
+                        esEthaccountsService.updateFail(esLsbaccounts.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,esLsbaccounts.getId().toString());
+                    }
+                    //提现LSB→ETH
+                    if(esLsbaccounts.getDicType().equals(EsLsbaccountsServiceImpl.DIC_TYPE_DRAW)){
                     }
                 }
             }
@@ -129,6 +170,7 @@ public class TaskTransferEtherService extends BaseBaseService {
                             if(status.equals("1")){
                                 success++;
                                 bool = esEthaccountsService.updateSuccess(esEthaccounts.getId(),EsEthaccountsServiceImpl.DIC_TYPE_DRAW,new BigDecimal(gasUsed));
+                                continue;
                             }
                             if(status.equals("2")){
                                 fail++;
@@ -138,6 +180,10 @@ public class TaskTransferEtherService extends BaseBaseService {
                             wait++;
                         }
                     }
+                }else{
+                    fail++;
+                    esEthaccountsService.updateFail(esEthaccounts.getId(),EsEthaccountsServiceImpl.DIC_TYPE_DRAW);
+                    continue;
                 }
             }
         }

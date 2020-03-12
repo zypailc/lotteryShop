@@ -167,7 +167,7 @@ public class WalletService extends BaseBaseService {
     public ResultUtil withdrawCashLsbToEth(BigDecimal sum){
         SysConfig sysConfig = sysConfigService.getSysConfig();
         //判断最低兑换限制
-        if(sysConfig.getLsbwithdrawMin().compareTo(sum) < 0 ){
+        if(sysConfig.getLsbwithdrawMin().compareTo(sum) > 0 ){
             String msg = "The minimum exchange limit is "+sysConfig.getLsbwithdrawMin().toPlainString()+"!";
             if(super.isChineseLanguage()){
                 msg = "最低兌換限額為 "+sysConfig.getLsbwithdrawMin().toPlainString()+"!";
@@ -279,9 +279,9 @@ public class WalletService extends BaseBaseService {
         }
         SysConfig sysConfig = sysConfigService.getSysConfig();
         if(sum.compareTo(sysConfig.getEthwithdrawMin()) == -1){
-            String msg = "The top-up amount is less than the minimum limit!";
+            String msg = "The top-up amount is less than the minimum limit("+sysConfig.getEthwithdrawMin()+")!";
             if(super.isChineseLanguage()){
-                msg = "充值金额小于最低限制!";
+                msg = "充值金额小于最低限制（"+sysConfig.getEthwithdrawMin()+"）!";
             }
             return ResultUtil.errorJson(msg);
         }
@@ -306,8 +306,13 @@ public class WalletService extends BaseBaseService {
         String uuId = CodeUtil.getUuid();
         boolean b = esLsbaccountsService.addInBeingprocessed(loginUser.getId(),EsLsbaccountsServiceImpl.DIC_TYPE_IN,sum,uuId);
         if(b) {
-            //kafka 执行公链转账操作
-            kafkaTemplate.send("withdrawCashEthToLsb","operId",uuId+"##-##"+super.getRequest().getHeader("Authorization"));
+            EsLsbaccounts esLsbaccounts = esLsbaccountsService.findEsLsbaccountsByOperId(uuId);
+            if(esLsbaccounts != null){
+                //冻结ETH钱包金额
+                esEthaccountsService.addOutBeingProcessed(loginUser.getId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,ethToLsb,esLsbaccounts.getId().toString());
+                //kafka 执行公链转账操作
+                kafkaTemplate.send("withdrawCashEthToLsb","operId",uuId+"##-##"+super.getRequest().getHeader("Authorization"));
+            }
         }else{
             String msg = "Purchase failed, please try again !";
             if(super.isChineseLanguage()){
@@ -354,14 +359,22 @@ public class WalletService extends BaseBaseService {
                         //等待确认
 
                     }else if(Integer.valueOf(rMap.get(Web3jService.TRANSACTION_STATUS).toString()) == 1){
-                        //成功
+                        //成功解冻（增加）LSB
                         esLsbaccountsService.updateSuccess(esLsbaccounts.getId(),new BigDecimal(rMap.get(Web3jService.TRANSACTION_GASUSED).toString()));
-                        //记录一条成功的ETH账目记录(出账)
-                        esEthaccountsService.addOutSuccess(esLsbaccounts.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,ethToLsb,esLsbaccounts.getId().toString(),new BigDecimal(rMap.get(Web3jService.TRANSACTION_GASUSED).toString()));
+                        //成功解冻（消除）ETH
+                        esEthaccountsService.updateSuccess(esLsbaccounts.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,esLsbaccounts.getId().toString(),new BigDecimal(rMap.get(Web3jService.TRANSACTION_GASUSED).toString()));
+                        //esEthaccountsService.addOutSuccess(esLsbaccounts.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,ethToLsb,esLsbaccounts.getId().toString(),new BigDecimal(rMap.get(Web3jService.TRANSACTION_GASUSED).toString()));
                     }else if(Integer.valueOf(rMap.get(Web3jService.TRANSACTION_STATUS).toString()) == 2){
-                        //失败
+                        //失败解冻(消除)LSB
                         esLsbaccountsService.updateFail(esLsbaccounts.getId());
+                        //失败解冻(增加)ETH
+                        esEthaccountsService.updateFail(esLsbaccounts.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,esLsbaccounts.getId().toString());
                     }
+                }else{
+                    //失败解冻(消除)LSB
+                    esLsbaccountsService.updateFail(esLsbaccounts.getId());
+                    //失败解冻(增加)ETH
+                    esEthaccountsService.updateFail(esLsbaccounts.getMemberId(),EsEthaccountsServiceImpl.DIC_TYPE_ETHTOLSB,esLsbaccounts.getId().toString());
                 }
             }
         }

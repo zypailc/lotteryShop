@@ -414,13 +414,15 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
     }
 
     /**
-     * 查询所有Lsb和Eth
+     * 查询所有LSB→ETH 和 ETH → LSB 等待处理的数据
      * @return
      */
     public List<EsLsbaccounts> findSATransferStatusWait(){
         Wrapper<EsLsbaccounts> wrapper = new EntityWrapper<>();
-        wrapper.and("transfer_hash_value is not null and transfer_hash_value<>''")
-                .and().eq("status",STATUS_BEINGPROCESSED);
+        //kafka 服务出现错误时，没有生成transfer_hash_value需要解冻ETH&LSB
+        // wrapper.and("transfer_hash_value is not null and transfer_hash_value<>''")
+        wrapper.eq("status",STATUS_BEINGPROCESSED)
+        .and("(dic_type = '"+EsLsbaccountsServiceImpl.DIC_TYPE_IN+"' or dic_type = '"+EsLsbaccountsServiceImpl.DIC_TYPE_DRAW+"')");
         return super.selectList(wrapper);
     }
 

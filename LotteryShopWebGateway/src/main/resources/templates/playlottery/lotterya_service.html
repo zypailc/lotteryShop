@@ -26,7 +26,8 @@ include("../common/common.js.html"){}
 	$(function(){
 		//返回页面
 		$(".back").click(function(){
-			history.back();
+			//history.back();
+			window.location.href ="/web/authIndex";
 		});
 		var li = $(".lotteryPlay_li");
 		li.click();
@@ -79,6 +80,7 @@ include("../common/common.js.html"){}
 			var incurExpense = $(".money_expenditure").attr("dataValue") || 0;
 			if(!loginUser){
 				layer.msg("please log in !");
+				window.location.href = "/web/authLogin?rdirectUrl=/web/authLotteryServices?playType=1";
 			} else if(parseFloat(availableBalance) < parseFloat(incurExpense)){
 				layui_open("Account balance is insufficient, please recharge first !");
 			} else {

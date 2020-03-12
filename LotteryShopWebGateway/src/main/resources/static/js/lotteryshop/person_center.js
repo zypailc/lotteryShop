@@ -553,12 +553,15 @@ function paymentCodeConfirm(e){
 }
 
 function walletOperation(url,dataJson){
+    alert(1);
+   var loadIndex =  layer.load();
     $.ajax({
         url:url,
         type:"get",
         data:dataJson,
         dataType:"json",
         success:function (result){
+            layer.close(loadIndex);
             if(result.code != 200){
                 layui_open(result.msg);
             }else {
@@ -569,7 +572,7 @@ function walletOperation(url,dataJson){
                 findETHWallet(  'walletETH','/api/base/v1/ethWallet/findEthWallet');
                 findWalletRecord(true,'walletETH','/api/base/v1/ethWallet/findEthRecord');
             }
-            if(url == "/api/base/v1/baseWallet/withdrawCashEthToLsb"){
+            if(url == "/api/base/v1/baseWallet/withdrawCashEthToLsb" || url == "/api/base/v1/baseWallet/withdrawCashLsbToEth"){
                 findETHWallet( 'walletFLAT','/api/base/v1/lsbWallet/findLsbWallet');
                 findWalletRecord(true,'walletFLAT','/api/base/v1/lsbWallet/findLsbRecord');//lsb
             }

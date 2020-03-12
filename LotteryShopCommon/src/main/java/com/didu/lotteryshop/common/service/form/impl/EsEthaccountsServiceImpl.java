@@ -341,8 +341,8 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
      */
     public List<EsEthaccounts> findSATransferStatusWait(){
         Wrapper<EsEthaccounts> wrapper = new EntityWrapper<>();
-        wrapper.and("transfer_hash_value is not null and transfer_hash_value<>''")
-                .and().eq("type",TYPE_OUT).eq("status",STATUS_BEINGPROCESSED);
+        //wrapper.and("transfer_hash_value is not null and transfer_hash_value<>''")
+        wrapper.eq("type",TYPE_OUT).eq("status",STATUS_BEINGPROCESSED);
         return super.selectList(wrapper);
     }
 
