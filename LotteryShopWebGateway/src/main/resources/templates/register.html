@@ -93,7 +93,7 @@
 						layer.close(index);
 						if(data.success){//注册成功
 							layer.msg(data.extend.data);
-							set_Time_out('../web/login');
+							set_Time_out('/web/authLogin');
 						}else{
 							layui_open(data.msg)
 						}
