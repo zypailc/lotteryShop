@@ -69,6 +69,12 @@ public class SysConfig extends Model<SysConfig> {
 	@TableField("lsbwithdraw_min")
 	private BigDecimal lsbwithdrawMin;
 
+	/**
+	 * ETH转平台币的最小限制
+	 */
+	@TableField("ethwithdraw_min")
+	private BigDecimal ethwithdrawMin;
+
 	public Integer getId() {
 		return id;
 	}
@@ -149,6 +155,14 @@ public class SysConfig extends Model<SysConfig> {
 		this.lsbwithdrawMin = lsbwithdrawMin;
 	}
 
+	public BigDecimal getEthwithdrawMin() {
+		return ethwithdrawMin;
+	}
+
+	public void setEthwithdrawMin(BigDecimal ethwithdrawMin) {
+		this.ethwithdrawMin = ethwithdrawMin;
+	}
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -167,6 +181,7 @@ public class SysConfig extends Model<SysConfig> {
 			", managerAddress=" + managerAddress +
 			", withdrawRatio=" + withdrawRatio +
 			", lsbwithdrawMin=" + lsbwithdrawMin +
+			", ethwithdrawMin=" + ethwithdrawMin +
 			"}";
 	}
 }

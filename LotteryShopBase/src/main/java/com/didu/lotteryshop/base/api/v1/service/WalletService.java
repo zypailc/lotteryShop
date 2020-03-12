@@ -278,6 +278,13 @@ public class WalletService extends BaseBaseService {
             return ResultUtil.errorJson(msg);
         }
         SysConfig sysConfig = sysConfigService.getSysConfig();
+        if(sum.compareTo(sysConfig.getEthwithdrawMin()) == -1){
+            String msg = "The top-up amount is less than the minimum limit!";
+            if(super.isChineseLanguage()){
+                msg = "充值金额小于最低限制!";
+            }
+            return ResultUtil.errorJson(msg);
+        }
         BigDecimal ethToLsb = sum.divide(sysConfig.getEthToLsb(),4,BigDecimal.ROUND_DOWN);
         //判断余额是否可支付
         if(!esEthwalletService.judgeBalance(loginUser.getId(),ethToLsb)){
