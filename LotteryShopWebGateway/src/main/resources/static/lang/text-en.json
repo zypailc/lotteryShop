@@ -101,6 +101,7 @@
     "threeCompaniesThroughSelectionText": "Bet on all 3 linked Numbers (123, 234, 345, 456).Bonus odds are 7.96 times.",
     "twoIdenticalCheckText": "The drawing number has two identical, namely two identical number;Choose one or more Numbers from 11-66, and choose the same number as the prize number (including 11-66, in no order), that is, win (excluding leopards 111-666).The odds are 12.74.",
     "twoOnTheSameSignText": "Select 1 pair of the same number and 1 different number betting, select the same number and prize number, namely winning.Bonus odds 63.72 times.",
-    "theTwoDifferentText": "Choose 2 or more Numbers from 1-6, the number selected is the same as any 2 Numbers of the drawing number, namely the winning number.Bonus odds of 6.37."
+    "theTwoDifferentText": "Choose 2 or more Numbers from 1-6, the number selected is the same as any 2 Numbers of the drawing number, namely the winning number.Bonus odds of 6.37.",
+    "change": "change"
   }
 }

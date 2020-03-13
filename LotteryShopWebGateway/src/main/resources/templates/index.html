@@ -314,7 +314,7 @@
 </body>
 <script>
 	$(function(){
-		//存储推广人员的Id，推广人员Id存储在session有效期24小时
+		//Store the promoter's Id, which is stored in the session for 24 hours
 		var generalizePersonId = "${generalizePersonId!''}";
 		setCookie("generalizePersonId",generalizePersonId,24);
 		var languageType = getLanguage();
@@ -465,7 +465,7 @@ var canvas = document.getElementById('canvas'),
 		hue = 217,
 		stars = [],
 		count = 0,
-		maxStars = 500;//星星数量
+		maxStars = 500;//The number of the stars
 
 var canvas2 = document.createElement('canvas'),
 		ctx2 = canvas2.getContext('2d');
@@ -504,19 +504,19 @@ function maxOrbit(x, y) {
 	var max = Math.max(x, y),
 			diameter = Math.round(Math.sqrt(max * max + max * max));
 	return diameter / 2;
-	//星星移动范围，值越大范围越小，
+	//The bigger the star moves, the smaller the range,
 }
 
 var Star = function() {
 
 	this.orbitRadius = random(maxOrbit(w, h));
 	this.radius = random(60, this.orbitRadius) / 8;
-	//星星大小
+	//The size of the stars
 	this.orbitX = w / 2;
 	this.orbitY = h / 2;
 	this.timePassed = random(0, maxStars);
 	this.speed = random(this.orbitRadius) / 50000;
-	//星星移动速度
+	//Star velocity
 	this.alpha = random(2, 10) / 10;
 
 	count++;
@@ -545,7 +545,7 @@ for (var i = 0; i < maxStars; i++) {
 
 function animation() {
 	ctx.globalCompositeOperation = 'source-over';
-	ctx.globalAlpha = 0.5; //尾巴
+	ctx.globalAlpha = 0.5; //tail
 	ctx.fillStyle = 'hsla(' + hue + ', 64%, 6%, 2)';
 	ctx.fillRect(0, 0, w, h)
 

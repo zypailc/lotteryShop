@@ -238,16 +238,16 @@ include("../common/common.js.html"){}
 	.wallet_left{
 		overflow: auto;
 	}
-	.wallet_left::-webkit-scrollbar {/*滚动条整体样式*/
-		width: 2px;     /*高宽分别对应横竖滚动条的尺寸*/
+	.wallet_left::-webkit-scrollbar {
+		width: 2px;
 		height: 1px;
 	}
-	.wallet_left::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+	.wallet_left::-webkit-scrollbar-thumb {
 		border-radius: 2px;
 		-webkit-box-shadow: inset 0 0 2px rgba(0,0,0, 0.07);
 		background: rgba(151, 151, 151, 0.3);
 	}
-	.wallet_left::-webkit-scrollbar-track {/*滚动条里面轨道*/
+	.wallet_left::-webkit-scrollbar-track {
 		-webkit-box-shadow: inset 0 0 2px rgba(0,0,0, 0.07);
 		border-radius: 2px;
 		background: rgba(151, 151, 151, 0.3);
@@ -380,7 +380,7 @@ include("../common/common.js.html"){}
 <script>
 	$(function(){
 
-		//初始化方法
+		//init
 		var li = $(".personal_center");
 		li.click();
 
@@ -481,18 +481,15 @@ include("../common/common.js.html"){}
 			//}
 		});
 
-		//昵称标签超出长度显示省略号
 		var span_title = $(".span_title").html();
 		if (span_title.length > 50) {
-			//截取固定长度
 			var span_title = span_title.substring(0, 50);
-			//为非隐藏<span>标签赋值--截取固定长度
 			$(".span_title").text(span_title+"...");
 		} else {
 			$(".span_title").text(span_title);
 		}
 
-		//屏幕分辨率小于991的初始化方法
+		//991
 		$(".personal_phone").click(function(){
 			var type = $(this).attr("data-file") || "";
 			if(type == 'generalize'){
@@ -764,7 +761,6 @@ include("../common/common.js.html"){}
 					</div>
 				</div>
 			</div>
-			<!-- 购买彩票记录和中奖记录 -->
 			<div class="search_div web_design">
 				<input type="text" class="input_class startDateInput  layui-input" placeholder="start：yyyy-MM-dd">
 				<input type="text" class="input_class endDateInput  layui-input" placeholder="end：yyyy-MM-dd">
@@ -774,10 +770,10 @@ include("../common/common.js.html"){}
 				</select>
                 <select class="select_search lotteryWinningSelect">
                     <option value="-1" data-localize="base.all">All</option>
-                    <option value="1" data-localize="base.Winning">中奖</option>
-                    <option value="0" data-localize="base.onWinning">未中奖</option>
+                    <option value="1" data-localize="base.Winning"></option>
+                    <option value="0" data-localize="base.onWinning"></option>
                 </select>
-				<button class="btn search_lottery_record" data-localize="base.search">查询</button>
+				<button class="btn search_lottery_record" data-localize="base.search">search</button>
 				<hr>
 			</div>
 			<hr class="web_design">
@@ -788,9 +784,9 @@ include("../common/common.js.html"){}
 							<div>
 								<p><span class="lotteryType lottery_span_right">Lottery type</span><span class="lotteryIssue"></span></p>
 								<p>
-									<span class="luckNumStr">幸运号 : </span><span class="lottery_span_right selfLuckNum"></span>
-									<span class="winningNumStr">开奖号 : </span><span class="lottery_span_right luckNum"></span>
-									<span class="luckAmountStr">幸运金 : </span><span class="luckTotal"></span>
+									<span class="luckNumStr">luckNum : </span><span class="lottery_span_right selfLuckNum"></span>
+									<span class="winningNumStr">winningNum : </span><span class="lottery_span_right luckNum"></span>
+									<span class="luckAmountStr">luckAmount : </span><span class="luckTotal"></span>
 								</p>
 								<p><span class="startTime">00:00:00 00:00:00</span> ~ <span class="endTime">00:00:00 00:00:00</span></p>
 							</div>
@@ -800,7 +796,7 @@ include("../common/common.js.html"){}
 				</div>
 				<hr>
 			</div>
-			<!-- ETH 记录 -->
+			<!-- ETH  -->
 			<div class="card card-1 card-1_scroll walletETH">
 				<div class="card-body">
 					<div class="eth_record">
@@ -817,7 +813,7 @@ include("../common/common.js.html"){}
 								<!--<p><span class="title_span_1">ETH </span></p>-->
 								<div class="div_withdrawCash wallet_address_self_eth_withdrawCash">
 									<p><span class="title_span_2" data-localize="base.withdrawCash">Withdraw cash</span></p>
-									<p><span data-localize="base.rules">规则</span></p>
+									<p><span data-localize="base.rules">rule</span></p>
 									<!--<p>
 										<span class="title_span_3" data-localize="base.total">total</span> : <span class="wallet_span_total">0ETH</span>
 										<span class="title_span_3" data-localize="base.balance1">balance</span> : <span class="balance">0ETH </span>
@@ -841,8 +837,8 @@ include("../common/common.js.html"){}
 									<p>
 										<span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
 										<span class="span_right expendOrReceipts">0.1</span>
-										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">0.0</span>
-										<span class="ethGas ethGasStr" data-localize="base.ethGas">燃气费 : </span><span class="ethGas ethGasStrInfo">0.0</span>
+										<span class="balanceStr" data-localize="base.balance1">balance : </span><span class="span_right balance1">0.0</span>
+										<span class="ethGas ethGasStr" data-localize="base.ethGas">gas : </span><span class="ethGas ethGasStrInfo">0.0</span>
 									</p>
 								</div>
 								<!--<hr class="hrEth">-->
@@ -871,7 +867,7 @@ include("../common/common.js.html"){}
 									<p>
 										<span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
 										<span class="span_right expendOrReceipts">0.0</span>
-										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">0.0</span>
+										<span class="balanceStr" data-localize="base.balance1">balance : </span><span class="span_right balance1">0.0</span>
 									</p>
 								</div>
 								<!--<hr class="hrEth">-->
@@ -900,7 +896,7 @@ include("../common/common.js.html"){}
 									<p>
 										<span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
 										<span class="span_right expendOrReceipts">0.0</span>
-										<span class="balanceStr" data-localize="base.balance1">余额 : </span><span class="span_right balance1">0.0</span>
+										<span class="balanceStr" data-localize="base.balance1">balance : </span><span class="span_right balance1">0.0</span>
 									</p>
 								</div>
 								<!--<hr class="hrEth">-->
@@ -909,7 +905,7 @@ include("../common/common.js.html"){}
 					</div>
 				</div>
 			</div>
-			<!-- FLAT 记录 -->
+			<!-- FLAT -->
 			<div class="card card-1 card-1_scroll walletFLAT">
 				<div class="card-body">
 					<div class="lsb_record">
@@ -964,14 +960,10 @@ include("../common/common.js.html"){}
 					</div>
 				</div>
 			</div>
-			<!-- 推广主页 -->
+			<!-- generalize home -->
 			<div class="card generalize">
 				<div class="wallet_left">
 					<div class="generalizeContent wallet_extract wallet_extract_generalize">
-						<!--<p>推广游戏可获得推广佣金，推广佣金层级为7层，包含消费佣金和中奖佣金两部分。</p>
-                        <p>1.当用户7层内下级产生消费时，该消费用户消费金额的5%作为消费佣金，回馈给该消费用户的7层内上级。</p>
-                        <p>2.当用户7层内下级产生中奖时，该中奖用户中奖金额的10%作为中奖佣金，回馈给该中奖用户的7层内上级。</p>
-                        <p>注：中奖佣金由平台单独支付，不影响中奖用户奖金金额。</p>-->
 					</div>
 					<div class="wallet_extract wallet_extract_generalize">
 						<p><span class="generalizeEwmUrl"></span></p>
@@ -981,7 +973,7 @@ include("../common/common.js.html"){}
 					</div>
 				</div>
 			</div>
-			<!-- 推广人員 -->
+			<!-- generalize person -->
 			<div class="card card-1 card-1_scroll generalizePersonal">
 				<div class="card-body generalizeRecord">
 					<ul class="ul_personal_generalizePersonal">
@@ -999,7 +991,7 @@ include("../common/common.js.html"){}
 			<div class="search_div generalize_statistics">
 				<input type="text" class="input_class generalizeStartTime layui-input" placeholder="start：yyyy-MM-dd">
 				<input type="text" class="input_class generalizeEndTime layui-input" placeholder="end：yyyy-MM-dd">
-				<button class="btn" onclick="findGeneralizeStatistics()" data-localize="base.search">查询</button>
+				<button class="btn" onclick="findGeneralizeStatistics()" data-localize="base.search">search</button>
 				<hr>
 			</div>
 			<hr class="generalize_statistics">
@@ -1008,7 +1000,7 @@ include("../common/common.js.html"){}
 					<ul class="generalize_statistics_ul">
 						<li class="generalize_statistics_1">
 							<div>
-								<div class="level level_1"><span data-localize="base.level_1">一楼</span></div>
+								<div class="level level_1"><span data-localize="base.level_1"></span></div>
 								<div class="generalize_left">
 									<p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
 									<p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
@@ -1019,7 +1011,7 @@ include("../common/common.js.html"){}
 						<li class="generalize_statistics_2">
 
 							<div>
-								<div class="level level_2"><span data-localize="base.level_2">二楼</span></div>
+								<div class="level level_2"><span data-localize="base.level_2"></span></div>
 								<div class="generalize_left">
 									<p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
 									<p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
@@ -1030,7 +1022,7 @@ include("../common/common.js.html"){}
 						<li class="generalize_statistics_3">
 
 							<div>
-								<div class="level level_3"><span data-localize="base.level_3">三楼</span></div>
+								<div class="level level_3"><span data-localize="base.level_3"></span></div>
 								<div class="generalize_left">
 									<p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
 									<p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
@@ -1041,7 +1033,7 @@ include("../common/common.js.html"){}
 						<li class="generalize_statistics_4">
 
 							<div>
-								<div class="level level_4"><span data-localize="base.level_4">四楼</span></div>
+								<div class="level level_4"><span data-localize="base.level_4"></span></div>
 								<div class="generalize_left">
 									<p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
 									<p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
@@ -1052,7 +1044,7 @@ include("../common/common.js.html"){}
 						<li class="generalize_statistics_5">
 
 							<div>
-								<div class="level level_5" ><span data-localize="base.level_5">五楼</span></div>
+								<div class="level level_5" ><span data-localize="base.level_5"></span></div>
 								<div class="generalize_left">
 									<p><input class="total ztotal" value="0"><span data-localize="base.winningBonus"></span></p>
 									<p><input class="total gtotal" value="0"><span data-localize="base.purchaseBonus"></span></p>
@@ -1062,7 +1054,7 @@ include("../common/common.js.html"){}
 						</li>
 						<li class="generalize_statistics_6">
 							<div>
-								<div  class="level level_6" ><span data-localize="base.level_6">六楼</span></div>
+								<div  class="level level_6" ><span data-localize="base.level_6"></span></div>
 								<div class="generalize_left">
 									<p><input class="total ztotal" value="0"><span  data-localize="base.winningBonus"></span></p>
 									<p><input class="total gtotal" value="0"><span  data-localize="base.purchaseBonus"></span></p>
@@ -1073,7 +1065,6 @@ include("../common/common.js.html"){}
 					</ul>
 				</div>
 			</div>
-			<!-- 钱包 包括绑定地址和提现功能 -->
 			<div class="card wallet wallet_piece">
 				<div class="wallet_left">
 					<%
@@ -1094,7 +1085,7 @@ include("../common/common.js.html"){}
 								<p><span class="title_span_1">ETH </span></p>
 								<div class="wallet_address_self_eth_withdrawCash">
 									<p><span class="title_span_2" data-localize="base.withdrawCash">Withdraw cash</span></p>
-									<p>规则：</p>
+									<p>rule：</p>
 									<p>
 										<span class="title_span_3" data-localize="base.total">total</span> : <span class="wallet_span_total">0ETH</span>
 										<span class="title_span_3" data-localize="base.balance1">balance</span> : <span class="balance">0ETH </span>
@@ -1156,7 +1147,7 @@ include("../common/common.js.html"){}
 				</div>
 			</div>
 		</div>
-		<!-- 手机列表 -->
+		<!-- phone list -->
 		<div class="container container_phone">
 			<div class="phone_piece">
 				<div class="personal_phone" data-file="lottery_record">
@@ -1189,12 +1180,12 @@ include("../common/common.js.html"){}
 	<!-- head -->
 	<div class="layui_head" style="display: none">
 		<div class="layui_title">
-			<span>头像</span>
+			<span>head portrait</span>
 		</div>
 		<div class="div_head_images">
-			<!-- 头像列表 -->
+			<!-- head portrait list -->
 		</div>
-		<button class="btn btn_head_button" onclick="img_change_button()" >更改</button>
+		<button class="btn btn_head_button" onclick="img_change_button()" data-localize="base.change" >change</button>
 	</div>
 	<!-- play code -->
 	<div id="playPassword" style="display: none;">
