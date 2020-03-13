@@ -15,7 +15,7 @@ function changePicture(){
         type: 1,
         title: false,
         shadeClose: true,
-        area:['380px','430px'],
+        area:['400px','520px'],
         content: $(".layui_head")
     });
 }
