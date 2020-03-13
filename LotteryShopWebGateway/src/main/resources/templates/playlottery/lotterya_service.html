@@ -383,7 +383,8 @@ include("../common/common.js.html"){}
 		var dataObj = $("#"+dataId);
 		var currentPage = dataObj.attr("currentPage") || 1;
 		var pageSize = dataObj.attr("pageSize") || 20;
-		var isFind = dataObj.attr("pageSize") || "true";
+		var isFind = dataObj.attr("isFind") || "true";
+		var isRepetition = dataObj.attr("isRepetition") || "true";
 		var ul = dataObj.find("ul");
 		var li = dataObj.find("ul").find("li:first-child");
 		var languageType = getLanguage();
@@ -393,53 +394,58 @@ include("../common/common.js.html"){}
 		if(flag){
 			ul.html("");
 		}
-		$.ajax({
-			url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryIssue',
-			type:'get',
-			data:{"currentPage":currentPage,"pageSize":pageSize},
-			dataType:"json",
-			success:function (result) {
-				var dataInfo = result.extend.data.records;
-				isFind = dataObj.attr("isFind") || 'true';
-				if(isFind == 'true') {
-					if (dataInfo.length < pageSize) {
-						dataObj.attr("isFind", 'false')
-					}
-					$.each(dataInfo, function (index, data) {
-						if(data.luckNum){
-							var luckNum = data.luckNum.split("");
-							var new_li;
-							if(flag && index == 0){
-								new_li = li.clone();
-							}else {
-								new_li = dataObj.find("ul").find("li:first-child").clone();
-							}
-							if(languageType == 'zh'){
-								new_li.find(".luckNumStr").html("幸运号");
-								new_li.find(".luckTotalStr").html("开奖金额");
-
-							}else {
-								new_li.find(".luckNumStr").html("Luck number");
-								new_li.find(".luckTotalStr").html("Winning amount");
-							}
-							new_li.find(".lotteryIssue").html("#"+data.issueNum);
-							new_li.find(".luckNum_1").addClass("span_element_num_"+luckNum[0]);
-							new_li.find(".luckNum_2").addClass("span_element_num_"+luckNum[1]);
-							new_li.find(".luckNum_3").addClass("span_element_num_"+luckNum[2]);
-							new_li.find(".luckTotal").html(data.luckTotal+"ETH");
-							new_li.find(".lotteryTime").html(data.startTime + " ~ " + data.endTime);
-                            new_li.show();
-							ul.append(new_li);
+		if(isRepetition == 'true'){
+			dataObj.attr("isRepetition",'false');
+			$.ajax({
+				url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryIssue',
+				type:'get',
+				data:{"currentPage":currentPage,"pageSize":pageSize},
+				dataType:"json",
+				success:function (result) {
+					var dataInfo = result.extend.data.records;
+					isFind = dataObj.attr("isFind") || 'true';
+					if(isFind == 'true') {
+						if (dataInfo.length < pageSize) {
+							dataObj.attr("isFind", 'false')
 						}
-					})
-					if (dataInfo.length < pageSize) {
-						ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+						$.each(dataInfo, function (index, data) {
+							if(data.luckNum){
+								var luckNum = data.luckNum.split("");
+								var new_li;
+								if(flag && index == 0){
+									new_li = li.clone();
+								}else {
+									new_li = dataObj.find("ul").find("li:first-child").clone();
+								}
+								if(languageType == 'zh'){
+									new_li.find(".luckNumStr").html("幸运号");
+									new_li.find(".luckTotalStr").html("开奖金额");
+
+								}else {
+									new_li.find(".luckNumStr").html("Luck number");
+									new_li.find(".luckTotalStr").html("Winning amount");
+								}
+								new_li.find(".lotteryIssue").html("#"+data.issueNum);
+								new_li.find(".luckNum_1").addClass("span_element_num_"+luckNum[0]);
+								new_li.find(".luckNum_2").addClass("span_element_num_"+luckNum[1]);
+								new_li.find(".luckNum_3").addClass("span_element_num_"+luckNum[2]);
+								new_li.find(".luckTotal").html(data.luckTotal+"ETH");
+								new_li.find(".lotteryTime").html(data.startTime + " ~ " + data.endTime);
+								new_li.show();
+								ul.append(new_li);
+							}
+						})
+						if (dataInfo.length < pageSize) {
+							ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+						}
+						dataObj.attr("isRepetition",'true');
+						dataObj.attr("currentPage",parseInt(currentPage) + 1);
+						dataObj.attr("pageSize",pageSize);
 					}
 				}
-			}
-		})
-		dataObj.attr("currentPage",parseInt(currentPage) + 1);
-		dataObj.attr("pageSize",pageSize);
+			})
+		}
+
 	}
 	function getLotteryDetail(e){
 		var li = $(e);
@@ -454,7 +460,8 @@ include("../common/common.js.html"){}
 		var dataObj = $("."+classProperty);
 		var currentPage = dataObj.attr("currentPage") || 1;
 		var pageSize = dataObj.attr("pageSize") || 20;
-		var isFind = dataObj.attr("pageSize") || "true";
+		var isFind = dataObj.attr("isFind") || "true";
+		var isRepetition = dataObj.attr("isRepetition") || "true";
 		var ul = dataObj;
 		var li = dataObj.find("li:first-child");
 		var languageType = getLanguage();
@@ -471,56 +478,60 @@ include("../common/common.js.html"){}
 		}else {
 			issue = dataObj.attr("issus") || issue;
 		}
-		var index_record = layer.load(3,{shade: [0.8, '#393D49']});
-		$.ajax({
-			url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryBuy',
-			type:'get',
-			data:{"currentPage":currentPage,"pageSize":pageSize,"lotteryaIssueId":issue,"type":2,"isLuck":1},
-			dataType:"json",
-			success:function (result) {
-				layer.close(index_record);
-				var dataInfo = result.extend.data;
-				isFind = dataObj.attr("isFind") || 'true';
-				if(isFind == 'true') {
-					if (dataInfo.length < pageSize) {
-						dataObj.attr("isFind", 'false')
+		if(isRepetition == 'true'){
+			dataObj.attr("isRepetition",'false');
+			var index_record = layer.load(3,{shade: [0.8, '#393D49']});
+			$.ajax({
+				url:'${projectPath}/apiauthorization/lotteryA/authorization/v1/getLotteryBuy',
+				type:'get',
+				data:{"currentPage":currentPage,"pageSize":pageSize,"lotteryaIssueId":issue,"type":2,"isLuck":1},
+				dataType:"json",
+				success:function (result) {
+					layer.close(index_record);
+					var dataInfo = result.extend.data;
+					isFind = dataObj.attr("isFind") || 'true';
+					if(isFind == 'true') {
+						if (dataInfo.length < pageSize) {
+							dataObj.attr("isFind", 'false')
+						}
+						$.each(dataInfo, function (index, data) {
+							var new_li;
+							if(flag && index == 0){
+								new_li = li.clone();
+							}else {
+								new_li = dataObj.find("li:first-child").clone();
+							}
+							/*new_li.find(".memberName").html(data.memberName);*/
+							new_li.find(".email").html(data.email);
+							new_li.find(".luckNum").html(data.luckTotal + " ETH");
+							if(languageType == 'zh'){
+								new_li.find(".multiples").html(data.multipleNum + " Multiples");
+							}else {
+								new_li.find(".multiples").html(data.multipleNum + " 倍");
+							}
+
+
+							new_li.show();
+							ul.append(new_li);
+						})
+						dataObj.attr("isRepetition",'true');
+						dataObj.attr("currentPage",parseInt(currentPage) + 1);
+						dataObj.attr("pageSize",pageSize);
+						if (dataInfo.length < pageSize) {
+							if(flag && dataInfo.length == 0){
+								li.hide();
+								ul.append(li);
+
+							}
+							ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+						}
 					}
-					$.each(dataInfo, function (index, data) {
-						var new_li;
-						if(flag && index == 0){
-							new_li = li.clone();
-						}else {
-							new_li = dataObj.find("li:first-child").clone();
-						}
-						/*new_li.find(".memberName").html(data.memberName);*/
-						new_li.find(".email").html(data.email);
-						new_li.find(".luckNum").html(data.luckTotal + " ETH");
-						if(languageType == 'zh'){
-							new_li.find(".multiples").html(data.multipleNum + " Multiples");
-						}else {
-							new_li.find(".multiples").html(data.multipleNum + " 倍");
-						}
-
-
-						new_li.show();
-						ul.append(new_li);
-					})
-					dataObj.attr("currentPage",parseInt(currentPage) + 1);
-					dataObj.attr("pageSize",pageSize);
-					if (dataInfo.length < pageSize) {
-						if(flag && dataInfo.length == 0){
-							li.hide();
-							ul.append(li);
-
-						}
-						ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+					if(flag){
+						open_lottery_issue_record();
 					}
 				}
-				if(flag){
-					open_lottery_issue_record();
-				}
-			}
-		})
+			})
+		}
 
 	}
 	function open_lottery_issue_record(){
@@ -583,7 +594,8 @@ include("../common/common.js.html"){}
 		var dataObj = $(".layer_receive_list");
 		var currentPage = dataObj.attr("currentPage") || 1;
 		var pageSize = dataObj.attr("pageSize") || 5;
-		var isFind = dataObj.attr("pageSize") || "true";
+		var isFind = dataObj.attr("isFind") || "true";
+		var isRepetition = dataObj.attr("isRepetition") || "true";
 		var ul = dataObj.find("ul");
 		var li = ul.find("li:first-child");
 		var languageType = getLanguage();
@@ -596,73 +608,77 @@ include("../common/common.js.html"){}
 			currentPage = 1;
 			ul.html("");
 		}
-		$.ajax({
-			url:'${projectPath}/api/lotteryA/v1/lotteryA/findLotteryAIssueReceive',
-			type:'get',
-			data:{"currentPage":currentPage,"pageSize":pageSize},
-			dataType:"json",
-			success:function (result) {
-				var dataInfo = result.extend.data;
-				isFind = dataObj.attr("isFind") || 'true';
-				if(isFind == 'true') {
-					if (dataInfo.length < pageSize) {
-						dataObj.attr("isFind", 'false')
-					}
-					$.each(dataInfo, function (index, data) {
-						var new_li;
-						if(flag && index == 0){
-							new_li = li.clone();
-						}else {
-							new_li = dataObj.find("li:first-child").clone();
+		if(isRepetition == 'true'){
+			dataObj.attr("isRepetition",'false');
+			$.ajax({
+				url:'${projectPath}/api/lotteryA/v1/lotteryA/findLotteryAIssueReceive',
+				type:'get',
+				data:{"currentPage":currentPage,"pageSize":pageSize},
+				dataType:"json",
+				success:function (result) {
+					var dataInfo = result.extend.data;
+					isFind = dataObj.attr("isFind") || 'true';
+					if(isFind == 'true') {
+						if (dataInfo.length < pageSize) {
+							dataObj.attr("isFind", 'false')
 						}
-						new_li.find(".issue").html("#"+data.issueNum);
-						new_li.find(".time").html(data.startTime + "~" + data.endTime);
-						if(languageType == 'zh'){
-							new_li.find(".explain_1").html("购买分红");
-							new_li.find(".explain_2").html("中奖分红");
-							if(data.status == '0'){
-								new_li.find(".explain_3").html("待领取");
-								$(".to_receive_content").find(".count_down").show();
+						$.each(dataInfo, function (index, data) {
+							var new_li;
+							if(flag && index == 0){
+								new_li = li.clone();
+							}else {
+								new_li = dataObj.find("li:first-child").clone();
 							}
-							if(data.status == '1'){
-								new_li.find(".explain_3").html("已领取");
-								$(".to_receive_content").find(".count_down").hide();
+							new_li.find(".issue").html("#"+data.issueNum);
+							new_li.find(".time").html(data.startTime + "~" + data.endTime);
+							if(languageType == 'zh'){
+								new_li.find(".explain_1").html("购买分红");
+								new_li.find(".explain_2").html("中奖分红");
+								if(data.status == '0'){
+									new_li.find(".explain_3").html("待领取");
+									$(".to_receive_content").find(".count_down").show();
+								}
+								if(data.status == '1'){
+									new_li.find(".explain_3").html("已领取");
+									$(".to_receive_content").find(".count_down").hide();
+								}
+								if(data.status == '2'){
+									new_li.find(".explain_3").html("过期");
+									$(".to_receive_content").find(".count_down").hide();
+								}
+							}else {
+								new_li.find(".explain_1").html("Purchase of bonus");
+								new_li.find(".explain_2").html("winning of bonus");
+								if(data.status == '0'){
+									new_li.find(".explain_3").html("待领取");
+									$(".to_receive_content").find(".count_down").show();
+								}
+								if(data.status == '1'){
+									new_li.find(".explain_3").html("already received");
+									$(".to_receive_content").find(".count_down").hide();
+								}
+								if(data.status == '2'){
+									new_li.find(".explain_3").html("past due");
+									$(".to_receive_content").find(".count_down").hide();
+								}
 							}
-							if(data.status == '2'){
-								new_li.find(".explain_3").html("过期");
-								$(".to_receive_content").find(".count_down").hide();
-							}
-						}else {
-							new_li.find(".explain_1").html("Purchase of bonus");
-							new_li.find(".explain_2").html("winning of bonus");
-							if(data.status == '0'){
-								new_li.find(".explain_3").html("待领取");
-								$(".to_receive_content").find(".count_down").show();
-							}
-							if(data.status == '1'){
-								new_li.find(".explain_3").html("already received");
-								$(".to_receive_content").find(".count_down").hide();
-							}
-							if(data.status == '2'){
-								new_li.find(".explain_3").html("past due");
-								$(".to_receive_content").find(".count_down").hide();
-							}
+							new_li.find(".total_1").val(data.gTotal);
+							new_li.find(".total_2").val(data.zTotal);
+
+							new_li.find(".count_down").html();
+
+							ul.append(new_li);
+						})
+						dataObj.attr("isRepetition",'true');
+						dataObj.attr("currentPage",parseInt(currentPage) + 1);
+						dataObj.attr("pageSize",pageSize);
+						if (dataInfo.length < pageSize) {
+							ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
 						}
-						new_li.find(".total_1").val(data.gTotal);
-						new_li.find(".total_2").val(data.zTotal);
-
-						new_li.find(".count_down").html();
-
-						ul.append(new_li);
-					})
-					dataObj.attr("currentPage",parseInt(currentPage) + 1);
-					dataObj.attr("pageSize",pageSize);
-					if (dataInfo.length < pageSize) {
-						ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
 					}
 				}
-			}
-		})
+			})
+		}
 	}
 	function findLotteryAIssueReceiveStatistics(languageType){
 		$.ajax({

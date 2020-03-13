@@ -7,9 +7,14 @@
 		<id column="id" property="id" />
 		<result column="zh_title" property="zhTitle" />
 		<result column="en_title" property="enTitle" />
-		<result column="price" property="price" />
 		<result column="period_date" property="periodDate" />
 		<result column="interval_date" property="intervalDate" />
+		<result column="min_money" property="minMoney" />
+		<result column="max_money" property="maxMoney" />
+		<result column="pm_vnum" property="pmVnum" />
+		<result column="pm_rnum" property="pmRnum" />
+		<result column="buy_pm" property="buyPm" />
+		<result column="winning_pm" property="winningPm" />
 	</resultMap>
 
 </mapper>

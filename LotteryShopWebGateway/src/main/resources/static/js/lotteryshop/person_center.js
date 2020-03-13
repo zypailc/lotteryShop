@@ -137,6 +137,7 @@ function gengeralizeMemberInit(flag,classProperty){
     var currentPage = gengeralizeMember.attr("currentPage") || 1;
     var pageSize = gengeralizeMember.attr("pageSize") || 20;
     var isFind = gengeralizeMember.attr("isFind") || 'true';
+    var isRepetition = gengeralizeMember.attr("isRepetition") || "true";
     var ul = gengeralizeMember.find("ul");
     var li = $("."+classProperty).find("ul").find("li:first-child");
     if(flag){
@@ -146,35 +147,39 @@ function gengeralizeMemberInit(flag,classProperty){
         isFind = "true";
         currentPage = 1;
     }
-    $.ajax({
-        url: '/api/base/v1/member/findGeneralizeMemberList',
-        type: 'post',
-        dataType: "json",
-        success: function (list) {
-            isFind = gengeralizeMember.attr("isFind") || 'true';
-            if(isFind == 'true') {
-                if (list.length < pageSize) {
-                    gengeralizeMember.attr("isFind", 'false')
-                }
-                $.each(list, function (index, data) {
-                    var new_li;
-                    if(flag && index == 0){
-                        new_li = li.clone();
-                    }else {
-                        new_li = $("."+classProperty).find("ul").find("li:first-child").clone();
+    if(isRepetition == 'true'){
+        gengeralizeMember.attr("isRepetition",'false');
+        $.ajax({
+            url: '/api/base/v1/member/findGeneralizeMemberList',
+            type: 'post',
+            dataType: "json",
+            success: function (list) {
+                isFind = gengeralizeMember.attr("isFind") || 'true';
+                if(isFind == 'true') {
+                    if (list.length < pageSize) {
+                        gengeralizeMember.attr("isFind", 'false')
                     }
-                    new_li.find(".generalizePersonalRecordNikeName").html(data.memberName);
-                    new_li.find(".generalizePersonalRecordEmail").html(data.email);
-                    ul.append(new_li);
-                })
-                gengeralizeMember.attr("currentPage", (parseInt(currentPage) + 1));
-                gengeralizeMember.attr("pageSize", pageSize);
-                if (list.length < pageSize) {
-                    ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+                    $.each(list, function (index, data) {
+                        var new_li;
+                        if(flag && index == 0){
+                            new_li = li.clone();
+                        }else {
+                            new_li = $("."+classProperty).find("ul").find("li:first-child").clone();
+                        }
+                        new_li.find(".generalizePersonalRecordNikeName").html(data.memberName);
+                        new_li.find(".generalizePersonalRecordEmail").html(data.email);
+                        ul.append(new_li);
+                    })
+                    gengeralizeMember.attr("isRepetition",'true');
+                    gengeralizeMember.attr("currentPage", (parseInt(currentPage) + 1));
+                    gengeralizeMember.attr("pageSize", pageSize);
+                    if (list.length < pageSize) {
+                        ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+                    }
                 }
             }
-        }
-    })
+        })
+    }
 }
 
 //init ETH record
@@ -226,6 +231,7 @@ function findWalletRecord(flag,classProperty,url){
     var currentPage = walletETH.attr("currentPage") || 1;
     var pageSize = walletETH.attr("pageSize") || 20;
     var isFind = walletETH.attr("isFind") || 'true';
+    var isRepetition = walletETH.attr("isRepetition") || 'true';
     var ul = walletETH.find("ul");
     var li = $("."+classProperty).find("ul").find("li:first-child");
     var languageType = getLanguage();
@@ -239,7 +245,8 @@ function findWalletRecord(flag,classProperty,url){
         isFind = "true";
         currentPage = 1;
     }
-    if(isFind == 'true') {
+    if(isRepetition == 'true') {
+        walletETH.attr("isRepetition","false");
         $.ajax({
             url: url,
             type: 'post',
@@ -250,7 +257,6 @@ function findWalletRecord(flag,classProperty,url){
                 var record = dataInfo.records;
                 isFind = walletETH.attr("isFind") || 'true';
                 if(isFind == 'true') {
-
                     if(record.length < pageSize){
                         walletETH.attr("isFind",'false')
                     }
@@ -316,6 +322,7 @@ function findWalletRecord(flag,classProperty,url){
                         }
                         ul.append( new_li);
                     });
+                    walletETH.attr("isRepetition","true");
                     walletETH.attr("currentPage", (parseInt(currentPage) + 1));
                     walletETH.attr("pageSize", pageSize);
                     if (record.length < pageSize) {
@@ -332,6 +339,7 @@ function findLotteryRecord(flag,classProperty){
     var currentPage = walletETH.attr("currentPage") || 1;
     var pageSize = walletETH.attr("pageSize") || 20;
     var isFind = walletETH.attr("isFind") || 'true';
+    var isRepetition = walletETH.attr("isRepetition") || 'true';
     var ul = walletETH.find("ul");
     var startTime = $(".startDateInput").val() || "";
     var endTime = $(".endDateInput").val() || "";
@@ -345,8 +353,8 @@ function findLotteryRecord(flag,classProperty){
         isFind = "true";
         currentPage = 1;
     }
-    if(isFind == 'true') {
-
+    if(isRepetition == 'true') {
+        walletETH.attr("isRepetition","false");
         $.ajax({
             url: "/api/base/v1/member/findLotterPurchaseResord",
             type: 'post',
@@ -380,6 +388,7 @@ function findLotteryRecord(flag,classProperty){
                         new_li.show();
                         ul.append( new_li);
                     });
+                    walletETH.attr("isRepetition","true");
                     walletETH.attr("currentPage", (parseInt(currentPage) + 1));
                     walletETH.attr("pageSize", pageSize);
                     if (record.length < pageSize) {

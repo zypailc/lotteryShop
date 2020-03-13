@@ -121,11 +121,11 @@ public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, Lottery
      * @param lotterybInfoId
      * @return
      */
-    public boolean updateStatus(Integer lotterybInfoId){
+    public boolean updateStatus(Integer lotterybInfoId,LotterybIssue nowLotterybIssue){
         boolean bool = false;
         List<LotterybPm> lotterybPmList = this.findToReceive(lotterybInfoId);
         //本期
-        LotterybIssue nowLotterybIssue = lotterybIssueServiceIml.findUpLotteryaIssue(lotterybInfoId);
+        //LotterybIssue nowLotterybIssue = lotterybIssueServiceIml.findUpLotteryaIssue(lotterybInfoId);
         //上期
         //LotteryaIssue upLotteryaIssue = lotteryaIssueService.findUpLotteryaIssue();
         LotterybInfo lotterybInfo =  lotterybInfoServiceIml.find(lotterybInfoId);

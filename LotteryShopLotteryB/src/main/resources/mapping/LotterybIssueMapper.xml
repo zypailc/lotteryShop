@@ -17,6 +17,8 @@
 		<result column="bonus_status_time" property="bonusStatusTime" />
 		<result column="bonus_grant" property="bonusGrant" />
 		<result column="lotteryb_info_id" property="lotterybInfoId" />
+		<result column="lotteryb_proportion_id" property="lotterybProportionId" />
+		<result column="lotteryb_buy_ids" property="lotterybBuyIds" />
 	</resultMap>
 
 </mapper>

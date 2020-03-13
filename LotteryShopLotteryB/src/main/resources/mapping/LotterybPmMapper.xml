@@ -12,6 +12,7 @@
 		<result column="status_time" property="statusTime" />
 		<result column="create_time" property="createTime" />
 		<result column="type" property="type" />
+		<result column="lotteryb_info_id" property="lotterybInfoId" />
 	</resultMap>
 
 </mapper>

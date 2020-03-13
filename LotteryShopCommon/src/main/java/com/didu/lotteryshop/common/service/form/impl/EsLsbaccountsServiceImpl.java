@@ -39,6 +39,10 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
     public static String DIC_TYPE_DRAW = "2";
     /** 提取待领币 **/
     public static String DIC_TYPE_EXTRACT = "3";
+    /**
+     * 推廣結算賬款
+     */
+    public static String DIC_TYPE_GSA = "8";
 
     /** 类型：入账 */
     public static int TYPE_IN = 1;

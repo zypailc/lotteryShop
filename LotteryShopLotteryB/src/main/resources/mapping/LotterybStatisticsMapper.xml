@@ -5,10 +5,13 @@
 	<!-- 通用查询映射结果 -->
 	<resultMap id="BaseResultMap" type="com.didu.lotteryshop.lotteryb.entity.LotterybStatistics">
 		<id column="id" property="id" />
-		<result column="lotteryb_config_type" property="lotterybConfigType" />
+		<result column="lotteryb_number" property="lotterybNumber" />
 		<result column="lotteryb_issue_id" property="lotterybIssueId" />
 		<result column="amount" property="amount" />
 		<result column="lotteryb_info_id" property="lotterybInfoId" />
+		<result column="create_date" property="createDate" />
+		<result column="lotteryb_config_ids" property="lotterybConfigIds" />
+		<result column="lotteryb_buy_ids" property="lotterybBuyIds" />
 	</resultMap>
 
 </mapper>

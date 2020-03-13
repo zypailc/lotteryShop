@@ -39,11 +39,11 @@ public class LotterybStartService extends LotteryBBaseService {
      * 根据玩法Id开奖本玩法
      * @param lotterybInfoId 玩法类型
      */
-    public void lotteryBDraw(Integer lotterybInfoId){
+    public void lotteryBDraw(Integer lotterybInfoId,LotterybIssue lotterybIssue){
         //查询开奖玩法
         LotterybInfo lotterybInfo = lotterybInfoService.selectById(lotterybInfoId);
         //查询当前期数(在开奖前已经生成下期数据，所有这里要查询上期的数据)
-        LotterybIssue lotterybIssue = lotterybIssueServiceIml.findUpLotteryaIssue(lotterybInfoId);
+        //LotterybIssue lotterybIssue = lotterybIssueServiceIml.findUpLotteryaIssue(lotterybInfoId);
         if(lotterybIssue == null){
             //lotterybIssueService.createNextLotterybIssue(lotterybInfoId);
             return;
@@ -78,7 +78,6 @@ public class LotterybStartService extends LotteryBBaseService {
                 if(statistics.getAmount().compareTo(BigDecimal.ZERO) == 1){
                     lotterybStatistics = statistics;
                 }
-
             }
         }
         if(lotterybStatistics == null){

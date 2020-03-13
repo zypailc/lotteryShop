@@ -54,21 +54,16 @@ public class LotterybDi extends Model<LotterybDi> {
      */
 	@TableField("create_time")
 	private Date createTime;
-    /**
-     * 经营分成比例（%）
-     */
-	@TableField("operation_ratio")
-	private BigDecimal operationRatio;
-    /**
-     * 经营分成总额(lsb)
-     */
-	@TableField("operation_total")
-	private BigDecimal operationTotal;
-
 	/**
 	 * 结算状态 : 0 已结算 ；1 未结算
 	 */
 	private Integer status;
+
+	/**
+	 * 状态修改时间
+	 */
+	@TableField("status_time")
+	private Date statusTime;
 
 
 	public Integer getId() {
@@ -127,28 +122,20 @@ public class LotterybDi extends Model<LotterybDi> {
 		this.createTime = createTime;
 	}
 
-	public BigDecimal getOperationRatio() {
-		return operationRatio;
-	}
-
-	public void setOperationRatio(BigDecimal operationRatio) {
-		this.operationRatio = operationRatio;
-	}
-
-	public BigDecimal getOperationTotal() {
-		return operationTotal;
-	}
-
-	public void setOperationTotal(BigDecimal operationTotal) {
-		this.operationTotal = operationTotal;
-	}
-
 	public Integer getStatus() {
 		return status;
 	}
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	public Date getStatusTime() {
+		return statusTime;
+	}
+
+	public void setStatusTime(Date statusTime) {
+		this.statusTime = statusTime;
 	}
 
 	@Override
@@ -166,9 +153,8 @@ public class LotterybDi extends Model<LotterybDi> {
 			", diRatio=" + diRatio +
 			", diTotal=" + diTotal +
 			", createTime=" + createTime +
-			", operationRatio=" + operationRatio +
-			", operationTotal=" + operationTotal +
 			", status=" + status +
+			", statusTime=" + statusTime +
 			"}";
 	}
 }

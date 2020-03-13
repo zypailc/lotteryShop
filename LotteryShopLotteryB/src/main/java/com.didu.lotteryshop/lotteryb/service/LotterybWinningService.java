@@ -40,12 +40,12 @@ public class LotterybWinningService extends LotteryBBaseService {
      * @param lotterybInfoId
      * @return
      */
-    public boolean winning(Integer lotterybInfoId){
+    public boolean winning(Integer lotterybInfoId,LotterybIssue lotterybIssue){
         boolean bool = false;
         //查询竞猜基本玩法
         LotterybInfo lotterybInfo = lotterybInfoService.find(lotterybInfoId);
         //查询期数基本信息
-        LotterybIssue lotterybIssue = lotterybIssueService.findUpLotteryaIssue(lotterybInfoId);
+        //LotterybIssue lotterybIssue = lotterybIssueService.findUpLotteryaIssue(lotterybInfoId);
         //判断奖金未发放，并且允许发放
         if(lotterybIssue.getBonusStatus() == 0 && lotterybIssue.getBonusGrant() == 1 ){
             //是否有中奖用户(中奖金额大于0)

@@ -138,7 +138,7 @@ public class LotterybIssueServiceImpl extends ServiceImpl<LotterybIssueMapper, L
      */
     public Object findPageLotteryaIssue(Integer currentPage, Integer pageSize,Integer lotterybInfoId) {
         Wrapper<LotterybIssue> wrapper = new EntityWrapper<>();
-        wrapper.eq("bonus_status","1");
+        //wrapper.eq("bonus_status","1");
         wrapper.eq("lotteryb_info_id",lotterybInfoId);
         wrapper.orderBy("issueNum",false);
         Page<LotterybIssue> pageLI = new Page<>(currentPage,pageSize);

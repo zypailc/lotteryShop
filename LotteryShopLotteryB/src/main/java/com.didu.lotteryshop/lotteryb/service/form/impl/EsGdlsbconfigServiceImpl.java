@@ -22,6 +22,8 @@ import java.util.List;
 @Service
 public class EsGdlsbconfigServiceImpl extends ServiceImpl<EsGdlsbconfigMapper, EsGdlsbconfig> implements IEsGdlsbconfigService {
 
+
+
     /**
      * 根据玩法Id查询推广商提成配置信息
      * @param lotterybInfoId

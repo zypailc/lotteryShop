@@ -10,6 +10,8 @@
 		<result column="zh_title" property="zhTitle" />
 		<result column="en_title" property="enTitle" />
 		<result column="sort" property="sort" />
+		<result column="value" property="value" />
+		<result column="group" property="group" />
 	</resultMap>
 
 </mapper>

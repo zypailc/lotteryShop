@@ -6,23 +6,24 @@
 	<resultMap id="BaseResultMap" type="com.didu.lotteryshop.lotteryb.entity.LotterybBuy">
 		<id column="id" property="id" />
 		<result column="member_id" property="memberId" />
-		<result column="lotteryb_config_id" property="lotterybConfigId" />
+		<result column="lotteryb_config_ids" property="lotterybConfigIds" />
 		<result column="total" property="total" />
 		<result column="lotteryb_info_id" property="lotterybInfoId" />
 		<result column="lotteryb_issue_id" property="lotterybIssueId" />
 		<result column="is_luck" property="isLuck" />
 		<result column="luck_total" property="luckTotal" />
 		<result column="create_time" property="createTime" />
+		<result column="serial_number" property="serialNumber" />
 	</resultMap>
 
 	<!-- 查询每期的购买记录 -->
 	<select id="getPageLotteryBuyAll" parameterType="java.lang.String" resultType="java.util.Map">
 		select em_.email,em_.member_name as memberName,lb_.luck_total as luckTotal from es_member em_
 		left join lotteryb_buy lb_ on (lb_.member_id = em_.id)
-		left join lotteryb_issue li_ on (li_.id = lb_.lotterya_issue_id)
+		left join lotteryb_issue li_ on (li_.id = lb_.lotteryb_issue_id)
 		where 1 = 1
 		<if test="lotterybBuy.lotterybIssueId != null and  lotterybBuy.lotterybIssueId !=  ''">
-			and li_.issue_num = #{lotterybBuy.lotteryaIssueId}
+			and li_.id = #{lotterybBuy.lotterybIssueId}
 		</if>
 		<if test="mTransferStatus != null and  mTransferStatus != ''">
 			and lb_.transfer_status in(#{mTransferStatus})

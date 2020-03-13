@@ -11,9 +11,8 @@
 		<result column="di_ratio" property="diRatio" />
 		<result column="di_total" property="diTotal" />
 		<result column="create_time" property="createTime" />
-		<result column="operation_ratio" property="operationRatio" />
-		<result column="operation_total" property="operationTotal" />
 		<result column="status" property="status" />
+		<result column="status_time" property="statusTime" />
 	</resultMap>
 
 </mapper>
