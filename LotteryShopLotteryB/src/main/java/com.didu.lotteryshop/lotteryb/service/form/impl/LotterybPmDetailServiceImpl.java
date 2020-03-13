@@ -128,7 +128,6 @@ public class LotterybPmDetailServiceImpl extends ServiceImpl<LotterybPmDetailMap
         BigDecimal totalDlb = lotterybBuy.getTotal();
         //购买提成 5%
         totalDlb = totalDlb.divide(new BigDecimal("100")).multiply(lotterybInfo.getBuyPm());
-        //转换为平台币
         if(LotterybInfoPcList != null && LotterybInfoPcList.size() > 0){
             for(LotterybInfoPc laipc:LotterybInfoPcList){
                 String upMemberId  = memberService.findLevelMemberId(lotterybBuy.getMemberId(),laipc.getLevel());

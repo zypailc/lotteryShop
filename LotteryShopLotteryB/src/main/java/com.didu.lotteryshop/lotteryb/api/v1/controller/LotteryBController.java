@@ -37,7 +37,7 @@ public class LotteryBController extends LotteryBBaseController {
      */
     @ResponseBody
     @RequestMapping("/buyLotteryb")
-    public ResultUtil lsbBuyLottery(String dataInfo, String issueNum, String lotterybInfoId, BigDecimal total){
+    public ResultUtil lsbBuyLottery(String dataInfo, String issueNum, Integer lotterybInfoId, BigDecimal total){
         if(lotterybInfoId == null || "".equals(lotterybInfoId) ||
             issueNum == null || "".equals(issueNum) ||
             dataInfo == null || "".equals(dataInfo) ||
@@ -51,6 +51,4 @@ public class LotteryBController extends LotteryBBaseController {
         }
         return lotterybBuyService.lsbBuyLottery(lotterybInfoId,issueNum,dataInfo,total);
     }
-
-
 }

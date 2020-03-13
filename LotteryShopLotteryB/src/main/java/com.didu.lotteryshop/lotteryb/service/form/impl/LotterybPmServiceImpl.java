@@ -125,7 +125,7 @@ public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, Lottery
         boolean bool = false;
         List<LotterybPm> lotterybPmList = this.findToReceive(lotterybInfoId);
         //本期
-        LotterybIssue nowLotterybIssue = lotterybIssueServiceIml.getLotterybIssue(lotterybInfoId);
+        LotterybIssue nowLotterybIssue = lotterybIssueServiceIml.findUpLotteryaIssue(lotterybInfoId);
         //上期
         //LotteryaIssue upLotteryaIssue = lotteryaIssueService.findUpLotteryaIssue();
         LotterybInfo lotterybInfo =  lotterybInfoServiceIml.find(lotterybInfoId);
@@ -143,7 +143,7 @@ public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, Lottery
                         bool = super.updateById(lbpm);
                         if(bool){
                             //增加待领币
-                            String dicType = lbpm.getType() == 1 ? EsDlbaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA_PM : EsDlbaccountsServiceImpl.DIC_TYPE_BUYLOTTERYA_PM;
+                            String dicType = lbpm.getType() == 1 ? EsDlbaccountsServiceImpl.DIC_TYPE_BUYLOTTERYB_PM : EsDlbaccountsServiceImpl.DIC_TYPE_WINLOTTERYB_PM;
                             bool = esDlbaccountsService.addInSuccess(lbpm.getMemberId(),dicType,lbpm.getTotal(),lbpm.getId().toString());
                         }
                         if(!bool) return bool;
@@ -198,7 +198,7 @@ public class LotterybPmServiceImpl extends ServiceImpl<LotterybPmMapper, Lottery
         lotterybPm.setStatusTime(new Date());
         lotterybPm.setCreateTime(new Date());
         lotterybPm.setType(type);
-        lotterybPm.setLotterybInfoId(lotterybIssueId);
+        lotterybPm.setLotterybInfoId(lotterybInfoId);
         boolean bool = super.insert(lotterybPm);
         return bool ? lotterybPm : null;
     }

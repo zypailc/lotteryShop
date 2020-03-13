@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.didu.lotteryshop.common.utils.CodeUtil;
 import com.didu.lotteryshop.common.utils.DateUtil;
+import com.didu.lotteryshop.common.utils.ResultUtil;
 import com.didu.lotteryshop.lotteryb.entity.LotterybInfo;
 import com.didu.lotteryshop.lotteryb.entity.LotterybIssue;
 import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybInfoServiceImpl;
 import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybIssueServiceImpl;
+import jnr.ffi.annotations.In;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,9 +44,10 @@ public class LotterybIssueService extends LotteryBBaseService{
             return newIssuenum - issuenum;
         }else {
             //获取期数日期到现日期的日期数组(简单处理，写一个查询，直接查期数之间的)
-            String sql = "select count(1) as num  from lotteryb_issue where between '"+issueNum+"' and '"+nowIssueNum+"'";
+            String sql = "select count(1) as num  from lotteryb_issue where issue_num between '"+issueNum+"' and '"+nowIssueNum+"'";
             Map<String,Object> m = getSqlMapper().selectOne(sql);
-            return Integer.parseInt(m.get("num").toString());
+            //期数之间相差为一期查询出来的是 == 2 故减 1
+            return Integer.parseInt(m.get("num").toString()) - 1;
 
         }
     }
@@ -55,7 +58,6 @@ public class LotterybIssueService extends LotteryBBaseService{
      * @return
      */
     public LotterybIssue createNextLotterybIssue(Integer lotterybInfoId){
-
         //查询是否有本玩法期数
         Wrapper<LotterybIssue> wrapper = new EntityWrapper<>();
         wrapper.and().eq("lotteryb_info_id",lotterybInfoId);
@@ -75,7 +77,7 @@ public class LotterybIssueService extends LotteryBBaseService{
         }else {
             //生成数据
             lotterybIssue.setId(null);
-            Date date = lotterybIssue.getEndTime();
+            Date date = new Date();
             lotterybIssue.setStartTime(date);
             lotterybIssue.setEndTime(DateUtil.getDateAddMinute(date,lotterybInfo.getPeriodDate()));
             lotterybIssue.setIssueNum(lotterybIssueService.createIssueNum(lotterybInfoId,lotterybIssue.getIssueNum()));
@@ -87,9 +89,21 @@ public class LotterybIssueService extends LotteryBBaseService{
         lotterybIssue.setByStatus(0);
         lotterybIssue.setBonusStatus(0);
         lotterybIssue.setBonusStatusTime(new Date());
-        lotterybIssue.setBonusGrant(0);
+        lotterybIssue.setBonusGrant(1);
         lotterybIssueService.insert(lotterybIssue);
         return lotterybIssue;
     }
 
+    /**
+     * 查询期数信息
+     * @param currentPage
+     * @param pageSize
+     * @param lotterybInfoId 玩法Id
+     * @return
+     */
+    public ResultUtil getLotteryIssue(Integer currentPage, Integer pageSize, Integer lotterybInfoId) {
+        currentPage = currentPage == null ? 1:currentPage;
+        pageSize = pageSize == null ? 20:pageSize;
+        return ResultUtil.successJson(lotterybIssueService.findPageLotteryaIssue(currentPage,pageSize,lotterybInfoId));
+    }
 }

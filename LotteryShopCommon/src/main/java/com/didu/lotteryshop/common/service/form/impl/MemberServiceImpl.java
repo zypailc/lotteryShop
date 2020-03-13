@@ -68,6 +68,44 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> {
         return cnts;
     }
 
+    /**
+     * 查询会员下级活跃用户(lsb)
+     * @param memberId
+     * @param total
+     * @param level
+     * @param day
+     * @return
+     */
+    public int findLsbActiveMembers(String memberId,BigDecimal total,Integer level,Integer day){
+        int cnts = 0;
+        if(level != null){
+            Member member = super.selectById(memberId);
+            level += member.getGeneralizeMemberLevel() == null ? 0 : member.getGeneralizeMemberLevel();
+        }
+        String sql = " select count(1) as cnts from(" +
+                " select" +
+                " sum(ela_.amount) as amountTotal " +
+                " from es_lsbaccounts as ela_ " +
+                " left join es_member em_ on(ela_.member_id = em_.id )" +
+                " where  em_.generalize_member_ids like '%"+memberId+"%'";
+        if(level != null) {
+            sql += " and em_.generalize_member_level <= " + level;
+        }
+        sql += " and ela_.type = "+EsLsbaccountsServiceImpl.TYPE_OUT+
+                " and ela_.status = "+EsLsbaccountsServiceImpl.STATUS_SUCCESS+
+                " and ela_.dic_type<>'"+EsLsbaccountsServiceImpl.DIC_TYPE_DRAW+"' " +
+                " and ela_.dic_type<>'"+EsLsbaccountsServiceImpl.DIC_TYPE_EXTRACT+"' " +
+                " and  DATE_SUB(CURDATE(), INTERVAL "+day+" DAY) <= date(ela_.status_time)" +
+                " GROUP BY ela_.member_id " +
+                ")as t where t.amountTotal >= "+total;
+        SqlMapper sqlMapper =  baseService.getSqlMapper();
+        Map<String,Object> mMap = sqlMapper.selectOne(sql);
+        if(mMap != null && !mMap.isEmpty()){
+            return Integer.valueOf(mMap.get("cnts").toString()) ;
+        }
+        return cnts;
+    }
+
 
     /**
      * 递归查询上级会员ID

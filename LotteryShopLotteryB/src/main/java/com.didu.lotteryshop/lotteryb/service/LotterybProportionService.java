@@ -22,12 +22,17 @@ public class LotterybProportionService extends LotteryBBaseService {
      */
     public LotterybProportion getProportionNext(Integer lotterybProportionId){
         LotterybProportion lotterybProportion = lotterybProportionService.selectById(lotterybProportionId);
-        Integer rule = lotterybProportion.getRule() + 1;
-        Wrapper<LotterybProportion> wrapper = new EntityWrapper<>();
-        wrapper.and().eq("rule",rule);
-        List<LotterybProportion> list = lotterybProportionService.selectList(wrapper);
-        if(list != null && !list.isEmpty() && list.size() > 0){
-            return  list.get(0);
+        if(lotterybProportion != null){
+            Integer rule = lotterybProportion.getRule() + 1;
+            Wrapper<LotterybProportion> wrapper = new EntityWrapper<>();
+            wrapper.and().eq("rule",rule);
+            List<LotterybProportion> list = lotterybProportionService.selectList(wrapper);
+            if(!list.isEmpty() && list.size() > 0){
+                return  list.get(0);
+            }else {
+                return lotterybProportionService.selectById(1);
+            }
+
         }else {
             return lotterybProportionService.selectById(1);
         }

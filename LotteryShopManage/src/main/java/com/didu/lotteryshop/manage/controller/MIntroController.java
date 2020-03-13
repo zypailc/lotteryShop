@@ -42,9 +42,8 @@ public class MIntroController {
 
     @ResponseBody
     @RequestMapping("/saveAllocationfunds")
-    public ResultUtil saveAllocationfunds(String title_zh,String content_zh,String title_en,String content_en){
-        //return  mIntroService.saveAllocationfunds(title_zh,content_zh,title_en,content_en);
-        return null;
+    public ResultUtil saveAllocationfunds(String title_zh,String content_zh,String title_en,String content_en,Integer type){
+        return mIntroService.saveAllocationfunds(title_zh,content_zh,title_en,content_en,type);
     }
 
     @ResponseBody

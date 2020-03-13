@@ -10,9 +10,11 @@ package com.didu.lotteryshop.lotteryb.utils;
  * @author chengesheng
  * @date 2016年9月28日 下午3:18:34
  */
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class CombinationTest {
+public class CombinationUtil {
 
     public static void main(String[] args) {
  //     A(4, 2) = 12
@@ -21,8 +23,8 @@ public class CombinationTest {
 //      }, 2);
 //    C(5, 3) = 10
         combinationSelect(new String[] {
-                "1", "2","3"
-        }, 2);
+                "1", "2","3","4"
+        }, 3);
     }
 
     /**
@@ -70,9 +72,14 @@ public class CombinationTest {
      * @param dataList 待选列表
      * @param n 选择个数
      */
-    public static void combinationSelect(String[] dataList, int n) {
+    public static List<String> combinationSelect(String[] dataList, int n) {
         System.out.println(String.format("C(%d, %d) = %d", dataList.length, n, combination(dataList.length, n)));
-        combinationSelect(dataList, 0, new String[n], 0);
+        List<String> list = new ArrayList<>();
+        list = combinationSelect(dataList, 0, new String[n], 0,list);
+        for (String s : list) {
+            System.out.println(s);
+        }
+        return list;
     }
 
     /**
@@ -82,19 +89,19 @@ public class CombinationTest {
      * @param resultList 前面（resultIndex-1）个的组合结果
      * @param resultIndex 选择索引，从0开始
      */
-    private static void combinationSelect(String[] dataList, int dataIndex, String[] resultList, int resultIndex) {
+    private static List<String> combinationSelect(String[] dataList, int dataIndex, String[] resultList, int resultIndex, List<String> list) {
         int resultLen = resultList.length;
         int resultCount = resultIndex + 1;
         if (resultCount > resultLen) { // 全部选择完时，输出组合结果
-            System.out.println(Arrays.asList(resultList));
-            return;
+            list.add(Arrays.asList(resultList).toString().replace("[","").replace("]","").replace(" ",""));
+            return list;
         }
-
         // 递归选择下一个
         for (int i = dataIndex; i < dataList.length + resultCount - resultLen; i++) {
             resultList[resultIndex] = dataList[i];
-            combinationSelect(dataList, i + 1, resultList, resultIndex + 1);
+            combinationSelect(dataList, i + 1, resultList, resultIndex + 1,list);
         }
+        return list;
     }
 
     /**

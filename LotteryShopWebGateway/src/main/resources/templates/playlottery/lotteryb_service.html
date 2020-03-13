@@ -249,7 +249,97 @@
         .total{
             background: white;
         }
+        .lottery_service_lottery_animation{
+            margin-top: -10px;
+        }
+        .lottery_service_lottery_animation li{
+            display: inline-block;
+        }
+        .lottery_service_lottery_num{
+            margin-top: -15px;
+        }
+        .lottery_service_lottery_num li{
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            margin: 19px 22px 0 0;
+            display: inline-block;
+            background: url("../images/lotteryb/open_num.png")no-repeat center 0;
+        }
+        .lottery_service_lottery_record_num{
+            margin-top: -15px;
+        }
+        .lottery_service_lottery_record_num li{
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            margin: 19px 22px 0 0;
+            display: inline-block;
+            background: url("../images/lotteryb/open_num_1.png")no-repeat center 0;
+        }
+        .announcedNo1{
+            background-position: 0 0;
+        }
+        .announcedNo2{
+            background-position: 0 -61px!important;
+        }
+        .announcedNo3{
+            background-position: 0 -122px!important;
+        }
+        .announcedNo4{
+            background-position: 0 -183px!important;
+        }
+        .announcedNo5{
+            background-position: 0 -244px!important;
+        }
+        .announcedNo6{
+            background-position: 0 -305px!important;
+        }
+        .announcedNo1_1{
+            background-position: 0 0;
+        }
+        .announcedNo2_2{
+            background-position: 0 -31px!important;
+        }
+        .announcedNo3_3{
+            background-position: 0 -62px!important;
+        }
+        .announcedNo4_4{
+            background-position: 0 -93px!important;
+        }
+        .announcedNo5_5{
+            background-position: 0 -124px!important;
+        }
+        .announcedNo6_6{
+            background-position: 0 -155px!important;
+        }
+        .em_time{
+            width: 165px;
+            letter-spacing: 2px;
+        }
+        .service_item_title_rule{
+            text-align: center;
+        }
+        .service_item_title_draw{
+            text-align: center;
+        }
+        .lottery_play_div_recode{
+            display: inline-block;
+        }
+        .lottery_play_div_recode_1{
 
+        }
+        .lottery_play_div_recode_2{
+            width: 150px;
+        }
+        .lottery_play_div_recode_3{
+            width: 150px;
+        }
+        .lottery_play_div_recode_4{
+            width: 300px;
+        }
     </style>
 </head>
 <!-- commonality js -->
@@ -267,18 +357,53 @@ include("../common/common.js.html"){}
         if(whetherLogin == 'true'){
             findLsb();
         }
-        initInfo(lotterybInfoId,language);
+        initInfo(lotterybInfoId,language,'false');
+        initInfoUp(lotterybInfoId);
         initConfig(language,1);
+        findRule();
         countDown();
+        findLotteryIssue("the_lottery_record_id",true);
         $("#subbutton_confirm").click(function(){
             subbutton_confirm();
         });
         $("#button_purchase").click(function(){
             button_purchase();
         });
+        $(".ul_draw_archive").scroll(function(){
+            var $this =$(this),
+                viewH =$(this).height(),//可见高度
+                contentH =$(this).get(0).scrollHeight,//内容高度
+                scrollTop =$(this).scrollTop();//滚动高度
+            if(scrollTop/(contentH -viewH) >= 0.95){ //当滚动到距离底部5%时
+                findLotteryIssue("the_lottery_record_id",false);
+            }
+        });
+        $(".back").click(function(){
+            history.back();
+        });
     });
 
-    function initInfo(lotterybInfoId,language){
+    function initInfoUp(lotterybInfoId){
+        $.ajax({
+            url:'${projectPath}/apiauthorization/lotteryB/authorization/v1/findLotterybIssueUp',
+            type:'get',
+            data:{"lotterybInfoId":lotterybInfoId},
+            dataType:"json",
+            success:function (result) {
+                var dataInfo = result.extend.data;
+                $(".last_number_of_periods").html(dataInfo.issueNum);
+                var luckNum = dataInfo.luckNum;
+                var num = luckNum.split(",");
+                var ul = $(".lottery_service_lottery_num");
+                ul.empty();
+                $.each(num,function(index,data){
+                    ul.append("<li class='announcedNo"+num[index]+"'></li>");
+                })
+            }
+        });
+    }
+
+    function initInfo(lotterybInfoId,language,flag){
         $.ajax({
             url:'${projectPath}/apiauthorization/lotteryB/authorization/v1/findLotterybInfo',
             type:'get',
@@ -295,9 +420,15 @@ include("../common/common.js.html"){}
                 $(".lottery_service_time").attr("nowTime",dataInfo.newDate);
                 $(".lottery_service_time").attr("startTime",dataInfo.startDate);
                 $(".lottery_service_time").attr("endTime",dataInfo.endDate);
+                $(".lottery_service_time").attr("periodDate",dataInfo.periodDate);
+                if(flag == 'true'){
+                    if(dataInfo.issueNum != $(".now_number_of_periods").html().replace(/\s+/g,"")){
+                        $(".last_number_of_periods").html($(".now_number_of_periods").html());
+                    }
+                }
                 $(".now_number_of_periods").html(dataInfo.issueNum);
             }
-        })
+        });
     }
 
     function initConfig(language,type){
@@ -340,6 +471,27 @@ include("../common/common.js.html"){}
                     $("#subbutton_confirm").attr("num_2","");
                 }
                 item_block_checked(type);
+            }
+        })
+    }
+
+    function findRule(){
+        var playType = '${playType}' || "";
+        var languageType = getLanguage();
+        if(languageType != 'zh'){
+            languageType = 'en';
+        }
+        $.ajax({
+            url:'${projectPath}/apiauthorization/base/authorization/v1/baseInfo/findPlayTypeRule',
+            type:'get',
+            data:{"playType":playType,"languageType":languageType},
+            dataType:"json",
+            success:function (result) {
+                console.log(result);
+                $.each(result,function(index,data){
+                    console.log(data);
+                    $("#rules_content").html(data.content);
+                })
             }
         })
     }
@@ -648,8 +800,9 @@ include("../common/common.js.html"){}
         var num = $("#subbutton_confirm").attr("num").replace(/\s+/g,"") || 0;
         var num_2 = $("#subbutton_confirm").attr("num_2").replace(/\s+/g,"") || 0;
         var type = $("#subbutton_confirm").attr("type");
+        console.log("type:"+type);
         if(type == '4' || type == '7' || type == '8'){
-            var length = lotterybcofigids.split(",");
+            var length = (lotterybcofigids.substring(1)).split(",");
             if(type == '4'){
                 if(length.length < 3){
                     if(language == 'zh'){
@@ -764,6 +917,8 @@ include("../common/common.js.html"){}
         //var today=new Date($(".lottery_service_time").attr("nowTime")),h=today.getHours(),m=today.getMinutes(),s=today.getSeconds();
         var startTime = new Date($(".lottery_service_time").attr("startTime"));
         var stopTime=new Date($(".lottery_service_time").attr("endTime"));
+        var language = getLanguage();
+        var lotterybInfoId = '${playTypeId!""}';
         if((today.getTime() - startTime.getTime()) > 0 && stopTime.getTime() - today.getTime() > 0){//start period
             $(".timeIssueGiveOut").hide();
             $(".timeIssueDraw").hide();
@@ -779,8 +934,20 @@ include("../common/common.js.html"){}
             var shengyus = parseInt((shenyu-shengyuD*60*60*24*1000-shengyuH*60*60*1000-shengyuM*60*1000)/1000)//除去天、小时、分的毫秒数转化为秒
             $(".time_hour").html((PrefixInteger(shengyuH,2))+":"+PrefixInteger(shengyuM,2)+":"+PrefixInteger(shengyus,2));
         }
-        if(today.getTime() - startTime.getTime() < 0){
-            $(".time_hour").html("00:00:00");
+        if((parseInt(today.getTime()/1000) - parseInt(startTime.getTime()/1000)) > 10 && (parseInt(today.getTime()/1000) - parseInt(startTime.getTime()/1000)) < 12){
+            initInfoUp(lotterybInfoId);
+        }
+        if((parseInt(today.getTime()/1000) - parseInt(startTime.getTime()/1000)) <= 10){
+           $(".lottery_service_lottery_animation").show();
+            $(".lottery_service_lottery_num").hide();
+        }else {
+            $(".lottery_service_lottery_num").show();
+            $(".lottery_service_lottery_animation").hide();
+        }
+        var periodDate = $(".lottery_service_time").attr("periodDate") || 0;
+        if(((parseInt(today.getTime()/1000) - parseInt(startTime.getTime()/1000)) > ( 60 * parseInt(periodDate) - 1)) && (parseInt(today.getTime()/1000) - parseInt(startTime.getTime()/1000)) < ( 60 * parseInt(periodDate) + 3)){
+            //$(".time_hour").html("00:00:00");
+            initInfo(lotterybInfoId,language,'true');
         }
         setTimeout(countDown,500);
     }
@@ -803,16 +970,200 @@ include("../common/common.js.html"){}
             }
         })
         dataInfo = "["+dataInfo+"]";
-
+        var index_record = layer.load(3,{shade: [0.8, '#393D49']});
         $.ajax({
             url:'/api/lotteryB/v1/lotteryB/buyLotteryb',
             type:'get',
-            data:{"issue":issue,"lotterybInfoId":lotterybInfoId,"total":total,"dataInfo":dataInfo},
+            data:{"issueNum":issue,"lotterybInfoId":lotterybInfoId,"total":total,"dataInfo":dataInfo},
             dataType:"json",
             success:function (result) {
+               layer.close(index_record);
                layer.close(layer_buy);
+               if(result.code == 500){
+                   layui_open(result.msg);
+               }else if(result.code == 200){
+                   layer.msg(result.msg);
+                   //clean data
+                   $(".service_item_content_buyList_ul ").find("li").each(function(index,data){
+                        var type = $(data).attr("type");
+                        if(type != "-1"){
+                            $(data).find(".a_delete").click();
+                        }
+                   });
+               }
             }
         })
+    }
+
+    function findLotteryIssue(dataId,flag){
+        var dataObj = $("#"+dataId);
+        var lotterybInfoId = '${playTypeId!""}';
+        var currentPage = dataObj.attr("currentPage") || 1;
+        var pageSize = dataObj.attr("pageSize") || 20;
+        var isFind = dataObj.attr("pageSize") || "true";
+        var ul = dataObj.find("ul");
+        var li = dataObj.find("ul").find("li:first-child");
+        var languageType = getLanguage();
+        if(languageType != 'zh'){
+            languageType = 'en';
+        }
+        if(flag){
+            ul.html("");
+        }
+        $.ajax({
+            url:'${projectPath}/apiauthorization/lotteryB/authorization/v1/getLotteryIssue',
+            type:'get',
+            data:{"currentPage":currentPage,"pageSize":pageSize,"lotterybInfoId":lotterybInfoId},
+            dataType:"json",
+            success:function (result) {
+                var dataInfo = result.extend.data.records;
+                isFind = dataObj.attr("isFind") || 'true';
+                if(isFind == 'true') {
+                    if (dataInfo.length < pageSize) {
+                        dataObj.attr("isFind", 'false')
+                    }
+                    $.each(dataInfo, function (index, data) {
+                        console.log(data);
+                        if(data.luckNum){
+                            var luckNum = data.luckNum.split(",");
+                            var new_li;
+                            if(flag && index == 0){
+                                new_li = li.clone();
+                            }else {
+                                new_li = dataObj.find("ul").find("li:first-child").clone();
+                            }
+                            if(languageType == 'zh'){
+                                new_li.find(".luckTotalStr").html("开奖金额");
+                            }else {
+                                new_li.find(".luckTotalStr").html("Winning amount");
+                            }
+                            new_li.find(".lotteryIssue").html("#"+data.issueNum);
+                            var ul_1 = new_li.find(".lottery_service_lottery_record_num");
+                            ul_1.empty();
+                            $.each(luckNum,function(index,data){
+                                console.log(data);
+                                ul_1.append("<li class='announcedNo"+luckNum[index]+"_"+luckNum[index]+"'></li>");
+                            });
+                            new_li.find(".luckTotal").html(data.luckTotal);
+                            new_li.find(".lotteryTime").html(data.startTime + " ~ " + data.endTime);
+                            ul.append(new_li);
+                        }
+                    })
+                   /* if (dataInfo.length < pageSize) {
+                        ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+                    }*/
+                }
+            }
+        })
+        dataObj.attr("currentPage",parseInt(currentPage) + 1);
+        dataObj.attr("pageSize",pageSize);
+    }
+    function getLotteryDetail(e){
+        var li = $(e);
+        var issue = li.find(".lotteryIssue").html().replace("#","");
+        var layer_open_lottery = $(".lottery_winning_record_head");
+        layer_open_lottery.find(".issue").html(li.find(".lotteryIssue").html());
+        layer_open_lottery.find(".luckNum").html(li.find(".luckNum_1").html()+ " " + li.find(".luckNum_2").html() + " " + li.find(".luckNum_3").html());
+        layer_open_lottery.find(".time").html(li.find(".lotteryTime").html());
+        findWinningRecord(true,'lottery_winning_record_ul',issue);
+    }
+
+    function findWinningRecord(flag,classProperty,issue){
+        var dataObj = $("."+classProperty);
+        var currentPage = dataObj.attr("currentPage") || 1;
+        var pageSize = dataObj.attr("pageSize") || 20;
+        var isFind = dataObj.attr("pageSize") || "true";
+        var ul = dataObj;
+        var li = dataObj.find("li:first-child");
+        var languageType = getLanguage();
+        if(languageType != 'zh'){
+            languageType = 'en';
+        }
+        if(flag){
+            issue = issue;
+            dataObj.attr("currentPage",'1');
+            dataObj.attr("isFind","true");
+            dataObj.attr("issus",issue);
+            currentPage = 1;
+            ul.html("");
+        }else {
+            issue = dataObj.attr("issus") || issue;
+        }
+        var index_record = layer.load(3,{shade: [0.8, '#393D49']});
+        $.ajax({
+            url:'${projectPath}/apiauthorization/lotteryB/authorization/v1/getLotteryBuy',
+            type:'get',
+            data:{"currentPage":currentPage,"pageSize":pageSize,"lotteryaIssueId":issue,"type":2,"isLuck":1},
+            dataType:"json",
+            success:function (result) {
+                layer.close(index_record);
+                var dataInfo = result.extend.data;
+                isFind = dataObj.attr("isFind") || 'true';
+                if(isFind == 'true') {
+                    if (dataInfo.length < pageSize) {
+                        dataObj.attr("isFind", 'false')
+                    }
+                    $.each(dataInfo, function (index, data) {
+                        var new_li;
+                        if(flag && index == 0){
+                            new_li = li.clone();
+                        }else {
+                            new_li = dataObj.find("li:first-child").clone();
+                        }
+                        new_li.find(".email").html(data.email);
+                        new_li.find(".luckNum").html(data.luckTotal);
+                        if(languageType == 'zh'){
+                            new_li.find(".multiples").html(data.multipleNum + " Multiples");
+                        }else {
+                            new_li.find(".multiples").html(data.multipleNum + " 倍");
+                        }
+                        new_li.show();
+                        ul.append(new_li);
+                    })
+                    dataObj.attr("currentPage",parseInt(currentPage) + 1);
+                    dataObj.attr("pageSize",pageSize);
+                    if (dataInfo.length < pageSize) {
+                        if(flag && dataInfo.length == 0){
+                            li.hide();
+                            ul.append(li);
+
+                        }
+                        ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+                    }
+                }
+                if(flag){
+                    open_lottery_issue_record();
+                }
+            }
+        })
+    }
+    function open_lottery_issue_record(){
+        var width = document.body.clientWidth;
+        var area = ["30%","400px"];
+        if(width < 991){
+            width = document.body.clientWidth;
+            area = ["95%","400px"]
+        }
+        layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 0,
+            shadeClose: true,
+            scrollbar:false,
+            skin: 'issue-record-class',
+            area:  area,            //宽高自适应
+            content: $(".lottery_winning_record").html()
+        });
+
+        $(".issue-record-class").find(".layer_open_lottery_issue").scroll(function(){
+            var $this =$(this),
+                viewH =$(this).height(),//可见高度
+                contentH =$(this).get(0).scrollHeight,//内容高度
+                scrollTop =$(this).scrollTop();//滚动高度
+            if(scrollTop/(contentH -viewH) >= 0.95){ //当滚动到距离底部5%时
+                findWinningRecord(false,'lottery_winning_record_ul');
+            }
+        });
     }
 
 </script>
@@ -856,7 +1207,7 @@ include("../common/common.js.html"){}
                         <div class="lottery_service_title"> <span class="lottery_title"></span></div>
                     </div>
                     <div class="service_item_title service_item_title_left">
-                        <div class="lottery_service_title"> <span class="now_number_of_periods"></span></div>
+                        <div class="lottery_service_title"> <span class="now_number_of_periods">0000000000000</span></div>
                         <div class="lottery_service_time">
                             <span class="timeIssueView">
                                <em class="em_time time_hour">00:00:00</em>
@@ -865,8 +1216,19 @@ include("../common/common.js.html"){}
                     </div>
 
                     <div class="service_item_title service_item_title_right">
-                        <div class="lottery_service_title"><span class="last_number_of_periods">2020030400001</span></div>
-                        <div>开奖号</div>
+                        <div class="lottery_service_title"><span class="last_number_of_periods">0000000000000</span></div>
+                        <div>
+                            <ul class="lottery_service_lottery_animation" style="display: none">
+                                <li><img src="../images/lotteryb/open_num.gif"></li>
+                                <li><img src="../images/lotteryb/open_num.gif"></li>
+                                <li><img src="../images/lotteryb/open_num.gif"></li>
+                            </ul>
+                            <ul class="lottery_service_lottery_num">
+                                <li class="announcedNo1"></li>
+                                <li class="announcedNo1"></li>
+                                <li class="announcedNo1"></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div class="service_item_content_type">
@@ -926,12 +1288,49 @@ include("../common/common.js.html"){}
                 <input id="availableBalance" type="hidden">
             </div>
             <!-- rule -->
-            <div class="lottery_item rules">
+            <div class="lottery_item rules" style="display: none">
+                <div class="service_item_content">
+                    <div class="service_item_title_rule">
+                        <h2 data-localize="base.rules">Rules</h2>
+                    </div>
+                </div>
+                <div id="rules_content">
 
+                </div>
             </div>
             <!-- Lottery record -->
-            <div class="lottery_item drawArchive">
-
+            <div class="lottery_item drawArchive"  style="display: none">
+                <div id="the_lottery_record_id" class="service_item_content">
+                    <div class="service_item_title_draw">
+                        <h2 data-localize="base.drawArchive">Draw archive</h2>
+                    </div>
+                    <ul class="ul_draw_archive services_item_inner-1" id="lottery_record">
+                        <li class="lotteryRecord" onclick="getLotteryDetail(this)">
+                            <div class="lotteryIssue">#0</div>
+                            <div>
+                                <div class="model_purchase_record">
+                                    <div class="lottery_play_div_recode lottery_play_div_recode_1">
+                                        <ul class="lottery_service_lottery_record_num">
+                                            <li class="announcedNo1_1"></li>
+                                            <li class="announcedNo1_1"></li>
+                                            <li class="announcedNo1_1"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="lottery_play_div_recode lottery_play_div_recode_2">
+                                        <span class="span_element_1 luckTotalStr">开奖金额</span>
+                                    </div>
+                                    <div class="lottery_play_div_recode lottery_play_div_recode_3">
+                                        <span class="span_element_1 luckTotal">0</span>
+                                    </div>
+                                    <div class="lottery_play_div_recode lottery_play_div_recode_4">
+                                        <span class="span_element_1 lotteryTime">00-00-00 00:00:00 ~ 00-00-00 00:00:00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -947,7 +1346,7 @@ include("../common/common.js.html"){}
                 <li>
                     <!--<p><span class="memberName">on</span> </p>-->
                     <p><span class="email">on@xx.xx</span></p>
-                    <P><span class="luckNum span_right"> 0ETH</span> <span class="multiples"> 0 Multiples </span> </P>
+                    <P><span class="luckNum span_right"> 0</span> <span class="multiples"> 0 Multiples </span> </P>
                     <hr>
                 </li>
             </ul>

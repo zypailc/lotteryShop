@@ -40,6 +40,10 @@ public class EsDlbaccountsServiceImpl extends ServiceImpl<EsDlbaccountsMapper, E
     public static String DIC_TYPE_BUYLOTTERYA_PM = "1";
     /** 赢得A彩票提成 */
     public static String DIC_TYPE_WINLOTTERYA_PM = "2";
+    /** 购买B彩票提成 */
+    public static String DIC_TYPE_BUYLOTTERYB_PM = "7";
+    /** 赢得B彩票提成 */
+    public static String DIC_TYPE_WINLOTTERYB_PM = "8";
     /** 注册奖励*/
     public static String DIC_TYPE_REGISTER = "3";
     /** 提现(平台币) */

@@ -1,6 +1,9 @@
 # 服务配置
 server:
   port: 8070
+  serverlet:
+    session:
+      timeout:3600
 # Sping配置
 spring:
   application:

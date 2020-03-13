@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.service.IService;
  * </p>
  *
  * @author ${author}
- * @since 2020-03-03
+ * @since 2020-03-12
  */
 public interface ILotterybDiService extends IService<LotterybDi> {
 	

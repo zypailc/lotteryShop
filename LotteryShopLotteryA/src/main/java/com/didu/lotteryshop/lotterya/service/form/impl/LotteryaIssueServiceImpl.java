@@ -60,7 +60,7 @@ public class LotteryaIssueServiceImpl extends ServiceImpl<LotteryaIssueMapper, L
     public Page<LotteryaIssue> findPageLotteryaIssue(int currentPage,int pageSize){
        Wrapper<LotteryaIssue> wrapper = new EntityWrapper<>();
        wrapper.eq("bonus_status","1");
-       wrapper.orderBy("issueNum",false);
+       wrapper.orderBy("issue_num",false);
         Page<LotteryaIssue> pageLI = new Page<>(currentPage,pageSize);
         return super.selectPage(pageLI,wrapper);
     }

@@ -47,9 +47,16 @@ public class LotterybConfig extends Model<LotterybConfig> {
 	private Integer sort;
 
 	/**
+	 * 值
+	 */
+	private String value;
+
+	/**
 	 * 分组
 	 */
 	private Integer group;
+
+
 
 
 	public Integer getId() {
@@ -108,6 +115,16 @@ public class LotterybConfig extends Model<LotterybConfig> {
 		this.group = group;
 	}
 
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+
+
 	@Override
 	protected Serializable pkVal() {
 		return this.id;
@@ -122,6 +139,7 @@ public class LotterybConfig extends Model<LotterybConfig> {
 			", zhTitle=" + zhTitle +
 			", enTitle=" + enTitle +
 			", sort=" + sort +
+			", value=" + value +
 			"}";
 	}
 }

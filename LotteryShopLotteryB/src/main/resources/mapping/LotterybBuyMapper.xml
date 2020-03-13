@@ -15,4 +15,22 @@
 		<result column="create_time" property="createTime" />
 	</resultMap>
 
+	<!-- 查询每期的购买记录 -->
+	<select id="getPageLotteryBuyAll" parameterType="java.lang.String" resultType="java.util.Map">
+		select em_.email,em_.member_name as memberName,lb_.luck_total as luckTotal from es_member em_
+		left join lotteryb_buy lb_ on (lb_.member_id = em_.id)
+		left join lotteryb_issue li_ on (li_.id = lb_.lotterya_issue_id)
+		where 1 = 1
+		<if test="lotterybBuy.lotterybIssueId != null and  lotterybBuy.lotterybIssueId !=  ''">
+			and li_.issue_num = #{lotterybBuy.lotteryaIssueId}
+		</if>
+		<if test="mTransferStatus != null and  mTransferStatus != ''">
+			and lb_.transfer_status in(#{mTransferStatus})
+		</if>
+		<if test="lotterybBuy.isLuck != null and lotterybBuy.isLuck != ''">
+			and lb_.is_luck = #{lotterybBuy.isLuck}
+		</if>
+		LIMIT #{currentPage},#{pageSize}
+	</select>
+
 </mapper>

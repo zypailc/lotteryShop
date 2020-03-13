@@ -3,6 +3,9 @@ package com.didu.lotteryshop.lotteryb.mapper;
 import com.didu.lotteryshop.lotteryb.entity.LotterybBuy;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
   *  Mapper 接口
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface LotterybBuyMapper extends BaseMapper<LotterybBuy> {
 
+    public List<Map<String,Object>> getPageLotteryBuyAll(Integer currentPage, Integer pageSize, String mTransferStatus, LotterybBuy lotterybBuy);
 }

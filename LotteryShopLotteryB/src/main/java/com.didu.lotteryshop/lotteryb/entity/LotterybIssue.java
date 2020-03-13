@@ -93,6 +93,12 @@ public class LotterybIssue extends Model<LotterybIssue> {
 	@TableField("lotteryb_proportion_id")
 	private Integer lotterybProportionId;
 
+	/**
+	 * 购买Ids
+	 */
+	@TableField("lotteryb_buy_ids")
+	private String lotterybBuyIds;
+
 
 
 	public Integer getId() {
@@ -207,7 +213,13 @@ public class LotterybIssue extends Model<LotterybIssue> {
 		this.lotterybProportionId = lotterybProportionId;
 	}
 
+	public String getLotterybBuyIds() {
+		return lotterybBuyIds;
+	}
 
+	public void setLotterybBuyIds(String lotterybBuyIds) {
+		this.lotterybBuyIds = lotterybBuyIds;
+	}
 
 	@Override
 	protected Serializable pkVal() {
@@ -231,6 +243,7 @@ public class LotterybIssue extends Model<LotterybIssue> {
 			", bonusGrant=" + bonusGrant +
 			", lotterybInfoId=" + lotterybInfoId +
 			", lotterybProportionId=" + lotterybProportionId +
+			", lotterybBuyIds=" + lotterybBuyIds +
 			"}";
 	}
 }

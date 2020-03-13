@@ -30,18 +30,22 @@ public class LotterybConfigServiceImpl extends ServiceImpl<LotterybConfigMapper,
      * 单
      */
     public static final  Integer SINGLE_ID = 1;
+    public static final  String [] TYPE_COMBINATION_GINGLE = {"1,1,1","1,1,2",""};
     /**
      * 双
      */
     public static final  Integer DOUBLE_ID = 2;
+    public static final  String [] TYPE_COMBINATION_DOUBLE = {};
     /**
      * 大
      */
     public static final  Integer LARGE_ID = 3;
+    public static final  String [] TYPE_COMBINATION_LARGE = {};
     /**
      * 小
      */
     public static final  Integer SMALL_ID = 4;
+    public static final  String [] TYPE_COMBINATION_SMALL = {};
 
 
     public static  final Integer ID_1 = 4;
@@ -84,7 +88,7 @@ public class LotterybConfigServiceImpl extends ServiceImpl<LotterybConfigMapper,
 
     public static final  Integer TYPE_9 = 9;
     public static final  Integer TYPE_VALUE_9 = 7;
-    public static final  String [] TYPE_COMBINATION_9 = {"114","124","133","223"};
+    public static final  String [] TYPE_COMBINATION_9 = {"115","124","133","223"};
 
     public static final  Integer TYPE_10 = 10;
     public static final  Integer TYPE_VALUE_10 = 8;
@@ -225,6 +229,32 @@ public class LotterybConfigServiceImpl extends ServiceImpl<LotterybConfigMapper,
             return LotterybConfigServiceImpl.TYPE_COMBINATION_20[random.nextInt(LotterybConfigServiceImpl.TYPE_COMBINATION_20.length + 1)];
         }*/
         return "";
+    }
+
+
+    /**
+     * 查询单个配置
+     * @param lotterybConfigId
+     * @return
+     */
+    public LotterybConfig find(String lotterybConfigId){
+        List<LotterybConfig> list = findList(lotterybConfigId);
+        if(list.isEmpty() && list.size() > 0){
+            return list.get(0);
+        }
+        return null;
+    }
+
+    /**
+     * 查询多个配置
+     * @param lotterybConfigIds
+     * @return
+     */
+    public List<LotterybConfig> findList(String lotterybConfigIds){
+        Wrapper<LotterybConfig> wrapper = new EntityWrapper();
+        wrapper.and().in("id",lotterybConfigIds);
+        List<LotterybConfig> list = super.selectList(wrapper);
+        return list;
     }
 
 }

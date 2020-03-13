@@ -74,13 +74,13 @@ public class MIntroService extends BaseService {
         return ResultUtil.successJson("error !");
     }
 
-    /*public ResultUtil saveAllocationfunds(String title_zh,String content_zh,String title_en,String content_en){
-        boolean b = save(title_zh,content_zh,title_en,content_en,MIntro.TYPE_ALLOCATION_FUNDS,null);
+    public ResultUtil saveAllocationfunds(String title_zh,String content_zh,String title_en,String content_en,Integer type){
+        boolean b = save(title_zh,content_zh,title_en,content_en,type,null);
         if(b){
             return ResultUtil.successJson("success !");
         }
         return ResultUtil.successJson("error !");
-    }*/
+    }
 
 
     public ResultUtil updateCharacteristicProject(HttpServletRequest request,String id,String title_zh,String content_zh,String title_en,String content_en,String sort){

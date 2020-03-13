@@ -174,7 +174,14 @@
             var columns_s = [];
             var fild = "";
             $.each(language.split(","),function(index,data){
-                columns_s.push({field: 'title_'+data, title: 'title_'+data},{field:'content_'+data,title:'content_'+data});
+                columns_s.push(
+                    {field: 'title_'+data, title: 'title_'+data,formatter:function(value,row,index){
+                            return "<p class='title_"+data+"'>"+value+"</p>";
+                        }},
+                    {field:'content_'+data,title:'content_'+data,formatter:function(value,row,index){
+                            return "<p class='content_"+data+"'>"+value+"</p>";
+                        }}
+                    );
             })
 
             columns_s.push({
@@ -182,7 +189,7 @@
                 title:'sort',
                 formatter:function (value, row, index){
                     if(value){
-                        return value;
+                        return "<p class='sort'>"+value+"</p>";
                     }
                     return "No sorting";
                 }
@@ -192,7 +199,7 @@
                 formatter: function (value, row, index){
                     return "<button class='btn' onclick='delete_parrner("+row.id+")'>delete" +
                         "</button> <button class='btn'data-toggle='modal' data-target='#add_partner'>add</button>" +
-                        " <button class='btn'data-toggle='modal' onclick='update_Id("+row.id+",\""+(row.title_zh || "")+"\",\""+ (row.content_zh || "") +"\",\""+(row.title_en || "")+"\",\""+ (row.content_en || "") +"\",\""+(row.sort || 0)+"\")' data-target='#update_sort'>updateSort</button>";
+                        " <button class='btn'data-toggle='modal' id = '"+row.id+"' onclick='update_Id("+row.id+")' data-target='#update_sort'>updateSort</button>";
                 }
             })
             $(".table_partner").bootstrapTable({
@@ -250,7 +257,7 @@
                 var title_en = $("#update_title_en").val() || "";
                 var content_en = $("#update_content_en").val() || "";
                 var sort = $("#sort").val() || 0;
-                var file = document.getElementById('update_input_img').files[0];
+                //var file = document.getElementById('update_input_img').files[0];
                 if(!id){
                     alert("operation error");
                     return;
@@ -278,7 +285,7 @@
                 datas.append("content_zh",content_zh);
                 datas.append("title_en",title_en);
                 datas.append("content_en",content_en);
-                datas.append("dataFile",file);
+                //datas.append("dataFile",file);
                 $.ajax({
                     url:'../../mIntro/updateCharacteristicProject',
                     type:'POST',
@@ -313,17 +320,16 @@
             })
         }
 
-        function update_Id(id,title_zh,content_zh,title_en,content_en,sort){
+        function update_Id(id){
+            var tr = $("#"+id).parents("tr");
+            console.log(tr);
             $("#sort").attr("dataId",id);
-            $("#update_title_zh").val(title_zh);
-            $("#update_content_zh").val(content_zh);
-            $("#update_title_en").val(title_en);
-            $("#update_content_en").val(content_en);
-            $("#sort").val(sort);
+            $("#update_title_zh").val(tr.find(".title_zh").html());
+            $("#update_content_zh").val(tr.find(".content_zh").html());
+            $("#update_title_en").val(tr.find(".title_en").html());
+            $("#update_content_en").val(tr.find(".content_en").html());
+            $("#sort").val(tr.find("sort").html());
         }
-
-
-
 
     </script>
 </body>
