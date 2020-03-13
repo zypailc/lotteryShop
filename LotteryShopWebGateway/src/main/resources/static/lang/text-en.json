@@ -93,6 +93,14 @@
     "compensate": "[Compensate]",
     "delete": "Delete",
     "select": "select",
-    "allMoney": "[All money]"
+    "allMoney": "[All money]",
+    "sumValueText": "3-10 is small, 11-18 is large, 3, 5, 7, 9, 11, 13, 15, 17 is single;4, 6, 8, 10, 12, 14, 16, 18 are double.Odds 1.970-191.16.",
+    "threeSameNumberThroughSelectionText": "Bet on all three of the same Numbers (111, 222, 333, 444, 555, 666).Bonus odds 31.86 times.",
+    "threeWithASingleText": "Bet on any one or more of the same three Numbers (111, 222, 333, 444, 555, 666).Bonus odds 191.16 times.",
+    "threeDifferentNoText": "Lottery Numbers are all different, that is, different Numbers;Choose 3 or more Numbers from 1-6, the number selected is the same as the 3 Numbers of the drawing number, namely the winning number.Bonus odds 31.86 times.",
+    "threeCompaniesThroughSelectionText": "Bet on all 3 linked Numbers (123, 234, 345, 456).Bonus odds are 7.96 times.",
+    "twoIdenticalCheckText": "The drawing number has two identical, namely two identical number;Choose one or more Numbers from 11-66, and choose the same number as the prize number (including 11-66, in no order), that is, win (excluding leopards 111-666).The odds are 12.74.",
+    "twoOnTheSameSignText": "Select 1 pair of the same number and 1 different number betting, select the same number and prize number, namely winning.Bonus odds 63.72 times.",
+    "theTwoDifferentText": "Choose 2 or more Numbers from 1-6, the number selected is the same as any 2 Numbers of the drawing number, namely the winning number.Bonus odds of 6.37."
   }
 }

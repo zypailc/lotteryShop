@@ -347,6 +347,9 @@
         .p_content_center_issue{
             text-align: left!important;
         }
+        .service_item_content_type_value_text_p{
+            margin: 3px;
+        }
     </style>
 </head>
 <!-- commonality js -->
@@ -597,6 +600,8 @@ include("../common/common.js.html"){}
     function select_type(){
         var select_obj = $(".service_item_content_type_value");
         initConfig(getLanguage(),select_obj.val());
+        $(".service_item_content_type_value_text").find(".service_item_content_type_value_text_p").hide();
+        $(".service_item_content_type_value_text").find("p[type="+select_obj.val()+"]").show();
     }
 
     function list_1_add(lotterybConfigId,typeName,lines,type,num,num_2){
@@ -1274,6 +1279,16 @@ include("../common/common.js.html"){}
                         <div class="service_item_content_type_value"><span class="two_identical_check" data-localize="base.twoIdenticalCheck">Two identical check</span></div>
                         <div class="service_item_content_type_value"><span class="two_on_the_same_sign" data-localize="base.twoOnTheSameSign">Two on the same sign</span></div>
                         <div class="service_item_content_type_value"><span class="the_two_different" data-localize="base.theTwoDifferent">The two different</span></div>-->
+                    </div>
+                    <div class="service_item_content_type_value_text">
+                        <p type="1" class="service_item_content_type_value_text_p sum_value_text" data-localize="base.sumValueText"></p>
+                        <p type="2" style="display: none" class="service_item_content_type_value_text_p three_same_number_through_selection_text" data-localize="base.threeSameNumberThroughSelectionText"></p>
+                        <p type="3" style="display: none" class="service_item_content_type_value_text_p three_with_a_single_text" data-localize="base.threeWithASingleText"></p>
+                        <p type="4" style="display: none" class="service_item_content_type_value_text_p three_different_no_text" data-localize="base.threeDifferentNoText"></p>
+                        <p type="5" style="display: none" class="service_item_content_type_value_text_p three_companies_through_selection_text" data-localize="base.threeCompaniesThroughSelectionText"></p>
+                        <p type="6" style="display: none" class="service_item_content_type_value_text_p two_identical_check_text" data-localize="base.twoIdenticalCheckText"></p>
+                        <p type="7" style="display: none" class="service_item_content_type_value_text_p two_on_the_same_sign_text" data-localize="base.twoOnTheSameSignText"></p>
+                        <p type="8" style="display: none" class="service_item_content_type_value_text_p the_two_different_text" data-localize="base.theTwoDifferentText"></p>
                     </div>
                 </div>
                 <div class="service_item_content_body">
