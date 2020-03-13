@@ -246,7 +246,7 @@ public class LotteryAService extends LotteryABaseService {
         LotteryaBuy lotteryaBuy = lotteryaBuyService.selectById(lotteryaBuyId);
         if(lotteryaBuy != null && lotteryaBuy.getId() != null){
             //购买彩票
-            LotteryAContractResultEntity lacre = lotteryAContractService.buyLotterA(lotteryaBuy.getLuckNum(),lotteryaBuy.getMultipleNum(),lotteryaBuy.getTotal());
+            LotteryAContractResultEntity lacre = lotteryAContractService.buyLotterA(lotteryaBuy.getLuckNum(),lotteryaBuy.getMultipleNum(),lotteryaBuy.getTotal(),lotteryaBuy.getMemberId());
             if(lacre != null){
                 lotteryaBuy.setTransferHashValue(lacre.getTransactionHash());
                 if(lacre.getStatus() == LotteryAContractResultEntity.STATUS_WAIT){

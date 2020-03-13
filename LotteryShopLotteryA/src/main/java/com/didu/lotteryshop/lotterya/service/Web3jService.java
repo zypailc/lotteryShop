@@ -2,7 +2,9 @@ package com.didu.lotteryshop.lotterya.service;
 
 import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.entity.LoginUser;
+import com.didu.lotteryshop.common.entity.Member;
 import com.didu.lotteryshop.common.service.GasProviderService;
+import com.didu.lotteryshop.common.service.form.impl.MemberServiceImpl;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.Web3jUtils;
 import com.didu.lotteryshop.lotterya.contract.LotteryAContract;
@@ -71,6 +73,8 @@ public class Web3jService extends LotteryABaseService {
     @Autowired
     private OAuth2RestTemplate oAuth2RestTemplate;
 
+    @Autowired
+    private MemberServiceImpl memberService;
 
     @PostConstruct
     public void init() {
@@ -131,6 +135,21 @@ public class Web3jService extends LotteryABaseService {
     }
 
     /**
+     * 根据用户ID加载ETH智能合约
+     * @param contractAddress
+     * @param memberId
+     * @return
+     */
+    public LotteryAContract loadMemberContract(String contractAddress,String memberId){
+        if(StringUtils.isNotBlank(contractAddress)){
+            Credentials credentials = this.getMemberCredentials(memberId);
+            if(credentials != null)
+                return LotteryAContract.load(contractAddress, web3j, credentials, gasProviderService.getStaticGasProvider());
+        }
+        return null;
+    }
+
+    /**
      * 获取登录用户Credentials
      * @return Credentials
      */
@@ -157,6 +176,21 @@ public class Web3jService extends LotteryABaseService {
 //                    }
 //                }
 //            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     *  根据用户ID获取Credentials
+     * @param memberId
+     * @return
+     */
+    public Credentials getMemberCredentials(String memberId){
+        try{
+            Member member = memberService.selectById(memberId);
+            return WalletUtils.loadBip39Credentials(member.getPaymentCodeWallet(),member.getId()+Constants.MEMBER_MNEMONIC);//添加生成钱包文件的密文字段 2019-12-30 zm
         }catch (Exception e){
             e.printStackTrace();
         }

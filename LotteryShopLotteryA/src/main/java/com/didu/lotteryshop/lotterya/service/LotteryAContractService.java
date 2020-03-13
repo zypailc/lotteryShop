@@ -161,12 +161,14 @@ public class LotteryAContractService extends LotteryABaseService {
      * @param luckNum 彩票号码
      * @param multipleNumber 倍数
      * @param amount 金额
+     * @param memberId 会员ID
      * @return LotteryAContractResultEntity
      */
-    public LotteryAContractResultEntity buyLotterA(String luckNum, Integer multipleNumber, BigDecimal amount){
+    public LotteryAContractResultEntity buyLotterA(String luckNum, Integer multipleNumber, BigDecimal amount,String memberId){
         LotteryAContractResultEntity lacre = new LotteryAContractResultEntity();
         try {
-            LotteryAContract lotteryAContract  = web3jService.loadLoginMemberContract(lotteryaInfoService.findLotteryaInfo().getContractAddress());
+            //LotteryAContract lotteryAContract  = web3jService.loadLoginMemberContract(lotteryaInfoService.findLotteryaInfo().getContractAddress());
+            LotteryAContract lotteryAContract  = web3jService.loadMemberContract(lotteryaInfoService.findLotteryaInfo().getContractAddress(),memberId);
             TransactionReceipt transactionReceipt = lotteryAContract.BuyLottery(luckNum, BigInteger.valueOf(multipleNumber), Convert.toWei(amount.toPlainString(), Convert.Unit.ETHER).toBigInteger()).sendAsync().get();
             //事务哈希值
             String transactionHash = transactionReceipt.getTransactionHash();
