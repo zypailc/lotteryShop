@@ -141,6 +141,7 @@ include("../common/common.js.html"){}
 					layer.close(lay_play_code);
 					layer.msg(result.msg,{time: 2000},function () {
 						parent.layer.close(index);
+                        //findLotteryRecord(1,"0,1,2","lottery_self_record",true,lotteryIssueNum);
 						location.reload();
 					});
 
@@ -192,7 +193,7 @@ include("../common/common.js.html"){}
 					$(".lottery_service_time").attr("presentTime",info.presentTime);
 					countDown();
 					getGas(parseFloat(info.price));
-                    findLotteryRecord(1,"0,1,2","lottery_self_record",true,info.issueNumId);
+                    findLotteryRecord(1,"0,1,2","lottery_self_record",false,info.issueNumId);
 				}
 			}
 		})
@@ -302,6 +303,10 @@ include("../common/common.js.html"){}
 		var currentPage = dataObj.attr("currentPage") || 1;
 		var pageSize = dataObj.attr("pageSize") || 20;
 		var isFind = dataObj.attr("isFind") || 'true';
+        var languageType = getLanguage();
+        if(languageType != 'zh'){
+            languageType = 'en';
+        }
 		var ul = dataObj.find("ul");
 		var li = ul.find("li:first-child");
 		if(flag){
@@ -332,20 +337,44 @@ include("../common/common.js.html"){}
                             }else {
                                 new_li = dataObj.find("ul").find("li:first-child").clone();
                             }
+                            if(languageType = 'zh'){
+                                if(dataInfo.transferStatus == '0'){
+                                    new_li.find(".status_dispose").html("处理中");
+                                }
+                                if(dataInfo.transferStatus == '1'){
+                                    new_li.find(".status_dispose").html("成功");
+                                }
+                                if(dataInfo.transferStatus == '2'){
+                                    new_li.find(".status_dispose").html("失败");
+                                }
+                            }else {
+                                if(dataInfo.transferStatus == '0'){
+                                    new_li.find(".status_dispose").html("dispose");
+                                }
+                                if(dataInfo.transferStatus == '1'){
+                                    new_li.find(".status_dispose").html("success");
+                                }
+                                if(dataInfo.transferStatus == '2'){
+                                    new_li.find(".status_dispose").html("fail");
+                                }
+                            }
+
                             new_li.find(".luckNum_1").addClass("span_element_num_"+luckNum[0]);
                             new_li.find(".luckNum_2").addClass("span_element_num_"+luckNum[1]);
                             new_li.find(".luckNum_3").addClass("span_element_num_"+luckNum[2]);
                             new_li.find(".multiple").html(dataInfo.multipleNum);
                             new_li.find(".luckTotal").html((parseFloat(doubledMoney) * parseFloat(dataInfo.multipleNum)) + "ETH");
                             new_li.find(".createTime").html(dataInfo.createTime);
+                            new_li.show();
                             ul.append(new_li);
 						})
 					}
+                    if (data.length < pageSize) {
+                        ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+                    }
 				}
 			})
-            if (data.length < pageSize) {
-                ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
-            }
+
 		}
 		dataObj.attr("currentPage",parseInt(currentPage) + 1);
 		dataObj.attr("pageSize",pageSize);
@@ -388,6 +417,7 @@ include("../common/common.js.html"){}
 							if(languageType == 'zh'){
 								new_li.find(".luckNumStr").html("幸运号");
 								new_li.find(".luckTotalStr").html("开奖金额");
+
 							}else {
 								new_li.find(".luckNumStr").html("Luck number");
 								new_li.find(".luckTotalStr").html("Winning amount");
@@ -398,6 +428,7 @@ include("../common/common.js.html"){}
 							new_li.find(".luckNum_3").addClass("span_element_num_"+luckNum[2]);
 							new_li.find(".luckTotal").html(data.luckTotal+"ETH");
 							new_li.find(".lotteryTime").html(data.startTime + " ~ " + data.endTime);
+                            new_li.show();
 							ul.append(new_li);
 						}
 					})
@@ -886,7 +917,7 @@ include("../common/common.js.html"){}
 						<div class="model_purchase_1 ul_self_record services_item_inner-1">
 							<div class="model_purchase_left" id="lottery_self_record">
 								<ul class="">
-                                    <li>
+                                    <li style="display: none">
                                         <div class="model_purchase_record">
                                             <div class="lottery_play_div_element_4 lottery_play_div_element_border_0">
                                                 <div class="span_element_1 luckNum_1"></div>
@@ -902,6 +933,7 @@ include("../common/common.js.html"){}
                                             </div>
                                             <div class="lottery_play_div_element_4 lottery_play_div_Multiple"><span class="span_element_1 luckTotal" >0 ETH</span></div>
                                             <div class="lottery_play_div_element_4 lottery_play_div_Multiple"><span class="span_element_1 createTime">00-00-00 00:00:00</span></div>
+                                            <div class="lottery_play_div_element_4 lottery_play_div_Multiple"><span class="span_element_1 status_dispose"></span></div>
                                         </div>
                                     </li>
                                 </ul>
