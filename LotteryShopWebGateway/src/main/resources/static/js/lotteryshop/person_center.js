@@ -345,6 +345,10 @@ function findLotteryRecord(flag,classProperty){
     var endTime = $(".endDateInput").val() || "";
     var type = $(".lotteryTypeSelect").val() || "";
     var winning = $(".lotteryWinningSelect").val() || "";
+    var languageType = getLanguage();
+    if(languageType != 'zh'){
+        languageType = 'en';
+    }
     var li = $("."+classProperty).find("ul").find("li:first-child");
     if(flag){
         ul.html("");
@@ -376,9 +380,31 @@ function findLotteryRecord(flag,classProperty){
                         }else {
                             new_li = $("."+classProperty).find("ul").find("li:first-child").clone();
                         }
-                        if(data.lotteryType == '1'){
+                        if(data.lotteryType == '4'){
                             new_li.find(".lotteryType").html("lotteryA")
                         }
+                        if(languageType == 'zh'){
+                            if(data.lotteryType == '1'){
+                                new_li.find(".lotteryType").html("竞猜-B1")
+                            }
+                            if(data.lotteryType == '2'){
+                                new_li.find(".lotteryType").html("竞猜-B2")
+                            }
+                            if(data.lotteryType == '3'){
+                                new_li.find(".lotteryType").html("竞猜-B3")
+                            }
+                        }else {
+                            if(data.lotteryType == '1'){
+                                new_li.find(".lotteryType").html("GUESS-B1")
+                            }
+                            if(data.lotteryType == '2'){
+                                new_li.find(".lotteryType").html("GUESS-B2")
+                            }
+                            if(data.lotteryType == '3'){
+                                new_li.find(".lotteryType").html("GUESS-B3")
+                            }
+                        }
+
                         new_li.find(".lotteryIssue").html("#"+data.issueNum);
                         new_li.find(".selfLuckNum").html(data.selfLuckNum);
                         new_li.find(".luckNum").html(data.luckNum);

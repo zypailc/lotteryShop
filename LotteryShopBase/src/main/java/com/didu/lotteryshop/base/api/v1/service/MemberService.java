@@ -353,7 +353,7 @@ public class MemberService extends BaseBaseService {
     public ResultUtil findLotterPurchaseResord(Integer currentPage,Integer pageSize,String startTime,String endTime,String type,String winning){
         LoginUser loginUser = getLoginUser();
         //可能会有多种玩法 把所有玩法的购买记录拼接在一起 （字段类型：彩票类型(loteryType)，期数(issueNum)，时间(startTime,endTime)，开奖号(luckNum)，自选号(selfLuckNum),中奖金额(luckNum),是否中奖(isLuck)）
-        String sql = " select 1 as lotteryType , li_.issue_num as issueNum, DATE_FORMAT(li_.start_time,'%Y-%m-%d %H:%i:%s') as startTime, DATE_FORMAT(li_.end_time,'%Y-%m-%d %H:%i:%s') as endTime,"+
+        /*String sql = " select 1 as lotteryType , li_.issue_num as issueNum, DATE_FORMAT(li_.start_time,'%Y-%m-%d %H:%i:%s') as startTime, DATE_FORMAT(li_.end_time,'%Y-%m-%d %H:%i:%s') as endTime,"+
                 " li_.luck_num as luckNum,lb_.luck_num as selfLuckNum ,lb_.luck_total as luckTotal,lb_.is_luck as isLuck,lb_.create_time as createTime "+
                 " from lotterya_buy lb_ "+
                 " left join lotterya_issue li_ on (lb_.lotterya_issue_id = li_.id) "; // A 玩法
@@ -367,6 +367,29 @@ public class MemberService extends BaseBaseService {
         }
         if(winning != null && !"".equals(winning) && !"-1".equals(winning)){
             sql += " and lb_.is_luck = '" + winning + "'";
+        }*/
+        String sql = "(select 4 as lotteryType , li_.issue_num as issueNum, DATE_FORMAT(li_.start_time,'%Y-%m-%d %H:%i:%s') as startTime,"+
+        "DATE_FORMAT(li_.end_time,'%Y-%m-%d %H:%i:%s') as endTime,"+
+        "li_.luck_num as luckNum,lb_.luck_num as selfLuckNum ,lb_.luck_total as luckTotal,lb_.is_luck as isLuck,lb_.create_time as createTime"+
+        "from lotterya_buy lb_"+
+        "left join lotterya_issue li_ on (lb_.lotterya_issue_id = li_.id)"+
+        "where lb_.member_id = '"+loginUser.getId()+"')"+
+        "UNION all"+
+        "(select lbb_.lotteryb_info_id as lotteryType,lbi_.issue_num as issueNum,"+
+        "DATE_FORMAT(lbi_.start_time,'%Y-%m-%d %H:%i:%s') as startTime, DATE_FORMAT(lbi_.end_time,'%Y-%m-%d %H:%i:%s') as endTime,"+
+        "lbi_.luck_num as luckNum,lbc_.type as selfLuckNum,lbb_.luck_total as luckTotal,lbb_.is_luck as isLuck,lbb_.create_time as createTime"+
+        "from lotteryb_buy lbb_"+
+        "left join  lotteryb_issue lbi_ on (lbb_.lotteryb_issue_id = lbi_.id)"+
+        "right join lotteryb_config lbc_ on (lbc_.id = SUBSTRING_INDEX(lbb_.lotteryb_config_ids,',',1))"+
+        "where lbb_.member_id = '"+loginUser.getId()+"') ";
+        if (startTime != null && !"".equals(startTime)) {
+            sql += " and DATE_FORMAT(createTime,'%Y-%m-%d') >= '"+startTime+"'";
+        }
+        if (endTime != null && !"".equals(endTime)) {
+            sql += " and DATE_FORMAT(createTime,'%Y-%m-%d') <= '"+endTime+"'";
+        }
+        if(winning != null && !"".equals(winning) && !"-1".equals(winning)){
+            sql += " and isLuck = '" + winning + "'";
         }
         sql += " ORDER BY createTime DESC ";
         sql += " limit " + ((currentPage - 1) * pageSize)+ "," +pageSize;
