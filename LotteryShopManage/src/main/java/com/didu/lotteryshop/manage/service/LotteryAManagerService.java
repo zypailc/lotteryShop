@@ -65,6 +65,10 @@ public class LotteryAManagerService extends BaseService {
         }
         if(StringUtils.isNotBlank(contractAddress) && total.compareTo(BigDecimal.ZERO) > 0 && StringUtils.isNotBlank(privateKey)){
             boolean bool = web3jService.contractBalanceIn(contractAddress,privateKey,total);
+            if(bool){
+                String updateSql = "update lotterya_issue set bonus_grant='1' where id="+lotterAMap.get("id").toString();
+                sqlMapper.update(updateSql);
+            }
             return bool ? ResultUtil.successJson("successful") :ResultUtil.errorJson("operation failure ！");
         }
         return  ResultUtil.errorJson("operation failure ！");
