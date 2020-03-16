@@ -369,19 +369,19 @@ public class MemberService extends BaseBaseService {
             sql += " and lb_.is_luck = '" + winning + "'";
         }*/
         String sql = "(select 4 as lotteryType , li_.issue_num as issueNum, DATE_FORMAT(li_.start_time,'%Y-%m-%d %H:%i:%s') as startTime,"+
-        "DATE_FORMAT(li_.end_time,'%Y-%m-%d %H:%i:%s') as endTime,"+
-        "li_.luck_num as luckNum,lb_.luck_num as selfLuckNum ,lb_.luck_total as luckTotal,lb_.is_luck as isLuck,lb_.create_time as createTime"+
-        "from lotterya_buy lb_"+
-        "left join lotterya_issue li_ on (lb_.lotterya_issue_id = li_.id)"+
-        "where lb_.member_id = '"+loginUser.getId()+"')"+
-        "UNION all"+
-        "(select lbb_.lotteryb_info_id as lotteryType,lbi_.issue_num as issueNum,"+
-        "DATE_FORMAT(lbi_.start_time,'%Y-%m-%d %H:%i:%s') as startTime, DATE_FORMAT(lbi_.end_time,'%Y-%m-%d %H:%i:%s') as endTime,"+
-        "lbi_.luck_num as luckNum,lbc_.type as selfLuckNum,lbb_.luck_total as luckTotal,lbb_.is_luck as isLuck,lbb_.create_time as createTime"+
-        "from lotteryb_buy lbb_"+
-        "left join  lotteryb_issue lbi_ on (lbb_.lotteryb_issue_id = lbi_.id)"+
-        "right join lotteryb_config lbc_ on (lbc_.id = SUBSTRING_INDEX(lbb_.lotteryb_config_ids,',',1))"+
-        "where lbb_.member_id = '"+loginUser.getId()+"') ";
+        " DATE_FORMAT(li_.end_time,'%Y-%m-%d %H:%i:%s') as endTime,"+
+        " li_.luck_num as luckNum,lb_.luck_num as selfLuckNum ,lb_.luck_total as luckTotal,lb_.is_luck as isLuck,lb_.create_time as createTime"+
+        " from lotterya_buy lb_"+
+        " left join lotterya_issue li_ on (lb_.lotterya_issue_id = li_.id)"+
+        " where lb_.member_id = '"+loginUser.getId()+"')"+
+        " UNION all"+
+        " (select lbb_.lotteryb_info_id as lotteryType,lbi_.issue_num as issueNum,"+
+        " DATE_FORMAT(lbi_.start_time,'%Y-%m-%d %H:%i:%s') as startTime, DATE_FORMAT(lbi_.end_time,'%Y-%m-%d %H:%i:%s') as endTime,"+
+        " lbi_.luck_num as luckNum,lbc_.type as selfLuckNum,lbb_.luck_total as luckTotal,lbb_.is_luck as isLuck,lbb_.create_time as createTime"+
+        " from lotteryb_buy lbb_"+
+        " left join  lotteryb_issue lbi_ on (lbb_.lotteryb_issue_id = lbi_.id)"+
+        " right join lotteryb_config lbc_ on (lbc_.id = SUBSTRING_INDEX(lbb_.lotteryb_config_ids,',',1))"+
+        " where lbb_.member_id = '"+loginUser.getId()+"') ";
         if (startTime != null && !"".equals(startTime)) {
             sql += " and DATE_FORMAT(createTime,'%Y-%m-%d') >= '"+startTime+"'";
         }

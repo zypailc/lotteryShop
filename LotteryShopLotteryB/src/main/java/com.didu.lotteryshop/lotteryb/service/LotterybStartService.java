@@ -84,7 +84,6 @@ public class LotterybStartService extends LotteryBBaseService {
             Random random = new Random();
             lotterybStatistics = list.get(random.nextInt(list.size()));
         }
-        System.out.println("amount:"+lotterybStatistics.getAmount());
         lotterybIssue.setLuckTotal(lotterybStatistics.getAmount());
         lotterybIssue.setLotterybInfoId(lotterybInfoId);
         //计算开奖号

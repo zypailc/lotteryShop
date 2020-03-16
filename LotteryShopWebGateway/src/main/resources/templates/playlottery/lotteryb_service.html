@@ -102,7 +102,7 @@
             margin-left: 3px;
             margin-top: 3px;
             background: #eee;
-            width: 98%;
+            width: 99%;
         }
         .service_item_content_buyList{
             float: left;
@@ -404,14 +404,19 @@ include("../common/common.js.html"){}
             dataType:"json",
             success:function (result) {
                 var dataInfo = result.extend.data;
-                $(".last_number_of_periods").html(dataInfo.issueNum);
-                var luckNum = dataInfo.luckNum;
-                var num = luckNum.split(",");
-                var ul = $(".lottery_service_lottery_num");
-                ul.empty();
-                $.each(num,function(index,data){
-                    ul.append("<li class='announcedNo"+num[index]+"'></li>");
-                })
+                if(dataInfo){
+                    console.log(dataInfo);
+                    $(".last_number_of_periods").html(dataInfo.issueNum);
+                    var luckNum = dataInfo.luckNum;
+                    if(luckNum){
+                        var num = luckNum.split(",");
+                        var ul = $(".lottery_service_lottery_num");
+                        ul.empty();
+                        $.each(num,function(index,data){
+                            ul.append("<li class='announcedNo"+num[index]+"'></li>");
+                        })
+                    }
+                }
             }
         });
     }

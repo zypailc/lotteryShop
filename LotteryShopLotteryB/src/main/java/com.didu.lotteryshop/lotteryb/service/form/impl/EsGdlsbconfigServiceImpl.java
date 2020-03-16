@@ -33,7 +33,7 @@ public class EsGdlsbconfigServiceImpl extends ServiceImpl<EsGdlsbconfigMapper, E
         Wrapper<EsGdlsbconfig> wrapper = new EntityWrapper<>();
         wrapper.and().eq("lotteryb_info_id",lotterybInfoId);
         List<EsGdlsbconfig> list = super.selectList(wrapper);
-        if(list.isEmpty() && list.size() > 0){
+        if(!list.isEmpty() && list.size() > 0){
             return list.get(0);
         }
         return null;

@@ -41,10 +41,10 @@ public class LotterybCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        //Timer timer = new Timer();
-        //timer.schedule(timerTask(1),1000);
-        //timer.schedule(timerTask(2),1000);
-        //timer.schedule(timerTask(3),1000);
+        Timer timer = new Timer();
+        timer.schedule(timerTask(1),1000);
+        timer.schedule(timerTask(2),1000);
+        timer.schedule(timerTask(3),1000);
 
     }
 

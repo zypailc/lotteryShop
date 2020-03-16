@@ -46,18 +46,20 @@ public class LotterybWinningService extends LotteryBBaseService {
         LotterybInfo lotterybInfo = lotterybInfoService.find(lotterybInfoId);
         //查询期数基本信息
         //LotterybIssue lotterybIssue = lotterybIssueService.findUpLotteryaIssue(lotterybInfoId);
-        //判断奖金未发放，并且允许发放
-        if(lotterybIssue.getBonusStatus() == 0 && lotterybIssue.getBonusGrant() == 1 ){
-            //是否有中奖用户(中奖金额大于0)
-            boolean isLuckMmber = lotterybIssue.getLuckTotal().compareTo(BigDecimal.ZERO) > 0;
-            //要有中奖者，才进行发放
-            if(isLuckMmber){
-                lotterybIssue.setBonusStatus(1);
-                lotterybIssue.setBonusStatusTime(new Date());
-                bool = lotterybIssueService.updateAllColumnById(lotterybIssue);
-                //新增账单记录和中奖平台币分成；
-                if(bool && isLuckMmber){
-                    bool = this.updateIsLuck(lotterybIssue,lotterybInfo);
+        if(lotterybIssue != null) {
+            //判断奖金未发放，并且允许发放
+            if (lotterybIssue.getBonusStatus() == 0 && lotterybIssue.getBonusGrant() == 1) {
+                //是否有中奖用户(中奖金额大于0)
+                boolean isLuckMmber = lotterybIssue.getLuckTotal().compareTo(BigDecimal.ZERO) > 0;
+                //要有中奖者，才进行发放
+                if (isLuckMmber) {
+                    lotterybIssue.setBonusStatus(1);
+                    lotterybIssue.setBonusStatusTime(new Date());
+                    bool = lotterybIssueService.updateAllColumnById(lotterybIssue);
+                    //新增账单记录和中奖平台币分成；
+                    if (bool && isLuckMmber) {
+                        bool = this.updateIsLuck(lotterybIssue, lotterybInfo);
+                    }
                 }
             }
         }

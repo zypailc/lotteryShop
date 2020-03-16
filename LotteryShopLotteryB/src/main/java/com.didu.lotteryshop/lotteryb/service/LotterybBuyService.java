@@ -197,7 +197,7 @@ public class LotterybBuyService extends LotteryBBaseService{
                 " sum(lbb_.luck_total) as luckTotal " + //中奖总金额
                 " from lotteryb_buy lbb_ " +
                 " left join es_member em_ on(lbb_.member_id = em_.id) " +
-                " where lbb_.lotterya_issue_id="+lotterybIssueId +
+                " where lbb_.lotteryb_issue_id="+lotterybIssueId +
                 " and (em_.generalize_member_ids like '%"+memberId+"%' or lbb_.member_id='"+memberId+"')";
         SqlMapper sqlMapper = super.getSqlMapper();
         return sqlMapper.selectOne(sql);
