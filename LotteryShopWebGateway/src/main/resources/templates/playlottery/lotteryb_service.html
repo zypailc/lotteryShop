@@ -378,7 +378,7 @@ include("../common/common.js.html"){}
         initConfig(language,1);
         findLotteryIssue("the_lottery_record_id",true);
         findRule();
-        countDown();
+        //countDown();
         $(".lotteryPlay_li").click();
 
         $("#subbutton_confirm").click(function(){
@@ -443,6 +443,7 @@ include("../common/common.js.html"){}
                 $(".lottery_service_time").attr("startTime",dataInfo.startDate);
                 $(".lottery_service_time").attr("endTime",dataInfo.endDate);
                 $(".lottery_service_time").attr("periodDate",dataInfo.periodDate);
+                countDown();
                 if(flag == 'true'){
                     if(dataInfo.issueNum != $(".now_number_of_periods").html().replace(/\s+/g,"")){
                         $(".last_number_of_periods").html($(".now_number_of_periods").html());
@@ -932,32 +933,44 @@ include("../common/common.js.html"){}
         }
     }
 
-    function countDown(){
-        var today=new Date(),h=today.getHours(),m=today.getMinutes(),s=today.getSeconds();
-        //var today=new Date($(".lottery_service_time").attr("nowTime")),h=today.getHours(),m=today.getMinutes(),s=today.getSeconds();
-        var startTime = new Date($(".lottery_service_time").attr("startTime"));
-        var stopTime=new Date($(".lottery_service_time").attr("endTime"));
+    function countDown(seconds){
+        console.log("seconds:"+seconds);
+        if(!seconds){
+            //var startTime = new Date($(".lottery_service_time").attr("startTime"));
+            var stopTime=$(".lottery_service_time").attr("endTime");
+            var today=$(".lottery_service_time").attr("nowTime");
+            stopTime = stopTime.replace(/-/g,':').replace(' ',':'); // 注意，第二个replace里，是' '，中间有个空格，千万不能遗漏
+            stopTime = stopTime.split(':');
+            stopTime = new Date(stopTime[0],(stopTime[1]-1),stopTime[2],stopTime[3],stopTime[4],stopTime[5]);
+            today = today.replace(/-/g,':').replace(' ',':'); // 注意，第二个replace里，是' '，中间有个空格，千万不能遗漏
+            today = today.split(':');
+            today = new Date(today[0],(today[1]-1),today[2],today[3],today[4],today[5]);
+            seconds = (((stopTime.getDay()-today.getDay())*24*60*60)+((stopTime.getHours()-today.getHours())*60*60)+((stopTime.getMinutes()-today.getMinutes())*60)+
+                (stopTime.getSeconds() - today.getSeconds())) || 0;
+        }
+        if(seconds< 10){
+            return;
+        }
         var language = getLanguage();
         var lotterybInfoId = '${playTypeId!""}';
-        if((today.getTime() - startTime.getTime()) > 0 && stopTime.getTime() - today.getTime() > 0){//start period
-            $(".timeIssueGiveOut").hide();
-            $(".timeIssueDraw").hide();
-            $(".timeIssueView").show();
-            var stopH=stopTime.getHours(),stopM=stopTime.getMinutes(),stopS=stopTime.getSeconds();
-            var shenyu=stopTime.getTime()-today.getTime(),
+        if(seconds > 0){//start period
+            //var stopH=stopTime.getHours(),stopM=stopTime.getMinutes(),stopS=stopTime.getSeconds();
+            /*var shenyu=stopTime.getTime()-today.getTime(),
                 shengyuD=parseInt(shenyu/(60*60*24*1000)),
                 D=parseInt(shenyu)-parseInt(shengyuD*60*60*24*1000),
                 shengyuH=parseInt(D/(60*60*1000)),
                 H=D-shengyuH*60*60*1000,
                 shengyuM=parseInt(H/(60*1000)),
                 M=H-shengyuM*60*1000;
-            var shengyus = parseInt((shenyu-shengyuD*60*60*24*1000-shengyuH*60*60*1000-shengyuM*60*1000)/1000)
-            $(".time_hour").html((PrefixInteger(shengyuH,2))+":"+PrefixInteger(shengyuM,2)+":"+PrefixInteger(shengyus,2));
+            var shengyus = parseInt((shenyu-shengyuD*60*60*24*1000-shengyuH*60*60*1000-shengyuM*60*1000)/1000)*/
+            //var shengyuH = seconds / 24 /
+
+            //$(".time_hour").html(PrefixInteger(shengyuH,2)+":"+PrefixInteger(shengyuM,2)+":"+PrefixInteger(shengyus,2));
         }
-        if((parseInt(today.getTime()/1000) - parseInt(startTime.getTime()/1000)) > 10 && (parseInt(today.getTime()/1000) - parseInt(startTime.getTime()/1000)) < 12){
+        if(seconds > 3 && seconds < 5){
             initInfoUp(lotterybInfoId);
         }
-        if((parseInt(today.getTime()/1000) - parseInt(startTime.getTime()/1000)) <= 10){
+        if(seconds <= 3){
            $(".lottery_service_lottery_animation").show();
             $(".lottery_service_lottery_num").hide();
         }else {
@@ -965,11 +978,11 @@ include("../common/common.js.html"){}
             $(".lottery_service_lottery_animation").hide();
         }
         var periodDate = $(".lottery_service_time").attr("periodDate") || 0;
-        if(((parseInt(today.getTime()/1000) - parseInt(startTime.getTime()/1000)) > ( 60 * parseInt(periodDate) - 1)) && (parseInt(today.getTime()/1000) - parseInt(startTime.getTime()/1000)) < ( 60 * parseInt(periodDate) + 3)){
-            //$(".time_hour").html("00:00:00");
+        if(seconds < 0){
             initInfo(lotterybInfoId,language,'true');
         }
-        setTimeout(countDown,500);
+
+        setTimeout(countDown(seconds-1),10000);
     }
 
     function paymentCodeConfirm(){
@@ -1029,6 +1042,10 @@ include("../common/common.js.html"){}
             languageType = 'en';
         }
         if(flag){
+            currentPage = dataObj.attr("currentPage",1);
+            pageSize = dataObj.attr("pageSize",20);
+            currentPage = 1;
+            pageSize = 20;
             ul.html("");
         }
         if(isRepetition == 'true'){
@@ -1086,6 +1103,7 @@ include("../common/common.js.html"){}
         }
 
     }
+
     function getLotteryDetail(e){
         var li = $(e);
         var issue = li.find(".lotteryIssue").html().replace("#","");
@@ -1173,6 +1191,7 @@ include("../common/common.js.html"){}
             })
         }
     }
+
     function open_lottery_issue_record(){
         var width = document.body.clientWidth;
         var area = ["30%","400px"];
@@ -1200,6 +1219,10 @@ include("../common/common.js.html"){}
                 findWinningRecord(false,'lottery_winning_record_ul');
             }
         });
+    }
+
+    function lotterybIssueRecode(){
+        findLotteryIssue("the_lottery_record_id",true);
     }
 
 </script>
@@ -1230,7 +1253,7 @@ include("../common/common.js.html"){}
             <ul>
                 <li class="portfolio_category lotteryPlay_li" data-filter=".lotteryPlay" data-localize="base.lotteryPlay">Lottery Play</li>
                 <li class="portfolio_category" data-filter=".rules" data-localize="base.rules">Rules</li>
-                <li class="portfolio_category" data-filter=".drawArchive" data-localize="base.drawArchive">Draw Archive</li>
+                <li class="portfolio_category" onclick="lotterybIssueRecode()" data-filter=".drawArchive" data-localize="base.drawArchive">Draw Archive</li>
             </ul>
         </div>
 
