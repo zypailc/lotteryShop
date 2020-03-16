@@ -95,4 +95,10 @@ public class BaseIndex {
         return "/table/table_generalize";
     }
 
+    @RequestMapping("/table/LotteryAContractManager")
+    public String LotteryAContractManager(Model model){
+        model.addAttribute("language", MIntroServiceImpl.LANGUAGES_STR);
+        return "/table/table_lotteryamanager";
+    }
+
 }

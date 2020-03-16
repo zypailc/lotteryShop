@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Flat Admin V.2 - Free Bootstrap Admin Templates</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%
+    include("../config/css_all.html"){};
+    %>
+</head>
+
+<body class="flat-blue">
+<div class="app-container">
+    <div class="row content-container">
+        <%
+        include("../nav_top.html"){};
+        %>
+        <%
+        include("../menu_url.html"){};
+        %>
+        <!-- Main Content -->
+        <div class="container-fluid">
+            <div class="side-body">
+                <div class="page-title">
+                    <span class="title">LotteryAContractManager</span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="card">
+                            <div class="card-body">
+                                LotteryAContractBalance:<span id="LotteryAContractBalance">0</span>ETH;
+                                </br>
+                                </br>
+                                LotteryA <span id="issue_num">0</span>(ISSUE)：
+                                &nbsp;&nbsp;&nbsp;&nbsp;BonusTotal:<span id="luck_total">0</span>ETH;
+                                &nbsp;&nbsp;&nbsp;&nbsp;ContractTotal:<span id="current_total" style="color: green">0</span>ETH;
+                                &nbsp;&nbsp;&nbsp;&nbsp;AdjustTotal:<span id="adjust_total" style="color: red;">0</span>ETH</br>
+                                </br>
+                                LotteryAManageBalance:<span id="LotteryAManagerBalance">0</span>ETH;
+                                </br>
+                                </br>
+                                LotteryAAdjustFundBalance:<span id="LotteryAAdjustFundBalance">0</span>ETH
+                                </br>
+                                </br>
+                                LotteryABonusPoolBalance:<span id="LotteryABonusPoolBalance">0</span>ETH
+                                </br>
+                                </br>
+
+
+                                <div class="modal-footer">
+                                    privateKey: <input style="width: 500px;" id="privateKey" name="privateKey" type="text"/>
+                                    <button type="button" class="btn btn-primary" onclick="recharge()">
+                                        recharge
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="app-footer">
+        <div class="wrapper">
+            <span class="pull-right">2.1 <a href="#"><i class="fa fa-long-arrow-up"></i></a></span> © 2015 Copyright.
+        </div>
+    </footer>
+    <div>
+        <%
+            include("../config/js_all.html"){}
+        %>
+
+        <script type="text/javascript">
+            $(function(){
+                $.ajax({
+                    url:'/LotteryAManager/findLotteryAInfo',
+                    type:'GET',
+                    data:{},
+                    dataType:"json",
+                    success:function (result){
+                        if(result.success){
+                            $('#LotteryAContractBalance').html(result.extend.data.LotteryAContractBalance);
+
+                            $('#issue_num').html(result.extend.data.issue_num);
+                            $('#luck_total').html(result.extend.data.luck_total);
+                            $('#current_total').html(result.extend.data.current_total);
+                            $('#adjust_total').html(result.extend.data.adjust_total);
+
+                            $('#LotteryAManagerBalance').html(result.extend.data.LotteryAManagerBalance);
+                            $('#LotteryAAdjustFundBalance').html(result.extend.data.LotteryAAdjustFundBalance);
+                            $('#LotteryABonusPoolBalance').html(result.extend.data.LotteryABonusPoolBalance);
+                        }
+                    }
+                });
+            });
+
+            function recharge(){
+                $.ajax({
+                    url:'/LotteryAManager/contractBalanceIn',
+                    type:'GET',
+                    data:{"privateKey":$('#privateKey').val()},
+                    dataType:"json",
+                    success:function (result){
+                        if(result.success){
+                            window.location.reload();
+                        }else{
+                            alert(result.msg);
+                        }
+                    }
+                });
+            }
+        </script>
+    </div>
+</body>
+</html>
