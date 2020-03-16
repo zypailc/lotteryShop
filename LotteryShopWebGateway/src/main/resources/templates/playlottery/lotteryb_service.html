@@ -28,6 +28,7 @@
         .service_item_title_right{
             height: 110px;
             float: right!important;
+            margin-right: 0px!important;
         }
         .service_item_title_name{
             width: 100%!important;
@@ -351,6 +352,10 @@
         .service_item_content_type_value_text_p{
             margin: 3px;
         }
+        .portfolio_category{
+            margin-left: 20px;
+            margin-right: 20px;
+        }
     </style>
 </head>
 <!-- commonality js -->
@@ -405,7 +410,6 @@ include("../common/common.js.html"){}
             success:function (result) {
                 var dataInfo = result.extend.data;
                 if(dataInfo){
-                    console.log(dataInfo);
                     $(".last_number_of_periods").html(dataInfo.issueNum);
                     var luckNum = dataInfo.luckNum;
                     if(luckNum){
@@ -675,7 +679,6 @@ include("../common/common.js.html"){}
             type: 'post',
             dataType: "json",
             success: function (result) {
-                console.log(result);
                 if(result.code == 200){
                     var dataInfo = result.extend.data;
                     $("#availableBalance").attr("balance",dataInfo.balance);
@@ -818,7 +821,6 @@ include("../common/common.js.html"){}
         var num = $("#subbutton_confirm").attr("num").replace(/\s+/g,"") || 0;
         var num_2 = $("#subbutton_confirm").attr("num_2").replace(/\s+/g,"") || 0;
         var type = $("#subbutton_confirm").attr("type");
-        console.log("type:"+type);
         if(type == '4' || type == '7' || type == '8'){
             var length = (lotterybcofigids.substring(1)).split(",");
             if(type == '4'){

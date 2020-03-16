@@ -183,13 +183,27 @@ public class IndexController extends WebgatewayBaseController {
             model.addAttribute("title","ETH");
         }
         if(type.equals("wallet_flat")){
-            model.addAttribute("title","FLAT");
+            if(super.isChineseLanguage()){
+                model.addAttribute("title","FLAT");
+            }else {
+                model.addAttribute("title","金幣");
+            }
         }
         if(type.equals("wallet_putMoney")){
             model.addAttribute("title","PUT MONEY");
+            if(super.isChineseLanguage()){
+                model.addAttribute("title","待領幣");
+            }else {
+                model.addAttribute("title","PUT MONEY");
+            }
         }
         if(type.equals("wallet_gdEth")){
-            model.addAttribute("title","DIVIDEND");
+            if(super.isChineseLanguage()){
+                model.addAttribute("title","分红");
+            }else {
+                model.addAttribute("title","DIVIDEND");
+            }
+
         }
         model.addAttribute("type",type);
         //eth和平台币展示记录

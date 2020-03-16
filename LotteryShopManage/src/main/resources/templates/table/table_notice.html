@@ -322,7 +322,6 @@
 
         function update_Id(id){
             var tr = $("#"+id).parents("tr");
-            console.log(tr);
             $("#sort").attr("dataId",id);
             $("#update_title_zh").val(tr.find(".title_zh").html());
             $("#update_content_zh").val(tr.find(".content_zh").html());
