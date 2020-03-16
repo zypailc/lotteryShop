@@ -91,7 +91,7 @@ include("../../common/common.js.html"){}
         overflow: auto;
     }
     .footer_search{
-        bottom: 2px;
+        bottom: 65px;
         position: fixed;
     }
     .footer_search_button{
@@ -140,7 +140,7 @@ include("../../common/common.js.html"){}
     <!-- Home -->
 
     <div class="search_condition">
-        <p class="search_title">search<p>
+        <p class="search_title" data-localize="base.search">search<p>
         <div class="search_lottery_content">
             <div class="condition search_date">
 
@@ -149,21 +149,24 @@ include("../../common/common.js.html"){}
             </div>
             <div class="condition search_type lotteryTypeSelect">
                 <select class="select_search">
-                    <option value="-1">全部类型</option>
-                    <option value="1">A</option>
+                    <option value="-1" data-localize="base.allTypes">All types</option>
+                    <option value="4">A</option>
+                    <option value="1" data-localize="b1"></option>
+                    <option value="2" data-localize="b2"></option>
+                    <option value="3" data-localize="b3"></option>
                 </select>
                 <select class="select_search lotteryWinningSelect">
-                    <option value="-1">全部</option>
-                    <option value="1">中奖</option>
-                    <option value="0">未中奖</option>
+                    <option value="-1" data-localize="base.all">All</option>
+                    <option value="1" data-localize="base.Winning">Winning</option>
+                    <option value="0" data-localize="base.onWinning">On winning</option>
                 </select>
             </div>
         </div>
         <div class="footer_search">
             <div class="footer_search_button">
                 <hr style="width:400px;">
-                <button class="btn confirm_button search_lottery_record_phone" type="button">confirm</button>
-                <button class="btn confirm_button" type="button">cancel</button>
+                <button class="btn confirm_button search_lottery_record_phone" type="button" data-localize="base.confirm">confirm</button>
+                <button class="btn confirm_button" type="button" data-localize="base.cancel">cancel</button>
             </div>
         </div>
     </div>

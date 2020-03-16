@@ -33,7 +33,7 @@ public class CombinationUtil {
      * @param n 选择个数
      */
     public static void arrangementSelect(String[] dataList, int n) {
-        System.out.println(String.format("A(%d, %d) = %d", dataList.length, n, arrangement(dataList.length, n)));
+        //System.out.println(String.format("A(%d, %d) = %d", dataList.length, n, arrangement(dataList.length, n)));
         arrangementSelect(dataList, new String[n], 0);
     }
 
@@ -46,7 +46,7 @@ public class CombinationUtil {
     private static void arrangementSelect(String[] dataList, String[] resultList, int resultIndex) {
         int resultLen = resultList.length;
         if (resultIndex >= resultLen) { // 全部选择完时，输出排列结果
-            System.out.println(Arrays.asList(resultList));
+            //System.out.println(Arrays.asList(resultList));
             return;
         }
 
@@ -73,12 +73,9 @@ public class CombinationUtil {
      * @param n 选择个数
      */
     public static List<String> combinationSelect(String[] dataList, int n) {
-        System.out.println(String.format("C(%d, %d) = %d", dataList.length, n, combination(dataList.length, n)));
+        //System.out.println(String.format("C(%d, %d) = %d", dataList.length, n, combination(dataList.length, n)));
         List<String> list = new ArrayList<>();
         list = combinationSelect(dataList, 0, new String[n], 0,list);
-        for (String s : list) {
-            System.out.println(s);
-        }
         return list;
     }
 

@@ -137,12 +137,12 @@ public class MailService {
         {
             printWriter.println(command);
             printWriter.flush();
-            System.out.println("客户端命令行信息→" + command);
+            //System.out.println("客户端命令行信息→" + command);
         }
         char[] serviceResponse = new char[1024];
 
         bufferedReader.read(serviceResponse);
-        System.out.println("服务器响应→" + new String(serviceResponse));
+        //System.out.println("服务器响应→" + new String(serviceResponse));
     }
 
 }

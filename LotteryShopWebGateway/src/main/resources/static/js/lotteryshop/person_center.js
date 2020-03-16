@@ -29,8 +29,13 @@ function img_change(e){
 //update head portrait
 function img_change_button(){
     var src = $(".img_change_border").attr("src") || "";
+    var languageType = getLanguage();
     if(!src){
-        layer.msg("Please select the avatar first !");
+        if(languageType == 'zh'){
+            layer.msg("请先选择角色 !");
+        }else {
+            layer.msg("Please select the avatar first !");
+        }
         return;
     }
     $.ajax({
@@ -76,20 +81,37 @@ function create_confirm(){
     var bAddress = $("input[name=bAddress]").val() || "";
     var paymentCode = $("input[name=paymentCode]").val() || "";
     var paymentCodeConfirm = $("input[name=paymentCodeConfirm]").val() || "";
+    var languageType = getLanguage();
     if(bAddress == ""){
-        layer.msg("Please enter your wallet address !");
+        if(languageType == 'zh'){
+            layer.msg("请输入您的钱包地址 !");
+        }else {
+            layer.msg("Please enter your wallet address !");
+        }
         return "";
     }
     if(paymentCode == ""){
-        layer.msg("Please enter your password !");
+        if(languageType == 'zh'){
+            layer.msg("请输入您的密码 !");
+        }else {
+            layer.msg("Please enter your password !");
+        }
         return;
     }
     if(paymentCodeConfirm == ""){
-        layer.msg("Please enter your confirm password !");
+        if(languageType == 'zh'){
+            layer.msg("请输入确认密码 !");
+        }else {
+            layer.msg("Please enter your confirm password!");
+        }
         return;
     }
     if(paymentCode != paymentCodeConfirm){
-        layer.msg("The password is inconsistent with the confirmation code !");
+        if(languageType == 'zh'){
+            layer.msg("密码与确认码不一致 !");
+        }else {
+            layer.msg("The password is inconsistent with the confirmation code !");
+        }
         return;
     }
     var index = layer.load();
@@ -502,9 +524,14 @@ function getWalletConfig(){
 
 function openPlayCode(type){
     $("#playPassword").find("input").attr("operationType",type);
+    var languageType = getLanguage();
+    var  title = "payment code";
+    if(languageType == 'zh'){
+        title = '支付密碼';
+    }
     lay_play_code = layer.open({
         type: 1,
-        title:"支付密碼",
+        title:title,
         anim: 2,
         shadeClose: true, //开启遮罩关闭
         content: $("#playPassword").html()
@@ -516,8 +543,13 @@ function withdrawCashEth(e){
     var propertyType = obj.attr("propertyType") || "-1";
     var propertyObj = "";
     var propertyObjHead = "";
+    var languageType = getLanguage();
     if(propertyType == "-1"){
-        layer.msg("There is an error in the operation, please refresh before operation !");
+        if(languageType == 'zh'){
+            layer.msg("操作中出现错误，请在操作前刷新 !");
+        }else {
+            layer.msg("There is an error in the operation, please refresh before operation !");
+        }
         return;
     }
     if(propertyType == "1"){//Eth
@@ -535,18 +567,30 @@ function withdrawCashEth(e){
     var balance = $("."+propertyObjHead).find(".balance").attr("dataValue") || "";
     var extractTheNumber = $("."+propertyObj).find("input").val() || "0";
     if(!extractTheNumber || extractTheNumber == '0'){
-        layer.msg("Please enter quantity ! ");
+        if(languageType == 'zh'){
+            layer.msg("请输入数量 !");
+        }else {
+            layer.msg("Please enter quantity !");
+        }
         return;
     }
     if(!balance){
-        layer.msg("The extractable number is zero ! ");
+        if(languageType == 'zh'){
+            layer.msg("可提取的数未0 !");
+        }else {
+            layer.msg("The extractable number is zero!");
+        }
         return;
     }
     if((propertyType == "1" || propertyType == "2")){
         balance = parseFloat(balance);
         extractTheNumber = parseFloat(extractTheNumber);
         if(extractTheNumber > balance){
-            layer.msg("The extracted number shall not be greater than the extractable number !");
+            if(languageType == 'zh'){
+                layer.msg("提取的数不得大于可提取的数 !");
+            }else {
+                layer.msg("The extracted number shall not be greater than the extractable number !");
+            }
             return;
         }
     }
@@ -644,16 +688,32 @@ function updatePassword(e,type){
     var oldPassword = obj.find("input[name=oldPassword]").val() || "";
     var newPassword = obj.find("input[name=newPassword]").val() || "";
     var confirmPassword = obj.find("input[name=confirmPassword]").val() || "";
+    var languageType = getLanguage();
+    if(languageType != 'zh'){
+        languageType = 'en';
+    }
     if(!oldPassword){
-        layui_open("Please enter the original password !");
+        if(languageType == 'zh'){
+            layui_open("Please enter the original password !");
+        }else {
+            layui_open("请输入原密码 !");
+        }
         return ;
     }
     if(!newPassword){
-        layui_open("Please enter your new password !");
+        if(languageType == 'zh'){
+            layui_open("Please enter your new password !");
+        }else {
+            layui_open("请输入新密码 !");
+        }
         return ;
     }
     if(!confirmPassword){
-        layui_open("Please enter the confirmation code !");
+        if(languageType == 'zh'){
+            layui_open("Please enter the confirmation code !");
+        }else {
+            layui_open("请确认输入密码 !");
+        }
         return ;
     }
     $.ajax({

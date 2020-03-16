@@ -391,6 +391,9 @@ public class MemberService extends BaseBaseService {
         if(winning != null && !"".equals(winning) && !"-1".equals(winning)){
             sql += " and isLuck = '" + winning + "'";
         }
+        if(type != null && !"".equals(type) && !"-1".equals(type)){
+            sql += " and lotteryType = '" + type + "'";
+        }
         sql += " ORDER BY createTime DESC ";
         sql += " limit " + ((currentPage - 1) * pageSize)+ "," +pageSize;
         List<Map<String,Object>> list = getSqlMapper().selectList(sql);

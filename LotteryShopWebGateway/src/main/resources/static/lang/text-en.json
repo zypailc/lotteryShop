@@ -105,6 +105,12 @@
     "change": "change",
     "luckNum": "Luck num",
     "winningNum": "Winning num",
-    "luckAmount": "Luck amount"
+    "luckAmount": "Luck amount",
+    "cancel": "cancel",
+    "all": "All",
+    "losingLottery": "Losing lottery",
+    "b1": "GUESS-B1",
+    "b2": "GUESS-B2",
+    "b3": "GUESS-B3"
   }
 }

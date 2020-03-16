@@ -105,6 +105,12 @@
     "change": "更改",
     "luckNum": "幸运号",
     "winningNum": "中奖号",
-    "luckAmount": "幸运金"
+    "luckAmount": "幸运金",
+    "cancel": "取消",
+    "all": "全部",
+    "losingLottery": "未中奖",
+    "b1": "竞猜-B1",
+    "b2": "竞猜-B2",
+    "b3": "竞猜-B3"
   }
 }

@@ -26,10 +26,8 @@ public class DateUtil {
     public static Date getDateAddMinute(Date date,Integer minute){
         Calendar nowTime = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd HHmmss");
-        System.out.println(format.format(nowTime.getTime()));
         nowTime.setTime(date);
         nowTime.add(Calendar.MINUTE, minute);
-        System.out.println(format.format(nowTime.getTime()));
         return nowTime.getTime();
     }
 
