@@ -24,7 +24,7 @@
 >    > 主要作用：快3玩法服务购买、开奖、发放奖金、提成、分红等，快3所有业务。
 
 
-* 前端项目启动顺序
+* 前台项目启动顺序
 	* LotteryShopEurekaServer
 	* LotteryShopAPIGateway
 	* LotteryShopAuth
