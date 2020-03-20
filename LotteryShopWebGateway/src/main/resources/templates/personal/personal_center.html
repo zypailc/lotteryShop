@@ -154,6 +154,11 @@ include("../common/common.js.html"){}
 		padding: 5px;
 		/*width: 60%;*/
 	}
+	.wallet_rule{
+		background: #f8f9fa;
+		border-radius: 5px;
+		padding: 5px;
+	}
 	.wallet_head span{
 		color: #868e96;
 		font-weight: 600;
@@ -266,7 +271,7 @@ include("../common/common.js.html"){}
 	.money_input{
 		border: none;
 		border-radius: 5px;
-		width: 100%;
+		width: 98%;
 		/*margin-left: 10px;*/
 		background: center;
 	}
@@ -276,6 +281,9 @@ include("../common/common.js.html"){}
 		width: 20%;
 		margin-left: 10px;
 		background: center;
+	}
+	.money_input_2{
+		/*width: 65%!important;*/
 	}
 	.moneyOpenOrClose{
 		float: right;
@@ -376,6 +384,28 @@ include("../common/common.js.html"){}
 	.li_come_0{
 		background: aliceblue;
 	}
+	.rules_particulars{
+
+	}
+	.isLuckRecode{
+		margin-left: 20px;
+	}
+	.total{
+		width: 100px;
+	}
+	.span_title_nike_name{
+		font-size: 11px;
+		font-weight: 700;
+		margin-right: 50px;
+	}
+	.pm_rule_open_layer{
+		cursor: pointer;
+		float: right;
+	}
+	.di_rule_open_layer{
+		cursor: pointer;
+		float: right;
+	}
 </style>
 <script>
 	$(function(){
@@ -383,7 +413,6 @@ include("../common/common.js.html"){}
 		//init
 		var li = $(".personal_center");
 		li.click();
-
 
 		$(".walletETH").scroll(function(){
 			var viewH = $(this).height();
@@ -767,9 +796,9 @@ include("../common/common.js.html"){}
 				<select class="select_search lotteryTypeSelect">
 					<option value="-1" data-localize="base.allTypes">All types</option>
 					<option value="4">A</option>
-					<option value="1" data-localize="b1"></option>
-					<option value="2" data-localize="b2"></option>
-					<option value="3" data-localize="b3"></option>
+					<option value="1" data-localize="base.b1"></option>
+					<option value="2" data-localize="base.b2"></option>
+					<option value="3" data-localize="base.b3"></option>
 				</select>
                 <select class="select_search lotteryWinningSelect">
                     <option value="-1" data-localize="base.all">All</option>
@@ -783,13 +812,14 @@ include("../common/common.js.html"){}
 			<div class="card card-1 card-1_scroll web_design lottery_record">
 				<div class="card-body">
 					<ul class="ul_personal_lottery">
-						<li class="li_lotteryRecord">
+						<li class="li_lotteryRecord" style="display: none">
 							<div>
 								<p><span class="lotteryType lottery_span_right">Lottery type</span><span class="lotteryIssue"></span></p>
 								<p>
 									<span class="luckNumStr" data-localize="base.luckNum">luckNum : </span><span class="lottery_span_right selfLuckNum"></span>
 									<span class="winningNumStr" data-localize="base.winningNum">winningNum : </span><span class="lottery_span_right luckNum"></span>
 									<span class="luckAmountStr" data-localize="base.luckAmount">luckAmount : </span><span class="luckTotal"></span>
+									<span class="isLuckRecode"></span>
 								</p>
 								<p><span class="startTime">00:00:00 00:00:00</span> ~ <span class="endTime">00:00:00 00:00:00</span></p>
 							</div>
@@ -816,7 +846,7 @@ include("../common/common.js.html"){}
 								<!--<p><span class="title_span_1">ETH </span></p>-->
 								<div class="div_withdrawCash wallet_address_self_eth_withdrawCash">
 									<p><span class="title_span_2" data-localize="base.withdrawCash">Withdraw cash</span></p>
-									<p><span data-localize="base.rules">rule</span></p>
+									<p><span data-localize="base.rules">rule</span> : <span data-localize="base.poundage"></span><span class="ethRatio"></span>%</p>
 									<!--<p>
 										<span class="title_span_3" data-localize="base.total">total</span> : <span class="wallet_span_total">0ETH</span>
 										<span class="title_span_3" data-localize="base.balance1">balance</span> : <span class="balance">0ETH </span>
@@ -834,7 +864,7 @@ include("../common/common.js.html"){}
 							</div>
 						</div>
 						<ul class="ul_personal_Eth">
-							<li class="li_come">
+							<li class="li_come" style="display: none">
 								<div>
 									<p><span class="statusTime span_right"></span><span class="divType"></span><span class="statusStr"></span></p>
 									<p>
@@ -855,16 +885,37 @@ include("../common/common.js.html"){}
 				<div class="card-body">
 					<div class="dlb_record">
 						<div class="wallet_head">
-							<p class="p_margin"><span class="wallet_span_title wallet_span_title_net_asset" data-localize="base.netAssets">Net assets</span><span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span></p>
-							<p class="p_margin"><span class="wallet_span_total"><input readonly="readonly" class="money_input" value="0.00"/></span></p>
+							<p class="p_margin"><span class="wallet_span_title wallet_span_title_net_asset" data-localize="base.netAssets">Net assets</span>
+								<span datavalue="0" class="moneyOpenOrClose pointerClass glyphicon glyphicon-eye-close"></span>
+							</p>
+							<p class="p_margin"><span class="wallet_span_total"><input readonly="readonly" class="money_input" value="0.00"/></span>
+								</p>
 							<p class="p_margin"><span class="wallet_span_total_dlb_usd"><input readonly="readonly" class="money_input money_input_usd" value="0.00"/></span></p>
 							<p class="p_margin">
 								<span data-localize="base.balance1">balance</span><span class="span_right balance"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
-								<span data-localize="base.freeze">freeze</span><span class="freeze"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
+								<span data-localize="base.freeze">freeze</span><span class="freeze"><input readonly="readonly" class="money_input_1 money_input_2" value="0.00"/><span  class="pm_rule_open_layer glyphicon glyphicon-question-sign"></span></span>
 							</p>
 						</div>
+						<!--<div class="wallet_rule">
+							<p data-localize="base.pendingCurrencySettlementRules">Pending currency settlement rules</p>
+							<div class="rules_particulars">
+								<div class="rules_particulars_div_zh" style="display: none">
+									<p>	1.待领币每<span class="day_pm">0</span>天结算一次。</p>
+									<p>	2.<span class="day_pm_1">0</span>天内消费>=<span class="eth_pm">0.0</span> ETH。</p>
+									<p>	3.统计<span class="level_pm">0</span>层下级活跃人数（活跃人数：<span class="day_pm_1">0</span>天内消费>=<span class="eth_pm">0.0</span> ETH），活跃人数/结算比例：
+									<span class="list_pm"></span></p>
+								</div>
+								<div class="rules_particulars_div_en" style="display: none">
+									<p>1.Outstanding currency will be settled every <span class="day_pm">0</span> day.</p>
+									<p>2.Consumption within <span class="day_pm_1">0</span>> days >=<span class="eth_pm">0.0</span> ETH.</p>
+									<p>3.Count the active number of the six levels (active number: consumption within <span class="day_pm_1">0</span> days >= <span class="eth_pm">0.0</span>eth), and the active number/settlement ratio:
+										<span class="list_pm"></span></p>
+
+								</div>
+							</div>
+						</div>-->
 						<ul class="ul_personal_Dlb">
-							<li class="li_come">
+							<li class="li_come" style="display: none">
 								<div>
 									<p><span class="statusTime span_right">2019-12-13 15:15:07</span><span class="divType"></span><span class="statusStr"></span></p>
 									<p>
@@ -889,17 +940,20 @@ include("../common/common.js.html"){}
 							<p class="p_margin"><span class="wallet_span_total_gd_usd"><input readonly="readonly" class="money_input money_input_usd" value="0.00"/></span></p>
 							<p class="p_margin">
 								<span data-localize="base.balance1">balance</span><span class="span_right balance"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
-								<span data-localize="base.freeze">freeze</span><span class="freeze"><input readonly="readonly" class="money_input_1" value="0.00"/></span>
+								<span data-localize="base.freeze">freeze</span><span class="freeze"><input readonly="readonly" class="money_input_1" value="0.00"/>
+								<span  class="di_rule_open_layer glyphicon glyphicon-question-sign"></span>
+							</span>
 							</p>
 						</div>
 						<ul class="ul_personal_gdEth">
-							<li class="li_come">
+							<li class="li_come" style="display: none">
 								<div>
 									<p><span class="statusTime span_right">2019-12-13 15:15:07</span><span class="divType"></span><span class="statusStr"></span></p>
 									<p>
 										<span class="expend glyphicon glyphicon-minus" data-localize="base.expend"></span><span class="recorded glyphicon glyphicon-plus" data-localize="base.recorded"></span>
 										<span class="span_right expendOrReceipts">0.0</span>
 										<span class="balanceStr" data-localize="base.balance1">balance : </span><span class="span_right balance1">0.0</span>
+
 									</p>
 								</div>
 								<!--<hr class="hrEth">-->
@@ -948,7 +1002,7 @@ include("../common/common.js.html"){}
 							</div>
 						</div>
 						<ul class="ul_personal_lottery">
-							<li class="li_come">
+							<li class="li_come" style="display: none">
 								<div>
 									<p><span class="statusTime span_right">2019-12-13 15:15:07</span><span class="divType"></span><span class="statusStr"></span></p>
 									<p>
@@ -982,7 +1036,7 @@ include("../common/common.js.html"){}
 					<ul class="ul_personal_generalizePersonal">
 						<li>
 							<div>
-								<p><span class="span_title generalizePersonalRecordNikeName"></span></p>
+								<p><span class="span_title_nike_name generalizePersonalRecordNikeName"></span> <span class="span_right generalizePersonalRecordCreate"></span></p>
 								<p><span class="generalizePersonalRecordEmail"></span></p>
 							</div>
 							<hr class="hrEth">
@@ -1198,6 +1252,39 @@ include("../common/common.js.html"){}
 			</div>
 			<div class="model_purchase_button">
 				<div class="button_purchase confirm" onclick="paymentCodeConfirm(this)"><span data-localize="base.confirm">confirm</span></div>
+			</div>
+		</div>
+	</div>
+	<!-- pm rule -->
+	<div class="wallet_rule_div">
+		<div class="wallet_rule">
+			<p data-localize="base.pendingCurrencySettlementRules">Pending currency settlement rules</p>
+			<div class="rules_particulars">
+				<div class="rules_particulars_div_zh" style="display: none">
+					<p>	1. 待领币每<span class="day_pm">0</span>天结算一次。</p>
+					<p>	2. <span class="day_pm_1">0</span>天内消费>=<span class="eth_pm">0.0</span> ETH。</p>
+					<p>	3. 统计<span class="level_pm">0</span>层下级活跃人数（活跃人数：<span class="day_pm_1">0</span>天内消费>=<span class="eth_pm">0.0</span> ETH），活跃人数/结算比例：
+						<span class="list_pm"></span></p>
+				</div>
+				<div class="rules_particulars_div_en" style="display: none">
+					<p>1. Outstanding currency will be settled every <span class="day_pm">0</span> day.</p>
+					<p>2. Consumption within <span class="day_pm_1">0</span>> days >=<span class="eth_pm">0.0</span> ETH.</p>
+					<p>3. Count the active number of the six levels (active number: consumption within <span class="day_pm_1">0</span> days >= <span class="eth_pm">0.0</span>eth), and the active number/settlement ratio:
+						<span class="list_pm"></span></p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="di_rule_div">
+		<div class="di_rule">
+			<p data-localize="base.promoterSettlementRules">Promoter settlement rules</p>
+			<div class="rules_particulars">
+				<div class="rules_particulars_div_zh" style="display: none">
+					<p>1. 统计所有下级活跃人数（活跃人数：<span class="day1_di">0</span>天内消费>=<span class="eth_di">0.0</span> ETH），活跃人数/结算周期(天)<span class="list_di"></span></p>
+				</div>
+				<div class="rules_particulars_div_en" style="display: none">
+					<p>1. Count the active number of all subordinates (active number: consumption within <span class="day1_di">0</span> days >= <span class="eth_di">0.0</span>eth), active number/settlement period (day)<span class="list_di"></span></p>
+				</div>
 			</div>
 		</div>
 	</div>

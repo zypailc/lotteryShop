@@ -127,3 +127,5 @@ ribbon:
 
 zuul.host.maxTotalConnections: 200
 zuul.host.maxPerRouteConnections: 10
+logging:
+  config: classpath:logback-boot.xml

@@ -230,10 +230,11 @@ public class EsDlbaccountsServiceImpl extends ServiceImpl<EsDlbaccountsMapper, E
             wrapper.and("  status_time < {0}",endTime);
         }
         if(memberId != null && !"".equals(memberId)){
-            wrapper.and("member_id = {0}",memberId);
+            wrapper.and().eq("member_id",memberId);
         }
         if(status != null && !"".equals(status)){
-            wrapper.in("status",status);
+            //wrapper.in("status",status);
+            wrapper.and("status in ({0})",status);
         }
         wrapper.orderBy("create_time",false);
         Page<Map<String,Object>> pageDlbRecord = new Page<Map<String,Object>>();

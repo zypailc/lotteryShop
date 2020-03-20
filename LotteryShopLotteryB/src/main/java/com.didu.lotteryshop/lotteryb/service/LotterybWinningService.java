@@ -83,8 +83,18 @@ public class LotterybWinningService extends LotteryBBaseService {
                 lb.setLuckTotal(luckTotal);
                 bool =  lotterybBuyServiceIml.updateAllColumnById(lb);
                 //新增流水账记录
+                if(lotteryaInfo.getId() == 1){
                 if(bool)
-                    bool =  esLsbaccountsService.addInSuccess(lb.getMemberId(), EsEthaccountsServiceImpl.DIC_TYPE_WINLOTTERYB,luckTotal,lb.getId().toString());
+                    bool =  esLsbaccountsService.addInSuccess(lb.getMemberId(), EsLsbaccountsServiceImpl.DIC_TYPE_WINLOTTERYB_1,luckTotal,lb.getId().toString());
+                }
+                if(lotteryaInfo.getId() == 2){
+                    if(bool)
+                        bool =  esLsbaccountsService.addInSuccess(lb.getMemberId(), EsLsbaccountsServiceImpl.DIC_TYPE_WINLOTTERYB_2,luckTotal,lb.getId().toString());
+                }
+                if(lotteryaInfo.getId() == 3){
+                    if(bool)
+                        bool =  esLsbaccountsService.addInSuccess(lb.getMemberId(), EsLsbaccountsServiceImpl.DIC_TYPE_WINLOTTERYB_3,luckTotal,lb.getId().toString());
+                }
                 //中奖分成
                 if(bool)
                     bool = lotterybPmDetailServiceIml.drawPM(lb,lotteryaInfo);

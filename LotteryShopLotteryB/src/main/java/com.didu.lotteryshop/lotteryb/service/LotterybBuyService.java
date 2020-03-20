@@ -202,4 +202,36 @@ public class LotterybBuyService extends LotteryBBaseService{
         SqlMapper sqlMapper = super.getSqlMapper();
         return sqlMapper.selectOne(sql);
     }
+
+    /**
+     * 查询购买
+     * @param currentPage
+     * @param pageSize
+     * @param lotterybInfoId 玩法Id
+     */
+    public ResultUtil lotterybBuyRecodeFind(Integer currentPage, Integer pageSize, Integer lotterybInfoId) {
+        LoginUser loginUser = getLoginUser();
+        LotterybIssue lotterybIssue = lotterybIssueService.getLotterybIssue(lotterybInfoId);
+        String sql = " select lb_.total,lc_.type,lc_.lines, " +
+                " (select group_concat(lc1_.en_title) from lotteryb_config lc1_ where lc1_.id in (lb_.lotteryb_config_ids) " +
+                " GROUP BY lc1_.type) as enTitle, " +
+                " (select group_concat(lc1_.zh_title) from lotteryb_config lc1_ where lc1_.id in (lb_.lotteryb_config_ids) " +
+                " GROUP BY lc1_.type) as zhTitle ,lb_.create_time as createTime" +
+                " from lotteryb_buy lb_ " +
+                " left join lotteryb_config lc_ on (lc_.id = SUBSTRING_INDEX(lb_.lotteryb_config_ids,',',1)) " +
+                " where lb_.lotteryb_issue_id = '"+lotterybIssue.getId()+"' ";
+        if(loginUser != null){
+            sql += " and lb_.member_id = '" + loginUser.getId() + "'";
+        }
+        if(lotterybInfoId != null && lotterybInfoId > 0){
+            sql += " and lb_.lotteryb_info_id = " + lotterybInfoId + "";
+        }
+        sql += " order by createTime desc ";
+        if(currentPage != null && currentPage > 0 & pageSize != null && pageSize > 0){
+            currentPage = (currentPage - 1) * pageSize;
+            sql += " LIMIT " + currentPage + "," + pageSize;
+        }
+        List<Map<String,Object>> list = getSqlMapper().selectList(sql);
+        return ResultUtil.successJson(list);
+    }
 }

@@ -16,5 +16,5 @@ import java.util.Map;
  */
 public interface EsDlbaccountsMapper extends BaseMapper<EsDlbaccounts> {
 
-    public List<Map<String,Object>> findDlbRecordPagination(Integer currentPage, Integer pageSize, String memberId, String startTime, String endTime, String status);
+    public List<Map<String,Object>> findDlbRecordPagination(Integer currentPage, Integer pageSize, String memberId, String startTime, String endTime, String statuss);
 }

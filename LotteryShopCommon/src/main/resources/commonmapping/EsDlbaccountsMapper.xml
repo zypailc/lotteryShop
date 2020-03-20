@@ -30,10 +30,10 @@
 		<if test="memberId != null and memberId != '' ">
 			and ed_.member_id = #{memberId}
 		</if>
-		<if test="status != null and status != '' ">
-			in(ed_.status,#{status})
+		<if test="statuss != null and statuss != '' ">
+			AND ed_.status  in(#{statuss})
 		</if>
-		order by ed_.create_time desc
+		 ORDER BY ed_.create_time DESC
 		<if test="currentPage != null and currentPage != '' and pageSize != null and pageSize != '' ">
 			limit #{currentPage},#{pageSize}
 		</if>

@@ -73,6 +73,21 @@
 
 		function register(){
 			var  data_array = $("#reply_form").serializeArray();
+			var language = getLanguage();
+			//验证邮箱格式
+             var mail_reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
+             var email = $("#reply_form_email").val() || "";
+             //获取推广人员ID
+			 var generalizePersonId = getCookie("generalizePersonId") || "";
+			 data_array.push({"name":"generalizeMemberId","value":generalizePersonId});
+             if(!mail_reg.test(email)){
+				if(language == 'zh'){
+                	layer.msg("请输入正确的电子邮件地址 !");
+				}else{
+					layer.msg("Please enter the correct email address !");
+				}
+                 return;
+             }
 			var index = layer.load(3,{shade: [0.8, '#393D49']});
 			$.ajax({
 					type: "get",

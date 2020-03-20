@@ -51,4 +51,26 @@ public class LotteryBController extends LotteryBBaseController {
         }
         return lotterybBuyService.lsbBuyLottery(lotterybInfoId,issueNum,dataInfo,total);
     }
+
+    /**
+     * 查询个人购买记录
+     * @param currentPage
+     * @param pageSize
+     * @param lotterybInfoId 玩法Id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/lotterybBuyRecodeFind")
+    public ResultUtil lotterybBuyRecodeFind(Integer currentPage,Integer pageSize,Integer lotterybInfoId){
+        currentPage =  currentPage == null ? 1:currentPage;
+        pageSize = pageSize == null ? 20 : pageSize;
+        if(lotterybInfoId == null || "".equals(lotterybInfoId)){
+            String msg = "parameter error !";
+            if (super.isChineseLanguage()) {
+                msg = "參數錯誤!";
+            }
+        }
+        return lotterybBuyService.lotterybBuyRecodeFind(currentPage,pageSize,lotterybInfoId);
+    }
+
 }

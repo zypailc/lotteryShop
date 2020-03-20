@@ -39,6 +39,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatcher("/**").authorizeRequests()
                 // 对静态文件和登陆页面放行
                 .antMatchers("/authorization/**").permitAll()
+                .antMatchers("/druid/**").permitAll()
                 // 其他请求需要认证登陆
                 .anyRequest().authenticated()
                 .and().csrf().disable();

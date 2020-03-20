@@ -66,10 +66,10 @@ public class LotterybCommandLineRunner implements CommandLineRunner {
                 LotterybIssue lotterybIssueUp = lotterybIssueServiceIml.findUpLotteryaIssue(lotterybInfoId);
                 //开奖
                 lotterybStartService.lotteryBDraw(lotterybInfoId,lotterybIssueUp);
-                //提成发放
-                lotterybPmService.updateStatus(lotterybInfoId,lotterybIssueUp);
                 //中奖发放
                 lotterybWinningService.winning(lotterybInfoId,lotterybIssueUp);
+                //提成发放
+                lotterybPmService.updateStatus(lotterybInfoId,lotterybIssueUp);
                 //推广商数据存储
                 lotterybDiService.generalizeDividedInto(lotterybInfoId,lotterybIssueUp);
             }

@@ -69,12 +69,12 @@ public class MailService {
 
             //这个地方就是伪造邮件发件人的时候，from之后的字符串任意填，
             //填了之后，收到邮件的人，会看到以这个名字发送的邮件，但是他不能回复，因为这个是伪造的地址，无效的。
-            printWriter.println("from:" + "DIDU@DIDU.COM");
+            printWriter.println("from:" + "COLORBALL@COLORBALL.COM");
             //收件人，格式和抄送者一样
             printWriter.println("to:" + email);
             //这是抄送者，同收件人一样，可以设置多个，中间用,号分隔
             //比如：xxx@qq.com,xxxxxx@qq.com,xxxx@qq.com
-            printWriter.println("Cc:" + "DIDU");
+            printWriter.println("Cc:" + "COLORBALL");
 
             //设置邮件主题
             printWriter.println("subject:" + subject);

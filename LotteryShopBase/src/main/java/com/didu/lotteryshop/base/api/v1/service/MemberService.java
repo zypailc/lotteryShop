@@ -158,6 +158,7 @@ public class MemberService extends BaseBaseService {
         LoginUser loginUser = getLoginUser();
         Wrapper wrapper = new EntityWrapper();
         wrapper.eq("generalize_member_id",loginUser.getId());
+        wrapper.orderBy("create_time",false);
         List<Map<String,Object>> list = memberServiceImp.selectMaps(wrapper);
         return  list;
     }
@@ -182,7 +183,7 @@ public class MemberService extends BaseBaseService {
         //随机生成一个秘钥jsonObjectjsonObject
         String secretKey = Constants.KEY_TOW;
         //随机生成随机密码
-        String password = "1";//CodeUtil.getCode(18);
+        String password = CodeUtil.getCode(6);
         try {
             //秘钥和密码加密生成暗文
             String ciphertext = AesEncryptUtil.encrypt_code(password,secretKey);
@@ -368,20 +369,25 @@ public class MemberService extends BaseBaseService {
         if(winning != null && !"".equals(winning) && !"-1".equals(winning)){
             sql += " and lb_.is_luck = '" + winning + "'";
         }*/
-        String sql = "(select 4 as lotteryType , li_.issue_num as issueNum, DATE_FORMAT(li_.start_time,'%Y-%m-%d %H:%i:%s') as startTime,"+
+        String sql = "select t_.* from (" +
+                "(select 4 as lotteryType , li_.issue_num as issueNum, DATE_FORMAT(li_.start_time,'%Y-%m-%d %H:%i:%s') as startTime,"+
         " DATE_FORMAT(li_.end_time,'%Y-%m-%d %H:%i:%s') as endTime,"+
-        " li_.luck_num as luckNum,lb_.luck_num as selfLuckNum ,lb_.luck_total as luckTotal,lb_.is_luck as isLuck,lb_.create_time as createTime"+
+        " li_.luck_num as luckNum,lb_.luck_num as selfLuckNum ,lb_.luck_total as luckTotal,lb_.is_luck as isLuck,lb_.create_time as createTime" +
+                " , '' as type,'' as enTitle,'' as zhTitle"+
         " from lotterya_buy lb_"+
         " left join lotterya_issue li_ on (lb_.lotterya_issue_id = li_.id)"+
         " where lb_.member_id = '"+loginUser.getId()+"')"+
         " UNION all"+
         " (select lbb_.lotteryb_info_id as lotteryType,lbi_.issue_num as issueNum,"+
         " DATE_FORMAT(lbi_.start_time,'%Y-%m-%d %H:%i:%s') as startTime, DATE_FORMAT(lbi_.end_time,'%Y-%m-%d %H:%i:%s') as endTime,"+
-        " lbi_.luck_num as luckNum,lbc_.type as selfLuckNum,lbb_.luck_total as luckTotal,lbb_.is_luck as isLuck,lbb_.create_time as createTime"+
+        " lbi_.luck_num as luckNum,lbc_.type as selfLuckNum,lbb_.luck_total as luckTotal,lbb_.is_luck as isLuck,lbb_.create_time as createTime " +
+                " ,lbc_.type as type," +
+                "(select group_concat(lc1_.en_title) from lotteryb_config lc1_ where lc1_.id in (lbb_.lotteryb_config_ids)  GROUP BY lc1_.type) as enTitle, " +
+                "(select group_concat(lc1_.zh_title) from lotteryb_config lc1_ where lc1_.id in (lbb_.lotteryb_config_ids)  GROUP BY lc1_.type) as zhTitle "+
         " from lotteryb_buy lbb_"+
         " left join  lotteryb_issue lbi_ on (lbb_.lotteryb_issue_id = lbi_.id)"+
         " right join lotteryb_config lbc_ on (lbc_.id = SUBSTRING_INDEX(lbb_.lotteryb_config_ids,',',1))"+
-        " where lbb_.member_id = '"+loginUser.getId()+"') ";
+        " where lbb_.member_id = '"+loginUser.getId()+"') ) t_ where 1 = 1 ";
         if (startTime != null && !"".equals(startTime)) {
             sql += " and DATE_FORMAT(createTime,'%Y-%m-%d') >= '"+startTime+"'";
         }
@@ -487,7 +493,7 @@ public class MemberService extends BaseBaseService {
         if(loginUser == null){
             return null;
         }
-        String sql = " select " +
+        String sql = "select SUM(t_.gTotal) as gTotal,SUM(t_.zTotal) as zTotal,t_.`level`,t_.dic_type  from ( ( select " +
                 " SUM(case when ed_.dic_type = 1 then lpd_.total else 0 end) gTotal," +
                 " SUM(case when ed_.dic_type = 2 then lpd_.total else 0 end) zTotal, " +
                 " lpd_.level,ed_.dic_type " +
@@ -502,7 +508,28 @@ public class MemberService extends BaseBaseService {
             sql += " and DATE_FORMAT(ed_.create_time,'%Y-%m-%d %T') <= '"+endTime+"' ";
         }
         sql +=" GROUP BY ed_.dic_type,lpd_.level " +
-        " order by lpd_.level";
+        " order by lpd_.level )";
+
+        sql += " union all ";
+
+        sql += "( select " +
+                " SUM(case when ed_.dic_type = 1 then lpd_.total else 0 end) gTotal," +
+                " SUM(case when ed_.dic_type = 2 then lpd_.total else 0 end) zTotal, " +
+                " lpd_.level,ed_.dic_type " +
+                " from es_dlbaccounts ed_ " +
+                " left join lotteryb_pm lp_ on (ed_.oper_id = lp_.id) " +
+                " left join lotteryb_pm_detail lpd_ on (lp_.id = lpd_.lotteryb_pm_id) " +
+                " where ed_.member_id = '"+loginUser.getId()+"'  and ed_.type = '1'  and ed_.status = '1' and ed_.oper_id <> '-1' and ed_.dic_type in (1,2) " ;
+        if(startTime != null && !"".equals(startTime)){
+            sql += " and DATE_FORMAT(ed_.create_time,'%Y-%m-%d %T') >= '"+startTime+"' ";
+        }
+        if(endTime != null && !"".equals(endTime)){
+            sql += " and DATE_FORMAT(ed_.create_time,'%Y-%m-%d %T') <= '"+endTime+"' ";
+        }
+        sql +=" GROUP BY ed_.dic_type,lpd_.level " +
+                " order by lpd_.level ) )";
+        sql += " t_ GROUP BY  t_.level,t_.dic_type";
+
         List<Map<String,Object>> list = getSqlMapper().selectList(sql);
 
         sql = " select sum(1) as personNum,em_.generalize_member_level " +

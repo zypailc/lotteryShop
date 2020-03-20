@@ -151,9 +151,9 @@ include("../../common/common.js.html"){}
                 <select class="select_search">
                     <option value="-1" data-localize="base.allTypes">All types</option>
                     <option value="4">A</option>
-                    <option value="1" data-localize="b1"></option>
-                    <option value="2" data-localize="b2"></option>
-                    <option value="3" data-localize="b3"></option>
+                    <option value="1" data-localize="base.b1"></option>
+                    <option value="2" data-localize="base.b2"></option>
+                    <option value="3" data-localize="base.b3"></option>
                 </select>
                 <select class="select_search lotteryWinningSelect">
                     <option value="-1" data-localize="base.all">All</option>
@@ -182,9 +182,10 @@ include("../../common/common.js.html"){}
                     <div>
                         <p><span class="lotteryType lottery_span_right">Lottery type</span><span class="lotteryIssue"></span></p>
                         <p>
-                            <span>幸运号 : </span><span class="lottery_span_right selfLuckNum"></span>
-                            <span>开奖号 : </span><span class="lottery_span_right luckNum"></span>
-                            <span>幸运金 : </span><span class="luckTotal"></span>
+                            <span class="luckNumStr" data-localize="base.luckNum">luckNum : </span><span class="lottery_span_right selfLuckNum"></span>
+                            <span class="winningNumStr" data-localize="base.winningNum">winningNum : </span><span class="lottery_span_right luckNum"></span>
+                            <span class="luckAmountStr" data-localize="base.luckAmount">luckAmount : </span><span class="luckTotal"></span>
+                            <span class="isLuckRecode"></span>
                         </p>
                         <p><span class="startTime">00:00:00 00:00:00</span> ~ <span class="endTime">00:00:00 00:00:00</span></p>
                     </div>

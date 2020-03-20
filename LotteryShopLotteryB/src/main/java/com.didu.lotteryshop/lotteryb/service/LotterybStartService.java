@@ -8,6 +8,7 @@ import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybInfoServiceImpl;
 import com.didu.lotteryshop.lotteryb.service.form.impl.LotterybIssueServiceImpl;
 import jnr.ffi.annotations.In;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.retry.backoff.Sleeper;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -60,11 +61,14 @@ public class LotterybStartService extends LotteryBBaseService {
         //查询购买本期的总金额
         BigDecimal buyAllTotal =  lotterybBuyServiceIml.findBuyStatistics(lotterybIssue.getId());
         LotterybStatistics lotterybStatistics = null;
+        LotterybStatistics lotterybStatistics1 = null;
         if(buyAllTotal.compareTo(BigDecimal.ZERO) == 1){
             BigDecimal proportion = BigDecimal.ZERO;
             BigDecimal differenceValue  = BigDecimal.ZERO;
+            Integer zore = 0;
             for(LotterybStatistics statistics : list){
-                /*BigDecimal z = statistics.getAmount().divide(buyAllTotal,4,BigDecimal.ROUND_DOWN);//中奖赔付比例
+
+                BigDecimal z = statistics.getAmount().divide(buyAllTotal,4,BigDecimal.ROUND_DOWN);//中奖赔付比例
                 BigDecimal p = new BigDecimal(lotterybProportion.getProportion()).divide(new BigDecimal(100));
                 if(z.compareTo(p) == -1){
                     differenceValue = p.multiply(z);
@@ -74,10 +78,18 @@ public class LotterybStartService extends LotteryBBaseService {
                 if(proportion.compareTo(BigDecimal.ZERO) != 0 && differenceValue.compareTo(proportion) ==  -1){
                     proportion = differenceValue;
                     lotterybStatistics = statistics;
-                }*/
+                }
                 if(statistics.getAmount().compareTo(BigDecimal.ZERO) == 1){
                     lotterybStatistics = statistics;
+
                 }
+                if(statistics.getAmount().compareTo(BigDecimal.ZERO) == 0){
+                    zore = zore + 1;
+                    lotterybStatistics1 =statistics;
+                }
+            }
+            if(zore < 56){//开所有的号码都会有用户中奖 就用上面的算法 否则就开不中奖的那个
+                lotterybStatistics = lotterybStatistics1;
             }
         }
         if(lotterybStatistics == null){

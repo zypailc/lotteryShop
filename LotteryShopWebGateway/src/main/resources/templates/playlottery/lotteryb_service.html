@@ -114,7 +114,6 @@
         }
         .service_item_content_btn{
             float: left;
-            margin-bottom: 100px;
             width: 100%;
             background: #f1f1f1;
             margin-top: 3px;
@@ -153,15 +152,43 @@
             border-radius: 2px;
             background: #EDEDED;
         }
+        .service_item_content_buyList_ul{
+            padding: 5px;
+            min-height: 100px;
+            max-height: 190px;
+            overflow: auto;
+        }
         .service_item_content_buyList_ul_li{
             text-align: left;
             margin-left: 3px;
             border-bottom: solid 1px white;
             color: #9f88be;
         }
-        .service_item_content_buyList_ul_li_end{
+        .service_item_content_recode_ul::-webkit-scrollbar {/*滚动条整体样式*/
+            width: 2px;     /*高宽分别对应横竖滚动条的尺寸*/
+            height: 1px;
+        }
+        .service_item_content_recode_ul::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 2px;
+            -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+            background: #dddddd;
+        }
+        .service_item_content_recode_ul::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+            border-radius: 2px;
+            background: #EDEDED;
+        }
+        .service_item_content_recode_ul{
+            padding: 5px;
+            min-height: 100px;
+            max-height: 190px;
+            overflow: auto;
+        }
+        .service_item_content_recode_ul_li{
             text-align: left;
             margin-left: 3px;
+            border-bottom: solid 1px white;
+            color: #9f88be;
         }
         .span_right{
             margin-right: 30px;
@@ -356,6 +383,13 @@
             margin-left: 20px;
             margin-right: 20px;
         }
+        .service_item_content_recode_list{
+            float: left;
+            width: 100%;
+            margin-top: 3px;
+            margin-bottom: 100px;
+            background: #f1f1f1;
+        }
     </style>
 </head>
 <!-- commonality js -->
@@ -367,6 +401,9 @@ include("../common/common.js.html"){}
     var type_4 = new Array(1,4,10,20);
     var type_8 = new Array(1,3,6,10,15);
     var whetherLogin = '${whetherLogin}';
+    window.onload = function(){
+        lotterybBuyRecodeFind("service_item_content_recode_list",true);
+    }
     $(function(){
         var language = getLanguage();
         var lotterybInfoId = '${playTypeId!""}';
@@ -378,7 +415,6 @@ include("../common/common.js.html"){}
         initConfig(language,1);
         findLotteryIssue("the_lottery_record_id",true);
         findRule();
-        //countDown();
         $(".lotteryPlay_li").click();
 
         $("#subbutton_confirm").click(function(){
@@ -394,6 +430,15 @@ include("../common/common.js.html"){}
                 scrollTop =$(this).scrollTop();
             if(scrollTop/(contentH -viewH) >= 0.95){
                 findLotteryIssue("the_lottery_record_id",false);
+            }
+        });
+        $(".service_item_content_recode_list").scroll(function(){
+            var $this =$(this),
+                viewH =$(this).height(),
+                contentH =$(this).get(0).scrollHeight,
+                scrollTop =$(this).scrollTop();
+            if(scrollTop/(contentH -viewH) >= 0.95){
+                lotterybBuyRecodeFind("service_item_content_recode_list",false);
             }
         });
         $(".back").click(function(){
@@ -413,18 +458,22 @@ include("../common/common.js.html"){}
                     $(".last_number_of_periods").html(dataInfo.issueNum);
                     var luckNum = dataInfo.luckNum;
                     if(luckNum){
+                        $(".lottery_service_lottery_num").show();
+                        $(".lottery_service_lottery_animation").hide();
                         var num = luckNum.split(",");
                         var ul = $(".lottery_service_lottery_num");
                         ul.empty();
                         $.each(num,function(index,data){
                             ul.append("<li class='announcedNo"+num[index]+"'></li>");
                         })
+                    }else {
+                        initInfoUp(lotterybInfoId);
                     }
                 }
             }
         });
     }
-
+    var setIntervalId;
     function initInfo(lotterybInfoId,language,flag){
         $.ajax({
             url:'${projectPath}/apiauthorization/lotteryB/authorization/v1/findLotterybInfo',
@@ -432,6 +481,8 @@ include("../common/common.js.html"){}
             data:{"lotterybInfoId":lotterybInfoId},
             dataType:"json",
             success:function (result) {
+                initInfoUp(lotterybInfoId);
+                lotterybBuyRecodeFind("service_item_content_recode_list",true);
                 var dataInfo = result.extend.data;
                 if(language == 'en'){
                     $(".lottery_title").html(dataInfo.enTitle);
@@ -442,14 +493,20 @@ include("../common/common.js.html"){}
                 $(".lottery_service_time").attr("nowTime",dataInfo.newDate);
                 $(".lottery_service_time").attr("startTime",dataInfo.startDate);
                 $(".lottery_service_time").attr("endTime",dataInfo.endDate);
-                $(".lottery_service_time").attr("periodDate",dataInfo.periodDate);
-                countDown();
+                var stopTime= new Date($(".lottery_service_time").attr("endTime"));
+                var today= new Date($(".lottery_service_time").attr("nowTime"));
+                var seconds = parseInt((stopTime.getTime() - today.getTime())/1000);
+                clearInterval(setIntervalId);
+                setIntervalId =  setInterval(function(){
+                                                        countDown(seconds);
+                                                        seconds = seconds - 1;
+                                                        $(".now_number_of_periods").html(dataInfo.issueNum);
+                                                    },1000);
                 if(flag == 'true'){
                     if(dataInfo.issueNum != $(".now_number_of_periods").html().replace(/\s+/g,"")){
                         $(".last_number_of_periods").html($(".now_number_of_periods").html());
                     }
                 }
-                $(".now_number_of_periods").html(dataInfo.issueNum);
             }
         });
     }
@@ -934,55 +991,19 @@ include("../common/common.js.html"){}
     }
 
     function countDown(seconds){
-        console.log("seconds:"+seconds);
-        if(!seconds){
-            //var startTime = new Date($(".lottery_service_time").attr("startTime"));
-            var stopTime=$(".lottery_service_time").attr("endTime");
-            var today=$(".lottery_service_time").attr("nowTime");
-            stopTime = stopTime.replace(/-/g,':').replace(' ',':'); // 注意，第二个replace里，是' '，中间有个空格，千万不能遗漏
-            stopTime = stopTime.split(':');
-            stopTime = new Date(stopTime[0],(stopTime[1]-1),stopTime[2],stopTime[3],stopTime[4],stopTime[5]);
-            today = today.replace(/-/g,':').replace(' ',':'); // 注意，第二个replace里，是' '，中间有个空格，千万不能遗漏
-            today = today.split(':');
-            today = new Date(today[0],(today[1]-1),today[2],today[3],today[4],today[5]);
-            seconds = (((stopTime.getDay()-today.getDay())*24*60*60)+((stopTime.getHours()-today.getHours())*60*60)+((stopTime.getMinutes()-today.getMinutes())*60)+
-                (stopTime.getSeconds() - today.getSeconds())) || 0;
-        }
-        if(seconds< 10){
-            return;
-        }
         var language = getLanguage();
         var lotterybInfoId = '${playTypeId!""}';
-        if(seconds > 0){//start period
-            //var stopH=stopTime.getHours(),stopM=stopTime.getMinutes(),stopS=stopTime.getSeconds();
-            /*var shenyu=stopTime.getTime()-today.getTime(),
-                shengyuD=parseInt(shenyu/(60*60*24*1000)),
-                D=parseInt(shenyu)-parseInt(shengyuD*60*60*24*1000),
-                shengyuH=parseInt(D/(60*60*1000)),
-                H=D-shengyuH*60*60*1000,
-                shengyuM=parseInt(H/(60*1000)),
-                M=H-shengyuM*60*1000;
-            var shengyus = parseInt((shenyu-shengyuD*60*60*24*1000-shengyuH*60*60*1000-shengyuM*60*1000)/1000)*/
-            //var shengyuH = seconds / 24 /
-
-            //$(".time_hour").html(PrefixInteger(shengyuH,2)+":"+PrefixInteger(shengyuM,2)+":"+PrefixInteger(shengyus,2));
+        if(seconds >= 0){//start period
+            $(".time_hour").html("00"+":"+PrefixInteger(parseInt(seconds/60),2)+":"+PrefixInteger(seconds%60,2));
         }
-        if(seconds > 3 && seconds < 5){
-            initInfoUp(lotterybInfoId);
-        }
-        if(seconds <= 3){
+        if(seconds <= 0){
            $(".lottery_service_lottery_animation").show();
             $(".lottery_service_lottery_num").hide();
-        }else {
-            $(".lottery_service_lottery_num").show();
-            $(".lottery_service_lottery_animation").hide();
         }
         var periodDate = $(".lottery_service_time").attr("periodDate") || 0;
-        if(seconds < 0){
+        if(seconds <= 0){
             initInfo(lotterybInfoId,language,'true');
         }
-
-        setTimeout(countDown(seconds-1),10000);
     }
 
     function paymentCodeConfirm(){
@@ -1015,8 +1036,8 @@ include("../common/common.js.html"){}
                if(result.code == 500){
                    layui_open(result.msg);
                }else if(result.code == 200){
+                   lotterybBuyRecodeFind("service_item_content_recode_list",true);
                    layer.msg(result.msg);
-                   //clean data
                    $(".service_item_content_buyList_ul ").find("li").each(function(index,data){
                         var type = $(data).attr("type");
                         if(type != "-1"){
@@ -1225,6 +1246,72 @@ include("../common/common.js.html"){}
         findLotteryIssue("the_lottery_record_id",true);
     }
 
+    function lotterybBuyRecodeFind(dataClass,flag){
+        var dataObj = $("."+dataClass);
+        var lotterybInfoId = '${playTypeId!""}';
+        var currentPage = dataObj.attr("currentPage") || 1;
+        var pageSize = dataObj.attr("pageSize") || 20;
+        var isFind = dataObj.attr("isFind") || "true";
+        var isRepetition = dataObj.attr("isRepetition") || "true";
+        var ul = dataObj.find("ul:first");
+        var li = ul.find("li:first-child");
+        var serviceItem = $(".service_item_content_type_value");
+        var languageType = getLanguage();
+        if(languageType != 'zh'){
+            languageType = 'en';
+        }
+        if(flag){
+            currentPage = dataObj.attr("currentPage",1);
+            pageSize = dataObj.attr("pageSize",20);
+            currentPage = 1;
+            pageSize = 20;
+            ul.html("");
+        }
+        if(isRepetition == 'true'){
+            dataObj.attr("isRepetition",'false');
+            $.ajax({
+                url: '${projectPath}/api/lotteryB/v1/lotteryB/lotterybBuyRecodeFind',
+                type: 'get',
+                data: {"currentPage": currentPage, "pageSize": pageSize, "lotterybInfoId": lotterybInfoId},
+                dataType: "json",
+                success: function (result) {
+                    var dataInfo = result.extend.data;
+                    isFind = dataObj.attr("isFind") || 'true';
+                    if (isFind == 'true') {
+                        if (dataInfo.length < pageSize) {
+                            dataObj.attr("isFind", 'false')
+                        }
+                        $.each(dataInfo, function (index, data) {
+                            var new_li;
+                            if (flag && index == 0) {
+                                new_li = li.clone();
+                            } else {
+                                new_li = dataObj.find("ul").find("li:first-child").clone();
+                            }
+                            var typeValue = serviceItem.find("option[value=\""+data.type+"\"]").html();
+                            if(languageType == 'zh'){
+                                new_li.find(".type_name").html("["+typeValue+"]"+data.zhTitle);
+                            }else {
+                                new_li.find(".type_name").html("["+typeValue+"]"+data.enTitle);
+                            }
+                            new_li.find(".input_money").val(data.total);
+                            new_li.find(".compensate_value").html(new Decimal(data.total).mul(new Decimal(data.lines)).toNumber());
+                            new_li.show();
+                            ul.append(new_li);
+                        })
+                        dataObj.attr("isRepetition",'true');
+                        dataObj.attr("currentPage", parseInt(currentPage) + 1);
+                        dataObj.attr("pageSize", pageSize);
+                        if (dataInfo.length < pageSize) {
+                            ul.append("<li class='li_eth_come' style='text-align: center;' dataTag='noMore'>No More</li>")
+                        }
+                    }
+                }
+            })
+        }
+
+    }
+
 </script>
 <body class="body_top" data-spy="scroll" data-target=".services_item_inner">
 
@@ -1353,6 +1440,18 @@ include("../common/common.js.html"){}
                     <div class="model_purchase_button model_purchase_button_1">
                         <div class="button_purchase button_width_all" disabled="disabled" id="button_purchase"><span data-localize="base.confirm">confirm</span></div>
                     </div>
+                </div>
+                <div class="service_item_content_recode_list">
+                    <ul class="service_item_content_recode_ul ">
+                        <li class="service_item_content_recode_ul_li" style="display: none">
+                            <div class="li_item type_name">[sum value]</div>
+                            <div class="li_item type_other">
+                                <div class="li_item_block type_num"><span data-localize="base.number">[Number]</span> <span class="num_value">1</span> </div>
+                                <div class="li_item_block type_money"><span data-localize="base.buy">[Buy]</span><input class="input_money" readonly="readonly" onchange="calculateMoney(this)" type="number" value="0"></div>
+                                <div class="li_item_block type_compensate"><span data-localize="base.compensate">[Compensate]</span><span class="color_red compensate_value"> 0 </span></div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
                 <input id="availableBalance" type="hidden">
             </div>

@@ -103,14 +103,17 @@
     "twoOnTheSameSignText": "Select 1 pair of the same number and 1 different number betting, select the same number and prize number, namely winning.Bonus odds 63.72 times.",
     "theTwoDifferentText": "Choose 2 or more Numbers from 1-6, the number selected is the same as any 2 Numbers of the drawing number, namely the winning number.Bonus odds of 6.37.",
     "change": "change",
-    "luckNum": "Luck num",
-    "winningNum": "Winning num",
-    "luckAmount": "Luck amount",
+    "luckNum": "[Luck num]",
+    "winningNum": "[Winning num]",
+    "luckAmount": "[Luck amount]",
     "cancel": "cancel",
     "all": "All",
     "losingLottery": "Losing lottery",
     "b1": "GUESS-B1",
     "b2": "GUESS-B2",
-    "b3": "GUESS-B3"
+    "b3": "GUESS-B3",
+    "pendingCurrencySettlementRules": "Pending currency settlement rules",
+    "promoterSettlementRules": "Promoter settlement rules",
+    "poundage": "poundage"
   }
 }

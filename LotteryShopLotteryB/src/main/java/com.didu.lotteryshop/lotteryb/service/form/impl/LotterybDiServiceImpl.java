@@ -84,6 +84,7 @@ public class LotterybDiServiceImpl extends ServiceImpl<LotterybDiMapper, Lottery
                     lotterybDi.setDiRatio(esGdethconfig.getDiRatio());
                     lotterybDi.setDiTotal(diTotalAll);
                     lotterybDi.setCreateTime(new Date());
+                    lotterybDi.setStatus(1);
                     lotterybDi.setStatusTime(new Date());
                     bool =  super.insert(lotterybDi);
                 }

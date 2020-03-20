@@ -316,7 +316,9 @@
 	$(function(){
 		//Store the promoter's Id, which is stored in the session for 24 hours
 		var generalizePersonId = "${generalizePersonId!''}";
-		setCookie("generalizePersonId",generalizePersonId,24);
+		if(generalizePersonId){
+			setCookie("generalizePersonId",generalizePersonId,24);
+		}
 		var languageType = getLanguage();
 		if(languageType != 'zh'){
 			languageType = 'en'

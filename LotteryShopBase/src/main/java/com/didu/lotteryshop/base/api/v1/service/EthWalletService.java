@@ -4,11 +4,15 @@ import com.didu.lotteryshop.base.service.BaseBaseService;
 import com.didu.lotteryshop.common.entity.EsEthaccounts;
 import com.didu.lotteryshop.common.entity.EsEthwallet;
 import com.didu.lotteryshop.common.entity.LoginUser;
+import com.didu.lotteryshop.common.entity.SysConfig;
 import com.didu.lotteryshop.common.service.form.impl.EsDlbaccountsServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsEthaccountsServiceImpl;
 import com.didu.lotteryshop.common.service.form.impl.EsEthwalletServiceImpl;
+import com.didu.lotteryshop.common.service.form.impl.SysConfigServiceImpl;
 import com.didu.lotteryshop.common.utils.BigDecimalUtil;
+import com.didu.lotteryshop.common.utils.ObjectToMapUtil;
 import com.didu.lotteryshop.common.utils.ResultUtil;
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
@@ -31,6 +35,8 @@ public class EthWalletService extends BaseBaseService {
     private OAuth2RestTemplate oAuth2RestTemplate;
     @Autowired
     private EsEthaccountsServiceImpl esEthaccountsService;
+    @Autowired
+    private SysConfigServiceImpl sysConfigService;
 
     /**
      * 查询eth钱包
@@ -79,8 +85,15 @@ public class EthWalletService extends BaseBaseService {
            esEthwallet.setBalance(BigDecimalUtil.bigDecimalToPrecision(esEthwallet.getBalance()));
            esEthwallet.setFreeze(BigDecimalUtil.bigDecimalToPrecision(esEthwallet.getFreeze()));
        }
-
-       return ResultUtil.successJson(esEthwallet) ;
+        Map<String,Object> map = new HashMap<>();
+       try {
+           map = ObjectToMapUtil.objectToMap(esEthwallet);
+       }catch (Exception e){
+           e.printStackTrace();
+       }
+       SysConfig sysConfig = sysConfigService.getSysConfig();
+       map.put("ethRatio",sysConfig.getWithdrawRatio().multiply(new BigDecimal(100)));
+       return ResultUtil.successJson(map) ;
    }
 
     /**

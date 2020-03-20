@@ -103,14 +103,17 @@
     "twoOnTheSameSignText": "选择1对相同号码和1个不同号码投注，选号与奖号相同，即为中奖。奖金赔率63.72倍。",
     "theTwoDifferentText": "从1-6中任选2个或多个号码，所选号码与开奖号码任意2个号码相同，即为中奖。奖金赔率6.37倍。",
     "change": "更改",
-    "luckNum": "幸运号",
-    "winningNum": "中奖号",
-    "luckAmount": "幸运金",
+    "luckNum": "[幸运号]",
+    "winningNum": "[中奖号]",
+    "luckAmount": "[幸运金]",
     "cancel": "取消",
     "all": "全部",
     "losingLottery": "未中奖",
     "b1": "竞猜-B1",
     "b2": "竞猜-B2",
-    "b3": "竞猜-B3"
+    "b3": "竞猜-B3",
+    "pendingCurrencySettlementRules": "待领币结算规则",
+    "promoterSettlementRules": "推广商结算规则",
+    "poundage": "手续费"
   }
 }

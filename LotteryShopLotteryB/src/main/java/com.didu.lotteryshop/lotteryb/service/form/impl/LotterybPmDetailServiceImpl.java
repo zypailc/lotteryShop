@@ -102,7 +102,6 @@ public class LotterybPmDetailServiceImpl extends ServiceImpl<LotterybPmDetailMap
         BigDecimal totalDlb = lotterybBuy.getLuckTotal();
         //中奖提成 10%
         totalDlb = totalDlb.divide(new BigDecimal("100")).multiply(lotterybInfo.getWinningPm());
-        //转换为平台币
         if(LotterybInfoPcList != null && LotterybInfoPcList.size() > 0){
             for(LotterybInfoPc laipc:LotterybInfoPcList){
                 String upMemberId  = memberService.findLevelMemberId(lotterybBuy.getMemberId(),laipc.getLevel());
@@ -110,6 +109,7 @@ public class LotterybPmDetailServiceImpl extends ServiceImpl<LotterybPmDetailMap
                 BigDecimal total = (totalDlb.divide(new BigDecimal("100")).multiply(laipc.getRatio())).setScale(4,BigDecimal.ROUND_DOWN);
                 bool = this.addWinning(upMemberId,lotterybBuy.getLotterybIssueId(),lotterybBuy.getLotterybInfoId(),lotterybBuy.getId(),total,laipc.getLevel(),laipc.getRatio());
                 if(!bool) return bool;
+
             }
         }
         return bool;

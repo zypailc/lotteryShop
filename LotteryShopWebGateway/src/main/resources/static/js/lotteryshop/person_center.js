@@ -1,3 +1,5 @@
+var enTitle = new Array("Sum value","Three same number through selection","Three with a single","Three different no","Three companies through selection","Two identical check","Two on the same sign","The two different");
+var zhTitle = new Array("和值","三同号通选","三同号单选","三不同号","三连号通选","二同号复选","二同号单选","二不同号");
 $(function(){
     $(".search_lottery_record").click(function(){
         findLotteryRecord(true,"lottery_record");
@@ -5,6 +7,37 @@ $(function(){
     $(".search_lottery_record_phone").click(function(){
         findLotteryRecord(true,"lottery_record_phone");
     });
+    var languageType = getLanguage();
+    if(languageType == 'zh'){
+        $(".rules_particulars_div_zh").show();
+        $(".rules_particulars_div_en").hide();
+    }else {
+        $(".rules_particulars_div_zh").hide();
+        $(".rules_particulars_div_en").show();
+    }
+
+    $(".pm_rule_open_layer").click(function () {
+        var content = $(this).attr("content");
+        var title = $(this).find(".card-title").find("a").html();
+        layer.open({
+            type: 1,
+            title: false,
+            shadeClose: true,
+            area:["40%","auto"],
+            content:$(".wallet_rule_div").html()
+        });
+    })
+    $(".di_rule_open_layer").click(function () {
+        var content = $(this).attr("content");
+        var title = $(this).find(".card-title").find("a").html();
+        layer.open({
+            type: 1,
+            title: false,
+            shadeClose: true,
+            area:["40%","auto"],
+            content:$(".di_rule").html()
+        });
+    })
 
 })
 // head portrait layer
@@ -164,6 +197,7 @@ function gengeralizeMemberInit(flag,classProperty){
     var li = $("."+classProperty).find("ul").find("li:first-child");
     if(flag){
         ul.html("");
+        ul.append(li);
         gengeralizeMember.attr("currentPage","1");
         gengeralizeMember.attr("isFind","true");
         isFind = "true";
@@ -190,6 +224,8 @@ function gengeralizeMemberInit(flag,classProperty){
                         }
                         new_li.find(".generalizePersonalRecordNikeName").html(data.memberName);
                         new_li.find(".generalizePersonalRecordEmail").html(data.email);
+                        new_li.find(".generalizePersonalRecordCreate").html(data.createTime);
+                        new_li.show();
                         ul.append(new_li);
                     })
                     gengeralizeMember.attr("isRepetition",'true');
@@ -218,9 +254,19 @@ function findETHWallet(classProperty,url){
                 if(classProperty == 'walletETH'){
                     ethHead = $(".eth_record");
                     walletdetail = $(".wallet_address_self_eth_withdrawCash");
+                    console.log(walletdetail.find(".ethRatio").parent().html());
+                    console.log(dataInfo);
+                    console.log(dataInfo.ethRatio);
+                    walletdetail.find(".ethRatio").html(dataInfo.ethRatio);
                 }
                 if(classProperty == 'walletPutMoney'){
                     ethHead = $(".dlb_record");
+                    var rule = $(".wallet_rule");
+                    rule.find(".day_pm").html(dataInfo.day);
+                    rule.find(".day_pm_1").html(dataInfo.day1);
+                    rule.find(".eth_pm").html(dataInfo.eth);
+                    rule.find(".level_pm").html(dataInfo.level);
+                    rule.find(".list_pm").html(dataInfo.list);
                 }
                 if(classProperty == 'walletFLAT'){
                     ethHead = $(".lsb_record");
@@ -228,6 +274,10 @@ function findETHWallet(classProperty,url){
                 }
                 if(classProperty == 'walletGdEth'){
                     ethHead = $(".gdEth_record");
+                    var rule = $(".di_rule");
+                    rule.find(".day1_di").html(dataInfo.day1);
+                    rule.find(".eth_di").html(dataInfo.eth);
+                    rule.find(".list_di").html(dataInfo.list);
                 }
                 ethHead.find(".wallet_span_total").find("input").val(dataInfo.total);
                 ethHead.find(".wallet_span_total").attr("dataValue",dataInfo.total);
@@ -262,6 +312,7 @@ function findWalletRecord(flag,classProperty,url){
     }
     if(flag){
         ul.html("");
+        ul.append(li);
         walletETH.attr("currentPage","1")
         walletETH.attr("isFind","true");
         isFind = "true";
@@ -272,7 +323,7 @@ function findWalletRecord(flag,classProperty,url){
         $.ajax({
             url: url,
             type: 'post',
-            data: {"currentPage": currentPage, "pageSize": pageSize, "start": '1,2'},
+            data: {"currentPage": currentPage, "pageSize": pageSize, "status": '1,2'},
             dataType: "json",
             success: function (result) {
                 var dataInfo = result.extend.data;
@@ -342,6 +393,7 @@ function findWalletRecord(flag,classProperty,url){
                         }else {
                             new_li.find(".ethGas").hide();
                         }
+                        new_li.show();
                         ul.append( new_li);
                     });
                     walletETH.attr("isRepetition","true");
@@ -374,6 +426,7 @@ function findLotteryRecord(flag,classProperty){
     var li = $("."+classProperty).find("ul").find("li:first-child");
     if(flag){
         ul.html("");
+        ul.append(li);
         walletETH.attr("currentPage","1")
         walletETH.attr("isFind","true");
         isFind = "true";
@@ -415,6 +468,12 @@ function findLotteryRecord(flag,classProperty){
                             if(data.lotteryType == '3'){
                                 new_li.find(".lotteryType").html("竞猜-B3")
                             }
+                            if(data.isLuck == '1'){
+                                new_li.find(".isLuckRecode").html("中奖");
+                            }else {
+                                new_li.find(".isLuckRecode").html("未中奖");
+                            }
+
                         }else {
                             if(data.lotteryType == '1'){
                                 new_li.find(".lotteryType").html("GUESS-B1")
@@ -425,10 +484,32 @@ function findLotteryRecord(flag,classProperty){
                             if(data.lotteryType == '3'){
                                 new_li.find(".lotteryType").html("GUESS-B3")
                             }
+                            if(data.isLuck == '1'){
+                                new_li.find(".isLuckRecode").html("Winning");
+                            }else {
+                                new_li.find(".isLuckRecode").html("No winning");
+                            }
+
+                        }
+                        if(data.type){
+                            if(languageType == 'zh'){
+                                new_li.find(".luckNumStr").html("["+zhTitle[data.type-1]+"]")
+                                new_li.find(".selfLuckNum").html(data.zhTitle);
+                            }else {
+                                new_li.find(".luckNumStr").html("["+zhTitle[data.type-1]+"]")
+                                new_li.find(".selfLuckNum").html(data.enTitle);
+                            }
+
+                        }else {
+                            if(languageType == 'zh'){
+                                new_li.find(".luckNumStr").html("[幸运号]")
+                            }else {
+                                new_li.find(".luckNumStr").html("[Luck num]")
+                            }
+                            new_li.find(".selfLuckNum").html(data.selfLuckNum);
                         }
 
                         new_li.find(".lotteryIssue").html("#"+data.issueNum);
-                        new_li.find(".selfLuckNum").html(data.selfLuckNum);
                         new_li.find(".luckNum").html(data.luckNum);
                         new_li.find(".luckTotal").html(data.luck_total || 0);
                         new_li.find(".startTime").html(data.startTime);
@@ -632,7 +713,6 @@ function paymentCodeConfirm(e){
 }
 
 function walletOperation(url,dataJson){
-    alert(1);
    var loadIndex =  layer.load();
     $.ajax({
         url:url,
@@ -774,6 +854,10 @@ function findGeneralizeStatistics() {
             var data = result.extend.data;
             var generalize = data.generalize;
             var generalizePerson = data.generalizePerson;
+            if(generalize.length == 0){
+                $(".generalize_statistics_ul").find(".ztotal").val(0);
+                $(".generalize_statistics_ul").find(".gtotal").val(0);
+            }
             $.each(generalize,function(index,info){
                 var obj = $(".generalize_statistics_"+(index+1));
                 obj.find(".ztotal").val(info.zTotal);

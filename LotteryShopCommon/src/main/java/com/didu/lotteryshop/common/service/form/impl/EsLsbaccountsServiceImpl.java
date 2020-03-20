@@ -44,6 +44,13 @@ public class EsLsbaccountsServiceImpl extends ServiceImpl<EsLsbaccountsMapper, E
      */
     public static String DIC_TYPE_GSA = "8";
 
+    /** 赢得B-1彩票*/
+    public static String DIC_TYPE_WINLOTTERYB_1 = "7";
+    /** 赢得B-1彩票*/
+    public static String DIC_TYPE_WINLOTTERYB_2 = "9";
+    /** 赢得B-1彩票*/
+    public static String DIC_TYPE_WINLOTTERYB_3 = "10";
+
     /** 类型：入账 */
     public static int TYPE_IN = 1;
     /** 类型：出账 */

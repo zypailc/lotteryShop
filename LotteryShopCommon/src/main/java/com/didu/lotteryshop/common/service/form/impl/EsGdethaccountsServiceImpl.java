@@ -358,6 +358,7 @@ public class EsGdethaccountsServiceImpl extends ServiceImpl<EsGdethaccountsMappe
         }
         wrapper.orderBy("create_time",false);*/
         Page<Map<String,Object>> pageEthRecord = new Page<Map<String, Object>>();
+        currentPage = (currentPage - 1) * pageSize;
         pageEthRecord.setRecords(gdethaccountsMapper.findGdethRecordPagination(currentPage,pageSize,memberId,startTime,endTime));
         return pageEthRecord;
     }

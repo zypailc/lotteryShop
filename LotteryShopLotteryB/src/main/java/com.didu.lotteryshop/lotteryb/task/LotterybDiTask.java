@@ -27,5 +27,4 @@ public class LotterybDiTask {
         logger.info("==============================☆☆ Start execution dividedSettleAccounts timing task! ☆☆==============================================");
     }
 
-
 }
