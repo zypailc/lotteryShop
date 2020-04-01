@@ -31,97 +31,9 @@
 	<!-- Home -->
 
 	<div class="home">
+		<canvas id="homecanvas"></canvas>
 		<div class="home_background_container prlx_parent">
-			<!--<div class="home_background prlx" style="background-image:url(../images/slider_background.jpg)"></div>-->
-			<div class="canvaszz"> </div>
-			<canvas id="canvas"></canvas>
-		</div>
-
-		<!-- Hero Slider -->
-		<div class="hero_slider_container">
-			<!-- Slider -->
-			<div class="owl-carousel owl-theme hero_slider slider_auto">
-				<!-- Slider Item -->
-				<div class="owl-item hero_slider_item item_1 d-flex flex-column align-items-center justify-content-center slider_auto_item">
-					<div class="services_item_inner " style="background-image: -webkit-gradient(linear,left bottom,left top,from(#725fd8),to(#513c9c));
-											background-image:linear-gradient(to top,#725fd8,#513c9c);border-radius:7px;">
-						<div class="service_item_content lottery_wrapper" >
-							<div class="lottery_content">
-								<p class="title" style="border-bottom:1px solid rgba(255,255,255,.3)">BLOCK 3 </p>
-								<p class="jackpot">Jackpot</p>
-								<p class="eth">50 ETH</p>
-								<!--<p class="usd">$7,450</p>-->
-							</div>
-							<div class="button service_item_button trans_200 lottery_btn1">
-								<a href="../web/authLotteryServices?playType=1"  class=" trans_200" data-localize="base.start">START</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Slider Item -->
-				<div class="owl-item hero_slider_item item_1 d-flex flex-column align-items-center justify-content-center">
-					<div class="services_item_inner " style="background-image: -webkit-gradient(linear,left bottom,left top,from(#ff8b2c),to(#ffa23f));
-    								background-image: linear-gradient(to top,#ff8b2c,#ffa23f);border-radius:7px;">
-						<div class="service_item_content lottery_wrapper"  >
-							<div class="lottery_content">
-								<p class="title" style="border-bottom:1px solid rgba(255,255,255,.3)">INSTANT PRIZE B-1</p>
-								<p class="jackpot">Instant</p>
-							</div>
-							<div class="button service_item_button trans_200 lottery_btn2">
-								<a href="../web/authLotterybServices?playTypeId=1&playType=2" class="lottery_btn trans_200" data-localize="base.start">START</a>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- Slider Item -->
-				<div class="owl-item hero_slider_item item_1 d-flex flex-column align-items-center justify-content-center slider_auto_item">
-					<div class="services_item_inner " style="background-image: -webkit-gradient(linear,left bottom,left top,from(#725fd8),to(#513c9c));
-											background-image:linear-gradient(to top,#725fd8,#513c9c);border-radius:7px;">
-						<div class="service_item_content lottery_wrapper" >
-							<div class="lottery_content">
-								<p class="title" style="border-bottom:1px solid rgba(255,255,255,.3)">INSTANT PRIZE B-2</p>
-								<p class="jackpot">Instant</p>
-							</div>
-							<div class="button service_item_button trans_200 lottery_btn1">
-								<a href="../web/authLotterybServices?playTypeId=2&playType=2"  class=" trans_200" data-localize="base.start">START</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Slider Item -->
-				<div class="owl-item hero_slider_item item_1 d-flex flex-column align-items-center justify-content-center">
-					<div class="services_item_inner " style="background-image: -webkit-gradient(linear,left bottom,left top,from(#ff8b2c),to(#ffa23f));
-    								background-image: linear-gradient(to top,#ff8b2c,#ffa23f);border-radius:7px;">
-						<div class="service_item_content lottery_wrapper"  >
-							<div class="lottery_content">
-								<p class="title" style="border-bottom:1px solid rgba(255,255,255,.3)">INSTANT PRIZE B-3</p>
-								<p class="jackpot">Instant</p>
-							</div>
-							<div class="button service_item_button trans_200 lottery_btn2">
-								<a href="../web/authLotterybServices?playTypeId=3&playType=2" class="lottery_btn trans_200" data-localize="base.start">START</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Slider Item -->
-				<div class="owl-item hero_slider_item item_1 d-flex flex-column align-items-center justify-content-center">
-					<div class="services_item_inner " style="background-image: -webkit-gradient(linear,left bottom,left top,from(#ddd),to(#ddd));
-    								background-image: linear-gradient(to top,#ddd,#ddd);border-radius:7px;">
-						<div class="service_item_content lottery_wrapper"  >
-							<div class="lottery_content">
-								<p class="title" data-localize="base.more" style="border-bottom:1px solid rgba(255,255,255,.3)">MORE</p>
-								<p class="jackpot" data-localize="base.toBeExpected">To be expected</p>
-							</div>
-						</div>
-						<div class="button service_item_button trans_200 lottery_btn2">
-							<a href="javascript:void(0);"   class=" trans_200" data-localize="base.more">MORE</a>
-						</div>
-					</div>
-				</div>
-			</div>
+			<img src="../images/bgpurper1.png" alt="" class="bgimg">
 		</div>
 	</div>
 
@@ -148,7 +60,7 @@
 			<div class="row">
 				<div class="col text-center">
 					<div class="section_title">
-						<h1 data-localize="base.modernFeatures">Modern features</h1>
+						<h1 data-localize="base.modernFeatures">Modern Features</h1>
 					</div>
 				</div>
 			</div>
@@ -260,9 +172,6 @@
 			</div>
 		</div>
 	</div>
-
-
-
 	<!-- Top-up way -->
 	<div class="features">
 		<div class="container">
@@ -304,8 +213,6 @@
 		</div>
 	</div>
 
-	<!-- hr -->
-	<hr>
 	<!-- commonality Footer -->
 	<%
 		include("common/bottom.html"){}
@@ -455,108 +362,64 @@ function getLotterybPlayList(languageType){
 function open_url(url){
 	window.open(url);
 }
+</script>
 
-//宇宙特效
-"use strict";
-var canvas = document.getElementById('canvas'),
-		ctx = canvas.getContext('2d'),
-		w = canvas.width = window.innerWidth,
-		h = canvas.height = window.innerHeight - 300,
+<!-- Flowing letters -->
+<script>
+	var canvas=document.getElementById("homecanvas");
+	var headdiv=document.getElementById("top");
+	var products = document.getElementById("products");
+	var can=homecanvas.getContext("2d");
+	var s=window.screen;//获取屏幕
+	var w=homecanvas.width=s.width;//获取屏幕宽度
+	var h=homecanvas.height=s.height;//获取屏幕高度
+	/*var h =  (products.offsetHeight+200);
+	if(s.width < 768){
+	h += 530;
+	}
+	canvas.height = h;*/
+	//alert(xxx)
+	//canvas.height = h;
+	//can.globalAlpha=0.2;
+	can.fillStyle=color2();
 
-		hue = 217,
-		stars = [],
-		count = 0,
-		maxStars = 500;//The number of the stars
+	var words = Array(256).join("1").split("");
+	//设置一个包含256个空元素的数组，join("1")用来把数组里的元素拼接成字符串，split("")过滤掉数组里的空元素
 
-var canvas2 = document.createElement('canvas'),
-		ctx2 = canvas2.getContext('2d');
-canvas2.width = 100;
-canvas2.height = 100;
-var half = canvas2.width / 2,
-		gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half);
-gradient2.addColorStop(0.025, '#CCC');
-gradient2.addColorStop(0.1, 'hsl(' + hue + ', 61%, 33%)');
-gradient2.addColorStop(0.25, 'hsl(' + hue + ', 64%, 6%)');
-gradient2.addColorStop(1, 'transparent');
+	setInterval(draw,50);
 
-ctx2.fillStyle = gradient2;
-ctx2.beginPath();
-ctx2.arc(half, half, half, 0, Math.PI * 2);
-ctx2.fill();
+	// can.font="30px 微软雅黑"; //只设置一个不生效，一定要两个属性都设
+	// //绘制实心的文本：绘制的文本，文本的坐标x，文本的坐标y
+	// can.fillText("黑客帝国",100,100);
+	// // setInterval(draw,50);
+	function draw(){
+		//can.clearRect(0,0,canvas.width,canvas.height);
+		//can.fillRect()画一个实心矩形:坐标x，坐标y，矩形宽，举行高
+		//can.fillStyle='rgba(1,25,53,0.05)';
+		can.fillStyle='rgba(0,0,0,0.05)';
+		can.fillRect(0,0,w,h);
+		can.fillStyle=color2();
+		words.map(function(y,n){
 
-// End cache
+			text=String.fromCharCode(Math.ceil(65+Math.random()*57)); //转换为键盘上值
+			//textxx = textxx == "0" ? "1":"0";
+			x = n*10;
+			can.fillText(text,x,y)
+			words[n]=( y > (h-250) + Math.random()*484 ? 0:y+10 );
+		});//数组元素的一个映射
 
-function random(min, max) {
-	if (arguments.length < 2) {
-		max = min;
-		min = 0;
 	}
 
-	if (min > max) {
-		var hold = max;
-		max = min;
-		min = hold;
+	function color2(){
+		var color = Math.ceil(Math.random()*16777215).toString(16);
+		// for( var i=color.length; i<6; i++ ){
+		// 	color = '0'+color;
+		// }
+		while(color.length<6){
+			color = '0'+color;
+		}
+		//return '#'+color;
+		return '#17ac0c';
 	}
-
-	return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function maxOrbit(x, y) {
-	var max = Math.max(x, y),
-			diameter = Math.round(Math.sqrt(max * max + max * max));
-	return diameter / 2;
-	//The bigger the star moves, the smaller the range,
-}
-
-var Star = function() {
-
-	this.orbitRadius = random(maxOrbit(w, h));
-	this.radius = random(60, this.orbitRadius) / 8;
-	//The size of the stars
-	this.orbitX = w / 2;
-	this.orbitY = h / 2;
-	this.timePassed = random(0, maxStars);
-	this.speed = random(this.orbitRadius) / 50000;
-	//Star velocity
-	this.alpha = random(2, 10) / 10;
-
-	count++;
-	stars[count] = this;
-}
-
-Star.prototype.draw = function() {
-	var x = Math.sin(this.timePassed) * this.orbitRadius + this.orbitX,
-			y = Math.cos(this.timePassed) * this.orbitRadius + this.orbitY,
-			twinkle = random(10);
-
-	if (twinkle === 1 && this.alpha > 0) {
-		this.alpha -= 0.05;
-	} else if (twinkle === 2 && this.alpha < 1) {
-		this.alpha += 0.05;
-	}
-
-	ctx.globalAlpha = this.alpha;
-	ctx.drawImage(canvas2, x - this.radius / 2, y - this.radius / 2, this.radius, this.radius);
-	this.timePassed += this.speed;
-}
-
-for (var i = 0; i < maxStars; i++) {
-	new Star();
-}
-
-function animation() {
-	ctx.globalCompositeOperation = 'source-over';
-	ctx.globalAlpha = 0.5; //tail
-	ctx.fillStyle = 'hsla(' + hue + ', 64%, 6%, 2)';
-	ctx.fillRect(0, 0, w, h)
-
-	ctx.globalCompositeOperation = 'lighter';
-	for (var i = 1, l = stars.length; i < l; i++) {
-		stars[i].draw();
-	};
-
-	window.requestAnimationFrame(animation);
-}
-animation();
 </script>
 </html>

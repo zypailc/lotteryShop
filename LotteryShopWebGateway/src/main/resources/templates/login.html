@@ -18,6 +18,8 @@
 	%>
 <script type="text/javascript" src="../js/contact_custom.js"></script>
 <style type="text/css">
+	.contact{padding-bottom: 0px;}
+	.container{margin-bottom:175px;}
 	.button_parent_div{text-align: center;}
 	.button_margin{margin-left: 30px;margin-right: 30px;}
 	.a_color{color: #452b78;}
@@ -40,7 +42,6 @@
 				<div class="col-lg-8">
 					<!-- Reply -->
 					<div class="reply">
-
 						<div class="reply_form_container">
 							<!-- Reply Form -->
 							<form id="reply_form"  method="post">
@@ -64,15 +65,13 @@
 						</div>
 					</div>
 				</div>
+			</div>
 		</div>
+		<!-- commonality Footer -->
+		<%
+			include("common/bottom.html"){}
+		%>
 	</div>
-
-	<!-- commonality Footer -->
-	<%
-		include("common/bottom.html"){}
-	%>
-
-</div>
 
 	<script type="text/javascript">
 		function login(){
