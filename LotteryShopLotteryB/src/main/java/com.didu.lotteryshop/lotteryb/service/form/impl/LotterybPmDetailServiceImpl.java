@@ -98,6 +98,11 @@ public class LotterybPmDetailServiceImpl extends ServiceImpl<LotterybPmDetailMap
      */
     public boolean drawPM(LotterybBuy lotterybBuy, LotterybInfo lotterybInfo){
         boolean bool = false;
+        //2020-04-02 lyl 增加0为关闭中奖提出
+        if(lotterybInfo != null && lotterybInfo.getWinningPm() != null && lotterybInfo.getWinningPm().compareTo(BigDecimal.ZERO) == 0){
+            return true;
+        }
+
         List<LotterybInfoPc> LotterybInfoPcList = lotterybInfoPcServiceIml.findWinning(lotterybInfo.getId());
         BigDecimal totalDlb = lotterybBuy.getLuckTotal();
         //中奖提成 10%
@@ -124,6 +129,11 @@ public class LotterybPmDetailServiceImpl extends ServiceImpl<LotterybPmDetailMap
      */
     public boolean buyPM(LotterybBuy lotterybBuy, LotterybInfo lotterybInfo){
         boolean bool = false;
+        //2020-04-02 lyl 增加0为关闭购买提出
+        if(lotterybInfo != null && lotterybInfo.getBuyPm() != null && lotterybInfo.getBuyPm().compareTo(BigDecimal.ZERO) == 0){
+            return true;
+        }
+
         List<LotterybInfoPc> LotterybInfoPcList = lotterybInfoPcServiceIml.findBuy(lotterybInfo.getId());
         BigDecimal totalDlb = lotterybBuy.getTotal();
         //购买提成 5%

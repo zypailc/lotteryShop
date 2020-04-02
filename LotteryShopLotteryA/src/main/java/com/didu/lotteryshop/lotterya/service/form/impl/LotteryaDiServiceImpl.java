@@ -117,10 +117,16 @@ public class LotteryaDiServiceImpl extends ServiceImpl<LotteryaDiMapper, Lottery
      */
     public boolean generalizeDividedInto(Integer lotteryaIssueId){
         boolean bool = false;
+
+        EsGdethconfig esGdethconfig = esGdethconfigService.findEsGdethconfig();
+        //2020-04-02 lyl 增加0为关闭推广分成奖励
+        if(esGdethconfig != null && esGdethconfig.getDiRatio() != null && esGdethconfig.getDiRatio().compareTo(BigDecimal.ZERO) == 0){
+            return true;
+        }
         List<Member> memberList = memberService.findGeneralizeMembers();
         if(memberList != null && memberList.size() > 0){
             LotteryaInfo lotteryaInfo = lotteryaInfoService.findLotteryaInfo();
-            EsGdethconfig esGdethconfig = esGdethconfigService.findEsGdethconfig();
+
             Integer cLevel = esGdethconfig.getcLevel();
             cLevel = cLevel == -1 ? null : cLevel;
             BigDecimal diTotalCuntAll = BigDecimal.ZERO;
