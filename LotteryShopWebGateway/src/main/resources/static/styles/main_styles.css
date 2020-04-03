@@ -560,8 +560,7 @@ section
 	width: 100%;
 	padding-top: 50px;
 	padding-bottom: 30px;
-	margin-bottom: 50px;
-	background-color: #faf8ff;
+	margin-bottom: 100px;
 }
 .icon_box_title
 {
@@ -612,10 +611,9 @@ section
 .services
 {
 	width: 100%;
-	padding-top: 20px;
+	padding-top: 160px;
 	padding-bottom: 30px;
 	margin-bottom: 50px;
-	background-color: #faf8ff;
 }
 .section_title h1
 {
@@ -947,10 +945,11 @@ section
 
 .features
 {
-	padding-top: 20px;
-	padding-bottom: 30px;
+	padding-top: 50px;
+	padding-bottom: 50px;
 	background: #fafbfb;
 	margin-bottom: 50px;
+	background-color: #faf8ff;
 }
 .features_row
 {
@@ -1112,5 +1111,6 @@ section
 }
 .features_footer{
 	padding-bottom:100px;
+	background-color: #faf8ff;
 }
 
