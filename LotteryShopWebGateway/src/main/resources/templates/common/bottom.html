@@ -14,7 +14,7 @@
         padding-top: 30px;
     }
     .footer_content {
-        width: 1170px;
+        width: 65%;
         padding-right: 15px;
         padding-left: 15px;
         margin-right: auto;
@@ -60,6 +60,77 @@
     .footer_row3 {
         text-align:center;
     }
+    @media (max-width: 1200px) {
+
+    }
+    /*  Medium devices (desktops, 800px and up)  */
+    @media (max-width: 800px) {
+        .footer {
+            width: 100%;
+            height: 500px;
+        }
+        .row2left {
+            width:300px;
+            height: 100px;
+            max-width: 90%;
+        }
+        .row2left li{
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+        .row2right {
+            max-width: 50%;
+        }
+        .row2right li{
+            float:left;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+    }
+    /*  Medium Phone (phone, 420px and up)  */
+    @media (max-width: 420px) {
+        .footer {
+            width: 100%;
+            height: 600px;
+        }
+        .row2left {
+            height: 100px;
+        }
+        .row2left li{
+            margin-left: 15px;
+            margin-right: 15px;
+        }
+        .row2right {
+            height: 80px;
+        }
+        .row2right li{
+            float:left;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+    }
+    /*  Small Phone (phone, 360px and up)  */
+    @media (max-width: 360px) {
+        .footer {
+            width: 100%;
+            height: 600px;
+        }
+        .row2left {
+            height: 100px;
+        }
+        .row2left li{
+            margin-left: 10px;
+            margin-right: 40px;
+        }
+        .row2right {
+            height: 80px;
+        }
+        .row2right li{
+            float:left;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+    }
 </style>
 <footer class="footer">
     <div class="footer_div">
@@ -73,13 +144,13 @@
                 <div class="col-md-9 row2left">
                     <ul>
                         <li>
-                            <a href="" target="">Privacy Policy</a>
+                            <a href="" target="" data-localize="base.privacypolicy">Privacy Policy</a>
                         </li>
                         <li>
-                            <a href="" target="">Disclaimer</a>
+                            <a href="" target="" data-localize="base.disclaimer">Disclaimer</a>
                         </li>
                         <li>
-                            <a href="" target="">Cookie Policy</a>
+                            <a href="" target="" data-localize="base.cookiepolicy">Cookie Policy</a>
                         </li>
                     </ul>
                 </div>
@@ -111,10 +182,10 @@
             <hr>
             <div class="footer_row3">
                 <div>
-                    <p>© 2019 xxxxxxxxxx.com. All Rights Reserved.</p>
+                    <p data-localize="base.bottomaddra">© 2019 xxxxxxxxxx.com. All Rights Reserved.</p>
                 </div>
                 <div>
-                    <P>If you have any questions, please contact xxxxxxxx@email.com</P>
+                    <P data-localize="base.bottomemail">If you have any questions, please contact xxxxxxxx@email.com</P>
                 </div>
             </div>
         </div>

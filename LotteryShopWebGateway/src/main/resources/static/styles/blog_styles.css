@@ -969,4 +969,71 @@ background: -webkit-linear-gradient(top,  #7e5884 0%,#543179 50%,#7c458f 100%); 
 /*********************************
 7. Footer
 *********************************/
+@media (max-width: 1200px) {
+	.home
+	{
+		width: 100%;
+		height: 850px;
+		margin-top: 160px;
+		margin-bottom: 300px;
+	}
+	.homebutton {
+		height: 40px;
+		width:200px;
+		margin: 0 auto;
+		position: relative;
+		top:99%;
+	}
+}
+/*  Medium devices (desktops, 800px and up)  */
+@media (max-width: 800px) {
+	.home
+	{
+		width: 100%;
+		height: 600px;
+		margin-top: 140px;
+		margin-bottom: 250px;
+	}
+	.homebutton {
+		height: 40px;
+		width:200px;
+		margin: 0 auto;
+		position: relative;
+		top:99%;
+	}
+}
+/*  Medium Phone (phone, 420px and up)  */
+@media (max-width: 420px) {
+	.home
+	{
+		width: 100%;
+		height: 300px;
+		margin-top: 150px;
+		margin-bottom: 250px;
+	}
+	.homebutton {
+		height: 40px;
+		width:200px;
+		margin: 0 auto;
+		position: relative;
+		top:99%;
+	}
+}
+/*  Small Phone (phone, 360px and up)  */
+@media (max-width: 360px) {
+	.home
+	{
+		width: 100%;
+		height: 250px;
+		margin-top: 180px;
+		margin-bottom: 250px;
+	}
+	.homebutton {
+		height: 40px;
+		width:200px;
+		margin: 0 auto;
+		position: relative;
+		top:99%;
+	}
+}
 
