@@ -17,9 +17,9 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://47.108.140.142:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
-      username: root
-      password: 123456
+      url: jdbc:mysql://172.17.0.1:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
+      username: lottery
+      password: Lottery2020@)@)
       filters: stat,wall,4j,config
       max-active: 100
       initial-size: 1
@@ -36,7 +36,7 @@ spring:
       max-pool-prepared-statement-per-connection-size: 20
   #kafka 消息队列配置
   kafka:     # 指定kafka 代理地址，可以多个
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: 172.17.0.1:9092
     producer:
       retries: 1 # 设置大于0的值，则客户端会将发送失败的记录重新发送
       # 每次批量发送消息的数量
@@ -59,22 +59,22 @@ eureka:
     #instance-id: ${spring.cloud.client.ipAddress}:${server.port}
   client:
     serviceUrl:
-      defaultZone: http://localhost:8090/eureka/
+      defaultZone: http://172.17.0.1:8090/eureka/
 #mybatispluse
 mybatis-plus:
-  mapper-locations: classpath:mapping/*.xml,classpath*:/commonmapping/*.xml
+  mapper-locations: classpath:*/mapping/*.xml,classpath*:*/commonmapping/*.xml
   type-aliases-package: com.didu.lotteryshop
 #security&oauth2 配置
 security:
   oauth2:
     resource:
       id: lotterya-service
-      user-info-uri: http://localhost:8083/auth/api/member # 资源服务认证
+      user-info-uri: http://172.17.0.1:8083/auth/api/member # 资源服务认证
       prefer-token-info: false
     client:
       client-id: browser # 认证服务ID
       client-secret: browser # 认证服务密码
       grantType: password
-      access-token-uri: http://localhost:8083/auth/oauth/token # 获取token
-      user-authorization-uri: http://localhost:8083/auth/oauth/authorize # 获取授权码
+      access-token-uri: http://172.17.0.1:8083/auth/oauth/token # 获取token
+      user-authorization-uri: http://172.17.0.1:8083/auth/oauth/authorize # 获取授权码
 

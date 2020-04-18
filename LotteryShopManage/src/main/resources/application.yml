@@ -23,9 +23,9 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://47.108.140.142:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
-      username: root
-      password: 123456
+      url: jdbc:mysql://172.17.0.1:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+      username: lottery
+      password: Lottery2020@)@)
       filters: stat,wall,4j,config
       max-active: 100
       initial-size: 1

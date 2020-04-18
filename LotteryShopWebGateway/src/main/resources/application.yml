@@ -15,9 +15,10 @@ spring:
   #redis 缓存数据库配置
   redis:
     database: 0
-    host: localhost
+    host: 172.17.0.1
+    #host: localhost
     port: 6379
-    password:
+    #password:123456
     jedis:
       pool:
         max-active: 8
@@ -28,9 +29,12 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://47.108.140.142:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
-      username: root
-      password: 123456
+      url: jdbc:mysql://172.17.0.1:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
+      #url: jdbc:mysql://localhost:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
+      username: lottery
+      #username: root
+      password: Lottery2020@)@)
+      #password: 123456
       filters: stat,wall,4j,config
       max-active: 100
       initial-size: 1
@@ -58,7 +62,8 @@ eureka:
     #instance-id: ${spring.cloud.client.ipAddress}:${server.port}
   client:
     serviceUrl:
-      defaultZone: http://localhost:8090/eureka/
+      defaultZone: http://172.17.0.1:8090/eureka/
+      #defaultZone: http://localhost:8090/eureka/
 #beelt模板引擎配置
 beetl:
   #模板路径
