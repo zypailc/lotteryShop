@@ -1,9 +1,7 @@
 package com.didu.lotteryshop.common.config;
 
-import com.didu.lotteryshop.common.entity.Member;
-import jnr.ffi.annotations.In;
+import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 
-import java.math.BigDecimal;
 import java.util.Random;
 
 /**
@@ -38,7 +36,14 @@ public class Constants {
     //public static final String id = "";
 
     public static void main(String[] args) {
-        System.out.println(getRandomString(16));
+        try {
+            System.out.println( AesEncryptUtil.encrypt("02E815D85FE08C8036EEEEAB0D4EDD03C4B05C18D1B61B8B58A6CF6A03100F01", Constants.AES_ETHMANAGER_PRIVATEKEY));
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        //System.out.println(getRandomString(16));
     }
 
     /**

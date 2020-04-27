@@ -3,7 +3,6 @@ package com.didu.lotteryshop.common.service;
 import com.didu.lotteryshop.common.entity.MailCommonProperties;
 import com.didu.lotteryshop.common.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -40,7 +39,8 @@ public class MailService {
             host = mailProperties.getHost();
             userName = mailProperties.getUsername();
             password = mailProperties.getPassword();
-            this.socket = new Socket(host, 25);
+            Integer port = mailProperties.getPort();
+            this.socket = new Socket(host, port);
             bufferedReader = this.getReader(socket);
             printWriter = this.getWriter(socket);
 
