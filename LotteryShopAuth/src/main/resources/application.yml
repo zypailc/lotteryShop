@@ -10,22 +10,9 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
     cache: false
-  #redis 缓存数据库配置
-  redis:
-    database: 0
-    host: 172.17.0.1
-    port: 6379
-    password:
-    jedis:
-      pool:
-        max-active: 8
-        max-idle: 8
-        min-idle: 0
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://172.17.0.1:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
-    username: lottery
-    password: Lottery2020@)@)
+  # aws与本地环境切换（aws: prod  本地：dev)
+  profiles:
+    active: dev
   druid:
     initialSize: 5 #初始化连接大小
     minIdle: 5     #最小连接池数量
@@ -47,19 +34,10 @@ spring:
 #  #模板路径
 #  templatesPath: templates
 
-#eureka服务注册中心配置
-eureka:
-  instance:
-    prefer-ip-address: true
-    #instance-id: ${spring.cloud.client.ipAddress}:${server.port}
-  client:
-    service-url:
-#      defaultZone: http://localhost:8090/eureka/
-      # 生产环境用这个地址
-      defaultZone: http://172.17.0.1:8090/eureka/
 #mybatis 配置
 mybatis-plus:
-  mapper-locations: classpath*:*/mapping/*.xml,classpath*:*/commonmapping/*.xml
+  #mapper-locations: classpath:*/mapping/*.xml,classpath*:*/commonmapping/*.xml
+  mapper-locations: classpath*:/mapping/*.xml,classpath*:/commonmapping/*.xml
   type-aliases-package: com.didu.lotteryshop.common.entity
   #configuration:
     #map-underscore-to-camel-case: true  #开启驼峰命名,l_name -> lName

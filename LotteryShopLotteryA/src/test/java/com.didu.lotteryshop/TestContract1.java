@@ -1,9 +1,6 @@
 package com.didu.lotteryshop;
 
 import com.didu.lotteryshop.common.utils.Web3jUtils;
-import com.didu.lotteryshop.lotterya.service.Web3jService;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
@@ -27,13 +24,15 @@ public class TestContract1 {
 //    private Web3jService web3jService;
     public static void main(String[] args) {
         try {
-            Web3j web3j = Web3j.build(new HttpService("http://127.0.0.1:8545/"));
+            //账户充值私
+
+            Web3j web3j = Web3j.build(new HttpService("http://52.74.252.140:8545/"));
             //查询所有账户余额
             fianAccountsBalance(web3j);
-            String outPerKey = "0x4fe2b2dfc28084bc925c96889566454344d5b884981e219213027b75e29e7a40";
-            String outAddress = "0xBfC1B5e016cfFF115261d6E96a0af3B29224472d";
+            String outPerKey = "0x7f58204fcf3f9a8df8967530e5276d35074ec2a79546593de8e503cc970bed02";
+            String outAddress = "0xA4027E2379DaBa87cFe682C52f31282D31f8CDA4";
             //管理员账号
-            String toAddress = "0x3fF8eEC1b063E09Eeb8d4e13d2dbD5728325FDFB";
+            String toAddress = "0xC0935FF232d752B002b09A09fE64339AfeBe182B";
 
 
             //String toAddress = "0xD806aa5180299f4c034E89AE605ca295D6283f8B";//lsb 0x2e802677292c94b295bf826b82c3f19911335993

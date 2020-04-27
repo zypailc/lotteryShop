@@ -1,0 +1,7 @@
+version: "3"
+services:
+  manage:
+    build: ./
+    container_name: manage
+    ports:
+      - "8070:8070"

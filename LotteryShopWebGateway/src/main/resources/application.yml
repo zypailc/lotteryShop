@@ -12,58 +12,16 @@ spring:
       enabled: true
       charset: UTF-8
       force: true
-  #redis 缓存数据库配置
-  redis:
-    database: 0
-    host: 172.17.0.1
-    #host: localhost
-    port: 6379
-    #password:123456
-    jedis:
-      pool:
-        max-active: 8
-        max-idle: 8
-        min-idle: 0
-  datasource:
-    name: druidDataSource
-    type: com.alibaba.druid.pool.DruidDataSource
-    druid:
-      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://172.17.0.1:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
-      #url: jdbc:mysql://localhost:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&allowPublicKeyRetrieval=true
-      username: lottery
-      #username: root
-      password: Lottery2020@)@)
-      #password: 123456
-      filters: stat,wall,4j,config
-      max-active: 100
-      initial-size: 1
-      max-wait: 60000
-      min-idle: 1
-      time-between-eviction-runs-millis: 60000
-      min-evictable-idle-time-millis: 300000
-      validation-query: select 'x'
-      test-while-idle: true
-      test-on-borrow: false
-      test-on-return: false
-      pool-prepared-statements: true
-      max-open-prepared-statements: 50
-      max-pool-prepared-statement-per-connection-size: 20
+  # aws与本地环境切换（aws: prod  本地：dev)
+  profiles:
+    active: dev
+
 #  # 模板引擎配置
 #  thymeleaf:
 #    prefix: classpath:/templates/
 #    suffix: .html
 #    cache: false
 
-#微服务注册服务配置
-eureka:
-  instance:
-    prefer-ip-address: true
-    #instance-id: ${spring.cloud.client.ipAddress}:${server.port}
-  client:
-    serviceUrl:
-      defaultZone: http://172.17.0.1:8090/eureka/
-      #defaultZone: http://localhost:8090/eureka/
 #beelt模板引擎配置
 beetl:
   #模板路径

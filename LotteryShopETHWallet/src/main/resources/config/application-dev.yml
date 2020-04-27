@@ -1,0 +1,48 @@
+spring:
+  datasource:
+    name: druidDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+      username: root
+      password: 123456
+      filters: stat,wall,4j,config
+      max-active: 100
+      initial-size: 1
+      max-wait: 60000
+      min-idle: 1
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: select 'x'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 50
+      max-pool-prepared-statement-per-connection-size: 20
+
+#微服务注册服务配置
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: localhost
+    #instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    serviceUrl:
+      #      defaultZone: http://172.17.0.1:8090/eureka/
+      defaultZone: http://localhost:8090/eureka/
+
+#security&oauth2 配置
+security:
+  oauth2:
+    resource:
+      id: wallet-service
+      user-info-uri: http://localhost:8083/auth/api/member # 资源服务认证
+      prefer-token-info: false
+#    client:
+#      client-id: browser # 认证服务ID
+#      client-secret: browser # 认证服务密码
+#      grantType: password
+#      access-token-uri: http://localhost:8083/auth/oauth/token # 获取token
+#      user-authorization-uri: http://localhost:8083/auth/oauth/authorize # 获取授权码

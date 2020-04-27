@@ -13,33 +13,14 @@ spring:
       enabled: true
       charset: UTF-8
       force: true
+  # aws与本地环境切换（aws: prod  本地：dev)
+  profiles:
+    active: dev
 #security 配置
   security:
     user:
-      name: didu123456didu
-      password: 123456
-  datasource:
-    name: druidDataSource
-    type: com.alibaba.druid.pool.DruidDataSource
-    druid:
-      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://172.17.0.1:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
-      username: lottery
+      name: admin
       password: Lottery2020@)@)
-      filters: stat,wall,4j,config
-      max-active: 100
-      initial-size: 1
-      max-wait: 60000
-      min-idle: 1
-      time-between-eviction-runs-millis: 60000
-      min-evictable-idle-time-millis: 300000
-      validation-query: select 'x'
-      test-while-idle: true
-      test-on-borrow: false
-      test-on-return: false
-      pool-prepared-statements: true
-      max-open-prepared-statements: 50
-      max-pool-prepared-statement-per-connection-size: 20
 #微服务注册服务配置
 #eureka:
 #  instance:
@@ -54,7 +35,7 @@ beetl:
   templatesPath: templates
 #mybatispluse
 mybatis-plus:
-  mapper-locations: classpath*:commonmapping/*.xml
+  mapper-locations: classpath*:/mapping/*.xml,classpath*:/commonmapping/*.xml
   type-aliases-package: com.didu.lotteryshop.common.entity
 
 

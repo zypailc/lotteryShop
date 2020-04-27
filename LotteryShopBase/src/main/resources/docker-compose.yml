@@ -1,0 +1,7 @@
+version: "3"
+services:
+  base:
+    build: ./
+    container_name: base
+    ports:
+      - "8092:8092"

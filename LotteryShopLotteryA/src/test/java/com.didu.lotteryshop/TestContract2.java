@@ -4,18 +4,15 @@ import com.didu.lotteryshop.common.config.Constants;
 import com.didu.lotteryshop.common.utils.AesEncryptUtil;
 import com.didu.lotteryshop.common.utils.Web3jUtils;
 import com.didu.lotteryshop.lotterya.contract.LotteryAContract;
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.junit.Test;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tuples.generated.Tuple2;
 import org.web3j.tx.gas.DefaultGasProvider;
-import org.web3j.utils.Convert;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -50,8 +47,9 @@ public class TestContract2 {
 @Test
   public void test1(){
       try {
-          Web3j web3j = Web3j.build(new HttpService("http://127.0.0.1:8545/"));
-          Credentials credentials = Credentials.create("3E5E0BC6DA93639AA9FA5C1E36091E552404F20A5D6F410788FA8B5CCBFF8E7F");
+          //部署合约
+          Web3j web3j = Web3j.build(new HttpService("http://52.74.252.140:8545/"));
+          Credentials credentials = Credentials.create("38FF01D2467E352375E4716416E4207BCC70794F1FC44C168D1CFD2D3994F3FC");
           DefaultGasProvider defaultGasProvider = new DefaultGasProvider();
           EthGetBalance ethGetBalancel1 = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameter.valueOf("latest")).send();
           System.out.println("部署前余额："+Web3jUtils.bigIntegerToBigDecimal(ethGetBalancel1.getBalance()).toPlainString());
@@ -67,6 +65,22 @@ public class TestContract2 {
           e.printStackTrace();
       }
   }
+
+    @Test
+    public void test2(){
+        try {
+            //销毁合约
+            Web3j web3j = Web3j.build(new HttpService("http://52.74.252.140:8545/"));
+            Credentials credentials = Credentials.create("38FF01D2467E352375E4716416E4207BCC70794F1FC44C168D1CFD2D3994F3FC");
+            DefaultGasProvider defaultGasProvider = new DefaultGasProvider();
+            EthGetBalance ethGetBalancel1 = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameter.valueOf("latest")).send();
+            String  contractAddress = "";
+            LotteryAContract lotteryAContract = LotteryAContract.load(contractAddress,web3j,credentials,defaultGasProvider);
+            lotteryAContract.kill().send();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 @Test
   public void test3(){
       try {

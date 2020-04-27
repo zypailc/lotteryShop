@@ -1,0 +1,7 @@
+version: "3"
+services:
+  wallet:
+    build: ./
+    container_name: wallet
+    ports:
+      - "8095:8095"

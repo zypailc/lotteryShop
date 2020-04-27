@@ -1,0 +1,7 @@
+version: "3"
+services:
+  auth:
+    build: ./
+    container_name: auth
+    ports:
+      - "8083:8083"

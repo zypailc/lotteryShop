@@ -1036,4 +1036,22 @@ background: -webkit-linear-gradient(top,  #7e5884 0%,#543179 50%,#7c458f 100%); 
 		top:99%;
 	}
 }
-
+/*********************************
+6.3 lotteryChart
+*********************************/
+.lotteryChart {
+	width: 100%;
+	height: 600px;
+}
+.lotteryChartl {
+	width: 40%;
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-right: auto;
+	margin-left: auto;
+}
+.chartdiv {
+	position: relative;
+	width: 600px;
+	height: 600px;
+}

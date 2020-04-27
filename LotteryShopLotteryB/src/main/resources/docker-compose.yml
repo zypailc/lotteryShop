@@ -1,0 +1,7 @@
+version: "3"
+services:
+  lotteryB:
+    build: ./
+    container_name: lotteryB
+    ports:
+      - "8097:8097"

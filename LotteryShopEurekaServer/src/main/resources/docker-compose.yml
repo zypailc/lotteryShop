@@ -1,0 +1,7 @@
+version: "3"
+services:
+  eureka:
+    build: ./
+    container_name: eureka
+    ports:
+      - "8090:8090"

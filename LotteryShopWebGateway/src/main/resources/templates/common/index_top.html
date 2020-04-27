@@ -383,24 +383,55 @@
         }
     }
     function logOut(){
-        var b = confirm("Determine the exit !")
-        if(!b){
-            return false;
-        }
-        $.ajax({
-            type: "get",
-            url: "/web/loginOut",
-            dataType: "json",
-            success:function (data){
-                if(data.code == '200'){
-                    layer.msg(data.extend.data);
-                    window.location.href="../web/authIndex";
-                    //set_Time_out("../web/authIndex");
-                }
-                if(data == '500'){
-                    layui_open(data.msg)
-                }
+        layer.open({
+            type: 1,
+            title: false,
+            closeBtn: false,
+            shade: 0.8,
+            time: 0,
+            id: 'LAY_layuipro',
+            resize: false,
+            scrollbar: false,//禁用滾動條
+            btn: ['sure','wait'],
+            btnAlign: 'c',
+            moveType: 1 ,
+            content: '<div style="padding: 50px; line-height: 22px; background-color: #6d3d87; color: #fff; font-weight: 300;">Are you sure you want to quit?</div>',
+            yes: function(){
+                $.ajax({
+                    type: "get",
+                    url: "/web/loginOut",
+                    dataType: "json",
+                    success:function (data){
+                        if(data.code == '200'){
+                            layer.msg(data.extend.data);
+                            window.location.href="../web/authIndex";
+                            //set_Time_out("../web/authIndex");
+                        }
+                        if(data == '500'){
+                            layui_open(data.msg)
+                        }
+                    }
+                })
             }
-        })
+        });
+        // var b = confirm("Determine the exit !")
+        // if(!b){
+        //     return false;
+        // }
+        // $.ajax({
+        //     type: "get",
+        //     url: "/web/loginOut",
+        //     dataType: "json",
+        //     success:function (data){
+        //         if(data.code == '200'){
+        //             layer.msg(data.extend.data);
+        //             window.location.href="../web/authIndex";
+        //             //set_Time_out("../web/authIndex");
+        //         }
+        //         if(data == '500'){
+        //             layui_open(data.msg)
+        //         }
+        //     }
+        // })
     }
 </script>

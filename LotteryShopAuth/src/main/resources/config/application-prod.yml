@@ -1,0 +1,27 @@
+spring:
+  #redis 缓存数据库配置
+  redis:
+    database: 0
+    host: 172.17.0.1
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://172.17.0.1:3306/lotteryshop?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+    username: lottery
+    password: Lottery2020@)@)
+#微服务注册服务配置
+eureka:
+  instance:
+    prefer-ip-address: true
+    ip-address: 172.17.0.1
+    #instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://172.17.0.1:8090/eureka/
+      #defaultZone: http://localhost:8090/eureka/

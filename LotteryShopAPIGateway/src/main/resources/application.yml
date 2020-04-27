@@ -10,16 +10,8 @@ spring:
       enabled: true
       charset: UTF-8
       force: true
-
-#微服务注册服务配置
-eureka:
-  instance:
-    prefer-ip-address: true
-    #instance-id: ${spring.cloud.client.ipAddress}:${server.port}
-  client:
-    serviceUrl:
-      defaultZone: http://172.17.0.1:8090/eureka/
-      #defaultZone: http://localhost:8090/eureka/
+  profiles:
+    active: dev
 # zuul网关配置
 zuul:
   ignored-services: '*'
