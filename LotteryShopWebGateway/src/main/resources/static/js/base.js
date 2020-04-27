@@ -58,6 +58,7 @@ function hero_side_text_container_button_click(){
         layer.open({
             type: 1,
             title: false,
+            skin: 'ifarmecss',
             shadeClose: true,
             area:area,
             content: $(".div_margin_notice").html()

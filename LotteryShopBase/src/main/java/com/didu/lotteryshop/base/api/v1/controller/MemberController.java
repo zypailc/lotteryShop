@@ -19,7 +19,6 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
@@ -132,10 +131,11 @@ public class MemberController extends BaseBaseController {
             BufferedImage image = QRCodeUtil.createImage_1(QR, "", true);
             LsImage lsImage = lsImageService.selectById(baseConfig.getQRBackgroundId());
             QRUrl = baseConfig.getImgTemporaryUrl() + System.currentTimeMillis()+".png";
-            QRCodeUtil.mergeImage_p(ImageIO.read(new ByteArrayInputStream(lsImage.getByteData())),image,QRUrl);
-            File file = new File(QRUrl);
-            inputStream = new FileInputStream(new File(QRUrl));
-            FileUtil.outImg(response,FileUtil.input2byte(inputStream));
+//            QRCodeUtil.mergeImage_p(ImageIO.read(new ByteArrayInputStream(lsImage.getByteData())),image,QRUrl);
+            QRCodeUtil.mergeImage(ImageIO.read(new ByteArrayInputStream(lsImage.getByteData())),image,response.getOutputStream());
+
+//            inputStream = new FileInputStream(new File(QRUrl));
+//            FileUtil.outImg(response,FileUtil.input2byte(inputStream));
         }catch (Exception e){
             e.printStackTrace();
         }finally {

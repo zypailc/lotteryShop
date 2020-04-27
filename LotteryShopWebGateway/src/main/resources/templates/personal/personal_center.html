@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<link rel="icon" href="../../images/labelLogo.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="../../images/labelLogo.ico" type="image/x-icon">
 	<!-- commonality  meta and title -->
 	<%
 	include("../common/common.meta.html"){}
@@ -202,12 +204,12 @@ include("../common/common.js.html"){}
         text-align: left;
     }
 	.walletPutMoney{
-		margin-top: 15px;
+		/*margin-top: 15px;*/
 		width: 100%;
 		text-align: left;
 	}
 	.walletFLAT{
-		margin-top: 15px;
+		/*margin-top: 15px;*/
 		width: 100%;
 		text-align: left;
 	}
@@ -406,6 +408,7 @@ include("../common/common.js.html"){}
 		cursor: pointer;
 		float: right;
 	}
+	.ifarmecss{ border:5px solid #DCDCDC; }/*layer弹出边框样式*/
 </style>
 <script>
 	$(function(){
@@ -653,7 +656,7 @@ include("../common/common.js.html"){}
 	%>
 	<!-- Home -->
 
-	<div class="portfolio" style="overflow-x: hidden;">
+	<div class="portfolio" style="overflow-x: hidden;background-color:rgba(72,61,139,1);">
 		<div class="container container_left">
 			<div class="row">
 				<div class="col">
@@ -910,7 +913,6 @@ include("../common/common.js.html"){}
 									<p>2.Consumption within <span class="day_pm_1">0</span>> days >=<span class="eth_pm">0.0</span> ETH.</p>
 									<p>3.Count the active number of the six levels (active number: consumption within <span class="day_pm_1">0</span> days >= <span class="eth_pm">0.0</span>eth), and the active number/settlement ratio:
 										<span class="list_pm"></span></p>
-
 								</div>
 							</div>
 						</div>-->
@@ -1256,7 +1258,7 @@ include("../common/common.js.html"){}
 		</div>
 	</div>
 	<!-- pm rule -->
-	<div class="wallet_rule_div">
+	<div class="wallet_rule_div" style="display:none">
 		<div class="wallet_rule">
 			<p data-localize="base.pendingCurrencySettlementRules">Pending currency settlement rules</p>
 			<div class="rules_particulars">
@@ -1275,7 +1277,7 @@ include("../common/common.js.html"){}
 			</div>
 		</div>
 	</div>
-	<div class="di_rule_div">
+	<div class="di_rule_div" style="display:none">
 		<div class="di_rule">
 			<p data-localize="base.promoterSettlementRules">Promoter settlement rules</p>
 			<div class="rules_particulars">
@@ -1289,9 +1291,9 @@ include("../common/common.js.html"){}
 		</div>
 	</div>
 	<!-- commonality fotter -->
-	<%
+	<!--<%
 	include("../common/bottom.html"){}
-	%>
+	%>-->
 
 </div>
 </body>

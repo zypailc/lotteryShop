@@ -22,6 +22,7 @@ $(function(){
         layer.open({
             type: 1,
             title: false,
+            skin: 'ifarmecss',
             shadeClose: true,
             area:["40%","auto"],
             content:$(".wallet_rule_div").html()
