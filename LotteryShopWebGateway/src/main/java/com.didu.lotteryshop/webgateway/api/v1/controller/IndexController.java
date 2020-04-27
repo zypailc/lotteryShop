@@ -310,4 +310,36 @@ public class IndexController extends WebgatewayBaseController {
         return "";
     }
 
+    /**
+     * 隐私政策
+     * @param model
+     * @return
+     */
+    @RequestMapping("/web/authPrivacyPolicy")
+    public String privacyPolicy(Model model){
+        model = getModel(model);
+        return "file/privacyPolicy";
+    }
+
+    /**
+     * 免责声明
+     * @param model
+     * @return
+     */
+    @RequestMapping("/web/authDisclaimer")
+    public String disclaimer(Model model){
+        model = getModel(model);
+        return "file/disclaimer";
+    }
+
+    /**
+     * cookie政策
+     * @param model
+     * @return
+     */
+    @RequestMapping("/web/authCookiePolicy")
+    public String cookiePolicy(Model model){
+        model = getModel(model);
+        return "file/cookiePolicy";
+    }
 }
