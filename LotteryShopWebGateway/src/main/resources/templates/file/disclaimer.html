@@ -1,10 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <!-- commonality  meta and title -->
+    <%
+        include("../common/common.meta.html"){}
+    %>
+    <!-- commonality style -->
+    <%
+        include("../common/common.css.html"){}
+    %>
+    <!-- commonality js -->
+    <%
+        include("../common/common.js.html"){}
+    %>
+    <link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
+
+    <style type="text/css">
+
+        /*  big pad (pad pro, 1670px and up)  */
+        @media (max-width: 1670px) {
+            .disclaimer_contact {
+                width: 75%;
+                padding-right: 15px;
+                padding-left: 15px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+        }
+        /*  Medium devices (pad, 800px and up)  */
+        @media (max-width: 800px) {
+            .disclaimer_contact {
+                width: 80%;
+                padding-right: 15px;
+                padding-left: 15px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+        }
+        /*  Medium Phone (phone, 420px and up)  */
+        @media (max-width: 420px) {
+            .disclaimer_contact {
+                width: 85%;
+                padding-right: 15px;
+                padding-left: 15px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+        }
+        /*  Small Phone (phone, 360px and up)  */
+        @media (max-width: 360px) {
+            .disclaimer_contact {
+                width: 95%;
+                padding-right: 10px;
+                padding-left: 10px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+        }
+        @media (min-width: 1670px) {
+            .disclaimer_contact {
+                width: 75%;
+                padding-right: 10px;
+                padding-left: 10px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+        }
+        .disclaimer_div {
+            width:100%;
+        }
+        .disclaimer_contact {
+            margin-top: 80px;
+        }
+        .label_div {
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .title_h1 {
+            text-align:center;
+            padding-top: 60px;
+            margin-bottom: 50px;
+        }
+        p {
+            font-weight: bold;
+        }
+        ul {
+            width:100%;
+            text-align:left;
+        }
+        .paragraph_div {
+            margin-top: 15px;
+        }
+        .level_1 {
+            padding-left: 10px;
+        }
+        .level_2 {
+            padding-left: 20px;
+        }
+        .level_3 {
+            padding-left: 30px;
+        }
+    </style>
 </head>
 <body>
-
+    <div class="disclaimer_div">
+        <!-- commonality head -->
+        <%
+            include("../common/index_top.html"){}
+        %>
+        <div class="disclaimer_contact">
+            <div class="label_div">
+                <h1 class="title_h1">Disclaimer</h1>
+                <div class="text_content col-md-12 col-sm-16 col-xs-16">
+                    <p>END USER LICENSE AGREEMENT (“EULA”) FOR COLOR BALL: IMPORTANT - PLEASE READ THESE TERMS AND CONDITIONS CAREFULLY BEFORE PROCEEDING TO USE OUR SERVICES, AND/OR DOWNLOADING OUR SOFTWARE, AS YOUR AGREEMENT TO THEM CONSTITUTES A LEGALLY BINDING AGREEMENT. IT IS YOUR SOLE RESPONSIBILITY TO PERIODICALLY REVIEW THIS EULA AND YOUR CONTINUED USE OF THE SITE, AND ASSOCIATED SERVICES, CONSTITUTES YOUR ONGOING ACCEPTANCE OF THE TERMS CONTAINED HEREINAFTER.</p>
+                    <p>This EULA is between “You” (“Your” also refers to You throughout this EULA) and Quanta Technology Limited (“QTL”) of Minerva House, Ballafletcher Rd, Douglas, Isle of Man IM4 4QH, a company registered in the Isle of Man under company number 13083C. COLOR BALL is defined as “We”, “Us” or “Our” as appropriate. COLOR BALL is licensed and regulated by the Isle of Man Gambling Supervision Commission for the purposes of operating an online gambling licence.COLOR BALL offers online lottery services (“Services”) its brand through its website www.colorball.club In addition to offering COLOR BALL’s Services through the internet We may, from time to time, offer Our products and services through alternative mediums such as mobile devices. When you use COLOR BALL’s Services by whatever medium, this EULA shall apply to such use to such an extent as is applicable to the circumstances.</p>
+                    <p>Services are provided through Our website domain. Before You download the Software “Software”, hereinafter includes any downloadable desktop application, mobile application, system component from Our Website or from our downloadable app. We will ask You to give your express agreement to the Terms and Conditions of this EULA. By agreeing to this EULA You acknowledge that You are entering into a legally binding Agreement with COLOR BALL.</p>
+                    <p>You accept to be bound by the Terms and Conditions of this EULA by clicking on ‘I Agree’ and using our Software and accessing our website. If You do not agree to any of the provisions of this EULA You should immediately stop using Our Software or accessing Our website and remove any copies of it from Your computer. </p>
+                    <div class="paragraph_div">
+                        <p>1.&nbsp;&nbsp;GRANT OF LICENCE CONDITIONS</p>
+                        <ul>
+                            <li class="level_1"><span>1.1&nbsp;&nbsp;</span><span>To use the Software, You will first need to register with Us. To do so please download and install any of Our applicable software or navigate your internet browser to the appropriate page on Our website. Then click on the REGISTER button to commence the registration process.</span></li>
+                            <li class="level_1"><span>1.2&nbsp;&nbsp;</span><span>We are required to verify the identity of Our players and therefore reserve the right to request satisfactory proof of your identity (including but not limited to copies of a valid passport/driving licence/identity card and/or any payment cards used) and satisfactory proof of address (including but not limited to a recent bank/credit card statement or utility bill dated within the last 3 months) at any time. Failure to supply such documentation within a period of 3 weeks after initial registration may result in the suspension of Services and ultimately the closure of your account.</span></li>
+                            <li class="level_1"><span>1.3&nbsp;&nbsp;</span><span>You agree to provide Us with full and complete information regarding your identity and residential address. Incomplete or fictitious information or documentation will not be accepted and will constitute a material breach of this EULA. This will result in the suspension of Services and the closure of your account.</span></li>
+                            <li class="level_1"><span>1.4&nbsp;&nbsp;</span><span>Subject to satisfactory completion of Our registration process and acceptance of the Terms and Conditions of this EULA, COLOR BALL grants to You a non-exclusive, non-transferable, limited licence to use one copy of the Software.</span></li>
+                            <li class="level_1"><span>1.5&nbsp;&nbsp;</span><span>You shall not distribute, sell, supply, modify, adapt, amend, incorporate, merge or otherwise alter the Software. The granting of this EULA shall not give you any express or implied rights to decompile, reverse engineer or otherwise disassemble any part of the Software.</span></li>
+                            <li class="level_1"><span>1.6&nbsp;&nbsp;</span><span>You shall immediately notify Us of any unauthorised use or disclosure, of, or of any unauthorised access to, or of any theft or loss of any copies of the Software or other Proprietary Information (as defined in provision 5.2 below) which You suspect or which comes to your attention.</span></li>
+                            <li class="level_1"><span>1.7&nbsp;&nbsp;</span><span>Except for the rights and licence granted under this EULA, nothing contained in this Agreement shall be construed to grant to You any right, title, interest in or to the Software. COLOR BALL expressly reserves all right, title and interest in and to the Software which are not specifically granted to You under this EULA.</span></li>
+                            <li class="level_1"><span>1.8&nbsp;&nbsp;</span><span>COLOR BALL grants You the right to install a copy of the Software on your computer running an up to date Internet Browser such as Firefox, Chrome, Safari on a validly licensed copy of the operating system for which the Software was designed. COLOR BALL also grants You the right to install a copy of the Software on a device running Android or iOS operating systems, where the software and operating system are not more than 6 months out of date.</span></li>
+                            <li class="level_1"><span>1.9&nbsp;&nbsp;</span><span>It is entirely at COLOR BALL which games and wagering services shall be supported by Our software and/or downloadable App’s and You acknowledge that the game offerings on Our website, or via Our App, may be changed from time to time with or without notice from Us.</span></li>
+                            <li class="level_1"><span>1.10&nbsp;&nbsp;</span><span>The Software must not be used in any manner prohibited by any applicable laws or regulations in any jurisdiction. It remains Your sole responsibility to ensure that it is legal to play, use or participate in the game in the country/jurisdiction in which you reside or are accessing the Software.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>2.&nbsp;&nbsp;RIGHTS, REPRESENTATIONS AND LIMITATIONS</p>
+                        <ul>
+                            <li class="level_1"><span>2.1&nbsp;&nbsp;</span><span>Maintenance of Copyright Notices You must not remove or alter any copyright notices on any and all copies of the Software.</span></li>
+                            <li class="level_1"><span>2.2&nbsp;&nbsp;</span><span>Distribution You may not distribute copies of the Software to third parties.</span></li>
+                            <li class="level_1"><span>2.3&nbsp;&nbsp;</span><span>Prohibition on Reverse Engineering, Decompilation and Disassembly. You must not interfere in any way with the Software. This prohibition is absolute and includes, but may not be limited to, reverse engineer, decompilation or disassembly of the Software.</span></li>
+                            <li class="level_1"><span>2.4&nbsp;&nbsp;</span><span>Cheating and Unfair Practices</span>
+                                <ul>
+                                    <li class="level_2"><span>a)&nbsp;&nbsp;COLOR BALL with the Isle of Man Gambling Supervision Commission and as a provider of online lottery service is dependent on Us delivering a level playing field for all Our customers. We are committed to using all reasonable measures to promote fair play and cheating of any kind is strictly forbidden when using Services.</span></li>
+                                    <li class="level_2"><span>b)&nbsp;&nbsp;The use of non-public material (insider trading) is strictly forbidden.</span></li>
+                                    <li class="level_2"><span>c)&nbsp;&nbsp;For the avoidance of doubt, under no circumstances is any kind of Player Assistance Software permitted for use with Our Software or website.</span></li>
+                                    <li class="level_2"><span>d)&nbsp;&nbsp;If you are found to have used any form of software or practice to gain unfair advantage:</span>
+                                        <ul>
+                                            <li class="level_3"><span>1.&nbsp;&nbsp;Your account will be immediately frozen and investigated. Pending the outcome of Our investigation the funds in your account may be subject to forfeiture.</span></li>
+                                            <li class="level_3"><span>2.&nbsp;&nbsp;If We determine there are reasonable grounds, You will be reported to all relevant authorities, including the Isle of Man Financial Intelligence Unit if we suspect that there is evidence of fraud or money laundering.</span></li>
+                                            <li class="level_3"><span>3.&nbsp;&nbsp;If We determine your playing account with us is to be terminated We fully reserve all other legal rights and causes of action We may have.</span></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="level_1"><span>2.5&nbsp;&nbsp;</span><span>Insider Information</span>
+                                <ul>
+                                    <li class="level_2"><span>a)&nbsp;&nbsp;You shall not, and will not procure any third party to, use any information, material or data which a member of the public could not also legally obtain (INSIDER INFORMATION) on, or in conjunction with, the website. If You use, or procure any third party to use INSIDER INFORMATION on the website, We may immediately terminate Your (and any relevant third party’s) ACCOUNT and the provisions of clause 1.7 shall apply to such termination.</span></li>
+                                    <li class="level_2"><span>b)&nbsp;&nbsp;You will be liable to Us and shall indemnify Us for any claim, loss, damage, costs and/or expenses we incur as a result of You not complying with this clause. This means You will be responsible for any loss or damage We suffer as a result of Your breach of this clause.</span></li>
+                                </ul>
+                            </li>
+                            <li class="level_1"><span>2.6&nbsp;&nbsp;</span><span>Rental<br>You must not rent, lease or lend Our Software to any third party.</span></li>
+                            <li class="level_1"><span>2.7&nbsp;&nbsp;</span><span>Support Services<br>COLOR BALL may provide You with support services related to the Software (“Support Services”). Any supplemental Software code provided to You as part of the Support Services shall be considered part of our Software and subject to the Terms and Conditions of this EULA.</span></li>
+                            <li class="level_1"><span>2.8&nbsp;&nbsp;</span><span>Errors<br>As a regulated business COLOR BALL is committed to fair play. Whilst rare, should an erroneous or palpable error occur in any calculations with respect to any stake You have placed We will seek to put all parties into the position they would have been in but for the occurrence of the error. In rectifying any error it may be necessary to declare a stake null and void. If the error results in You being unfairly enriched, We reserve the right to reduce Your account balance by the amount paid in error of if the funds are withdrawn to make demand of You to immediately reimburse Us.</span></li>
+                            <li class="level_1"><span>2.9&nbsp;&nbsp;</span><span>Disputes<br>You fully accept and agree that Our systems will make a final determination of the prices for each draw event incorporated into Our Services. In the unlikely event of a discrepancy between the result showing on the Software installed on Your computer, or accessed through an internet browser, and the result shown on Our server, the result showing on Our server shall prevail. In the absence of a manifest error You acknowledge and agree that Our records shall be the final authority when determining any dispute relating to Our Services.</span></li>
+                            <li class="level_1"><span>2.10&nbsp;&nbsp;</span><span>COLOR BALL shall not be responsible or liable for any technical failure, loss or corruption of data whilst using Our Software, including but not limited to network failure, system or server crashes, power outages or damage caused by viruses, worms logic bombs or other malicious software.</span></li>
+                            <li class="level_1"><span>2.11&nbsp;&nbsp;</span><span> It is a condition of using Our Software that You must register and open an account with Us. You agree that it is a condition precedent that You will only maintain one account with Us for these purposes and You agree and acknowledge that any and all offers or promotions are limited to one per individual. We reserve the right, at Our absolute discretion, to prevent You from receiving future offers or promotions, or to place any restrictions on Your account for breach of this condition.</span></li>
+                            <li class="level_1"><span>2.12&nbsp;&nbsp;</span><span>You represent that:</span>
+                                <ul>
+                                    <li class="level_2"><span>a)&nbsp;&nbsp;Your registered account with Us is solely for Your benefit. You shall not allow any third party (including a relative) to use Your account, password or identity to access or use Services or Software and You shall be fully responsible for any activities undertaken on Your account by a third party. You will not reveal your account username or password, to Your account or wallet, to any third party and You shall take all reasonable steps to ensure that such details are not revealed to any third party. You shall inform us immediately if You suspect that Your account is being misused by a third party and/or any third party has access to Your account, username or password so that We may investigate such matters and You will cooperate with Us, as We may reasonably request, in the course of such investigations.</span></li>
+                                    <li class="level_2"><span>b)&nbsp;&nbsp;You are responsible for the security of Your username and password for both Your account and wallet on Your own PC, internet access location or via any COLOR BALL that you might use to access Our services from. If the allocated username or password combination is “hacked” from Your computer, due to any viruses or malware that is present on the computer that You access Your account with, this is Your responsibility. You should report any possible hacking attempts or security breaches from Your computer terminal or installed COLOR BALL immediately.</span></li>
+                                    <li class="level_2"><span>c)&nbsp;&nbsp;You are fully aware that there is a risk of losing money when guess game by means of Our Software, games and Services and You are fully responsible for any such loss.</span></li>
+                                    <li class="level_2"><span>d)&nbsp;&nbsp;You are of sound mind and You are capable of taking responsibility for Your own actions and agree that Your use of Our Software, games and Services is at Your sole option, discretion and risk. In relation to Your losses you shall have no claims whatsoever against COLOR BALL, officers or employees.</span></li>
+                                    <li class="level_2"><span>e)&nbsp;&nbsp;Any funds used by You to facilitate access to Our Services were not illegally obtained and that You will not use Our Software in any way for the purpose of money laundering or other illegal purposes.</span></li>
+                                    <li class="level_2"><span>f)&nbsp;&nbsp;You will not use Our Software or Services for any unlawful or fraudulent activity or prohibited transaction (including money laundering) under the laws of any jurisdiction that applies to You and in particular the laws of the Isle of Man.</span></li>
+                                    <li class="level_2"><span>g)&nbsp;&nbsp;When using Our Services and/or website You agree to treat all of Our staff and other players with respect. Use of offensive and/or threatening language when contacting Support Services (or equivalent) or interacting with other players through any “Chat” service of “Forum” that we may choose to provide is strictly forbidden and may result in the termination of Services to You and forfeiture of Your playing account.</span></li>
+                                    <li class="level_2"><span>h)&nbsp;&nbsp;You acknowledge and agree that all wagers made are accepted at Our absolute discretion.</span></li>
+                                </ul>
+                            </li>
+                            <li class="level_1"><span>2.13&nbsp;&nbsp;</span><span>Compliance with applicable laws:</span>
+                                <ul>
+                                    <li class="level_2"><span>a)&nbsp;&nbsp;You may only use Our software if You are 18 years of age or over and/or it is legal for you to do so according to the laws that apply in Your jurisdiction. In addition to the rights reserved in 1.2 above, We may require additional proof of age and address from You and Your ability to access and use our Services shall be suspended until such satisfactory proof of age and address has been provided.</span></li>
+                                    <li class="level_2"><span>b)&nbsp;&nbsp;Without limitation to the above, access to Our Software may be restricted in certain jurisdictions. By using Our Software You agree to comply with all applicable laws regarding its use and any use of it is at Your sole option, discretion and risk.</span></li>
+                                    <li class="level_2"><span>c)&nbsp;&nbsp;Does not permit the use of its Software if You are a resident of Iran, North Korea, United States of America or in a country in which Our product is considered illegal.</span></li>
+                                </ul>
+                            </li>
+                            <li class="level_1"><span>2.14&nbsp;&nbsp;</span><span>You acknowledge and agree that You can instruct at any time a period of self-exclusion as set out in our ‘Guess Game’ page on Our site. </span></li>
+                            <li class="level_1"><span>2.15&nbsp;&nbsp;</span><span> Abandonment of Account<br>COLOR BALL reserves the right to close Your account if you do not log-in with Your username and password within the last 5 years. At the end of this period We shall with absolute discretion close Your account and Your entire account balance (if any), bonus points/tokens and/or frequent player points/tokens will be deemed abandoned and forfeited.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>3.&nbsp;&nbsp;BREACH AND INDEMNITY</p>
+                        <ul>
+                            <li class="level_1"><span>3.1&nbsp;&nbsp;</span><span>The provisions of this EULA are necessary for the protection of COLOR BALL’s business and good will and are considered to be reasonable for such purposes. You agree that any breach of this EULA may cause substantial and irreparable damages and, therefore, in the event of any such breach, in addition to other remedies which may be available, shall have the right to seek specific performance and other injunctive and equitable relief.</span></li>
+                            <li class="level_1"><span>3.2&nbsp;&nbsp;</span><span>You agree to indemnify and hold harmless COLOR BALL and its officers, employees, parent or subsidiary companies from any and all claims, demands, liabilities, damages, costs and expenses (including all reasonable legal costs) which are incurred as a result of You:</span>
+                                <ul>
+                                    <li class="level_2"><span>3.2.1&nbsp;&nbsp;</span><span>Breaching the Terms and Conditions of this EULA;</span></li>
+                                    <li class="level_2"><span>3.2.2&nbsp;&nbsp;</span><span>Breaching any law or regulation in any jurisdiction.</span></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>4.&nbsp;&nbsp;TERMINATION</p>
+                        <ul>
+                            <li class="level_1"><span>4.1&nbsp;&nbsp;</span><span>Without prejudice to any other rights, We may terminate this EULA if You fail to comply with the Terms and Conditions of this EULA. In such event, You must cease and desist from using our Software and Services and You must delete/destroy any of the copies of the Software that you may have in Your possession.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>5.&nbsp;&nbsp;INTELLECTUAL PROPERTY RIGHTS</p>
+                        <ul>
+                            <li class="level_1"><span>5.1&nbsp;&nbsp;</span><span>The Software provided by and any copies made by You, including all intellectual property rights including all patents, inventions, copyrights, database rights, design rights (whether registered or not), trademarks, trade names, logos, trade secrets, know how and all rights to sue for passing off or unfair competition and all applications for the same and all rights of a similar nature existing anywhere in the world (“Intellectual Property Rights”) therein, are and shall remain Our exclusive property.</span></li>
+                            <li class="level_1"><span>5.2&nbsp;&nbsp;</span><span>You acknowledge that the Software, the related Intellectual Property Rights including its object and source code and related proprietary information embodied in or related to them (“Proprietary Information”), contain valuable trade secrets of and are also protected by the copyright and patent laws of various countries. You agree that in accessing our Software You will keep the Proprietary Information in strict confidence and will not copy, reproduce or duplicate the Proprietary Information or any portion thereof in any form or medium, except as provided in this EULA.</span></li>
+                            <li class="level_1"><span>5.3&nbsp;&nbsp;</span><span>All Intellectual Property Rights and Proprietary Information not expressly granted are reserved by COLOR BALL.</span></li>
+                            <li class="level_1"><span>5.4&nbsp;&nbsp;</span><span>COLOR BALL shall be at liberty to advertise, promote and generate goodwill in Services through a media channel deemed fit.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>6.&nbsp;&nbsp;PAYMENT SERVICE PROVIDERS</p>
+                        <ul>
+                            <li class="level_1"><span>6.1&nbsp;&nbsp;</span><span>Once You have registered with Us to use Our Services You may be required to deposit funds with Us through an associated/suitable wallet. In agreeing to the Terms and Conditions of this EULA You also expressly agree to Us providing any personal information necessary to process the transaction, including where necessary passing information outside of Your country or residence.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>7.&nbsp;&nbsp;SECURITY REVIEWS</p>
+                        <ul>
+                            <li class="level_1"><span>7.1&nbsp;&nbsp;</span><span>By agreeing to the Terms and Conditions of this EULA You expressly authorise Us to disclose Your personal information to any appropriate third party agency for the purposes of validating the information You have provided to Us. In addition, You also agree to provide Us with any additional information and/or documentation as We may reasonably request.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>8.&nbsp;&nbsp;ASSIGNMENT</p>
+                        <ul>
+                            <li class="level_1"><span>8.1&nbsp;&nbsp;</span><span>This EULA may not be assigned by You without prior written approval. COLOR BALL may assign all rights and benefits without Your consent to any parent company or subsidiary, or new company created through a merger or by a new owner acquiring.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>9.&nbsp;&nbsp;NO WARRANTIES</p>
+                        <ul>
+                            <li class="level_1"><span>9.1&nbsp;&nbsp;</span><span>COLOR BALL expressly disclaims any warranty for the Software. The Software is provided ‘As Is’ without any express or implied warranty of any kind, including but not limited to any warranties or merchantability, non-infringement, or fitness of a particular purpose. COLOR BALL does not warrant or assume responsibility for the accuracy or completeness of any information, text, graphics, links or other items contained within the Software. COLOR BALL makes no warranties in respect of any harm that may be caused by the transmission of a computer virus, worm, time bomb, logic bomb, or other such computer program. COLOR BALL further expressly disclaims any warranty or representation to authorised users or to any third party.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>10.&nbsp;&nbsp;LIMITATION OF LIABILITY</p>
+                        <ul>
+                            <li class="level_1"><span>10.1&nbsp;&nbsp;</span><span>In no event shall We be liable for any damages (including, without limitation, lost profits, business interruption, or lost information) arising out of authorised use of or inability to use the Software, even if has been advised of the possibility of such damages. In no event will We be liable for loss of data or for indirect, special, incidental, consequential (including lost profit), or other damages based in contract, tort or otherwise, shall have no liability with respect to the content of the Software or any part thereof, including but not limited to errors or omissions contained therein, libel, infringements of rights of publicity, privacy, trademark rights, business interruption, personal injury, loss of privacy, moral rights or the disclosure of confidential information.</span></li>
+                            <li class="level_1"><span>10.2&nbsp;&nbsp;</span><span>To the extent permitted by law, the Software is supplied As Is, including any faults. To the maximum extent permitted by the law, excludes all warranties conditions or other terms that may be implied into this EULA whether by law, statute or otherwise. COLOR BALL gives no condition, warranty or other term whatsoever, either express or implied including, without limitation, any condition, warranty or other term as to the condition of any code, or as to merchantability, satisfactory quality, fitness for a particular purpose, non-infringement, or use of reasonable care and skill. To the extent permitted under any applicable laws COLOR BALL shall not be liable in contract, tort or otherwise for any loss or damage, howsoever arising in connection with the Software or this EULA. COLOR BALL shall not be liable for any indirect, special or consequential damages, or loss of profit, whether such damages or losses are known, foreseen, foreseeable or unforeseen. Nothing in this Agreement shall limit the liability for negligently caused death or personal injury or fraud.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>11.&nbsp;&nbsp;FORCE MAJEURE</p>
+                        <ul>
+                            <li class="level_1"><span>11.1&nbsp;&nbsp;</span><span>COLOR BALL shall not be liable for any failure that is as a result of an act of God (including fire, flood, earthquake, storm, hurricane or other natural disaster), war, invasion, act of foreign enemies, hostilities (regardless of whether war is declared), civil war, rebellion, revolution, insurrection, military or usurped power or confiscation, terrorist activities, government sanction, blockage, embargo , labour dispute, strike, lockout or interruption or failure of electricity, internet or telephone service.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>12.&nbsp;&nbsp;ENTIRE AGREEMENT</p>
+                        <ul>
+                            <li class="level_1"><span>12.1&nbsp;&nbsp;</span><span>The Privacy Policy and information in relation to COLOR BALL can be found on Our website and shall form an integral part of this EULA. This EULA, together with the Privacy Policy sets out the entire understanding between You and COLOR BALL and supersedes all prior agreements, whether oral or written, in respect of the subject matter of this EULA and the provision of Services.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>13.&nbsp;&nbsp;LANGUAGE</p>
+                        <ul>
+                            <li class="level_1"><span>13.1&nbsp;&nbsp;</span><span>This EULA is made in the English language. If there is any conflict in the meaning between the English language version of this Agreement and any version or translation of it in any other language, the English version shall prevail.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>14.&nbsp;&nbsp;SEVERABILITY</p>
+                        <ul>
+                            <li class="level_1"><span>14.1&nbsp;&nbsp;</span><span>Each provision of this EULA is severable, one from the other, and if any one provision is found to be unenforceable for any reason by any competent court the remaining provisions shall be and remain in full force and effect.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>15.&nbsp;&nbsp;ALTERATION OF OUR WEBSITE/APPLICATION AND CONTENT</p>
+                        <ul>
+                            <li class="level_1"><span>15.1&nbsp;&nbsp;</span><span>COLOR BALL may, in Our absolute discretion, alter or amend any product offered on Our website or App at any time for the purpose of maintaining the website.</span></li>
+                            <li class="level_1"><span>15.2&nbsp;&nbsp;</span><span>COLOR BALL may amend its its absolute discretion the Terms and Conditions of this EULA from time to time. Amendments will be displayed in the update EULA available from Our website. It remains your sole responsibility to regularly review the contents of this EULA and your continued use of the website and Our Services constitutes Your continued acceptance of the terms condition hereon in.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>16.&nbsp;&nbsp;GUESS GAME</p>
+                        <ul>
+                            <li class="level_1"><span>16.1&nbsp;&nbsp;</span><span>COLOR BALL offer a suite of self-exclusion and ‘cooling off’ options details of which are set out on Our ‘Guess Game’ page. You can access the self-exclusion and ‘cooling off’ options from within Your Account.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>17.&nbsp;&nbsp;GOVERNING LAW</p>
+                        <ul>
+                            <li class="level_1"><span>17.1&nbsp;&nbsp;</span><span>The agreement shall be governed by and construed and interpreted in accordance with the laws of the Isle of Man.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>18.&nbsp;&nbsp;COMPLAINTS</p>
+                        <ul>
+                            <li class="level_1"><span>18.1&nbsp;&nbsp;</span><span>COLOR BALL work diligently to ensure that Your experience of dealing with Us is a pleasant one. However, there may be occasions where You may wish to make a complaint regarding COLOR BALL. Should you wish to make a complaint from COLOR BALL, or its Services, then We request that You contact info@quanta.im within 30 days of the incident occurring.</span></li>
+                            <li class="level_1"><span>18.2&nbsp;&nbsp;</span><span>COLOR BALL will attempt to resolve Your complaint within 21 days of receipt. COLOR BALL reserve the right to request further information or documentation from You as and when we see fit. This will enable Us to review Your complaint in full.</span></li>
+                        </ul>
+                    </div>
+                    <div class="paragraph_div">
+                        <p>19.&nbsp;&nbsp;GAME RULES</p>
+                        <ul>
+                            <li class="level_1"><span>19.1&nbsp;&nbsp;</span><span>Our Services
+                                <br>We provide lottery services (Services). In order to use the Services you need to set up an account with COLOR BALL (Account). In order to set up an account you need to:
+                                <br>You need to make sure you are an adult who is fully responsible for your actions;
+                                <br>Register your Ethereum wallet address that you will use to send Ether to buy a lottery ticket (Sending Address).
+                                <br>Once you registered, you can not change these information: full name, email, display name, date of birth and Ethereum address in the Account Profile (Profile). Ether is the name of the currency used within Ethereum blockchain network. We will hereafter use ETH for Ether in this document.</span></li>
+                            <li class="level_1"><span>19.2&nbsp;&nbsp;</span><span>Account Profile (Profile)
+                                <br>In order to verify the Account Profile (Profile), you need to go through further verification process in which includes email. Once sending the above document to be verified by COLOR BALL, you can not change any information in your Profile. You are only entitled to open one account with COLOR BALL (Your Account). Duplicate accounts constitutes a breach of these terms. You warrant that the details you provide in relation to Your Account relate to you, are accurate and up to date. You warrant that you: control and are the legal and genuine owner of any ETH you send to us and any Ethereum address you register with us; that the funds are not derived from any illegal source. We will take all measures at our disposal and as provided by the law, including but not limited to cooperating with investigatory bodies, if we identify any breaches by you of these warranties. In case of a breach of our terms, a ban to Your account and/or even a loss of ETH you have spent for tickets and/or restriction to service access including tickets history will be applied.</span></li>
+                            <li class="level_1"><span>19.3&nbsp;&nbsp;</span><span>Using the Services
+                                <br>All lottery tickets are priced in ETH and the payment is only received in ETH. The price of each lottery is set between 0.001ETH and 0.1ETH at the time of each lottery draw's start.
+                                <br>Please pay into the Selling Address to order 1 or a number of lottery tickets (Lottery Order).
+                                <br>Any overpayments for tickets will be refunded.
+                                <br>A valid Lottery Order is only made when the Selling Address has received cleared funds which for now is 6 confirmations on the Ethereum network.
+                                <br>If we accept your Lottery Order you will see your ticket numbers for each ticket that you have purchased (Ticket Number) in the Account Profile (Profile).
+                                <br>The Ticket Number is randomly allocated to you. You do not choose your own Ticket Number.
+                                <br>Through the Profile interface you will see all the tickets you have purchased during the Current Lottery and previous lotteries.</span></li>
+                            <li><span class="level_1">19.4&nbsp;&nbsp;</span><span>Selling period<br>The guess game starts once a day and is settled once a day.</span></li>
+                            <li><span class="level_1">19.5&nbsp;&nbsp;</span><span>Prize Pool The Current Lottery Prize Pool is displayed on our Sites. Our random number will start a new round from 6:00 pm UK time, 6:00 pm UK time to 5:00 pm UK time the next day is the game participation time and ticket purchase time, 5:01 pm UK time to 5:29 pm UK time to calculate the random number. The prize draws at 5:30 pm UK time.From the Final Number the lottery system will determine the allocation of the Prize Pool to the winning ticket numbers.</span>
+                                <ul>
+                                    <li class="level_2"><span>19.5.1&nbsp;&nbsp;</span><span>Ticket Sales<br>80% of the tickets sold represents the prize pool (Prize Pool).</span></li>
+                                    <li class="level_2"><span>19.5.2&nbsp;&nbsp;</span><span>Jackpot<br>Choose a 3-digit number from 000-999. If the number is the same as the draw number, you will win. The price of 1 bet is 0.1 ETH, which can be doubled. Each doubling is the price of 1 bet.</span></li>
+                                    <li class="level_2"><span>19.5.3&nbsp;&nbsp;</span><span>Prizes<br>The fixed bonus is 50ETH, no other awards are set, and the odds of this game are up to 500 times.</span></li>
+                                </ul>
+                            </li>
+                            <li class="level_1"><span>19.6&nbsp;&nbsp;</span><span>Official results<br>The official results of the lottery are published on the Ethereum blockchain and on the Sites. You agree that those results are final. Once the results are public on our Sites, we consider that date is the announcement date.</span></li>
+                            <li class="level_1"><span>19.7&nbsp;&nbsp;</span><span>Details<br>You warrant that the details you provide are accurate. You are responsible for keeping your details up to date. In this situation you acknowledge and agree that we may retain your details for a reasonable period of time in case circumstances change and we are subsequently able to create an account for you. We only pay prizes to the Ethereum address you registered with us. We will not be liable for paying the prize to your registered account if you no longer has access to that account.</span></li>
+                            <li class="level_1"><span>19.8&nbsp;&nbsp;</span><span>Typing errors<br>We take no responsibility for typing errors on your part in submitting a Lottery Order. Please note that Ethereum transactions are irreversible.</span></li>
+                            <li class="level_1"><span>19.9&nbsp;&nbsp;</span><span>Technology<br>In order to participate in the COLOR BALL Game you need to have an Ethereum wallet. You are responsible for the management of your wallet and the private keys for your wallet.</span></li>
+                            <li class="level_1"><span>19.10&nbsp;&nbsp;</span><span>Sending Address<br>We register your sending address on our system. If you send ETH to a Selling Address from a non-registered account we will refund those funds and you will not be able to purchase a ticket.</span></li>
+                            <li class="level_1"><span>19.11&nbsp;&nbsp;</span><span>Self-Exclusion<br>COLOR BALL believes in responsible guess game. See our page on how to Self-Exclude or Self-Limit. If you Self-Exclude and try to pay for a ticket your account will be suspended and funds will be returned.</span></li>
+                            <li class="level_1"><span>19.12&nbsp;&nbsp;</span><span>Transaction Costs<br>We do not pay for transaction costs in making any refunds to you. All refunds are minus the transactions fees incurred in making the payment.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- commonality fotter -->
+        <%
+        include("../common/bottom.html"){}
+        %>
+    </div>
 </body>
 </html>
