@@ -1,10 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <!-- commonality  meta and title -->
+    <%
+    include("../common/common.meta.html"){}
+    %>
+    <!-- commonality style -->
+    <%
+    include("../common/common.css.html"){}
+    %>
+    <!-- commonality js -->
+    <%
+    include("../common/common.js.html"){}
+    %>
+    <link rel="stylesheet" type="text/css" href="../styles/main_styles1.css">
+    <link rel="stylesheet" type="text/css" href="../styles/responsive1.css">
+
+    <style type="text/css">
+
+        /*  big pad (pad pro, 1670px and up)  */
+        @media (max-width: 1670px) {
+            .disclaimer_contact {
+                width: 75%;
+                padding-right: 15px;
+                padding-left: 15px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+        }
+        /*  Medium devices (pad, 800px and up)  */
+        @media (max-width: 800px) {
+            .disclaimer_contact {
+                width: 80%;
+                padding-right: 15px;
+                padding-left: 15px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+        }
+        /*  Medium Phone (phone, 420px and up)  */
+        @media (max-width: 420px) {
+            .disclaimer_contact {
+                width: 85%;
+                padding-right: 15px;
+                padding-left: 15px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+        }
+        /*  Small Phone (phone, 360px and up)  */
+        @media (max-width: 360px) {
+            .disclaimer_contact {
+                width: 95%;
+                padding-right: 10px;
+                padding-left: 10px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+        }
+        @media (min-width: 1670px) {
+            .disclaimer_contact {
+                width: 75%;
+                padding-right: 10px;
+                padding-left: 10px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+        }
+        .disclaimer_div {
+            width:100%;
+        }
+        .disclaimer_contact {
+            margin-top: 80px;
+        }
+        .label_div {
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .title_h1 {
+            text-align:center;
+            padding-top: 60px;
+            margin-bottom: 50px;
+        }
+        .paragraph_title {
+            font-weight: bold;
+        }
+        p {
+            margin-top: 10px;
+        }
+        ul {
+            width:100%;
+            text-align:left;
+            margin-top: 10px;
+        }
+        .paragraph_div {
+            margin-top: 15px;
+        }
+        .level_1 {
+            padding-left: 10px;
+        }
+        .level_2 {
+            padding-left: 20px;
+        }
+        .level_3 {
+            padding-left: 30px;
+        }
+    </style>
 </head>
 <body>
-    <div><span>24242424</span></div>
+<div class="disclaimer_div">
+    <!-- commonality head -->
+    <%
+    include("../common/index_top.html"){}
+    %>
+    <div class="disclaimer_contact">
+        <div class="label_div">
+            <h1 class="title_h1">Privacy&nbsp;&nbsp;Policy</h1>
+            <div class="text_content col-md-12 col-sm-16 col-xs-16">
+                <div class="paragraph_div">
+                    <p class="paragraph_title">1.&nbsp;&nbsp;Who is responsible for your personal data</p>
+                    <p>Our Privacy Policy applies to the personal data that we at Color Ball collect and use.</p>
+                    <p>“You” (“your” also refers to you) and Color Ball is defined as “we”, “us” or “our” as appropriate throughout this Privacy Policy document.</p>
+                    <p>We are Color Ball and we are a company incorporated in the Isle of Man with registration number 13083C and Minerva House, Ballafletcher Rd, Douglas, Isle of Man IM4 4QH. At Color Ball (“we”) are dedicated to safeguarding and preserving your privacy when visiting our website, utilising our online lottery services, products or communicating electronically with us. For the purposes of the data protection laws that apply to us, including the GDPR which is the European General Data Protection Regulation, we control the ways your personal data are collected and used. This Privacy Policy provides an explanation as to what happens to any personal data that you provide to us, or that we collect from you. We do update this Privacy Policy from time to time so please do review this policy regularly.</p>
+                </div>
+                <div class="paragraph_div">
+                    <p class="paragraph_title">2.&nbsp;&nbsp;Personal Data We Collect About You</p>
+                    <p>“Personal data” in this Privacy Policy, refers to the information that relates to you. At Color Ball, your personal data consists of your name, contact details, proof of identity documents, ethereum address, and information on how you use our website and lottery applications. We collect some of your personal data directly from you, for example when you register to play our lottery games, subscribe to our newsletters, use our website or our mobile and desktop apps, use our services or contact us (e.g. requesting technical support). We only collect your personal data that is necessary to provide our services in an efficient and legally compliant way.</p>
+                    <ul>
+                        <li class="level_1"><span>2.1&nbsp;&nbsp;</span><span>Categories of Data We Collect</span></li>
+                        <li class="level_1"><span>The following information can be collected for services purposes, for information on how we use your personal data see section 3 below:</span>
+                            <ul>
+                                <li class="level_2"><span>1.&nbsp;&nbsp;Your first name and surname and username.</span></li>
+                                <li class="level_2"><span>2.&nbsp;&nbsp;Contact information, such as residential address, postcode, county, country and email address.</span></li>
+                                <li class="level_2"><span>3.&nbsp;&nbsp;Account information, such as username and password.</span></li>
+                                <li class="level_2"><span>4.&nbsp;&nbsp;Information related to your virtual wallets public addresses.</span></li>
+                                <li class="level_2"><span>5.&nbsp;&nbsp;Financial information, such as Ethereum addresses and Blockchain transaction details.</span></li>
+                            </ul>
+                        </li>
+                        <li class="level_1"><span>The following information is collected for efficiency and security purposes:</span>
+                            <ul>
+                                <li class="level_2"><span>1.&nbsp;&nbsp;Your browser type and its version.</span></li>
+                                <li class="level_2"><span>2.&nbsp;&nbsp;Your operating system used to access our applications.</span></li>
+                                <li class="level_2"><span>3.&nbsp;&nbsp;Timestamps of access to our websites and applications.</span></li>
+                                <li class="level_2"><span>4.&nbsp;&nbsp;Your internet protocol address (IP address).</span></li>
+                                <li class="level_2"><span>5.&nbsp;&nbsp;The internet service provider of accessing system.</span></li>
+                                <li class="level_2"><span>5.&nbsp;&nbsp;Insights about blockchain transactions on our lottery games.</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="paragraph_div">
+                    <p class="paragraph_title">3.&nbsp;&nbsp;How and Why We Use Your Personal Data</p>
+                    <p>In accordance with the General Data Protection Regulation (GDPR) of the European Union, we only use your personal data when we have a lawful basis to do so. We use your personal data to perform our contract with you, i.e. to deliver lottery products and services you request for, and to fulfil our legal interests or those of our business associates (third parties), when these interests are not overridden by your rights (for example, to manage our relationship with you as our customer).</p>
+                    <p>Specifically, we use personal data for the following purposes:</p>
+                    <ul>
+                        <li class="level_1"><span>3.1&nbsp;&nbsp;</span><span>Registration<br>We use your personal data to register you on our “Know Your Customer” KYC portals. We collect data about your Blockchain transactions if you purchase tickets to play our lottery games. The information you provide us during registration for our games is necessary to meet our contractual commitments to you and compliance with legal obligations.</span></li>
+                        <li class="level_1"><span>3.2&nbsp;&nbsp;</span><span>Eligibility<br>We also collect data regarding your location, time zone, from which you access our app or website, the personal details you provide during account set up and, where relevant, any identity documents you have provided to check whether you are eligible to play our games. When you register for our games on our portal by submitting “proof of identity” documents (email,phone number etc) we take precautionary measures to verify that the details you provide are correct. This information is important for compliance with legal obligations.</span></li>
+                        <li class="level_1"><span>3.3&nbsp;&nbsp;</span><span>Customer Experience<br>We use your personal data and information about your use of our website, lottery applications, technical details of your device and other related information we receive from you or third parties to improve your customer experience and provide bespoke services that satisfy your needs and preferences. Also, we use your personal data to inform you about the latest updates of our lottery games and other products you may like. If you have subscribed to our newsletter, we may send you marketing communications and information that will create an excellent customer experience. This is necessary for our legitimate business interests.</span></li>
+                        <li class="level_1"><span>3.4&nbsp;&nbsp;</span><span>Playing our games<br>We use the personal and contact information provided by you and the Blockchain transaction details about your ticket purchases, to provide our lottery games and other services to you. This is important to meet our contractual commitments to you.</span></li>
+                        <li class="level_1"><span>3.5&nbsp;&nbsp;</span><span>Managing your account<br>We use your personal and contact information, and Blockchain transaction details about your lottery purchases, to manage your account. This is important to meet our contractua commitments to you.</span></li>
+                        <li class="level_1"><span>3.6&nbsp;&nbsp;</span><span>Communicating with you<br>We use your personal data provided by you, records of our communications with you and, in some circumstances, transaction details, to manage our relationship with you. Below are some few examples of how your personal data is used for communication:</span>
+                            <ul>
+                                <li class="level_2"><span>●&nbsp;&nbsp;To provide you with the information requested from us, relating to our services and to provide information on other services which we feel may be of interest to you,where you have consented to receive such information.</span></li>
+                                <li class="level_2"><span>●&nbsp;&nbsp;To communicate with you in response to any query, request or complaint you may have including by email or telephone whether relating to any ticket that you have purchased from us or otherwise.</span></li>
+                            </ul>
+                            <span>Depending on the context, we communicate with you when it's necessary to fulfil our contractual obligations with you, for legal compliance and also for our legitimate business interests.</span>
+                        </li>
+                        <li class="level_1"><span>3.7&nbsp;&nbsp;</span><span>Technical issues<br>We use technical information and your personal data to administer and protect our business, this website and our lottery applications (e.g. troubleshooting,system maintenance and security) to resolve any technical issues you may encounter. This is necessary for our legitimate business interests (e.g efficiently running our lottery games, providing IT system administration and security services).</span></li>
+                        <li class="level_1"><span>3.8&nbsp;&nbsp;</span><span>Analytics<br>We use your personal data relating to the use of our website, lottery applications and technical information, which includes information about your device or where you are accessing our website from, to optimise our service and to improve the efficiency of our lottery website and apps, services, direct marketing, behaviour profiling and your overall experience. This data is needed for our legitimate business interests (such as understanding how lottery game players play the games, keeping the content of our website relevant and up-to-date and improve our marketing strategy).</span></li>
+                        <li class="level_1"><span>3.9&nbsp;&nbsp;</span><span>Regulatory compliance<br>We use your personal data, lottery transaction information, information about any transaction between you and us, records of your communications with us, information about your use of our website and lottery applications, or technical information, to enable us to comply with our legal obligations.</span></li>
+                        <li class="level_1"><span>3.10&nbsp;&nbsp;</span><span>Fraud prevention<br>We use your personal data and Blockchain financial transaction information, details about any transaction between you and us, records of your communications with us, information about your use of our website and lottery apps, wallets, or technical information, to carry out analysis for the purposes of identifying and dealing with fraudulent activities. This is necessary to assist in making your lottery transactions secure, enable the protection your digital assets and our legitimate business interests.</span></li>
+                    </ul>
+                </div>
+                <div class="paragraph_div">
+                    <p class="paragraph_title">4.&nbsp;&nbsp;Your Data Protection Rights</p>
+                    <p>Under the GDPR you have some level of rights over your personal data we hold. At Color Ball, we are committed to make it easy for you to exercise these rights in the most transparent manner possible. You can exercise any of your rights in relation to the data that Color Ball holds about you, by contacting our data protection officer through the email address provided at the end of this section.</p>
+                    <p>The following are the specific rights you have over your personal data we hold:</p>
+                    <ul>
+                        <li class="level_1"><span>1.&nbsp;&nbsp;</span><span> Rights to request access to your personal data and information related to our use and processing of your information, including:</span>
+                            <ul>
+                                <li class="level_2"><span>●&nbsp;&nbsp;The purposes of the processing.</span></li>
+                                <li class="level_2"><span>●&nbsp;&nbsp;The categories of personal data concerned.</span></li>
+                                <li class="level_2"><span>●&nbsp;&nbsp;The recipients or categories of recipients to whom the personal data have been or will be disclosed, in particular recipients in third countries or international organisations.</span></li>
+                                <li class="level_2"><span>●&nbsp;&nbsp;The envisaged period for which the personal data will be stored, or, if not possible,the criteria used to determine that period.</span></li>
+                                <li class="level_2"><span>●&nbsp;&nbsp;The rights to make a request from Color Ball, the rectification or erasure of your personal data, or restriction of processing of your personal data in case:</span>
+                                    <ul>
+                                        <li class="level_3"><span>❖&nbsp;&nbsp;Your personal data is no longer necessary in relation to the purposes for which it was collected or otherwise processed.</span></li>
+                                        <li class="level_3"><span>❖&nbsp;&nbsp;There are no legitimate grounds for processing your personal data.</span></li>
+                                        <li class="level_3"><span>❖&nbsp;&nbsp;Your personal data have been unlawfully processed.</span></li>
+                                        <li class="level_3"><span>❖&nbsp;&nbsp;The accuracy of the personal data is contested by you, for a period enabling Color Ball to verify the accuracy of the personal data.</span></li>
+                                        <li class="level_3"><span>❖&nbsp;&nbsp;The processing is unlawful and you oppose the erasure of the personal data and requests instead of the restriction of their use instead.</span></li>
+                                        <li class="level_3"><span>❖&nbsp;&nbsp;We no longer need your personal data for the purposes of the processing, but they are required by you for the establishment, exercise or defence of legal claims.</span></li>
+                                    </ul>
+                                </li>
+                                <li class="level_2"><span>●&nbsp;&nbsp;The rights to inquire about any available information regarding the source of personal data we hold about you where the personal data was not collected directly from you.</span></li>
+                                <li class="level_2"><span>●&nbsp;&nbsp;The right to obtain information as to whether your personal data are transferred to a third country or to an international organisation. Where this is the case, you have the right to be informed of the appropriate safeguards relating to the transfer.</span></li>
+                                <li class="level_2"><span>●&nbsp;&nbsp;The right to request and to obtain from Color Ball the confirmation as to whether or not your personal data is being processed.</span></li>
+                            </ul>
+                        </li>
+                        <li class="level_1"><span>2.&nbsp;&nbsp;</span><span> Rights to withdraw your data protection consent to our use of your information at any time where we rely on your consent to use or process that information.<br>If one of the aforementioned cases applies, and you wish to request the erasure of personal data stored by Color Ball, you can at any time, contact our data protection officer on dataprotectionofficer@quanta.im. We promise to promptly ensure that the erasure request is completed as quickly as possible in accordance with provisions of the GDPR.</span>
+                    </ul>
+                </div>
+                <div class="paragraph_div">
+                    <p class="paragraph_title">5.&nbsp;&nbsp;Protecting Your Personal Data and Data Retention</p>
+                    <p>All personal data provided to Color Ball is stored on our secure servers. All lottery transactions entered into on systems are encrypted with modern technology to ensure its security. We take all appropriate security measures in line with market driven best practice to protect your personal information.</p>
+                    <ul>
+                        <li class="level_1"><span>5.1&nbsp;&nbsp;</span><span>How we protect your data<br>When you provide your personal data through our website, lottery website, lottery applications, this information is transmitted across the internet securely using industry standard encryption.<br>Your personal data will be held encrypted in our tamper proof systems, consistently monitored against cyber attacks and are located on the premises of our appointed data centre suppliers.<br>Where these third parties process your personal data on our behalf, we require that they have appropriate technical and organisational measures in place to protect this data.</span></li>
+                        <li class="level_1"><span>5.2&nbsp;&nbsp;</span><span>How you can protect your personal data<br>When you create your account, choose a strong password that is unique to this account. Do not share your password with other people. Using the same password across your different accounts will increase the risk of your data being compromised if your password is accidentally or unlawfully accessed by authorised persons. If you suspect that someone else has got access to your password, make sure that you change it immediately.<br>When using our wallets, ensure you keep your passphrases and keys in a secure device isolated from devices you use regularly. Do not share the device containing your passphrases and keys with friends, family members or even people you trust.</span></li>
+                        <li class="level_1"><span>5.3&nbsp;&nbsp;</span><span>Data Retention<br>Your personal data will be retained for as long as necessary to satisfy the purposes we received it for, this includes regulatory and business purposes.<br>In determining the necessary personal data retention period, the following factors are considered:</span>
+                            <ul>
+                                <li class="level_2"><span>●&nbsp;&nbsp;The amount of personal data.</span></li>
+                                <li class="level_2"><span>●&nbsp;&nbsp;The nature of the personal data.</span></li>
+                                <li class="level_2"><span>●&nbsp;&nbsp;The sensitivity of the personal data.</span></li>
+                                <li class="level_2"><span>●&nbsp;&nbsp;The potential risk of harm from unauthorised use or disclosure of your personal data.</span></li>
+                                <li class="level_2"><span>●&nbsp;&nbsp;The purposes for which we process your personal data and whether we can achieve those purposes through other means, and the applicable legal requirements.</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="paragraph_div">
+                    <p class="paragraph_title">6.&nbsp;&nbsp;Third Party Links</p>
+                    <p>You may find links to third party websites on our website. These websites should have their own privacy policies which you should check. We do not accept any responsibility or liability for their policies whatsoever as we have no control over them.</p>
+                </div>
+                <div class="paragraph_div">
+                    <p class="paragraph_title">7.&nbsp;&nbsp;Use of Cookies</p>
+                    <p>To enhance the quality of our services, provide you with relevant content as well as understanding how you use our website and game applications, we use technologies, such as cookies. Cookies do not typically contain any information that personally identifies you, but personal information that we store about you may be linked to the information stored in and obtained from cookies.</p>
+                    <p>We use cookies to learn about your traffic patterns and website usage to help us develop the design and layout of the website in order to enhance your experience browsing our website and applications. You can delete cookies if you wish; while certain cookies are necessary for viewing and navigating on our website, most of the features will be still accessible without cookies.</p>
+                </div>
+                <div class="paragraph_div">
+                    <p class="paragraph_title">8.&nbsp;&nbsp;Contacting Us</p>
+                    <p>We welcome any queries, comments or requests you may have regarding this Privacy Policy. Please do not hesitate to contact us at dataprotectionofficer@quanta.im.</p>
+                </div>
+                <div class="paragraph_div">
+                    <p class="paragraph_title">9.&nbsp;&nbsp;Changes to this Privacy Policy</p>
+                    <p>This Privacy Policy was last updated on 15th October 2019.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- commonality fotter -->
+    <%
+    include("../common/bottom.html"){}
+    %>
+</div>
 </body>
 </html>
