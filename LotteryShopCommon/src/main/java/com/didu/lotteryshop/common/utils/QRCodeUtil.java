@@ -113,6 +113,33 @@ public class QRCodeUtil {
         return image;
     }
 
+    /**
+     * 背景图加二维码合并
+     * @param background
+     * @param qr
+     * @param outputStream
+     * @throws IOException
+     */
+    public static void mergeImage(BufferedImage background, BufferedImage qr, OutputStream outputStream) throws IOException {
+        try {
+            //BufferedImage big = background;
+            // BufferedImage small = qr;//QRCodeUtil.createImage("www.baidu.com", "", false);
+        /*//合成两个文件时使用
+        BufferedImage small = ImageIO.read(new File(fillPicPath));*/
+            Graphics2D g = background.createGraphics();
+
+            //二维码或小图在大图的左上角坐标
+            int x = (background.getWidth() - qr.getWidth() - 40);
+            int y = (background.getHeight() - qr.getHeight() - 24);
+            g.drawImage(qr, x, y, qr.getWidth(), qr.getHeight(), null);
+            g.dispose();
+            //为了保证大图背景不变色，formatName必须为"png"
+            ImageIO.write(background,FORMAT_NAME, outputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 背景图加二维码合并
