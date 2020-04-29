@@ -121,7 +121,7 @@ public class MemberController extends BaseBaseController {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/generalizeInit")
+    @RequestMapping("/generalizeInit.png")
     public ResultUtil generalizeInit(String userId, HttpServletResponse response){
         LoginUser loginUser = getLoginUser();
         String QR = baseConfig.getUrl() +  "?generalizePersonId="+loginUser.getId();
