@@ -271,6 +271,7 @@ section
 .container_right{
 	float: left;
 	width: 69%;
+	min-height: calc(100vh - 240px);
 }
 .container_phone{
 	display: none;
@@ -280,6 +281,7 @@ section
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
+	min-height: 100vh;
 }
 .button
 {
