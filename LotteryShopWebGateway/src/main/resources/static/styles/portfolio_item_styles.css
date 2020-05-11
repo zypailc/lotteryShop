@@ -366,6 +366,7 @@ section
 .main_nav
 {
 	flex-basis: 200%;
+	margin-right: 80px;
 }
 .main_nav ul
 {
@@ -412,7 +413,6 @@ section
 }
 .search_content
 {
-	width: 100%;
 	height: 100%;
 }
 .search_button
