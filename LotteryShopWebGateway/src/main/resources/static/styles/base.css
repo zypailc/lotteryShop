@@ -1,6 +1,7 @@
 .top_div{float: right;}
-.top_login_span{font-size: 18px;color: #ffffff;margin-right: 10px;}
-.top_login_span a {color: #ffffff;}
+.top_login_span{font-size: 18px;color: #ffffff;margin: 0px 10px;}
+.top_login_span a {color: #ffffff; transition: all .35s;}
+.top_login_span a:hover {color: #7e5884;}
 .top_center_span{font-size: 10px;margin-right:5px;}
 .body_top{top: 0px !important;}
 .goog-te-banner-frame{top: -40px !important;}
