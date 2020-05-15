@@ -1024,7 +1024,7 @@ background: -webkit-linear-gradient(top,  #7e5884 0%,#543179 50%,#7c458f 100%); 
 	}
 }
 /*  Small Phone (phone, 360px and up)  */
-@media (max-width: 360px) {
+@media (max-width: 400px) {
 	.home
 	{
 		width: 100%;
@@ -1038,6 +1038,14 @@ background: -webkit-linear-gradient(top,  #7e5884 0%,#543179 50%,#7c458f 100%); 
 		margin: 0 auto;
 		position: relative;
 		top:99%;
+	}
+	.lotteryChart { height: 400px!important; }
+	.lotteryChartl {
+		width: 100%!important;
+	}
+	.lotteryChartl canvas {
+		width: 350px!important;
+		height: 350px!important;
 	}
 }
 /*********************************
