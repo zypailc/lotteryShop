@@ -8,7 +8,7 @@
         color: #ffffff;
     }
     .footer a {
-        color: #a5a5a5;
+        color: #cccccc;
     }
     .footer_div {
         padding-top: 30px;
@@ -25,6 +25,7 @@
         margin-left: 15px;
         margin-right: 15px;
     }
+    .footer_div .authorization li { float: right!important; }
     .footer_row1 {
         padding-bottom: 15px;
         margin-top: 5px;
@@ -60,41 +61,11 @@
     .footer_row3 {
         text-align:center;
     }
-    @media (max-width: 1200px) {
-
-    }
-    /*  Medium devices (desktops, 800px and up)  */
-    @media (max-width: 800px) {
-        .footer {
-            width: 100%;
-            height: 500px;
-        }
-        .row2left {
-            width:300px;
-            height: 100px;
-            max-width: 90%;
-        }
-        .row2left li{
-            margin-left: 15px;
-            margin-right: 15px;
-        }
-        .row2right {
-            max-width: 50%;
-        }
-        .row2right li{
-            float:left;
-            margin-left: 5px;
-            margin-right: 5px;
-        }
-    }
     /*  Medium Phone (phone, 420px and up)  */
     @media (max-width: 420px) {
+        .footer_content {width: 100%; }
         .footer {
             width: 100%;
-            height: 600px;
-        }
-        .row2left {
-            height: 100px;
         }
         .row2left li{
             margin-left: 15px;
@@ -103,30 +74,10 @@
         .row2right {
             height: 80px;
         }
+        .third-company { text-align: center; }
         .row2right li{
-            float:left;
-            margin-left: 5px;
-            margin-right: 5px;
-        }
-    }
-    /*  Small Phone (phone, 360px and up)  */
-    @media (max-width: 360px) {
-        .footer {
-            width: 100%;
-            height: 600px;
-        }
-        .row2left {
-            height: 100px;
-        }
-        .row2left li{
-            margin-left: 10px;
-            margin-right: 40px;
-        }
-        .row2right {
-            height: 80px;
-        }
-        .row2right li{
-            float:left;
+            float:unset;
+            display: inline-block;
             margin-left: 5px;
             margin-right: 5px;
         }
@@ -136,13 +87,13 @@
     <div class="footer_div">
         <div class="footer_content">
             <div class="footer_row1">
-                <p data-localize="base.boottomTitle">
+                <p data-localize="base.boottomTitle" style="text-align: center;">
                     The laws applicable to the services offered by ColorBall vary country to country. The contents of this site are not intended to encourage any related activities in countries and regions where ColorBall is legally accepted.
                 </p>
             </div>
             <div class="footer_row2">
-                <div class="col-md-9 row2left">
-                    <ul>
+                <div class="col-md-6 col-xs-12 row2left">
+                    <ul class="authorization">
                         <li>
                             <a href="../web/authPrivacyPolicy" target="" data-localize="base.privacypolicy">Privacy Policy</a>
                         </li>
@@ -154,8 +105,8 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-md-3 row2right">
-                    <ul>
+                <div class="col-md-6 col-xs-12 row2right">
+                    <ul class="third-company">
                         <li>
                             <a href="" target="">
                                 <img src="../images/r18.png" alt="" class="imgr18">
