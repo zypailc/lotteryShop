@@ -302,7 +302,7 @@ section
 .home
 {
 	width: 100%;
-	height: 950px;
+	height: 750px;
 }
 .home_background_container
 {
@@ -330,6 +330,9 @@ section
 	position: relative;
 	top:86%;
 }
+.homebutton a {
+	transition: all .35s;
+}
 .btn-home {
 	background: #7e5884; /* Old browsers */
 	background: -moz-linear-gradient(top, #7e5884 0%, #543179 50%, #7c458f 100%); /* FF3.6+ */
@@ -354,8 +357,9 @@ background: -webkit-linear-gradient(top,  #7e5884 0%,#543179 50%,#7c458f 100%); 
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 128px;
-	background: rgba(27, 11, 51, 0.52);
+	height: 80px;
+	background: rgba(72, 32, 132, 0.52);
+	transition: background .35s;
 	z-index: 10;
 }
 .header.scrolled
@@ -395,6 +399,7 @@ background: -webkit-linear-gradient(top,  #7e5884 0%,#543179 50%,#7c458f 100%); 
 .main_nav
 {
 	flex-basis: 200%;
+	margin-right: 80px;
 }
 .main_nav ul
 {
@@ -441,7 +446,6 @@ background: -webkit-linear-gradient(top,  #7e5884 0%,#543179 50%,#7c458f 100%); 
 }
 .search_content
 {
-	width: 100%;
 	height: 100%;
 }
 .search_button
@@ -973,7 +977,7 @@ background: -webkit-linear-gradient(top,  #7e5884 0%,#543179 50%,#7c458f 100%); 
 	.home
 	{
 		width: 100%;
-		height: 850px;
+		height: 720px;
 		margin-top: 160px;
 		margin-bottom: 300px;
 	}
@@ -1020,7 +1024,7 @@ background: -webkit-linear-gradient(top,  #7e5884 0%,#543179 50%,#7c458f 100%); 
 	}
 }
 /*  Small Phone (phone, 360px and up)  */
-@media (max-width: 360px) {
+@media (max-width: 400px) {
 	.home
 	{
 		width: 100%;
@@ -1034,6 +1038,14 @@ background: -webkit-linear-gradient(top,  #7e5884 0%,#543179 50%,#7c458f 100%); 
 		margin: 0 auto;
 		position: relative;
 		top:99%;
+	}
+	.lotteryChart { height: 400px!important; }
+	.lotteryChartl {
+		width: 100%!important;
+	}
+	.lotteryChartl canvas {
+		width: 350px!important;
+		height: 350px!important;
 	}
 }
 /*********************************

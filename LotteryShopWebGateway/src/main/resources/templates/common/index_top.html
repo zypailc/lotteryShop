@@ -27,7 +27,12 @@
         border-radius: 2px;
     }
     .a_logout{
+        color: #dddddd!important;
+        margin-left: 4px;
         cursor: pointer;
+    }
+    .a_logout:hover {
+        color: #ffffff!important;
     }
     .div_margin_notice_index{
         margin: 10px;
@@ -76,38 +81,13 @@
 
     <!-- Navigation -->
     <nav class="main_nav justify-self-end text-right">
-        <div class="top_div">
-            <div class="search_content d-flex flex-column align-items-center justify-content-center">
-                <% if(has(whetherLogin) && whetherLogin){ %>
-                <div class="top_center_span">
-                    <span class="span_personal"><span data-localize="base.lastTime"></span> ：${loginUser.loginDate!"error"}</span> <br/>
-                    <span>
-                        <a class="a_person" href="../web/personalCenter"><span data-localize="base.personalCenter"> Personal Center</span></a>
-                        <a class="a_logout" onclick="logOut()" data-localize="base.logOut">[log out]</a>
-                    </span>
-                </div>
-                <% }else{ %>
-                <div class="top_login_span">
-							<span>
-                                <% if(has(type) && type == 'register'){ %>
-                                    <a class="a_border" href="../web/authLogin" style="padding-left:20px" data-localize="base.login">Login</a>
-                                <% }else if(has(type) && type == 'login'){ %>
-                                    <a class="a_border" href="../web/authRegister" style="padding-left:20px"  data-localize="base.register">Register</a>
-                                <% }else{ %>
-                                    <a class="a_border" href="../web/authLogin" data-localize="base.login">Login</a>
-                                    <span> | </span>
-                                    <a class="a_border" href="../web/authRegister" data-localize="base.register">Register</a>
-                                <% } %>
-							</span>
-                </div>
-                <% } %>
-            </div>
-            <div>
-                <a class="noticeImg" href="javascript:void(0)" style="margin-right: 20px">
+        <div class="top_div d-flex flex-row">
+            <div style="width: 200px;">
+                <a class="noticeImg" href="javascript:void(0)" style="margin-right: 6px">
                     <img src="../images/notice/ld/notice_close.png">
                 </a>
 
-                <a class="a_language_select_onchange dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="a_language_select_onchange dropdown-toggle" style="margin-right: 12px;" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <img class="language_img" src="../images/flags/en.png"> <!--en-->
                 </a>
 
@@ -137,6 +117,31 @@
                         <img class="language_img" src="../images/flags/zh.png"> <!--<span>zh</span>-->
                     </a>
                 </div>
+            </div>
+            <div class="search_content d-flex flex-column align-items-center justify-content-center">
+                <% if(has(whetherLogin) && whetherLogin){ %>
+                <div class="top_center_span">
+<!--                    <span class="span_personal"><span data-localize="base.lastTime"></span> ：${loginUser.loginDate!"error"}</span> <br/>-->
+                    <span>
+                        <a class="a_person" href="../web/personalCenter"><span data-localize="base.personalCenter"> Personal Center</span></a>
+                        <a class="a_logout" onclick="logOut()" data-localize="base.logOut">[log out]</a>
+                    </span>
+                </div>
+                <% }else{ %>
+                <div class="top_login_span">
+							<span>
+                                <% if(has(type) && type == 'register'){ %>
+                                    <a class="a_border" href="../web/authLogin" style="padding-left:20px" data-localize="base.login">Login</a>
+                                <% }else if(has(type) && type == 'login'){ %>
+                                    <a class="a_border" href="../web/authRegister" style="padding-left:20px"  data-localize="base.register">Register</a>
+                                <% }else{ %>
+                                    <a class="a_border" href="../web/authLogin" data-localize="base.login">Login</a>
+                                    <span style="margin: 0 4px;"> | </span>
+                                    <a class="a_border" href="../web/authRegister" data-localize="base.register">Register</a>
+                                <% } %>
+							</span>
+                </div>
+                <% } %>
             </div>
         </div>
     </nav>
