@@ -26,11 +26,11 @@ public class TestContract1 {
         try {
             //账户充值私
 
-            Web3j web3j = Web3j.build(new HttpService("http://52.74.252.140:8545/"));
+            Web3j web3j = Web3j.build(new HttpService("http://127.0.0.1:8545"));
             //查询所有账户余额
             fianAccountsBalance(web3j);
-            String outPerKey = "0x7f58204fcf3f9a8df8967530e5276d35074ec2a79546593de8e503cc970bed02";
-            String outAddress = "0xA4027E2379DaBa87cFe682C52f31282D31f8CDA4";
+            String outPerKey = "0xcec5795a7278d5e5ad566324c4c47f9d6cb954ffd316e56306795e18b2046429";
+            String outAddress = "0xA71966b142fC69b23f20f1E372811251467C52C6";
             //管理员账号
             String toAddress = "0xC0935FF232d752B002b09A09fE64339AfeBe182B";
 
@@ -61,7 +61,7 @@ public class TestContract1 {
                     nonce, BigInteger.valueOf(22000000000L),
                     BigInteger.valueOf(4300000L),
                     toAddress,
-                    Convert.toWei("90", Convert.Unit.ETHER).toBigInteger());
+                    Convert.toWei("30", Convert.Unit.ETHER).toBigInteger());
 
             Credentials credentials = Credentials.create(outPerKey);
             byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, credentials);

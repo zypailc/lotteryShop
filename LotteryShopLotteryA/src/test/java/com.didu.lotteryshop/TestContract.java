@@ -3,8 +3,6 @@ package com.didu.lotteryshop;
 import com.didu.lotteryshop.lotterya.contract.LotteryAContract;
 import org.junit.Test;
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.ECKeyPair;
-import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.response.EthAccounts;
@@ -12,7 +10,6 @@ import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.DefaultGasProvider;
-import org.web3j.tx.gas.StaticGasProvider;
 import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
@@ -30,8 +27,8 @@ public class TestContract {
             //查询所有账户余额
             fianAccountsBalance(web3j);
             //部署智能合约
-            String managerAddress = "0x0B723f261cdd874Bd2dF700a95d01E907c245EF0";
-            String managerPrivateKey = "0x49d5ad76622376539a9cd9aa00b3b154ae55bc5aeb998ea2c6f1e8b74d2dd364";
+            String managerAddress = "0xC0935FF232d752B002b09A09fE64339AfeBe182B";
+            String managerPrivateKey = "0xd14dc35cffb9203ed97723534fabd1c3c5703a4e9c5c0faa75bd6c91706c8b53";
 
             //EthGetBalance ethGetBalance1 = web3j.ethGetBalance(managerAddress, DefaultBlockParameter.valueOf("latest")).send();
             //System.out.println("部署前账户余额："+bigIntegerToBigDecimal(ethGetBalance1.getBalance()));

@@ -324,7 +324,7 @@ function findWalletRecord(flag,classProperty,url){
         $.ajax({
             url: url,
             type: 'post',
-            data: {"currentPage": currentPage, "pageSize": pageSize, "status": '1,2'},
+            data: {"currentPage": currentPage, "pageSize": pageSize, "status": '0,1,2'},
             dataType: "json",
             success: function (result) {
                 var dataInfo = result.extend.data;

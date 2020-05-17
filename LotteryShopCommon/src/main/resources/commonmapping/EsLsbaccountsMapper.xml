@@ -34,7 +34,7 @@
 			and el_.member_id = #{memberId}
 		</if>
 		<if test="status != null and status != '' ">
-			in(el_.status,#{status})
+			and el_.status in(${status})
 		</if>
 		order  by el_.create_time desc
 		<if test="currentPage != null and currentPage != '' and pageSize != null and pageSize != '' ">

@@ -31,3 +31,12 @@ mybatis-plus:
 logging:
   config:
     classpath: logback.xml
+  level:
+    com:
+      didu:
+        lotteryshop:
+          common:
+            mapper: DEBUG
+#mybatis sql 日志打印
+
+

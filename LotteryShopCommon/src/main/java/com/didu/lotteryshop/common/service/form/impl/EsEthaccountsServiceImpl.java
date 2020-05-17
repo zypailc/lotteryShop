@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.didu.lotteryshop.common.base.service.BaseService;
 import com.didu.lotteryshop.common.entity.EsEthaccounts;
 import com.didu.lotteryshop.common.mapper.EsEthaccountsMapper;
-import com.didu.lotteryshop.common.mapper.EsEthwalletMapper;
 import com.didu.lotteryshop.common.service.form.IEsEthaccountsService;
 import com.github.abel533.sql.SqlMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -446,6 +445,7 @@ public class EsEthaccountsServiceImpl extends ServiceImpl<EsEthaccountsMapper, E
         //Page<EsEthaccounts> pageEthRecord = new Page<EsEthaccounts>(currentPage,pageSize);
         Page<Map<String,Object>> pageEthRecord = new Page<>();
         currentPage = (currentPage - 1) * pageSize;
+        status = "'"+status.replaceAll(",","','")+"'";
         pageEthRecord.setRecords(esEthaccountsMapper.findEthRecordPagination(currentPage,pageSize,startTime,endTime,memberId,status));
         return pageEthRecord;
     }

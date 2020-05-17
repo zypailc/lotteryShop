@@ -48,7 +48,7 @@ public class TestContract2 {
   public void test1(){
       try {
           //部署合约
-          Web3j web3j = Web3j.build(new HttpService("http://52.74.252.140:8545/"));
+          Web3j web3j = Web3j.build(new HttpService("http://127.0.0.1:8545/"));
           Credentials credentials = Credentials.create("38FF01D2467E352375E4716416E4207BCC70794F1FC44C168D1CFD2D3994F3FC");
           DefaultGasProvider defaultGasProvider = new DefaultGasProvider();
           EthGetBalance ethGetBalancel1 = web3j.ethGetBalance(credentials.getAddress(), DefaultBlockParameter.valueOf("latest")).send();
